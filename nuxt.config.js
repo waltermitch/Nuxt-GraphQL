@@ -17,6 +17,8 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  css: ['~assets/styles/scss/global.scss'],
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
 
@@ -58,6 +60,6 @@ export default {
     preconnect: true,
   },
   styleResources: {
-    scss: ['assets/styles/scss/*.scss'],
+    scss: ['assets/styles/scss/utils/*.scss'],
   },
 }
