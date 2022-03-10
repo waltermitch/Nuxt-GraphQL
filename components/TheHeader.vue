@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <header class="header">
     <div class="container">
       <div class="header-left">
         <NuxtLink to="/" class="logo">
@@ -26,7 +26,7 @@
         </svg>
       </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
