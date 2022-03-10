@@ -1,0 +1,44 @@
+<template>
+  <BasePageLayout>
+    <template #sideBar>
+      <SideBar :nav-tabs="navTabs" />
+    </template>
+
+    <template #header>
+      <PageSubtitle>Home / Close Register</PageSubtitle>
+      <PageTitle> Close Register </PageTitle>
+    </template>
+
+    <template #content>
+      <CloseRegisterContent />
+    </template>
+  </BasePageLayout>
+</template>
+
+<script>
+import { HOME_NAV_TABS } from '~/constants/constants'
+import BasePageLayout from '~/components/BasePageLayout.vue'
+import SideBar from '~/components/SideBar.vue'
+import PageTitle from '~/components/PageTitle'
+import PageSubtitle from '~/components/PageSubtitle.vue'
+import CloseRegisterContent from '~/components/CloseRegisterContent.vue'
+export default {
+  name: 'CloseRegisterPage',
+  components: {
+    BasePageLayout,
+    SideBar,
+    PageTitle,
+    PageSubtitle,
+    CloseRegisterContent,
+  },
+  data() {
+    return {
+      navTabs: HOME_NAV_TABS,
+      pageCategory: null,
+      pageSubCategory: null,
+    }
+  },
+}
+</script>
+
+<style lang="scss" scoped></style>
