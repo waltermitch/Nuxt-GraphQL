@@ -34,8 +34,6 @@ export default {
   data() {
     return {
       navTabs: HOME_NAV_TABS,
-      pageCategory: null,
-      pageSubCategory: null,
     }
   },
 }
