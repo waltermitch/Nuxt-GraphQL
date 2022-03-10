@@ -24,3 +24,66 @@ export const HEADER_TABS = [
     to: '/admin',
   },
 ]
+
+export const HOME_NAV_TABS = [
+  {
+    id: 1,
+    caption: 'Select Unit',
+    pageUrl: '/home/select-unit',
+    iconSrc: require('assets/images/icons/home/cube.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Close Register',
+    pageUrl: '/home/close-register',
+    iconSrc: require('assets/images/icons/home/window-close.svg'),
+  },
+  {
+    id: 3,
+    caption: 'Catering Sales',
+    pageUrl: '/home/catering-sales',
+    iconSrc: require('assets/images/icons/home/room_service.svg'),
+  },
+  {
+    id: 4,
+    caption: 'Purchase Orders',
+    pageUrl: '/home/purchase-orders',
+    iconSrc: require('assets/images/icons/home/order.svg'),
+  },
+  {
+    id: 4,
+    caption: 'Inventory',
+    pageUrl: '/home/inventory',
+    iconSrc: require('assets/images/icons/home/inventory.svg'),
+  },
+  {
+    id: 5,
+    caption: 'Expenses',
+    pageUrl: '/home/expenses',
+    iconSrc: require('assets/images/icons/home/account_balance_wallet.svg'),
+  },
+  {
+    id: 6,
+    caption: 'Receipts',
+    pageUrl: '/home/receipts',
+    iconSrc: require('assets/images/icons/home/receipt_long.svg'),
+  },
+  {
+    id: 7,
+    caption: 'On-Call Labor',
+    pageUrl: '/home/on-call-labor',
+    iconSrc: require('assets/images/icons/home/on-call.svg'),
+  },
+  {
+    id: 8,
+    caption: 'Accruals',
+    pageUrl: '/home/accruals',
+    iconSrc: require('assets/images/icons/home/chart-line.svg'),
+  },
+  {
+    id: 9,
+    caption: 'ReAccruals',
+    pageUrl: '/home/reaccruals',
+    iconSrc: require('assets/images/icons/home/chart-line.svg'),
+  },
+]
