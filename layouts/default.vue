@@ -18,4 +18,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {
+  min-height: 100vh;
+}
+
+.nuxt-container {
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+}
+</style>
