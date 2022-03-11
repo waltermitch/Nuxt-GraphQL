@@ -39,7 +39,7 @@
     </PageSubheader>
 
     <div class="content">
-      <div>
+      <div class="inputs-block">
         <h2 class="title">Select Register To Close</h2>
 
         <InputRow>
@@ -59,6 +59,8 @@
             </template>
           </InputWithTitle>
         </InputRow>
+
+        <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
       </div>
 
       <div class="total">
@@ -129,12 +131,17 @@
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import InputRow from './InputRow.vue'
 import CustomSelect from './CustomSelect.vue'
+import TabsView from './TabsView.vue'
+import SalesInfo from './SalesInfo.vue'
+import PettyCash from './PettyCash.vue'
+import FinishCloseout from './FinishCloseout.vue'
 export default {
   name: 'CloseRegisterContent',
   components: {
@@ -144,9 +151,15 @@ export default {
     InputWithTitle,
     InputRow,
     CustomSelect,
+    TabsView,
+    SalesInfo,
+    PettyCash,
+    FinishCloseout,
   },
   data() {
     return {
+      tabsHeaders: ['Sales Info', 'Petty Cash', 'Finish Closeout'],
+      tabs: [SalesInfo, PettyCash, FinishCloseout],
       registerId: null,
       registerName: '',
       mockedList: [
@@ -192,7 +205,11 @@ export default {
 .content {
   display: flex;
   justify-content: space-between;
-  padding: 20px 24px 20px 20px;
+  padding: 20px 24px 76px 20px;
+}
+
+.inputs-block {
+  width: 100%;
 }
 
 .title {
