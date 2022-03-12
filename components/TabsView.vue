@@ -58,6 +58,7 @@ export default {
   font-size: $font-s;
   font-weight: 500;
   line-height: 40px;
+  color: $suva-grey;
   transition: color linear 0.3s;
   cursor: pointer;
 
