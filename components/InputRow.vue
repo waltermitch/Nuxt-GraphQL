@@ -1,5 +1,5 @@
 <template>
-  <div class="input-row">
+  <div class="input-row" :style="{ marginBottom: marginBottom }">
     <slot></slot>
   </div>
 </template>
@@ -7,6 +7,12 @@
 <script>
 export default {
   name: 'InputsRow',
+  props: {
+    marginBottom: {
+      type: String,
+      default: '16px',
+    },
+  },
 }
 </script>
 

@@ -148,10 +148,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.content {
-  div.container {
-    margin-bottom: 16px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
