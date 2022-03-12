@@ -38,95 +38,97 @@
       </PageSubheaderItem>
     </PageSubheader>
 
-    <div class="content">
-      <div class="inputs-block">
-        <h2 class="title">Select Register To Close</h2>
+    <PageContentWrapper>
+      <div class="content">
+        <div class="inputs-block">
+          <h2 class="title">Select Register To Close</h2>
 
-        <InputRow>
-          <InputWithTitle>
-            <template #title>Register ID</template>
+          <InputRow>
+            <InputWithTitle>
+              <template #title>Register ID</template>
 
-            <template #input>
-              <CustomInput v-model="registerId" />
-            </template>
-          </InputWithTitle>
+              <template #input>
+                <CustomInput v-model="registerId" />
+              </template>
+            </InputWithTitle>
 
-          <InputWithTitle>
-            <template #title>Register Name</template>
+            <InputWithTitle>
+              <template #title>Register Name</template>
 
-            <template #input>
-              <CustomSelect :list="mockedList" @select-item="selectItem" />
-            </template>
-          </InputWithTitle>
-        </InputRow>
+              <template #input>
+                <CustomSelect :list="mockedList" @select-item="selectItem" />
+              </template>
+            </InputWithTitle>
+          </InputRow>
 
-        <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
+          <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
+        </div>
+
+        <div class="total">
+          <div class="total-section">
+            <div class="total-row">
+              <h5 class="total-caption">Total Net Sales</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+
+            <div class="total-row">
+              <h5 class="total-caption">- Charge</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="total-section">
+            <div class="total-row">
+              <h5 class="total-caption">Cash Total</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+
+            <div class="total-row">
+              <h5 class="total-caption">+ Cash Tax</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+
+            <div class="total-row">
+              <h5 class="total-caption">- Petty Cash</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="total-section">
+            <div class="total-row">
+              <h5 class="total-caption">Calced Deposit</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+
+            <div class="total-row">
+              <h5 class="total-caption">Actual Deposit</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="total-section">
+            <div class="total-row">
+              <h5 class="total-caption">Over/Short</h5>
+
+              <span class="total-amount">$0.00</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="total">
-        <div class="total-section">
-          <div class="total-row">
-            <h5 class="total-caption">Total Net Sales</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-
-          <div class="total-row">
-            <h5 class="total-caption">- Charge</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="total-section">
-          <div class="total-row">
-            <h5 class="total-caption">Cash Total</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-
-          <div class="total-row">
-            <h5 class="total-caption">+ Cash Tax</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-
-          <div class="total-row">
-            <h5 class="total-caption">- Petty Cash</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="total-section">
-          <div class="total-row">
-            <h5 class="total-caption">Calced Deposit</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-
-          <div class="total-row">
-            <h5 class="total-caption">Actual Deposit</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="total-section">
-          <div class="total-row">
-            <h5 class="total-caption">Over/Short</h5>
-
-            <span class="total-amount">$0.00</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    </PageContentWrapper>
   </div>
 </template>
 
@@ -142,6 +144,7 @@ import TabsView from './TabsView.vue'
 import SalesInfo from './SalesInfo.vue'
 import PettyCash from './PettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
+import PageContentWrapper from './PageContentWrapper.vue'
 export default {
   name: 'CloseRegisterContent',
   components: {
@@ -155,6 +158,7 @@ export default {
     SalesInfo,
     PettyCash,
     FinishCloseout,
+    PageContentWrapper,
   },
   data() {
     return {
@@ -205,7 +209,7 @@ export default {
 .content {
   display: flex;
   justify-content: space-between;
-  padding: 20px 24px 76px 20px;
+  width: 100%;
 }
 
 .inputs-block {
