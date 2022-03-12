@@ -65,6 +65,11 @@ export default {
 .nuxt-link-exact-active {
   background: $firebrick;
 
+  img.icon {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(2%) saturate(0%)
+      hue-rotate(172deg) brightness(103%) contrast(105%);
+  }
+
   span.caption {
     color: #fff;
   }
