@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h5 class="title">
+    <h5 class="title" :style="{ marginBottom }">
       <slot name="title"></slot>
     </h5>
 
@@ -11,6 +11,12 @@
 <script>
 export default {
   name: 'InputWithTitle',
+  props: {
+    marginBottom: {
+      type: String,
+      default: '4px',
+    },
+  },
 }
 </script>
 
