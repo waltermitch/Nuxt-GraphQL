@@ -27,6 +27,7 @@ import PageSubheaderItem from './PageSubheaderItem.vue'
 import TabsView from './TabsView.vue'
 import CateringSalesDetails from './CateringSalesDetails.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
+import CateringSalesItems from './CateringSalesItems.vue'
 export default {
   name: 'CateringSalesContent',
   components: {
@@ -35,11 +36,12 @@ export default {
     TabsView,
     CateringSalesDetails,
     PageContentWrapper,
+    CateringSalesItems,
   },
   data() {
     return {
       tabsHeaders: ['Details', 'Items', 'Ship To/Bill'],
-      tabs: [CateringSalesDetails],
+      tabs: [CateringSalesDetails, CateringSalesItems],
     }
   },
 }
