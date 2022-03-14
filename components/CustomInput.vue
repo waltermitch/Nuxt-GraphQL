@@ -46,7 +46,6 @@ export default {
 <style lang="scss" scoped>
 .input {
   width: 100%;
-  max-width: 240px;
   padding: 10px 8px;
   font-size: $font-s;
   line-height: 20px;
@@ -54,5 +53,9 @@ export default {
   border: 1px solid gainsboro;
   border-radius: 3px;
   outline: none;
+
+  &:focus {
+    border: 1px solid $firebrick;
+  }
 }
 </style>
