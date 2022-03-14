@@ -1,20 +1,18 @@
 <template>
-  <div
-    class="radio-container"
-    :style="{ width, height, borderRadius }"
-    @click="setIsActive"
-  >
-    <div
-      class="radio"
-      :class="{ 'radio-active': isActive }"
-      :style="{
-        width: radioWidth,
-        height: radioHeight,
-        borderRadius: radioBorderRadius,
-      }"
-    ></div>
+  <div class="container" @click="setIsActive">
+    <div class="radio-container" :style="{ width, height, borderRadius }">
+      <div
+        class="radio"
+        :class="{ 'radio-active': isActive }"
+        :style="{
+          width: radioWidth,
+          height: radioHeight,
+          borderRadius: radioBorderRadius,
+        }"
+      ></div>
+    </div>
 
-    <span class="title">
+    <span v-if="withTitle" class="caption">
       <slot></slot>
     </span>
   </div>
@@ -29,10 +27,6 @@ export default {
       default: false,
     },
     withTitle: {
-      type: Boolean,
-      default: false,
-    },
-    round: {
       type: Boolean,
       default: false,
     },
@@ -70,6 +64,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 .radio {
   cursor: pointer;
 
