@@ -21,7 +21,7 @@ export const HEADER_TABS = [
     id: 4,
     name: 'Admin',
     src: require('assets/images/icons/header/person-circle.svg'),
-    to: '/admin',
+    to: '/admin/fixed-expenses',
   },
 ]
 
@@ -85,5 +85,20 @@ export const HOME_NAV_TABS = [
     caption: 'ReAccruals',
     pageUrl: '/home/reaccruals',
     iconSrc: require('assets/images/icons/home/chart-line.svg'),
+  },
+]
+
+export const ADMIN_NAV_TABS = [
+  {
+    id: 1,
+    caption: 'Fixed Expenses',
+    pageUrl: '/admin/fixed-expenses',
+    iconSrc: require('assets/images/icons/admin/account_balance_wallet.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Close week',
+    pageUrl: '/admin/close-week',
+    iconSrc: require('assets/images/icons/admin/date.svg'),
   },
 ]
