@@ -54,6 +54,11 @@ export default {
 .logo {
   display: flex;
   margin-right: 80px;
+
+  img {
+    height: 82px;
+    width: 135px;
+  }
 }
 
 .container {
