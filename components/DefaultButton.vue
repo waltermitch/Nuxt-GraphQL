@@ -5,6 +5,7 @@
       'button--red': buttonColorGamma === 'red',
       'button--white': buttonColorGamma === 'white',
     }"
+    :disabled="disabled"
     :style="{ padding }"
     @click="buttonEvent"
   >
@@ -23,6 +24,10 @@ export default {
     buttonColorGamma: {
       type: String,
       default: 'red',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -51,6 +56,11 @@ export default {
     color: #000;
     background: #fff;
     border: 1px solid $gainsboro;
+  }
+
+  &:disabled {
+    background: $thistle;
+    cursor: not-allowed;
   }
 }
 </style>
