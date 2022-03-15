@@ -3,13 +3,13 @@ export const HEADER_TABS = [
     id: 1,
     name: 'Home',
     src: require('assets/images/icons/header/home.svg'),
-    to: '/home',
+    to: '/home/close-register',
   },
   {
     id: 2,
     name: 'Review',
     src: require('assets/images/icons/header/portfolio.svg'),
-    to: '/review',
+    to: '/review/weekly-purchases',
   },
   {
     id: 3,
@@ -100,5 +100,32 @@ export const ADMIN_NAV_TABS = [
     caption: 'Close week',
     pageUrl: '/admin/close-week',
     iconSrc: require('assets/images/icons/admin/date.svg'),
+  },
+]
+
+export const REVIEW_NAV_TABS = [
+  {
+    id: 1,
+    caption: 'Register Closeout',
+    pageUrl: '/review/register-closeout',
+    iconSrc: require('assets/images/icons/review/period.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Catering Sales',
+    pageUrl: '/review/catering-sales',
+    iconSrc: require('assets/images/icons/review/period.svg'),
+  },
+  {
+    id: 3,
+    caption: 'Weekly Purchases',
+    pageUrl: '/review/weekly-purchases',
+    iconSrc: require('assets/images/icons/review/period.svg'),
+  },
+  {
+    id: 3,
+    caption: 'Weekly Expenses',
+    pageUrl: '/review/weekly-expenses',
+    iconSrc: require('assets/images/icons/review/period.svg'),
   },
 ]
