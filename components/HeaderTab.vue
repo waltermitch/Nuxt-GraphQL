@@ -52,7 +52,7 @@ export default {
   color: #fff;
 }
 
-.nuxt-link-exact-active {
+.nuxt-link-active {
   background: $firebrick;
 }
 </style>

@@ -3,13 +3,13 @@ export const HEADER_TABS = [
     id: 1,
     name: 'Home',
     src: require('assets/images/icons/header/home.svg'),
-    to: '/home/close-register',
+    to: '/home',
   },
   {
     id: 2,
     name: 'Review',
     src: require('assets/images/icons/header/portfolio.svg'),
-    to: '/review/weekly-purchases',
+    to: '/review',
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export const HEADER_TABS = [
     id: 4,
     name: 'Admin',
     src: require('assets/images/icons/header/person-circle.svg'),
-    to: '/admin/fixed-expenses',
+    to: '/admin',
   },
 ]
 
@@ -123,7 +123,7 @@ export const REVIEW_NAV_TABS = [
     iconSrc: require('assets/images/icons/review/period.svg'),
   },
   {
-    id: 3,
+    id: 4,
     caption: 'Weekly Expenses',
     pageUrl: '/review/weekly-expenses',
     iconSrc: require('assets/images/icons/review/period.svg'),
