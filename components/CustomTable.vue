@@ -23,6 +23,7 @@ export default {
   background: #fff;
   border: 1px solid $gainsboro;
   border-radius: 8px;
+  overflow: hidden;
 }
 
 .header {
