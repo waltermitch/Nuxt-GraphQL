@@ -57,5 +57,10 @@ export default {
   &:focus {
     border: 1px solid $firebrick;
   }
+
+  &:disabled {
+    background: transparent;
+    cursor: not-allowed;
+  }
 }
 </style>
