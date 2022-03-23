@@ -62,4 +62,8 @@ export default {
   styleResources: {
     scss: ['assets/styles/scss/utils/*.scss'],
   },
+  loading: {
+    color: '#b01d22',
+    throttle: 0,
+  },
 }
