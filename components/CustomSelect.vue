@@ -11,7 +11,13 @@
         {{ selected && selected.name }}
       </span>
 
-      <img src="~assets/images/icons/chevron-down.svg" class="icon" />
+      <img
+        src="~assets/images/icons/chevron-down.svg"
+        class="icon"
+        :class="{
+          'icon--opened': open,
+        }"
+      />
     </div>
 
     <div v-show="open" class="options">
@@ -83,6 +89,10 @@ export default {
   top: 50%;
   right: 5px;
   transform: translateY(-50%);
+
+  &--opened {
+    transform: translateY(-50%) rotate(0.5turn);
+  }
 }
 
 .options {
