@@ -1,109 +1,81 @@
 <template>
-  <div class="select-container">
-    <div class="input-container">
-      <div @click="openList()">
-        <CustomInput v-model="searchString" />
-      </div>
-      <span v-if="!searchString" class="selected-item">
-        {{ selectedValue.name }}
+  <div class="custom-select" :tabindex="tabindex" @blur="open = false">
+    <div
+      class="selected"
+      :class="{
+        'selected--opened': open,
+      }"
+      @click="open = !open"
+    >
+      <span>
+        {{ selected && selected.name }}
       </span>
 
-      <img
-        src="~assets/images/icons/chevron-down.svg"
-        class="icon"
-        @click="toggleList"
-      />
+      <img src="~assets/images/icons/chevron-down.svg" class="icon" />
     </div>
 
-    <div v-show="showList" class="list-container">
-      <ul class="list">
-        <li
-          v-for="item in filteredList"
-          :key="item.id"
-          class="list-item"
-          @click.stop="selectItem(item)"
-        >
-          <span
-            :class="{
-              selected: item.selected,
-            }"
-          >
-            {{ item.name }}
-          </span>
-        </li>
-      </ul>
+    <div v-show="open" class="options">
+      <div
+        v-for="(option, i) of options"
+        :key="i"
+        class="option"
+        @click="selectOption(option)"
+      >
+        {{ option.name }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CustomInput from './CustomInput.vue'
 export default {
   name: 'CustomSelect',
-  components: { CustomInput },
   props: {
-    list: {
+    options: {
       type: Array,
       required: true,
+    },
+    tabindex: {
+      type: Number,
+      default: 0,
     },
   },
   data() {
     return {
-      searchString: '',
-      selectedValue: '',
-      showList: false,
+      selected: this.options.length > 0 ? this.options[0] : null,
+      open: false,
     }
   },
-  computed: {
-    filteredList() {
-      return [...this.list].filter((item) => {
-        return item.name.toLowerCase().includes(this.searchString.toLowerCase())
-      })
-    },
-  },
-  beforeMount() {
-    document.addEventListener('click', this.detectClickOutside)
-  },
-  unmounted() {
-    document.removeEventListener('click', this.detectClickOutside)
+  mounted() {
+    this.$emit('input', this.selected)
   },
   methods: {
-    selectItem(item) {
-      this.searchString = ''
-      this.selectedValue = item
-      this.$emit('select-item', {
-        ...item,
-        selected: true,
-      })
-    },
-    openList() {
-      this.showList = true
-    },
-    closeList() {
-      if (this.showList) {
-        this.showList = false
-      }
-    },
-    toggleList() {
-      this.showList = !this.showList
-    },
-    detectClickOutside(event) {
-      if (!(this.$el === event.target || this.$el.contains(event.target))) {
-        this.closeList()
-      }
+    selectOption(option) {
+      this.selected = option
+      this.open = false
+      this.$emit('input', option)
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.select-container {
+.custom-select {
   position: relative;
+  width: 100%;
+  outline: none;
 }
 
-.input-container {
-  position: relative;
+.selected {
+  padding: 10px 16px 10px 8px;
+  background: #fff;
   cursor: pointer;
+  border: 1px solid gainsboro;
+  border-radius: 3px;
+
+  &--opened {
+    border-radius: 3px 3px 0px 0px;
+  }
 }
 
 .icon {
@@ -113,40 +85,28 @@ export default {
   transform: translateY(-50%);
 }
 
-.list-container {
+.options {
   position: absolute;
+  left: 0;
+  right: 0;
   z-index: 1;
-  margin-top: 15px;
-  width: 100%;
-  max-width: 240px;
-  max-height: 150px;
-  overflow: auto;
+  color: #fff;
+  border-radius: 0px 0px 3px 3px;
+  border-right: 1px solid gainsboro;
+  border-left: 1px solid gainsboro;
+  border-bottom: 1px solid gainsboro;
+  overflow: hidden;
+}
+
+.option {
+  padding: 10px 16px 10px 8px;
+  color: #000;
   background: #fff;
-  border: 1px solid gainsboro;
-  border-radius: 3px;
-}
+  cursor: pointer;
 
-.list {
-  padding: 10px 20px;
-
-  &-item {
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
+  &:hover {
+    color: #fff;
+    background-color: $firebrick;
   }
-}
-
-.selected-item {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.selected {
-  background: $firebrick;
-  border-radius: 16px;
-  height: 32px;
-  padding: 5px 10px;
 }
 </style>

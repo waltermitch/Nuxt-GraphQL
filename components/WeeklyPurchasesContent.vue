@@ -4,7 +4,7 @@
       <template #title> Period End Date </template>
 
       <template #input>
-        <CustomSelect :list="mockedList" placeholder="mm/dd/yyyy" />
+        <CustomSelect :options="mockedList" @input="selectPeriodEndDate" />
       </template>
     </InputWithTitle>
 
@@ -106,7 +106,13 @@ export default {
           total: '$0.00',
         },
       ],
+      periodEndDate: null,
     }
+  },
+  methods: {
+    selectPeriodEndDate(item) {
+      this.periodEndDate = item
+    },
   },
 }
 </script>

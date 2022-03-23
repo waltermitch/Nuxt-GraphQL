@@ -20,7 +20,7 @@
             @set-is-active="setIsMonthly(item)"
           />
 
-          <CustomSelect :list="item.glAccount" @select-item="selectGlAccount" />
+          <CustomSelect :options="item.glAccount" @input="selectGlAccount" />
 
           <CustomInput v-model="item.amount" />
 

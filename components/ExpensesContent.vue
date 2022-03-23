@@ -65,10 +65,10 @@
 
       <InputRow>
         <InputWithTitle>
-          <template #title>Expense Date</template>
+          <template #title>GL Account</template>
 
           <template #input>
-            <CustomSelect :list="mockedList" @select-item="selectGlAccount" />
+            <CustomSelect :options="mockedList" @input="selectGlAccount" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -160,26 +160,7 @@ export default {
       Object.assign(this.$data, this.$options.data.apply(this))
     },
     selectGlAccount(account) {
-      // TODO remove when API would be available
-      // logic written to work with mocked array,
-      // with real data from API, this logic would not be needed and would be different
-      this.mockedList = this.mockedList.map((listItem) => {
-        if (account.id === listItem.id) {
-          if (listItem.selected) {
-            return {
-              ...account,
-              selected: null,
-            }
-          }
-
-          return { ...account }
-        }
-
-        return {
-          ...listItem,
-        }
-      })
-      this.glAccount = account.name
+      this.glAccount = account
     },
   },
 }

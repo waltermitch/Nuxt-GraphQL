@@ -56,7 +56,10 @@
               <template #title>Register Name</template>
 
               <template #input>
-                <CustomSelect :list="mockedList" @select-item="selectItem" />
+                <CustomSelect
+                  :options="mockedList"
+                  @input="selectRegisterName"
+                />
               </template>
             </InputWithTitle>
           </InputRow>
@@ -169,37 +172,20 @@ export default {
       mockedList: [
         {
           id: 1,
+          value: 'register#2',
           name: 'Register #2',
         },
         {
           id: 2,
+          value: 'register#3',
           name: 'Register #3',
         },
       ],
     }
   },
   methods: {
-    selectItem(item) {
-      // TODO remove when API would be available
-      // logic written to work with mocked array,
-      // with real data from API, this logic would not be needed and would be different
-      this.mockedList = this.mockedList.map((listItem) => {
-        if (item.id === listItem.id) {
-          if (listItem.selected) {
-            return {
-              ...item,
-              selected: null,
-            }
-          }
-
-          return { ...item }
-        }
-
-        return {
-          ...listItem,
-        }
-      })
-      this.registerName = item.name
+    selectRegisterName(item) {
+      this.registerName = item
     },
   },
 }
