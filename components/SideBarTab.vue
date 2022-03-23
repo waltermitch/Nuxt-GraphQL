@@ -73,18 +73,5 @@ export default {
   span.caption {
     color: #fff;
   }
-
-  &:hover {
-    background: #fff;
-
-    span.caption {
-      color: $night-rider;
-    }
-
-    img.icon {
-      filter: brightness(0) saturate(100%) invert(38%) sepia(17%) saturate(0%)
-        hue-rotate(256deg) brightness(99%) contrast(97%);
-    }
-  }
 }
 </style>
