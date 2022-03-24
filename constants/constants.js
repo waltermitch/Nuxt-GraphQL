@@ -129,3 +129,8 @@ export const REVIEW_NAV_TABS = [
     iconSrc: require('assets/images/icons/review/period.svg'),
   },
 ]
+
+export const CURRENCY_VALIDATION_REGEX = /^\d+(.\d{0,2})?$/
+
+export const DATE_VALIDATION_REGEX =
+  /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/

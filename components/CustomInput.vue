@@ -1,18 +1,23 @@
 <template>
-  <input
-    class="input"
-    :value="value"
-    :type="type"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :readonly="readonly"
-    @input="setValue($event.target.value)"
-  />
+  <ValidationProvider v-slot="{ errors }" :rules="rules">
+    <input
+      class="input"
+      :value="value"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :readonly="readonly"
+      @input="setValue($event.target.value)"
+    />
+    <span class="error">{{ errors[0] }}</span>
+  </ValidationProvider>
 </template>
 
 <script>
+import { ValidationProvider } from 'vee-validate'
 export default {
   name: 'CustomInput',
+  components: { ValidationProvider },
   props: {
     value: {
       type: [String, Number],
@@ -34,6 +39,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    rules: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     setValue(inputValue) {
@@ -44,6 +53,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  position: relative;
+}
+
 .input {
   width: 100%;
   padding: 10px 8px;
@@ -62,5 +75,13 @@ export default {
     background: transparent;
     cursor: not-allowed;
   }
+}
+
+.error {
+  font-size: 12px;
+  color: #f2494e;
+}
+
+.sign {
 }
 </style>
