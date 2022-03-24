@@ -1,5 +1,5 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" :rules="rules">
+  <ValidationProvider v-slot="{ errors }" mode="eager" :rules="rules">
     <input
       class="input"
       :value="value"
