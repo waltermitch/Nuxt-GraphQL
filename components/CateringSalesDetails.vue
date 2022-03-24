@@ -5,7 +5,7 @@
         <template #title>Order Number</template>
 
         <template #input>
-          <CustomInput v-model="orderNumber" />
+          <CustomInput v-model="orderNumber" rules="required" />
         </template>
       </InputWithTitle>
 
@@ -13,7 +13,7 @@
         <template #title>Description</template>
 
         <template #input>
-          <CustomInput v-model="description" />
+          <CustomInput v-model="description" rules="required" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -23,7 +23,11 @@
         <template #title>Order Date</template>
 
         <template #input>
-          <CustomInput v-model="orderDate" />
+          <CustomInput
+            v-model="orderDate"
+            rules="required|date"
+            placeholder="mm/dd/yyyy"
+          />
         </template>
       </InputWithTitle>
 
@@ -31,7 +35,11 @@
         <template #title>Phone</template>
 
         <template #input>
-          <CustomInput v-model="phone" />
+          <CustomInput
+            v-model="phone"
+            rules="required|phone"
+            placeholder="(123) 456-7890"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -41,7 +49,11 @@
         <template #title>Delivery Date/Time</template>
 
         <template #input>
-          <CustomInput v-model="deliveryDateAndTime" />
+          <CustomInput
+            v-model="deliveryDateAndTime"
+            rules="required|dateWithTime"
+            placeholder="mm/dd/yyyy hh:mm"
+          />
         </template>
       </InputWithTitle>
 
@@ -49,7 +61,7 @@
         <template #title>Head Count</template>
 
         <template #input>
-          <CustomInput v-model="headCount" />
+          <CustomInput v-model="headCount" rules="required" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -59,7 +71,7 @@
         <template #title>Ordered By</template>
 
         <template #input>
-          <CustomInput v-model="orderedBy" />
+          <CustomInput v-model="orderedBy" rules="required" />
         </template>
       </InputWithTitle>
 
@@ -67,7 +79,7 @@
         <template #title>Ordered For</template>
 
         <template #input>
-          <CustomInput v-model="orderedFor" />
+          <CustomInput v-model="orderedFor" rules="required" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -88,7 +100,7 @@
         <template #title>Charge #</template>
 
         <template #input>
-          <CustomInput v-model="chargeNumber" />
+          <CustomInput v-model="chargeNumber" rules="required" />
         </template>
       </InputWithTitle>
     </InputRow>
