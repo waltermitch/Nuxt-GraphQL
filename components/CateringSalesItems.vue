@@ -15,13 +15,13 @@
 
       <template #content>
         <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
-          <CustomInput v-model="item.quantity" />
+          <CustomInput v-model="item.quantity" rules="required|numeric" />
 
-          <CustomInput v-model="item.name" />
+          <CustomInput v-model="item.name" rules="required" />
 
-          <CustomInput v-model="item.price" />
+          <CustomInput v-model="item.price" rules="required|currency" />
 
-          <CustomInput v-model="item.ext" />
+          <CustomInput v-model="item.ext" rules="required|currency" />
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
@@ -33,7 +33,11 @@
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Tax</span>
 
-          <CustomInput v-model="tax" placeholder="$0.00" />
+          <CustomInput
+            v-model="tax"
+            placeholder="$0.00"
+            rules="required|currency"
+          />
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
