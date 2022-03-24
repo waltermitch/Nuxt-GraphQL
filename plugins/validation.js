@@ -3,7 +3,9 @@ import { required } from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
   DATE_VALIDATION_REGEX,
-} from '~/constants/constants'
+  DATE_WITH_TIME_VALIDATION_REGEX,
+  PHONE_VALIDATION_REGEX,
+} from '~/constants/regex'
 
 extend('currency', {
   validate: (value) => CURRENCY_VALIDATION_REGEX.test(value),
@@ -18,4 +20,14 @@ extend('required', {
 extend('date', {
   validate: (value) => DATE_VALIDATION_REGEX.test(value),
   message: 'Date must be in mm/dd/yyy format',
+})
+
+extend('dateWithTime', {
+  validate: (value) => DATE_WITH_TIME_VALIDATION_REGEX.test(value),
+  message: 'Date must be in mm/dd/yyy hh:mm format',
+})
+
+extend('phone', {
+  validate: (value) => PHONE_VALIDATION_REGEX.test(value),
+  message: 'Phone must be in (123) 456-7890 format',
 })
