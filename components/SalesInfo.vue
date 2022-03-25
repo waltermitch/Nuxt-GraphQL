@@ -5,7 +5,11 @@
         <template #title>New Non-Resettable</template>
 
         <template #input>
-          <CustomInput v-model="newNonResettable" readonly />
+          <CustomInput
+            v-model="newNonResettable"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
 
@@ -13,7 +17,7 @@
         <template #title>Net Total</template>
 
         <template #input>
-          <CustomInput v-model="newTotal" readonly />
+          <CustomInput v-model="newTotal" readonly disabled />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -23,7 +27,7 @@
         <template #title>Last Non-Resettable</template>
 
         <template #input>
-          <CustomInput v-model="lastNonResettable" readonly />
+          <CustomInput v-model="lastNonResettable" readonly disabled />
         </template>
       </InputWithTitle>
 
@@ -31,7 +35,11 @@
         <template #title>Net O/V</template>
 
         <template #input>
-          <CustomInput v-model="netOV" readonly />
+          <CustomInput
+            v-model="netOV"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -41,7 +49,7 @@
         <template #title>Total To Distribute</template>
 
         <template #input>
-          <CustomInput v-model="totalToDistribute" readonly />
+          <CustomInput v-model="totalToDistribute" readonly disabled />
         </template>
       </InputWithTitle>
 
@@ -49,7 +57,11 @@
         <template #title>Net Charge</template>
 
         <template #input>
-          <CustomInput v-model="netCharge" readonly />
+          <CustomInput
+            v-model="netCharge"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -59,7 +71,11 @@
         <template #title>Tax From The Tape</template>
 
         <template #input>
-          <CustomInput v-model="taxFromTheTape" readonly />
+          <CustomInput
+            v-model="taxFromTheTape"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
 
@@ -67,7 +83,11 @@
         <template #title>Net Voucher</template>
 
         <template #input>
-          <CustomInput v-model="netVoucher" readonly />
+          <CustomInput
+            v-model="netVoucher"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -77,7 +97,11 @@
         <template #title>- Overring/Void Tax</template>
 
         <template #input>
-          <CustomInput v-model="overringVoidTax" readonly />
+          <CustomInput
+            v-model="overringVoidTax"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
 
@@ -85,7 +109,7 @@
         <template #title>Net Cash</template>
 
         <template #input>
-          <CustomInput v-model="netCash" readonly />
+          <CustomInput v-model="netCash" readonly disabled />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -95,7 +119,11 @@
         <template #title>- Charge Tax</template>
 
         <template #input>
-          <CustomInput v-model="chargeTax" readonly />
+          <CustomInput
+            v-model="chargeTax"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -105,7 +133,11 @@
         <template #title>- Voucher Tax</template>
 
         <template #input>
-          <CustomInput v-model="voucherTax" readonly />
+          <CustomInput
+            v-model="voucherTax"
+            rules="currency|required"
+            placeholder="$0.00"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -115,7 +147,7 @@
         <template #title>Cash Tax</template>
 
         <template #input>
-          <CustomInput v-model="cashTax" readonly />
+          <CustomInput v-model="cashTax" readonly disabled />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -130,19 +162,19 @@ export default {
   components: { InputRow, CustomInput },
   data() {
     return {
-      newNonResettable: '$0.00',
-      newTotal: '$0.00',
-      lastNonResettable: '$0.00',
-      netOV: '$0.00',
-      totalToDistribute: '$0.00',
-      netCharge: '$0.00',
-      taxFromTheTape: '$0.00',
-      netVoucher: '$0.00',
-      overringVoidTax: '$0.00',
-      netCash: '$0.00',
-      chargeTax: '$0.00',
-      voucherTax: '$0.00',
-      cashTax: '$0.00',
+      newNonResettable: '',
+      newTotal: '',
+      lastNonResettable: '',
+      netOV: '',
+      totalToDistribute: '',
+      netCharge: '',
+      taxFromTheTape: '',
+      netVoucher: '',
+      overringVoidTax: '',
+      netCash: '',
+      chargeTax: '',
+      voucherTax: '',
+      cashTax: '',
     }
   },
 }
