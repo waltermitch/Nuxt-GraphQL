@@ -15,83 +15,93 @@
     </PageSubheader>
 
     <PageContentWrapper>
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Expense Date</template>
+      <ValidationObserver ref="form">
+        <InputRow>
+          <InputWithTitle>
+            <template #title>Expense Date</template>
 
-          <template #input>
-            <CustomInput v-model="expensesDate" placeholder="mm/dd/yyyy" />
-          </template>
-        </InputWithTitle>
+            <template #input>
+              <CustomInput
+                v-model="expensesDate"
+                placeholder="mm/dd/yyyy"
+                rules="required|date"
+              />
+            </template>
+          </InputWithTitle>
 
-        <InputWithTitle class="radio-buttons-row">
-          <template #title>Expense Type</template>
+          <InputWithTitle class="radio-buttons-row">
+            <template #title>Expense Type</template>
 
-          <template #input>
-            <div class="radio-buttons-area">
-              <CustomRadioButton
-                with-title
-                border-radius="50%"
-                radio-border-radius="50%"
-                :is-active="expensesType === 'transfer slip'"
-                @set-is-active="setExpensesType('transfer slip')"
-              >
-                Transfer Slip
-              </CustomRadioButton>
+            <template #input>
+              <div class="radio-buttons-area">
+                <CustomRadioButton
+                  with-title
+                  border-radius="50%"
+                  radio-border-radius="50%"
+                  :is-active="expensesType === 'transfer slip'"
+                  @set-is-active="setExpensesType('transfer slip')"
+                >
+                  Transfer Slip
+                </CustomRadioButton>
 
-              <CustomRadioButton
-                with-title
-                border-radius="50%"
-                radio-border-radius="50%"
-                :is-active="expensesType === 'shipping ticket'"
-                @set-is-active="setExpensesType('shipping ticket')"
-              >
-                Shipping Ticket
-              </CustomRadioButton>
+                <CustomRadioButton
+                  with-title
+                  border-radius="50%"
+                  radio-border-radius="50%"
+                  :is-active="expensesType === 'shipping ticket'"
+                  @set-is-active="setExpensesType('shipping ticket')"
+                >
+                  Shipping Ticket
+                </CustomRadioButton>
 
-              <CustomRadioButton
-                with-title
-                border-radius="50%"
-                radio-border-radius="50%"
-                :is-active="expensesType === 'other'"
-                @set-is-active="setExpensesType('other')"
-              >
-                Other
-              </CustomRadioButton>
-            </div>
-          </template>
-        </InputWithTitle>
-      </InputRow>
+                <CustomRadioButton
+                  with-title
+                  border-radius="50%"
+                  radio-border-radius="50%"
+                  :is-active="expensesType === 'other'"
+                  @set-is-active="setExpensesType('other')"
+                >
+                  Other
+                </CustomRadioButton>
+              </div>
+            </template>
+          </InputWithTitle>
+        </InputRow>
 
-      <InputRow>
-        <InputWithTitle>
-          <template #title>GL Account</template>
+        <InputRow>
+          <InputWithTitle>
+            <template #title>GL Account</template>
 
-          <template #input>
-            <CustomSelect :options="mockedList" @input="selectGlAccount" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
+            <template #input>
+              <CustomSelect :options="mockedList" @input="selectGlAccount" />
+            </template>
+          </InputWithTitle>
+        </InputRow>
 
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Amount</template>
+        <InputRow>
+          <InputWithTitle>
+            <template #title>Amount</template>
 
-          <template #input>
-            <CustomInput v-model="amount" placeholder="$0.00" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
+            <template #input>
+              <CustomInput
+                v-model="amount"
+                placeholder="$0.00"
+                rules="required|double|currency"
+              />
+            </template>
+          </InputWithTitle>
+        </InputRow>
 
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Comments</template>
+        <InputRow>
+          <InputWithTitle>
+            <template #title>Comments</template>
 
-          <template #input>
-            <CustomTextarea v-model="comments" name="comments" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
+            <template #input>
+              <CustomTextarea v-model="comments" name="comments" />
+            </template>
+          </InputWithTitle>
+        </InputRow>
+      </ValidationObserver>
 
       <div class="buttons-area">
         <DefaultButton button-color-gamma="red" @event="acceptEvent">
@@ -107,6 +117,7 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
@@ -130,6 +141,7 @@ export default {
     CustomSelect,
     CustomTextarea,
     DefaultButton,
+    ValidationObserver,
   },
   data() {
     return {
@@ -155,8 +167,11 @@ export default {
     setExpensesType(expensesType) {
       this.expensesType = this.expensesType === expensesType ? '' : expensesType
     },
-    acceptEvent() {},
+    acceptEvent() {
+      this.$refs.form.validate()
+    },
     cancelEvent() {
+      this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
     },
     selectGlAccount(account) {

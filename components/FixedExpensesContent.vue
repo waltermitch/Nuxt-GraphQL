@@ -1,33 +1,42 @@
 <template>
   <PageContentWrapper>
-    <CustomTable>
-      <template #header>
-        <div class="table-row">
-          <span>Monthly</span>
+    <ValidationObserver ref="form">
+      <CustomTable>
+        <template #header>
+          <div class="table-row">
+            <span>Monthly</span>
 
-          <span>GL Account</span>
+            <span>GL Account</span>
 
-          <span>Amount</span>
+            <span>Amount</span>
 
-          <span>Comments</span>
-        </div>
-      </template>
+            <span>Comments</span>
+          </div>
+        </template>
 
-      <template #content>
-        <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
-          <CustomRadioButton
-            :is-active="item.monthly"
-            @set-is-active="setIsMonthly(item)"
-          />
+        <template #content>
+          <CustomTableRow
+            v-for="item in items"
+            :key="item.id"
+            class="table-row"
+          >
+            <CustomRadioButton
+              :is-active="item.monthly"
+              @set-is-active="setIsMonthly(item)"
+            />
 
-          <CustomSelect :options="item.glAccount" @input="selectGlAccount" />
+            <CustomSelect :options="item.glAccount" @input="selectGlAccount" />
 
-          <CustomInput v-model="item.amount" />
+            <CustomInput
+              v-model="item.amount"
+              rules="required|double|currency"
+            />
 
-          <CustomInput v-model="item.comment" />
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+            <CustomInput v-model="item.comment" rules="required" />
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+    </ValidationObserver>
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="saveEvent">
@@ -42,6 +51,7 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
@@ -55,6 +65,7 @@ export default {
     CustomRadioButton,
     CustomSelect,
     CustomInput,
+    ValidationObserver,
   },
   data() {
     return {
@@ -149,8 +160,11 @@ export default {
         }
       })
     },
-    saveEvent() {},
+    saveEvent() {
+      this.$refs.form.validate()
+    },
     cancelEvent() {
+      this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
     },
   },
