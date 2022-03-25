@@ -19,12 +19,12 @@ extend('required', {
 
 extend('date', {
   validate: (value) => DATE_VALIDATION_REGEX.test(value),
-  message: 'Date must be in mm/dd/yyy format',
+  message: 'Date must be in mm/dd/yyyy format',
 })
 
 extend('dateWithTime', {
   validate: (value) => DATE_WITH_TIME_VALIDATION_REGEX.test(value),
-  message: 'Date must be in mm/dd/yyy hh:mm format',
+  message: 'Date must be in mm/dd/yyyy hh:mm format',
 })
 
 extend('phone', {
