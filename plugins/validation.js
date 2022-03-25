@@ -1,5 +1,5 @@
 import { extend } from 'vee-validate'
-import { required } from 'vee-validate/dist/rules'
+import { required, numeric } from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
   DATE_VALIDATION_REGEX,
@@ -30,4 +30,9 @@ extend('dateWithTime', {
 extend('phone', {
   validate: (value) => PHONE_VALIDATION_REGEX.test(value),
   message: 'Phone must be in (123) 456-7890 format',
+})
+
+extend('numeric', {
+  ...numeric,
+  message: 'This field must be numeric',
 })

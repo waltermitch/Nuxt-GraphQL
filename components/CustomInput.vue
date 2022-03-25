@@ -53,10 +53,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  position: relative;
-}
-
 .input {
   width: 100%;
   padding: 10px 8px;
@@ -80,8 +76,5 @@ export default {
 .error {
   font-size: 12px;
   color: #f2494e;
-}
-
-.sign {
 }
 </style>

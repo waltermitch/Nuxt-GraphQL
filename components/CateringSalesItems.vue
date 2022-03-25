@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ValidationObserver ref="form">
     <CustomTable>
       <template #header>
         <div class="table-row">
@@ -57,17 +57,24 @@
         >Cancel</DefaultButton
       >
     </div>
-  </div>
+  </ValidationObserver>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
 export default {
   name: 'CateringSalesItems',
-  components: { CustomTable, CustomInput, CustomTableRow, DefaultButton },
+  components: {
+    CustomTable,
+    CustomInput,
+    CustomTableRow,
+    DefaultButton,
+    ValidationObserver,
+  },
   data() {
     return {
       items: [
@@ -98,7 +105,8 @@ export default {
   },
   methods: {
     saveEvent() {
-      console.log('save')
+      this.$refs.form.reset()
+      this.$refs.form.validate()
     },
     cancelEvent() {
       Object.assign(this.$data, this.$options.data.apply(this))

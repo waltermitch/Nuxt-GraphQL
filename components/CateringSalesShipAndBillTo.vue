@@ -1,94 +1,96 @@
 <template>
   <div>
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ship To Name</template>
+    <ValidationObserver ref="form">
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ship To Name</template>
 
-        <template #input>
-          <CustomInput v-model="shipToName" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="shipToName" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Bill To Name</template>
+        <InputWithTitle>
+          <template #title>Bill To Name</template>
 
-        <template #input>
-          <CustomInput v-model="billToName" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="billToName" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ship To Address</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ship To Address</template>
 
-        <template #input>
-          <CustomInput v-model="shipToAddress" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="shipToAddress" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Bill To Address</template>
+        <InputWithTitle>
+          <template #title>Bill To Address</template>
 
-        <template #input>
-          <CustomInput v-model="billToAddress" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="billToAddress" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ship To City</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ship To City</template>
 
-        <template #input>
-          <CustomInput v-model="shipToCity" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="shipToCity" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Bill To City</template>
+        <InputWithTitle>
+          <template #title>Bill To City</template>
 
-        <template #input>
-          <CustomInput v-model="billToCity" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="billToCity" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ship To State</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ship To State</template>
 
-        <template #input>
-          <CustomInput v-model="shipToState" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="shipToState" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Bill To State</template>
+        <InputWithTitle>
+          <template #title>Bill To State</template>
 
-        <template #input>
-          <CustomInput v-model="billToState" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="billToState" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ship To Zip Code</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ship To Zip Code</template>
 
-        <template #input>
-          <CustomInput v-model="shipToZipCode" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="shipToZipCode" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Bill To Zip Code</template>
+        <InputWithTitle>
+          <template #title>Bill To Zip Code</template>
 
-        <template #input>
-          <CustomInput v-model="billToZipCode" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="billToZipCode" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+    </ValidationObserver>
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="saveEvent">
@@ -103,12 +105,13 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 export default {
   name: 'CateringSalesShipAndBillTo',
-  components: { InputRow, InputWithTitle, CustomInput },
+  components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
   data() {
     return {
       shipToName: '',
@@ -125,9 +128,10 @@ export default {
   },
   methods: {
     saveEvent() {
-      console.log('save')
+      this.$refs.form.validate()
     },
     cancelEvent() {
+      this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
     },
   },

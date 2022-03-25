@@ -1,122 +1,124 @@
 <template>
   <div class="content">
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Order Number</template>
+    <ValidationObserver ref="form">
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Order Number</template>
 
-        <template #input>
-          <CustomInput v-model="orderNumber" rules="required" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="orderNumber" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Description</template>
+        <InputWithTitle>
+          <template #title>Description</template>
 
-        <template #input>
-          <CustomInput v-model="description" rules="required" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="description" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Order Date</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Order Date</template>
 
-        <template #input>
-          <CustomInput
-            v-model="orderDate"
-            rules="required|date"
-            placeholder="mm/dd/yyyy"
-          />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput
+              v-model="orderDate"
+              rules="required|date"
+              placeholder="mm/dd/yyyy"
+            />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Phone</template>
+        <InputWithTitle>
+          <template #title>Phone</template>
 
-        <template #input>
-          <CustomInput
-            v-model="phone"
-            rules="required|phone"
-            placeholder="(123) 456-7890"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput
+              v-model="phone"
+              rules="required|phone"
+              placeholder="(123) 456-7890"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Delivery Date/Time</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Delivery Date/Time</template>
 
-        <template #input>
-          <CustomInput
-            v-model="deliveryDateAndTime"
-            rules="required|dateWithTime"
-            placeholder="mm/dd/yyyy hh:mm"
-          />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput
+              v-model="deliveryDateAndTime"
+              rules="required|dateWithTime"
+              placeholder="mm/dd/yyyy hh:mm"
+            />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Head Count</template>
+        <InputWithTitle>
+          <template #title>Head Count</template>
 
-        <template #input>
-          <CustomInput v-model="headCount" rules="required" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="headCount" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Ordered By</template>
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Ordered By</template>
 
-        <template #input>
-          <CustomInput v-model="orderedBy" rules="required" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomInput v-model="orderedBy" rules="required" />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Ordered For</template>
+        <InputWithTitle>
+          <template #title>Ordered For</template>
 
-        <template #input>
-          <CustomInput v-model="orderedFor" rules="required" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="orderedFor" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle margin-bottom="14px">
-        <template #title>Taxable</template>
+      <InputRow>
+        <InputWithTitle margin-bottom="14px">
+          <template #title>Taxable</template>
 
-        <template #input>
-          <CustomRadioButton
-            :is-active="taxable"
-            @set-is-active="setIsTaxable"
-          />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomRadioButton
+              :is-active="taxable"
+              @set-is-active="setIsTaxable"
+            />
+          </template>
+        </InputWithTitle>
 
-      <InputWithTitle>
-        <template #title>Charge #</template>
+        <InputWithTitle>
+          <template #title>Charge #</template>
 
-        <template #input>
-          <CustomInput v-model="chargeNumber" rules="required" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomInput v-model="chargeNumber" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
 
-    <InputRow>
-      <InputWithTitle margin-bottom="14px">
-        <template #title>Cash Order</template>
+      <InputRow>
+        <InputWithTitle margin-bottom="14px">
+          <template #title>Cash Order</template>
 
-        <template #input>
-          <CustomRadioButton
-            :is-active="cashOrder"
-            @set-is-active="setIsCashOrder"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
+          <template #input>
+            <CustomRadioButton
+              :is-active="cashOrder"
+              @set-is-active="setIsCashOrder"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+    </ValidationObserver>
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="saveEvent">
@@ -131,6 +133,7 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 import InputRow from './InputRow.vue'
@@ -144,6 +147,7 @@ export default {
     InputRow,
     CustomRadioButton,
     DefaultButton,
+    ValidationObserver,
   },
   data() {
     return {
@@ -168,9 +172,10 @@ export default {
       this.cashOrder = !this.cashOrder
     },
     saveEvent() {
-      console.log('save')
+      this.$refs.form.validate()
     },
     cancelEvent() {
+      this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
     },
   },
