@@ -56,7 +56,7 @@ export default {
   },
   googleFonts: {
     families: {
-      Roboto: false,
+      Roboto: true,
     },
     display: 'optional',
     preconnect: true,
