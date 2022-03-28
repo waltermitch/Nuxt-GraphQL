@@ -19,7 +19,9 @@
         </InputWithTitle>
       </ValidationObserver>
 
-      <span class="text"> FORGOT PASSWORD? </span>
+      <NuxtLink to="forgot-password">
+        <span class="text"> FORGOT PASSWORD? </span>
+      </NuxtLink>
 
       <DefaultButton button-color-gamma="red" @event="login">
         Sign in
@@ -78,5 +80,6 @@ export default {
   font-size: 14px;
   line-height: 20px;
   text-transform: uppercase;
+  cursor: pointer;
 }
 </style>
