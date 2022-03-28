@@ -1,5 +1,5 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" mode="eager" :rules="rules">
+  <ValidationProvider v-slot="{ errors, classes }" mode="eager" :rules="rules">
     <input
       class="input"
       :value="value"
@@ -7,6 +7,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       :readonly="readonly"
+      :class="classes"
       @input="setValue($event.target.value)"
     />
     <span class="error">{{ errors[0] }}</span>
@@ -75,6 +76,10 @@ export default {
 
 .error {
   font-size: 12px;
-  color: #f2494e;
+  color: $firebrick;
+}
+
+.invalid {
+  border: 1px solid $firebrick;
 }
 </style>

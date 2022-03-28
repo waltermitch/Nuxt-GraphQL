@@ -1,15 +1,21 @@
 <template>
-  <textarea
-    name=""
-    class="textarea"
-    :style="{ width, height }"
-    @input="textareaValue($event.target.value)"
-  ></textarea>
+  <ValidationProvider v-slot="{ errors, classes }" mode="eager" :rules="rules">
+    <textarea
+      name=""
+      class="textarea"
+      :class="classes"
+      :style="{ width, height }"
+      @input="textareaValue($event.target.value)"
+    ></textarea>
+    <span class="error">{{ errors[0] }}</span>
+  </ValidationProvider>
 </template>
 
 <script>
+import { ValidationProvider } from 'vee-validate'
 export default {
   name: 'CustomTextarea',
+  components: { ValidationProvider },
   props: {
     name: {
       type: String,
@@ -22,6 +28,10 @@ export default {
     height: {
       type: String,
       default: '80px',
+    },
+    rules: {
+      type: String,
+      default: 'required',
     },
   },
   methods: {
@@ -38,5 +48,14 @@ export default {
   border: 1px solid $gainsboro;
   border-radius: 3px;
   resize: none;
+}
+
+.error {
+  font-size: 12px;
+  color: $firebrick;
+}
+
+.invalid {
+  border: 1px solid $firebrick;
 }
 </style>
