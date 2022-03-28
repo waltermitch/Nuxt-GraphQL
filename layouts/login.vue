@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <TheHeader is-login />
+    <TheHeader only-logo />
 
     <div class="nuxt-container">
       <Nuxt />
