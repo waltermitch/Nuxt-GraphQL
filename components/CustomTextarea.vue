@@ -31,7 +31,7 @@ export default {
     },
     rules: {
       type: String,
-      default: 'required',
+      default: '',
     },
   },
   methods: {

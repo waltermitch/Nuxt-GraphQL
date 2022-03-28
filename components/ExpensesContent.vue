@@ -97,7 +97,11 @@
             <template #title>Comments</template>
 
             <template #input>
-              <CustomTextarea v-model="comments" name="comments" />
+              <CustomTextarea
+                v-model="comments"
+                name="comments"
+                rules="required"
+              />
             </template>
           </InputWithTitle>
         </InputRow>
