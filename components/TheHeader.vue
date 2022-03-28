@@ -6,10 +6,10 @@
           <img src="~assets/images/header/logo.svg" />
         </NuxtLink>
 
-        <HeaderNavigation />
+        <HeaderNavigation v-if="!isLoginPage" />
       </div>
 
-      <div class="profile">
+      <div v-if="!isLoginPage" class="profile">
         <img src="~assets/images/header/avatar.svg" />
 
         <svg
@@ -34,6 +34,12 @@ import HeaderNavigation from './HeaderNavigation.vue'
 export default {
   name: 'TheHeader',
   components: { HeaderNavigation },
+  props: {
+    isLoginPage: {
+      type: Boolean,
+      default: true,
+    },
+  },
 }
 </script>
 
