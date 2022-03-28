@@ -1,5 +1,5 @@
 import { extend } from 'vee-validate'
-import { required, numeric } from 'vee-validate/dist/rules'
+import { required, numeric, double, email } from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
   DATE_VALIDATION_REGEX,
@@ -14,7 +14,7 @@ extend('currency', {
 
 extend('required', {
   ...required,
-  message: 'This field is required',
+  message: 'The field is required',
 })
 
 extend('date', {
@@ -35,4 +35,14 @@ extend('phone', {
 extend('numeric', {
   ...numeric,
   message: 'This field must be numeric',
+})
+
+extend('double', {
+  ...double,
+  message: 'This should not contain letters',
+})
+
+extend('email', {
+  ...email,
+  message: 'Email is not valid',
 })
