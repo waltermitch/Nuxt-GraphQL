@@ -73,7 +73,11 @@
             <template #title>GL Account</template>
 
             <template #input>
-              <CustomSelect :options="mockedList" @input="selectGlAccount" />
+              <CustomSelect
+                :options="mockedList"
+                :error="selectError"
+                @input="selectGlAccount"
+              />
             </template>
           </InputWithTitle>
         </InputRow>
@@ -122,6 +126,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import { mapActions } from 'vuex'
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
@@ -154,6 +159,7 @@ export default {
       glAccount: '',
       amount: '',
       comments: '',
+      selectError: false,
       // TODO remove when API would be available
       mockedList: [
         {
@@ -168,15 +174,36 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setShowMessage: 'formSubmissionMessage/setShowMessage',
+      setMessageType: 'formSubmissionMessage/setMessageType',
+    }),
     setExpensesType(expensesType) {
       this.expensesType = this.expensesType === expensesType ? '' : expensesType
     },
     acceptEvent() {
-      this.$refs.form.validate()
+      if (!this.glAccount) {
+        this.selectError = true
+      }
+
+      this.$refs.form.validate().then((res) => {
+        if (res && this.glAccount) {
+          this.setShowMessage(true)
+          this.setMessageType('success')
+        } else {
+          this.setShowMessage(true)
+          this.setMessageType('error')
+        }
+
+        setTimeout(() => {
+          this.setShowMessage(false)
+        }, 4000)
+      })
     },
     cancelEvent() {
       this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
+      this.setShowMessage(false)
     },
     selectGlAccount(account) {
       this.glAccount = account
