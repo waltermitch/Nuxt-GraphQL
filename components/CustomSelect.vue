@@ -4,8 +4,9 @@
       class="selected"
       :class="{
         'selected--opened': open,
+        'selected--error': error,
       }"
-      @click="open = !open"
+      @click="toggleSelect"
     >
       <span>
         {{ selected && selected.name }}
@@ -20,7 +21,13 @@
       />
     </div>
 
-    <div v-show="open" class="options">
+    <div
+      v-show="open"
+      class="options"
+      :class="{
+        'options--opened': open,
+      }"
+    >
       <div
         v-for="(option, i) of options"
         :key="i"
@@ -30,6 +37,8 @@
         {{ option.name }}
       </div>
     </div>
+
+    <span v-if="error" class="error"> The field is required </span>
   </div>
 </template>
 
@@ -45,6 +54,10 @@ export default {
       type: Number,
       default: 0,
     },
+    error: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -56,6 +69,11 @@ export default {
     this.$emit('input', this.selected)
   },
   methods: {
+    toggleSelect() {
+      if (this.options.length) {
+        this.open = !this.open
+      }
+    },
     selectOption(option) {
       this.selected = option
       this.open = false
@@ -69,10 +87,12 @@ export default {
 .custom-select {
   position: relative;
   width: 100%;
+  height: 40px;
   outline: none;
 }
 
 .selected {
+  height: 100%;
   padding: 10px 16px 10px 8px;
   background: #fff;
   cursor: pointer;
@@ -81,6 +101,15 @@ export default {
 
   &--opened {
     border-radius: 3px 3px 0px 0px;
+    border-color: $firebrick;
+  }
+
+  &--error {
+    border-color: $firebrick;
+  }
+
+  &:active {
+    border-color: $firebrick;
   }
 }
 
@@ -106,6 +135,10 @@ export default {
   border-left: 1px solid gainsboro;
   border-bottom: 1px solid gainsboro;
   overflow: hidden;
+
+  &--opened {
+    border-color: $firebrick;
+  }
 }
 
 .option {
@@ -118,5 +151,10 @@ export default {
     color: #fff;
     background-color: $firebrick;
   }
+}
+
+.error {
+  font-size: 12px;
+  color: $firebrick;
 }
 </style>
