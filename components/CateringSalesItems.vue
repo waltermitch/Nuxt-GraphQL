@@ -62,6 +62,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import { mapActions } from 'vuex'
 import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
@@ -104,12 +105,34 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setShowMessage: 'formSubmissionMessage/setShowMessage',
+      setMessageType: 'formSubmissionMessage/setMessageType',
+    }),
+    scrollToTop() {
+      window.scrollTo(0, 0)
+    },
     saveEvent() {
-      this.$refs.form.reset()
-      this.$refs.form.validate()
+      this.$refs.form.validate().then((result) => {
+        if (result) {
+          this.setShowMessage(true)
+          this.setMessageType('success')
+          this.scrollToTop()
+        } else {
+          this.setShowMessage(true)
+          this.setMessageType('error')
+          this.scrollToTop()
+        }
+
+        setTimeout(() => {
+          this.setShowMessage(false)
+        }, 4000)
+      })
     },
     cancelEvent() {
+      this.$refs.form.reset()
       Object.assign(this.$data, this.$options.data.apply(this))
+      this.setShowMessage(false)
     },
   },
 }
