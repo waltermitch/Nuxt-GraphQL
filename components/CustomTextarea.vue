@@ -2,10 +2,11 @@
   <ValidationProvider v-slot="{ errors, classes }" mode="eager" :rules="rules">
     <textarea
       name=""
+      :value="value"
       class="textarea"
       :class="classes"
       :style="{ width, height }"
-      @input="textareaValue($event.target.value)"
+      @input="setValue($event.target.value)"
     ></textarea>
     <span class="error">{{ errors[0] }}</span>
   </ValidationProvider>
@@ -17,6 +18,10 @@ export default {
   name: 'CustomTextarea',
   components: { ValidationProvider },
   props: {
+    value: {
+      type: String,
+      default: '',
+    },
     name: {
       type: String,
       required: true,
