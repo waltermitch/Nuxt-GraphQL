@@ -1,0 +1,43 @@
+<template>
+  <BasePageLayout>
+    <template #sideBar>
+      <SideBar :nav-tabs="navTabs" />
+    </template>
+
+    <template #header>
+      <PageSubtitle> Home / Select Unit </PageSubtitle>
+
+      <PageTitle> Select Unit </PageTitle>
+    </template>
+
+    <template #content>
+      <SelectUnitContent />
+    </template>
+  </BasePageLayout>
+</template>
+
+<script>
+import { HOME_NAV_TABS } from '~/constants/constants'
+import BasePageLayout from '~/components/BasePageLayout.vue'
+import SideBar from '~/components/SideBar.vue'
+import PageSubtitle from '~/components/PageSubtitle.vue'
+import PageTitle from '~/components/PageTitle.vue'
+import SelectUnitContent from '~/components/SelectUnitContent.vue'
+export default {
+  name: 'SelectUnitPage',
+  components: {
+    BasePageLayout,
+    SideBar,
+    PageSubtitle,
+    PageTitle,
+    SelectUnitContent,
+  },
+  data() {
+    return {
+      navTabs: HOME_NAV_TABS,
+    }
+  },
+}
+</script>
+
+<style lang="scss" scoped></style>

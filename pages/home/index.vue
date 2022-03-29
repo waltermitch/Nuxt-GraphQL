@@ -7,7 +7,7 @@ export default {
   name: 'HomeIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
-    redirectTo: '/home/close-register',
+    redirectTo: '/home/select-unit',
   },
 }
 </script>
