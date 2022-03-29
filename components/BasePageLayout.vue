@@ -11,20 +11,33 @@
         <slot name="content"></slot>
       </div>
     </main>
+
+    <FormSubmissionMessage v-if="showMessage" :type="messageType" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import FormSubmissionMessage from '~/components/FormSubmissionMessage.vue'
 export default {
   name: 'BasePageLayout',
+  components: { FormSubmissionMessage },
+  computed: {
+    ...mapGetters({
+      showMessage: 'formSubmissionMessage/getShowMessage',
+      messageType: 'formSubmissionMessage/getMessageType',
+    }),
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .section {
+  position: relative;
   display: flex;
   width: 100%;
   max-width: $xxl;
+  overflow: hidden;
 }
 
 .container {

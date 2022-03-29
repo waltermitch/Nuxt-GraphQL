@@ -1,0 +1,62 @@
+<template>
+  <div
+    class="message"
+    :class="{
+      'message--success': type === 'success',
+      'message--error': type === 'error',
+    }"
+  >
+    <span class="text">
+      {{
+        type === 'success'
+          ? 'Form data has been updated'
+          : 'Something went wrong with the submission'
+      }}
+    </span>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'FormSubmissionMessage',
+  props: {
+    type: {
+      type: String,
+      required: true,
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.message {
+  position: absolute;
+  right: 0;
+  padding: 10px 15px;
+  animation: message 2s ease-in-out;
+
+  &--success {
+    background: $eucalyptus;
+  }
+
+  &--error {
+    background: $firebrick;
+  }
+}
+
+.text {
+  color: #fff;
+  font-size: $font-s;
+  line-height: 20px;
+}
+
+@keyframes message {
+  0% {
+    right: -310px;
+  }
+
+  100% {
+    right: 0;
+  }
+}
+</style>
