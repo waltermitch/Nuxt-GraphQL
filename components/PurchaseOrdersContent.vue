@@ -26,6 +26,7 @@ import PageSubheaderItem from './PageSubheaderItem.vue'
 import TabsView from './TabsView.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import PurchaseOrdersDetails from './PurchaseOrdersDetails.vue'
+import PurchaseOrdersItems from './PurchaseOrdersItems.vue'
 export default {
   name: 'PurchaseOrdersContent',
   components: {
@@ -37,7 +38,7 @@ export default {
   data() {
     return {
       tabsHeaders: ['Details', 'Items'],
-      tabs: [PurchaseOrdersDetails],
+      tabs: [PurchaseOrdersDetails, PurchaseOrdersItems],
     }
   },
 }
