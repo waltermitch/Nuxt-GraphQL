@@ -17,7 +17,9 @@
     </header>
 
     <div class="content">
-      <component :is="tabs[activeTab]" />
+      <KeepAlive>
+        <component :is="tabs[activeTab]" />
+      </KeepAlive>
     </div>
   </div>
 </template>
