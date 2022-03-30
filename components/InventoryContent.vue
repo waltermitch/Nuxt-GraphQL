@@ -78,7 +78,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
@@ -94,6 +94,7 @@ export default {
     CustomTableRow,
     ValidationObserver,
   },
+  mixins: [formMixin],
   data() {
     return {
       totalPreviousAmount: '75.00',
@@ -127,44 +128,6 @@ export default {
       return this.items.reduce((prev, current) => {
         return Number(prev) + Number(current.currentAmount)
       }, 0)
-    },
-  },
-  methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
-    scrollToTop() {
-      window.scrollTo(0, 0)
-    },
-    clearState() {
-      Object.assign(this.$data, this.$options.data.apply(this))
-    },
-    saveEvent() {
-      this.$refs.form.validate().then((result) => {
-        if (result) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-          this.scrollToTop()
-          setTimeout(() => {
-            this.clearState()
-            this.$refs.form.reset()
-          }, 4000)
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-          this.scrollToTop()
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      this.clearState()
-      this.setShowMessage(false)
     },
   },
 }
@@ -205,6 +168,7 @@ export default {
 
   span:nth-child(1) {
     grid-column: 2;
+    text-align: right;
   }
 
   span:nth-child(2) {

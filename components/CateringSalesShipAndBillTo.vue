@@ -106,13 +106,14 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 export default {
   name: 'CateringSalesShipAndBillTo',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
+  mixins: [formMixin],
   data() {
     return {
       shipToName: '',
@@ -126,32 +127,6 @@ export default {
       shipToZipCode: '',
       billToZipCode: '',
     }
-  },
-  methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
-    saveEvent() {
-      this.$refs.form.validate().then((result) => {
-        if (result) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      Object.assign(this.$data, this.$options.data.apply(this))
-      this.setShowMessage(false)
-    },
   },
 }
 </script>

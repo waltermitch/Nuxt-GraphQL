@@ -67,7 +67,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
@@ -83,6 +83,7 @@ export default {
     CustomInput,
     ValidationObserver,
   },
+  mixins: [formMixin],
   data() {
     return {
       items: [
@@ -138,10 +139,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
     setIsMonthly(expensesItem) {
       // TODO refactor this methods when API would be available
       this.items = this.items.map((item) => {
@@ -200,26 +197,6 @@ export default {
     },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
-    },
-    saveEvent() {
-      this.$refs.form.validate().then((res) => {
-        if (res) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      Object.assign(this.$data, this.$options.data.apply(this))
-      this.setShowMessage(false)
     },
   },
 }

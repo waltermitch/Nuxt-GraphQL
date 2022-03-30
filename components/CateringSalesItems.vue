@@ -19,9 +19,17 @@
 
           <CustomInput v-model="item.name" rules="required" />
 
-          <CustomInput v-model="item.price" rules="required|currency" placeholder="$0.00" />
+          <CustomInput
+            v-model="item.price"
+            rules="required|currency"
+            placeholder="$0.00"
+          />
 
-          <CustomInput v-model="item.ext" rules="required|currency" placeholder="$0.00" />
+          <CustomInput
+            v-model="item.ext"
+            rules="required|currency"
+            placeholder="$0.00"
+          />
 
           <img
             src="~assets/images/icons/home/delete.svg"
@@ -76,7 +84,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
@@ -90,6 +98,7 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
+  mixins: [formMixin],
   data() {
     return {
       items: [
@@ -119,35 +128,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
-    scrollToTop() {
-      window.scrollTo(0, 0)
-    },
-    saveEvent() {
-      this.$refs.form.validate().then((result) => {
-        if (result) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-          this.scrollToTop()
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-          this.scrollToTop()
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      Object.assign(this.$data, this.$options.data.apply(this))
-      this.setShowMessage(false)
-    },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },

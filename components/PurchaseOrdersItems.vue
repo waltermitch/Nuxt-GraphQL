@@ -68,13 +68,14 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 export default {
   name: 'PurchaseOrdersItems',
   components: { CustomTable, CustomTableRow, CustomInput, ValidationObserver },
+  mixins: [formMixin],
   data() {
     return {
       items: [
@@ -89,10 +90,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
     addRow() {
       this.items.push({
         id: this.items.length,
@@ -104,26 +101,6 @@ export default {
     },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
-    },
-    saveEvent() {
-      this.$refs.form.validate().then((result) => {
-        if (result) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      this.setShowMessage(false)
-      Object.assign(this.$data, this.$options.data.apply(this))
     },
   },
 }

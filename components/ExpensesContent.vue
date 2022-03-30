@@ -181,6 +181,9 @@ export default {
     setExpensesType(expensesType) {
       this.expensesType = this.expensesType === expensesType ? '' : expensesType
     },
+    clearState() {
+      Object.assign(this.$data, this.$options.data.apply(this))
+    },
     acceptEvent() {
       if (!this.glAccount) {
         this.selectError = true
@@ -190,6 +193,10 @@ export default {
         if (res && this.glAccount) {
           this.setShowMessage(true)
           this.setMessageType('success')
+          setTimeout(() => {
+            this.clearState()
+            this.$refs.form.reset()
+          }, 4000)
         } else {
           this.setShowMessage(true)
           this.setMessageType('error')
@@ -202,7 +209,7 @@ export default {
     },
     cancelEvent() {
       this.$refs.form.reset()
-      Object.assign(this.$data, this.$options.data.apply(this))
+      this.clearState()
       this.setShowMessage(false)
     },
     selectGlAccount(account) {

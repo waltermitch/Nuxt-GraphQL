@@ -1,5 +1,5 @@
 <template>
-  <p>Initial commit</p>
+  <p>SideBar</p>
 </template>
 
 <script>

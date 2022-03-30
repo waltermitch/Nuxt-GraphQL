@@ -134,7 +134,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 import InputRow from './InputRow.vue'
@@ -150,6 +150,7 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
+  mixins: [formMixin],
   data() {
     return {
       orderNumber: '',
@@ -166,35 +167,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
     setIsTaxable() {
       this.taxable = !this.taxable
     },
     setIsCashOrder() {
       this.cashOrder = !this.cashOrder
-    },
-    saveEvent() {
-      this.$refs.form.validate().then((result) => {
-        if (result) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      this.setShowMessage(false)
-      Object.assign(this.$data, this.$options.data.apply(this))
     },
   },
 }
