@@ -66,7 +66,7 @@
 
           <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
         </div>
-
+        <!-- TODO get real data whe API available -->
         <div class="total">
           <div class="total-section">
             <div class="total-row">
@@ -145,7 +145,7 @@ import InputRow from './InputRow.vue'
 import CustomSelect from './CustomSelect.vue'
 import TabsView from './TabsView.vue'
 import SalesInfo from './SalesInfo.vue'
-import PettyCash from './PettyCash.vue'
+import ClosRegisterPettyCash from './CloseRegisterPettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 export default {
@@ -159,14 +159,14 @@ export default {
     CustomSelect,
     TabsView,
     SalesInfo,
-    PettyCash,
+    ClosRegisterPettyCash,
     FinishCloseout,
     PageContentWrapper,
   },
   data() {
     return {
       tabsHeaders: ['Sales Info', 'Petty Cash', 'Finish Closeout'],
-      tabs: [SalesInfo, PettyCash, FinishCloseout],
+      tabs: [SalesInfo, ClosRegisterPettyCash, FinishCloseout],
       registerId: null,
       registerName: '',
       mockedList: [

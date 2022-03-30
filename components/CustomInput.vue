@@ -41,7 +41,7 @@ export default {
       default: false,
     },
     rules: {
-      type: String,
+      type: [String, Object],
       default: '',
     },
   },

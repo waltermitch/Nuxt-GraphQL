@@ -1,5 +1,11 @@
 import { extend } from 'vee-validate'
-import { required, numeric, double, email } from 'vee-validate/dist/rules'
+import {
+  required,
+  numeric,
+  double,
+  email,
+  between,
+} from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
   DATE_VALIDATION_REGEX,
@@ -45,4 +51,9 @@ extend('double', {
 extend('email', {
   ...email,
   message: 'Email is not valid',
+})
+
+extend('between', {
+  ...between,
+  message: 'Amount is bigger than left to distribute',
 })
