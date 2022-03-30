@@ -97,6 +97,9 @@ export default {
       this.items.push({
         id: this.items.length,
         amount: '',
+        inventoryCategory: '',
+        glAccount: '',
+        ext: '',
       })
     },
     deleteRow(id) {

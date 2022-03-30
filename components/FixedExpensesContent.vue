@@ -30,9 +30,24 @@
             <CustomInput
               v-model="item.amount"
               rules="required|double|currency"
+              placeholder="$0.00"
             />
 
             <CustomInput v-model="item.comment" rules="required" />
+
+            <img
+              src="~assets/images/icons/home/delete.svg"
+              class="icon"
+              @click="deleteRow(item.id)"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow class="table-row add-row">
+            <img
+              src="~assets/images/icons/home/add.svg"
+              class="icon icon--add"
+              @click="addRow"
+            />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -165,6 +180,27 @@ export default {
         }
       })
     },
+    addRow() {
+      this.items.push({
+        id: this.items.length + 1,
+        monthly: false,
+        glAccount: [
+          {
+            id: 1,
+            name: 'Register #2',
+          },
+          {
+            id: 2,
+            name: 'Register #3',
+          },
+        ],
+        amount: '',
+        comment: '',
+      })
+    },
+    deleteRow(id) {
+      this.items = this.items.filter((item) => item.id !== id)
+    },
     saveEvent() {
       this.$refs.form.validate().then((res) => {
         if (res) {
@@ -193,7 +229,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 150px 345px 192px 310px;
+  grid-template-columns: 150px 325px 192px 300px 20px;
   column-gap: 20px;
 }
 
@@ -203,6 +239,18 @@ export default {
 
   button:first-child {
     margin-right: 11px;
+  }
+}
+
+.add-row {
+  height: 86px;
+}
+
+.icon {
+  cursor: pointer;
+
+  &--add {
+    grid-column: 5;
   }
 }
 </style>

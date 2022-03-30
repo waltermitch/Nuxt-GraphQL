@@ -19,9 +19,23 @@
 
           <CustomInput v-model="item.name" rules="required" />
 
-          <CustomInput v-model="item.price" rules="required|currency" />
+          <CustomInput v-model="item.price" rules="required|currency" placeholder="$0.00" />
 
-          <CustomInput v-model="item.ext" rules="required|currency" />
+          <CustomInput v-model="item.ext" rules="required|currency" placeholder="$0.00" />
+
+          <img
+            src="~assets/images/icons/home/delete.svg"
+            class="icon"
+            @click="deleteRow(item.id)"
+          />
+        </CustomTableRow>
+
+        <CustomTableRow class="table-row add-row">
+          <img
+            src="~assets/images/icons/home/add.svg"
+            class="icon icon--add"
+            @click="addRow"
+          />
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
@@ -134,6 +148,18 @@ export default {
       Object.assign(this.$data, this.$options.data.apply(this))
       this.setShowMessage(false)
     },
+    deleteRow(id) {
+      this.items = this.items.filter((item) => item.id !== id)
+    },
+    addRow() {
+      this.items.push({
+        id: this.items.length,
+        amount: '',
+        name: '',
+        price: '',
+        ext: '',
+      })
+    },
   },
 }
 </script>
@@ -142,7 +168,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 207px 346px 194px 260px;
+  grid-template-columns: 207px 326px 194px 230px 20px;
   column-gap: 20px;
 }
 
@@ -167,6 +193,14 @@ export default {
 
   button:first-child {
     margin-right: 11px;
+  }
+}
+
+.icon {
+  cursor: pointer;
+
+  &--add {
+    grid-column: 5;
   }
 }
 </style>
