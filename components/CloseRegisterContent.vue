@@ -148,6 +148,7 @@ import SalesInfo from './SalesInfo.vue'
 import ClosRegisterPettyCash from './CloseRegisterPettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
+import CloseRegisterFinishCloseout from './CloseRegisterFinishCloseout'
 export default {
   name: 'CloseRegisterContent',
   components: {
@@ -166,7 +167,7 @@ export default {
   data() {
     return {
       tabsHeaders: ['Sales Info', 'Petty Cash', 'Finish Closeout'],
-      tabs: [SalesInfo, ClosRegisterPettyCash, FinishCloseout],
+      tabs: [SalesInfo, ClosRegisterPettyCash, CloseRegisterFinishCloseout],
       registerId: null,
       registerName: '',
       mockedList: [
