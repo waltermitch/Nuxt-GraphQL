@@ -23,12 +23,13 @@ export default {
   background: #fff;
   border: 1px solid $gainsboro;
   border-radius: 8px;
-  overflow: hidden;
 }
 
 .header {
   padding: 22px 20px 25px;
   background: $cultured;
+  border-top-right-radius: inherit;
+  border-top-left-radius: inherit;
   border-bottom: 1px solid $white-smoke;
 
   span {
