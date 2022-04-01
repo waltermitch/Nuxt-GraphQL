@@ -25,6 +25,33 @@ export const HEADER_TABS = [
   },
 ]
 
+export const HQ_HEADER_TABS = [
+  {
+    id: 1,
+    name: 'Maintenance',
+    src: require('assets/images/icons/hqHeader/maintenance.svg'),
+    to: '/hq-maintenance',
+  },
+  {
+    id: 2,
+    name: 'Units',
+    src: require('assets/images/icons/hqHeader/units.svg'),
+    to: '/hq-units',
+  },
+  {
+    id: 3,
+    name: 'Reports',
+    src: require('assets/images/icons/hqHeader/reports.svg'),
+    to: '/hq-reports',
+  },
+  {
+    id: 3,
+    name: 'Accounting',
+    src: require('assets/images/icons/hqHeader/accounting.svg'),
+    to: '/hq-accounting',
+  },
+]
+
 export const HOME_NAV_TABS = [
   {
     id: 1,
@@ -127,5 +154,104 @@ export const REVIEW_NAV_TABS = [
     caption: 'Weekly Expenses',
     pageUrl: '/review/weekly-expenses',
     iconSrc: require('assets/images/icons/review/period.svg'),
+  },
+]
+
+export const HQ_MAINTENANCE_TABS = [
+  {
+    id: 1,
+    caption: 'Export Purchases',
+    pageUrl: 'hq-maintenance/export-purchases',
+    iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Export Catering',
+    pageUrl: 'hq-maintenance/export-catering',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+]
+
+export const HQ_UNITS_TABS = [
+  {
+    id: 1,
+    caption: 'Units',
+    pageUrl: 'hq-units/units',
+    iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Unit Type',
+    pageUrl: 'hq-units/unit-type',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 3,
+    caption: 'Registers',
+    pageUrl: 'hq-units/registers',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 4,
+    caption: 'Unit Vendor',
+    pageUrl: 'hq-units/unit-vendor',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 5,
+    caption: 'Unit GL',
+    pageUrl: 'hq-units/unit-gl',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 6,
+    caption: 'Employee',
+    pageUrl: 'hq-units/employee',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 7,
+    caption: 'Unit Period Status',
+    pageUrl: 'hq-units/unit-period-status',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+]
+
+export const HQ_ACCOUNTING = [
+  {
+    id: 1,
+    caption: 'State',
+    pageUrl: 'hq-accounting/state',
+    iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
+  },
+  {
+    id: 2,
+    caption: 'County',
+    pageUrl: 'hq-accounting/county',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 3,
+    caption: 'City',
+    pageUrl: 'hq-accounting/city',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 4,
+    caption: 'District',
+    pageUrl: 'hq-accounting/district',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 5,
+    caption: 'Vendor',
+    pageUrl: 'hq-accounting/vendor',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 6,
+    caption: 'Sysco',
+    pageUrl: 'hq-accounting/sysco',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
 ]
