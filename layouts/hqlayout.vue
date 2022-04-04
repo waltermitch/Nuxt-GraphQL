@@ -12,13 +12,12 @@
 import { mapActions } from 'vuex'
 import TheHeader from '@/components/TheHeader'
 export default {
-  name: 'DefaultLayout',
+  name: 'HQLayout',
   components: {
     TheHeader,
   },
-  // middleware: 'authUser',
   mounted() {
-    this.setRole('user')
+    this.setRole('admin')
   },
   methods: {
     ...mapActions({

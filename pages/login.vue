@@ -32,6 +32,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import { mapActions } from 'vuex'
 import InputWithTitle from '~/components/InputWithTitle.vue'
 import CustomInput from '~/components/CustomInput.vue'
 import DefaultButton from '~/components/DefaultButton.vue'
@@ -51,8 +52,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setRole: 'auth/setRole',
+    }),
     login() {
-      this.$refs.form.validate()
+      this.$refs.form.validate().then((res) => {
+        if (res) {
+          this.setRole('user')
+          this.$router.push('/')
+        }
+      })
     },
   },
 }

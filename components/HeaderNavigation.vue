@@ -11,15 +11,24 @@
 </template>
 
 <script>
-import { HEADER_TABS } from '../constants/constants'
+import { mapGetters } from 'vuex'
+import { HEADER_TABS, HQ_HEADER_TABS } from '../constants/constants'
 import HeaderTab from './HeaderTab.vue'
 export default {
   name: 'HeaderNavigation',
   components: { HeaderTab },
-  data() {
-    return {
-      headerTabs: HEADER_TABS,
-    }
+  computed: {
+    ...mapGetters({
+      role: 'auth/getRole',
+    }),
+    headerTabs() {
+      switch (this.role) {
+        case 'admin':
+          return HQ_HEADER_TABS
+        default:
+          return HEADER_TABS
+      }
+    },
   },
 }
 </script>
