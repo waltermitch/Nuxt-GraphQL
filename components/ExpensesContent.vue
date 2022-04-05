@@ -126,7 +126,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
+import { formMixin } from '../mixins/formMixin'
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
@@ -152,6 +152,7 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
+  mixins: [formMixin],
   data() {
     return {
       expensesDate: '',
@@ -174,43 +175,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
     setExpensesType(expensesType) {
       this.expensesType = this.expensesType === expensesType ? '' : expensesType
-    },
-    clearState() {
-      Object.assign(this.$data, this.$options.data.apply(this))
     },
     acceptEvent() {
       if (!this.glAccount) {
         this.selectError = true
       }
 
-      this.$refs.form.validate().then((res) => {
-        if (res && this.glAccount) {
-          this.setShowMessage(true)
-          this.setMessageType('success')
-          setTimeout(() => {
-            this.clearState()
-            this.$refs.form.reset()
-          }, 4000)
-        } else {
-          this.setShowMessage(true)
-          this.setMessageType('error')
-        }
-
-        setTimeout(() => {
-          this.setShowMessage(false)
-        }, 4000)
-      })
-    },
-    cancelEvent() {
-      this.$refs.form.reset()
-      this.clearState()
-      this.setShowMessage(false)
+      this.saveEvent()
     },
     selectGlAccount(account) {
       this.glAccount = account
