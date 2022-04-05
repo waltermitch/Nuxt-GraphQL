@@ -160,12 +160,24 @@ export const REVIEW_NAV_TABS = [
 export const HQ_MAINTENANCE_TABS = [
   {
     id: 1,
+    caption: 'Units Reporting',
+    pageUrl: '/hq-maintenance/units-reporting',
+    iconSrc: require('assets/images/icons/header/home.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Send Unit Update',
+    pageUrl: '/hq-maintenance/send-unit-update',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 3,
     caption: 'Export Purchases',
     pageUrl: '/hq-maintenance/export-purchases',
     iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
   },
   {
-    id: 2,
+    id: 4,
     caption: 'Export Catering',
     pageUrl: '/hq-maintenance/export-catering',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
