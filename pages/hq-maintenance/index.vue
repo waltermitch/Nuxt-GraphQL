@@ -4,11 +4,11 @@
 
 <script>
 export default {
-  name: 'HomeIndexPage',
+  name: 'HQMaintenanceIndexPage',
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
-    redirectTo: 'hq-maintenance/export-purchases',
+    redirectTo: '/hq-maintenance/export-purchases',
   },
 }
 </script>

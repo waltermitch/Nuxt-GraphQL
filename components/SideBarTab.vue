@@ -36,6 +36,11 @@ export default {
   border-radius: 3px;
   transition: all ease-in-out 0.3s;
 
+  img.icon {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(991%)
+      hue-rotate(185deg) brightness(84%) contrast(94%);
+  }
+
   &:hover {
     background: $firebrick;
 
