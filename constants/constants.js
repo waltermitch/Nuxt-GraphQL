@@ -34,9 +34,9 @@ export const HQ_HEADER_TABS = [
   },
   {
     id: 2,
-    name: 'Units',
+    name: 'Unit Setup',
     src: require('assets/images/icons/hqHeader/units.svg'),
-    to: '/hq-units',
+    to: '/hq-unit-setup',
   },
   {
     id: 3,
@@ -188,43 +188,43 @@ export const HQ_UNITS_TABS = [
   {
     id: 1,
     caption: 'Units',
-    pageUrl: '/hq-units/units',
+    pageUrl: '/hq-unit-setup/unit-info',
     iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
   },
   {
     id: 2,
     caption: 'Unit Type',
-    pageUrl: '/hq-units/unit-type',
+    pageUrl: '/hq-unit-setup/unit-type',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
     id: 3,
     caption: 'Registers',
-    pageUrl: '/hq-units/registers',
+    pageUrl: '/hq-unit-setup/registers',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
     id: 4,
     caption: 'Unit Vendor',
-    pageUrl: '/hq-units/unit-vendor',
+    pageUrl: '/hq-unit-setup/unit-vendor',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
     id: 5,
     caption: 'Unit GL',
-    pageUrl: '/hq-units/unit-gl',
+    pageUrl: '/hq-unit-setup/unit-gl',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
     id: 6,
     caption: 'Employee',
-    pageUrl: '/hq-units/employee',
+    pageUrl: '/hq-unit-setup/employee',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
     id: 7,
     caption: 'Unit Period Status',
-    pageUrl: '/hq-units/unit-period-status',
+    pageUrl: '/hq-unit-setup/unit-period-status',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
 ]

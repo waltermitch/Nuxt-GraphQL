@@ -4,11 +4,11 @@
 
 <script>
 export default {
-  name: 'HQUnitsIndexPage',
+  name: 'HQUnitSetupIndexPage',
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
-    redirectTo: '/hq-units/units-setup',
+    redirectTo: '/hq-unit-setup/unit-info',
   },
 }
 </script>
