@@ -6,7 +6,12 @@
           <template #title>Email</template>
 
           <template #input>
-            <CustomInput v-model="email" type="email" rules="email|required" />
+            <CustomInput
+              v-model="email"
+              vid="email"
+              type="email"
+              rules="email|required"
+            />
           </template>
         </InputWithTitle>
 
@@ -33,9 +38,11 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import { mapActions } from 'vuex'
+import Login from '~/graphql/mutations/login.mutation.gql'
 import InputWithTitle from '~/components/InputWithTitle.vue'
 import CustomInput from '~/components/CustomInput.vue'
 import DefaultButton from '~/components/DefaultButton.vue'
+
 export default {
   name: 'LoginPage',
   components: {
@@ -55,13 +62,26 @@ export default {
     ...mapActions({
       setRole: 'auth/setRole',
     }),
-    login() {
-      this.$refs.form.validate().then((res) => {
-        if (res) {
-          this.setRole('user')
+    async login() {
+      const credentials = {
+        email: this.email,
+        password: this.password,
+      }
+      const formValidated = await this.$refs.form.validate()
+      if (formValidated) {
+        try {
+          const loginResult = await this.$apollo.mutate({
+            mutation: Login,
+            variables: credentials,
+          })
+          await this.$apolloHelpers.onLogin(loginResult.data.login.token)
           this.$router.push('/')
+        } catch (error) {
+          this.$refs.form.setErrors({
+            email: error.message,
+          })
         }
-      })
+      }
     },
   },
 }

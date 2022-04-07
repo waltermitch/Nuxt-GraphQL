@@ -16,6 +16,7 @@ export default {
   components: {
     TheHeader,
   },
+  middleware: 'isAuth',
   mounted() {
     this.setRole('admin')
   },

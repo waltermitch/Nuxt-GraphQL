@@ -1,5 +1,10 @@
 <template>
-  <ValidationProvider v-slot="{ errors, classes }" mode="eager" :rules="rules">
+  <ValidationProvider
+    v-slot="{ errors, classes }"
+    mode="eager"
+    :rules="rules"
+    :vid="vid"
+  >
     <input
       class="input"
       :value="value"
@@ -42,6 +47,10 @@ export default {
     },
     rules: {
       type: [String, Object],
+      default: '',
+    },
+    vid: {
+      type: String,
       default: '',
     },
   },
