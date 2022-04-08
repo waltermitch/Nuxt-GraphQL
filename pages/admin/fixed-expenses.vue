@@ -18,6 +18,7 @@
 
 <script>
 import { ADMIN_NAV_TABS } from '~/constants/constants'
+import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
@@ -32,11 +33,7 @@ export default {
     PageTitle,
     FixedExpensesContent,
   },
-  data() {
-    return {
-      navTabs: ADMIN_NAV_TABS,
-    }
-  },
+  mixins: [sideBarNavTabsMixin(ADMIN_NAV_TABS)],
 }
 </script>
 

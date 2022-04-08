@@ -25,6 +25,7 @@
 <script>
 import { HQ_UNITS_TABS } from '~/constants/constants'
 import { unitMaintenanceMixin } from '~/mixins/unitMaintenanceMixin'
+import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
@@ -39,13 +40,8 @@ export default {
     PageTitle,
     DefaultButton,
   },
-  mixins: [unitMaintenanceMixin],
+  mixins: [unitMaintenanceMixin, sideBarNavTabsMixin(HQ_UNITS_TABS)],
   layout: 'hqlayout',
-  data() {
-    return {
-      navTabs: HQ_UNITS_TABS,
-    }
-  },
 }
 </script>
 

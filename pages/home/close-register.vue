@@ -17,6 +17,7 @@
 
 <script>
 import { HOME_NAV_TABS } from '~/constants/constants'
+import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageTitle from '~/components/PageTitle'
@@ -31,11 +32,7 @@ export default {
     PageSubtitle,
     CloseRegisterContent,
   },
-  data() {
-    return {
-      navTabs: HOME_NAV_TABS,
-    }
-  },
+  mixins: [sideBarNavTabsMixin(HOME_NAV_TABS)],
 }
 </script>
 

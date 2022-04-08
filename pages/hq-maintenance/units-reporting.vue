@@ -18,6 +18,7 @@
 
 <script>
 import { HQ_MAINTENANCE_TABS } from '~/constants/constants'
+import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
@@ -32,12 +33,8 @@ export default {
     PageTitle,
     HQUnitsReportingContent,
   },
+  mixins: [sideBarNavTabsMixin(HQ_MAINTENANCE_TABS)],
   layout: 'hqlayout',
-  data() {
-    return {
-      navTabs: HQ_MAINTENANCE_TABS,
-    }
-  },
 }
 </script>
 
