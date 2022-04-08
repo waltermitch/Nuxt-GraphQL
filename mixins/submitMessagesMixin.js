@@ -1,5 +1,4 @@
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import FormSubmissionMessage from '~/components/FormSubmissionMessage.vue'
 
 export const submitMessagesMixin = {
