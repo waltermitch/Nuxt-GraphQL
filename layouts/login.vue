@@ -5,16 +5,24 @@
     <div class="nuxt-container">
       <Nuxt />
     </div>
+
+    <FormSubmissionMessage
+      v-if="showMessage"
+      :type="messageType"
+      :message="message"
+    />
   </div>
 </template>
 
 <script>
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import TheHeader from '@/components/TheHeader'
 export default {
   name: 'LoginLayout',
   components: {
     TheHeader,
   },
+  mixins: [submitMessagesMixin],
 }
 </script>
 

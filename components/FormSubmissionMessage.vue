@@ -6,12 +6,15 @@
       'message--error': type === 'error',
     }"
   >
-    <span class="text">
+    <span v-if="!message" class="text">
       {{
         type === 'success'
           ? 'Form data has been updated'
           : 'Something went wrong with the submission'
       }}
+    </span>
+    <span v-else>
+      {{ message }}
     </span>
   </div>
 </template>
@@ -24,6 +27,10 @@ export default {
       type: String,
       required: true,
     },
+    message: {
+      type: String,
+      required: true,
+    },
   },
 }
 </script>
@@ -31,7 +38,9 @@ export default {
 <style lang="scss" scoped>
 .message {
   position: absolute;
+  top: 0;
   right: 0;
+  z-index: 10;
   padding: 10px 15px;
   animation: message 2s ease-in-out;
 
@@ -52,7 +61,7 @@ export default {
 
 @keyframes message {
   0% {
-    right: -310px;
+    right: -500px;
   }
 
   100% {

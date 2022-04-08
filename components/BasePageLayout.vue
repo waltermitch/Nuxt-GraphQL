@@ -17,17 +17,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import FormSubmissionMessage from '~/components/FormSubmissionMessage.vue'
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 export default {
   name: 'BasePageLayout',
-  components: { FormSubmissionMessage },
-  computed: {
-    ...mapGetters({
-      showMessage: 'formSubmissionMessage/getShowMessage',
-      messageType: 'formSubmissionMessage/getMessageType',
-    }),
-  },
+  mixins: [submitMessagesMixin],
 }
 </script>
 
