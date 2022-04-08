@@ -45,7 +45,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.BASE_URL,
+        httpEndpoint: 'https://brock-api.staging.insanelab.com/graphql',
       },
     },
   },
