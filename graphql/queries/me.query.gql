@@ -1,0 +1,7 @@
+query Me {
+  me {
+    id
+    firstName
+    isAdmin
+  }
+}

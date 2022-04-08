@@ -1,7 +1,15 @@
-export default function ({ redirect, store }) {
-  const role = store.getters['auth/getRole']
+import Me from '../graphql/queries/me.query.gql'
 
-  if (role !== 'admin') {
+export default async function ({ app, redirect }) {
+  const {
+    data: {
+      me: { isAdmin },
+    },
+  } = await app.apolloProvider.defaultClient.query({
+    query: Me,
+  })
+
+  if (!isAdmin) {
     redirect('/login')
   }
 }
