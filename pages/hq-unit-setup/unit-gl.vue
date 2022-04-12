@@ -10,9 +10,9 @@
       <div class="title-area">
         <PageTitle> Unit-GL Maintenance </PageTitle>
 
-        <div @click="cloneUnit">
-          <DefaultButton button-color-gamma="red"> Clone Unit </DefaultButton>
-        </div>
+        <DefaultButton button-color-gamma="red" @event="cloneUnit">
+          Clone Unit
+        </DefaultButton>
       </div>
     </template>
 

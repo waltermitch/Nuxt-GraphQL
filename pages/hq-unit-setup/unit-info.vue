@@ -10,9 +10,9 @@
       <div class="title-area">
         <PageTitle> Unit Maintenance </PageTitle>
 
-        <div @click="showAddUnit">
-          <DefaultButton button-color-gamma="red"> + Add unit </DefaultButton>
-        </div>
+        <DefaultButton button-color-gamma="red" @event="showAddUnit">
+          + Add unit
+        </DefaultButton>
       </div>
     </template>
 
