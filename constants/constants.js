@@ -223,6 +223,12 @@ export const HQ_UNITS_TABS = [
   },
   {
     id: 7,
+    caption: 'Employee To Unit',
+    pageUrl: '/hq-unit-setup/employee-to-unit',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 8,
     caption: 'Unit Period Status',
     pageUrl: '/hq-unit-setup/unit-period-status',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
