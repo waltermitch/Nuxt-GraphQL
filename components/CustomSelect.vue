@@ -5,11 +5,13 @@
       :class="{
         'selected--opened': open,
         'selected--error': error,
+        disabled: disabled,
       }"
-      @click="toggleSelect"
+      @click="disabled ? null : toggleSelect()"
     >
-      <span>
-        {{ selected && selected.name }}
+      <span v-if="disabled"></span>
+      <span v-else>
+        {{ selected && selected[selectBy] }}
       </span>
 
       <img
@@ -34,7 +36,7 @@
         class="option"
         @click="selectOption(option)"
       >
-        {{ option.name }}
+        {{ option[selectBy] }}
       </div>
     </div>
 
@@ -55,6 +57,14 @@ export default {
       default: 0,
     },
     error: {
+      type: Boolean,
+      default: false,
+    },
+    selectBy: {
+      type: String,
+      default: 'name',
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },
@@ -156,5 +166,10 @@ export default {
 .error {
   font-size: 12px;
   color: $firebrick;
+}
+
+.disabled {
+  background: transparent;
+  cursor: not-allowed;
 }
 </style>
