@@ -37,8 +37,8 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { mapActions } from 'vuex'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+import { errorHandlerMixin } from '~/mixins/errorHandlerMixin'
 import Login from '~/graphql/mutations/login.mutation.gql'
 import InputWithTitle from '~/components/InputWithTitle.vue'
 import CustomInput from '~/components/CustomInput.vue'
@@ -52,7 +52,7 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
-  mixins: [submitMessagesMixin],
+  mixins: [submitMessagesMixin, errorHandlerMixin],
   layout: 'login',
   data() {
     return {
@@ -61,9 +61,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setRole: 'auth/setRole',
-    }),
     async login() {
       const credentials = {
         email: this.email,
@@ -78,11 +75,8 @@ export default {
           })
           await this.$apolloHelpers.onLogin(loginResult.data.login.token)
           this.$router.push('/')
-        } catch (error) {
-          this.showSubmitMessage(error.message, 'error')
-          this.$refs.form.setErrors({
-            email: error.message,
-          })
+        } catch ({ graphQLErrors }) {
+          this.handleError(graphQLErrors)
         }
       }
     },

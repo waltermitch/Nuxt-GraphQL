@@ -20,11 +20,13 @@
 import { ValidationObserver } from 'vee-validate'
 import ForgotPassword from '~/graphql/mutations/forgotPassword.mutation.gql'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+import { errorHandlerMixin } from '~/mixins/errorHandlerMixin'
+import { resultHandlerMixin } from '~/mixins/resultHandlerMixin'
 import CustomInput from '~/components/CustomInput.vue'
 export default {
   name: 'PasswordForgot',
   components: { CustomInput, ValidationObserver },
-  mixins: [submitMessagesMixin],
+  mixins: [submitMessagesMixin, errorHandlerMixin, resultHandlerMixin],
   layout: 'login',
   data() {
     return {
@@ -36,7 +38,7 @@ export default {
       const forgotPasswordInput = {
         email: this.email,
         resetPasswordUrl:
-          'https://brock.staging.insanelab.com/login/reset-password?email=__EMAIL__&token=__TOKEN__',
+          'https://brock.staging.insanelab.com/reset-password?email=__EMAIL__&token=__TOKEN__',
       }
       const formValidated = await this.$refs.form.validate()
 
@@ -46,12 +48,9 @@ export default {
             mutation: ForgotPassword,
             variables: forgotPasswordInput,
           })
-          console.log(forgotPasswordResult, 'forgotPasswordResult')
-        } catch (error) {
-          this.showSubmitMessage(error.message, 'error')
-          this.$refs.form.setErrors({
-            email: error.message,
-          })
+          this.handleResult(forgotPasswordResult, 'forgotPassword')
+        } catch ({ graphQLErrors }) {
+          this.handleError(graphQLErrors)
         }
       }
     },

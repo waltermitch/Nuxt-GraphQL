@@ -57,3 +57,11 @@ extend('between', {
   ...between,
   message: 'Amount is bigger than left to distribute',
 })
+
+extend('password', {
+  params: ['target'],
+  validate(value, { target }) {
+    return value === target
+  },
+  message: 'Confirm password does not match',
+})
