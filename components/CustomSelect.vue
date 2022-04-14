@@ -68,10 +68,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    selectedItem: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
-      selected: this.options.length > 0 ? this.options[0] : null,
+      selected: this.selectedItem
+        ? this.selectedItem
+        : this.options.length > 0
+        ? this.options[0]
+        : null,
       open: false,
     }
   },
