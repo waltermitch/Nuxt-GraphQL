@@ -266,10 +266,4 @@ export const HQ_ACCOUNTING = [
     pageUrl: '/hq-accounting/vendor',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
-  {
-    id: 6,
-    caption: 'Sysco',
-    pageUrl: '/hq-accounting/sysco',
-    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
-  },
 ]
