@@ -40,3 +40,46 @@ export const WeeklyReportsTypes = [
     name: 'Register Closeouts',
   },
 ]
+
+export const MonthlyReportsTypes = [
+  {
+    id: 0,
+    value: 'monthlyOperating',
+    name: 'Monthly Operating',
+  },
+  {
+    id: 1,
+    value: 'monthlyComplete',
+    name: 'Monthly Complete',
+  },
+  {
+    id: 2,
+    value: 'monthlyCatering',
+    name: 'Monthly Catering',
+  },
+  {
+    id: 3,
+    value: 'monthlyInventory',
+    name: 'Monthly Inventory',
+  },
+  {
+    id: 4,
+    value: 'monthlyExpense',
+    name: 'Monthly Expense',
+  },
+  {
+    id: 5,
+    value: 'monthlyLabor',
+    name: 'Monthly Labor',
+  },
+  {
+    id: 6,
+    value: 'purchaseDetails',
+    name: 'Purchase Details',
+  },
+  {
+    id: 7,
+    value: 'registerCloseouts',
+    name: 'Register Closeouts',
+  },
+]

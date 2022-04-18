@@ -5,9 +5,9 @@
     </template>
 
     <template #header>
-      <PageSubtitle> Reports / Multi Unit Labor Report </PageSubtitle>
+      <PageSubtitle> Reports / Monthly Operating Reports </PageSubtitle>
 
-      <PageTitle> Labor Schedule Report </PageTitle>
+      <PageTitle> Monthly Reports </PageTitle>
     </template>
 
     <template #content>
