@@ -147,12 +147,13 @@ export default {
   left: 0;
   right: 0;
   z-index: 1;
+  max-height: 500px;
   color: #fff;
   border-radius: 0px 0px 3px 3px;
   border-right: 1px solid gainsboro;
   border-left: 1px solid gainsboro;
   border-bottom: 1px solid gainsboro;
-  overflow: hidden;
+  overflow: auto;
 
   &--opened {
     border-color: $firebrick;
