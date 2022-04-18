@@ -2,14 +2,31 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow>
+        <CustomTable>
+          <template #header>
+            <span> Period End date </span>
+          </template>
+
+          <template #content>
+            <CustomTableContent>
+              <CustomTableRow
+                v-for="period in periodEndDates"
+                :key="period.id"
+                :is-active="period.id === periodEndDate.id"
+                selectable
+                @event="selectPeriodEndDate(period)"
+              >
+                {{ period.name }}
+              </CustomTableRow>
+            </CustomTableContent>
+          </template>
+        </CustomTable>
+
         <InputWithTitle>
-          <template #title> Period End date </template>
+          <template #title>Select District</template>
 
           <template #input>
-            <CustomSelect
-              :options="periodEndDates"
-              @input="selectPeriodEndDate"
-            />
+            <CustomSelect :options="districts" @input="selectDistrict" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -26,20 +43,22 @@
         </template>
 
         <template #content>
-          <CustomTableRow
-            v-for="unit in units"
-            :key="unit.id"
-            class="table-row"
-          >
-            <CustomRadioButton
-              :is-active="unit.selected"
-              @set-is-active="selectUnit(unit)"
-            />
+          <CustomTableContent>
+            <CustomTableRow
+              v-for="unit in units"
+              :key="unit.id"
+              class="table-row"
+            >
+              <CustomRadioButton
+                :is-active="unit.selected"
+                @set-is-active="selectUnit(unit)"
+              />
 
-            <span>{{ unit.unitId }}</span>
+              <span>{{ unit.unitId }}</span>
 
-            <span>{{ unit.name }}</span>
-          </CustomTableRow>
+              <span>{{ unit.name }}</span>
+            </CustomTableRow>
+          </CustomTableContent>
 
           <CustomTableRow class="table-row footer-row">
             <DefaultButton @event="selectAllUnits"> Select All </DefaultButton>
@@ -57,26 +76,36 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import PageContentWrapper from './PageContentWrapper.vue'
-import InputRow from './InputRow.vue'
-import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
+import CustomTableContent from './CustomTableContent.vue'
+import InputRow from './InputRow.vue'
+import InputWithTitle from './InputWithTitle.vue'
+import CustomSelect from './CustomSelect.vue'
 export default {
   name: 'HQLaborScheduleReport',
   components: {
     PageContentWrapper,
     ValidationObserver,
-    InputRow,
-    InputWithTitle,
-    CustomSelect,
     CustomTable,
     CustomTableRow,
     CustomRadioButton,
+    CustomTableContent,
+    InputRow,
+    InputWithTitle,
+    CustomSelect,
   },
   data() {
     return {
+      district: '',
+      districts: [
+        {
+          id: 0,
+          code: 11,
+          name: 'District',
+        },
+      ],
       periodEndDate: '',
       periodEndDates: [
         {
@@ -113,6 +142,9 @@ export default {
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
+    selectDistrict(item) {
+      this.district = item
+    },
     selectUnit(item) {
       this.units = this.units.map((unit) => {
         if (item.id === unit.id) {
@@ -138,7 +170,7 @@ export default {
       }))
     },
     openReport() {
-      console.log(this.selectedUnits)
+      console.log(this.selectedUnits, this.periodEndDate)
     },
   },
 }
