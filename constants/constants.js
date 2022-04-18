@@ -235,6 +235,33 @@ export const HQ_UNITS_TABS = [
   },
 ]
 
+export const HQ_REPORT_TABS = [
+  {
+    id: 1,
+    caption: 'Multi Unit Labor Report',
+    pageUrl: '/hq-reports/labor-schedule-report',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 2,
+    caption: 'Weekly Operating Reports',
+    pageUrl: '/hq-reports/weekly-operating-reports',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 3,
+    caption: 'Monthly Operating Reports',
+    pageUrl: '/hq-reports/monthly-operating-reports',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 4,
+    caption: 'Closed Units',
+    pageUrl: '/hq-reports/closed-units',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+]
+
 export const HQ_ACCOUNTING = [
   {
     id: 1,
