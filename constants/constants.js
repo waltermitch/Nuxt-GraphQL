@@ -157,6 +157,15 @@ export const REVIEW_NAV_TABS = [
   },
 ]
 
+export const REPORTS_NAV_TABS = [
+  {
+    id: 1,
+    caption: 'Open Report',
+    pageUrl: '/reports/open-report',
+    iconSrc: require('assets/images/icons/header/graph-line.svg'),
+  },
+]
+
 export const HQ_MAINTENANCE_TABS = [
   {
     id: 1,
