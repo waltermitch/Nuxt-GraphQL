@@ -7,6 +7,7 @@ export const formMixin = {
     }),
     clearState() {
       Object.assign(this.$data, this.$options.data.apply(this))
+      this.$refs.form.reset()
     },
     scrollToTop() {
       window.scrollTo(0, 0)
