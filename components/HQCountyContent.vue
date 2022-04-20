@@ -21,9 +21,7 @@
             <CustomSelect
               v-if="isEdit === county.id"
               :options="states.data"
-              :selected-item="
-                states.data.find((state) => state.id === county.state.id)
-              "
+              :selected-item="county.state"
               select-by="code"
               @input="selectState"
             />
