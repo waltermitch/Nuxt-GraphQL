@@ -1,0 +1,13 @@
+#import '../fragments/county.gql'
+#import '../fragments/state.gql'
+
+query Counties {
+  counties {
+    data {
+      ...CountyFragment
+      state {
+        ...StateFragment
+      }
+    }
+  }
+}

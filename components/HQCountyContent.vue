@@ -1,81 +1,184 @@
 <template>
   <PageContentWrapper>
-    <CustomTable class="table">
-      <template #header>
-        <div class="table-row">
-          <span>State</span>
+    <ValidationObserver ref="form">
+      <CustomTable class="table">
+        <template #header>
+          <div class="table-row">
+            <span>State</span>
 
-          <span>County</span>
+            <span>County</span>
 
-          <span>Tax</span>
-        </div>
-      </template>
+            <span>Tax</span>
+          </div>
+        </template>
 
-      <template #content>
-        <CustomTableRow
-          v-for="county in counties"
-          :key="county.id"
-          class="table-row"
-        >
-          <CustomSelect
-            :options="states"
-            :selected-item="states.find((state) => state.id === county.stateId)"
-            select-by="state"
-          />
+        <template v-if="counties" #content>
+          <CustomTableRow
+            v-for="county in counties.data"
+            :key="county.id"
+            class="table-row"
+          >
+            <CustomSelect
+              v-if="isEdit === county.id"
+              :options="states.data"
+              :selected-item="
+                states.data.find((state) => state.id === county.state.id)
+              "
+              select-by="code"
+              @input="selectState"
+            />
+            <span v-else>
+              {{ county.state.code }}
+            </span>
 
-          <span>
-            {{ county.county }}
-          </span>
+            <CustomInput
+              v-if="isEdit === county.id"
+              v-model="county.name"
+              rules="required"
+            />
+            <span v-else>
+              {{ county.name }}
+            </span>
 
-          <span>
-            {{ county.tax }}
-          </span>
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+            <CustomInput
+              v-if="isEdit === county.id"
+              v-model.number="county.tax"
+              type="number"
+              rules="required|double"
+            />
+            <span v-else>
+              {{ county.tax }}
+            </span>
+
+            <CustomTableIconsColumn
+              :is-edit-active="isEdit === county.id"
+              :is-delete-active="isDelete === county.id"
+              @edit="edit(county.id)"
+              @delete="deleteItem(county.id)"
+              @cancel="cancelEdit"
+              @cancel-delete="cancelDelete"
+              @confirm-edit="confirmEdit(county)"
+              @confirm-delete="confirmDelete(county.id)"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomSelect
+              :options="states.data"
+              select-by="code"
+              @input="selectState"
+            />
+
+            <CustomInput v-model="countyNew.name" rules="required" />
+
+            <CustomInput
+              v-model.number="countyNew.tax"
+              type="number"
+              rules="required|double"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow class="table-row add-row">
+            <img
+              src="~assets/images/icons/home/add.svg"
+              class="icon icon--add"
+              @click="addRow"
+            />
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+    </ValidationObserver>
+
+    <div v-if="isAdd" class="buttons-area">
+      <DefaultButton @event="addCounty"> Add County </DefaultButton>
+
+      <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+    </div>
   </PageContentWrapper>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
+import States from '../graphql/queries/states.gql'
+import Counties from '../graphql/queries/counties.gql'
+import CreateCounty from '../graphql/mutations/county/createCounty.gql'
+import UpdateCounty from '../graphql/mutations/county/updateCounty.gql'
+import DeleteCounty from '../graphql/mutations/county/deleteCounty.gql'
+import CustomInput from './CustomInput.vue'
+import CustomSelect from './CustomSelect.vue'
+import { accountingMixin } from '~/mixins/accountingMixin'
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+import { formMixin } from '~/mixins/formMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQCountyContent',
+  components: { ValidationObserver, CustomInput, CustomSelect },
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  apollo: {
+    states: {
+      query: States,
+    },
+    counties: {
+      query: Counties,
+    },
+  },
   data() {
     return {
-      counties: [
-        {
-          id: 0,
-          county: 'County',
-          tax: '0.00%',
-          stateId: 0,
-        },
-        {
-          id: 1,
-          county: 'County County',
-          tax: '0.00%',
-          stateId: 1,
-        },
-      ],
-      states: [
-        {
-          id: 0,
-          state: 'NY',
-          salesTaxCafeteria: '4.00%',
-          salesTaxVending: '3.90%',
-          salesTaxRestaurant: '2.90%',
-          salesTaxCStore: '2.00%',
-          grossReceiptsTax: '0.00%',
-        },
-        {
-          id: 1,
-          state: 'CA',
-          salesTaxCafeteria: '4.00%',
-          salesTaxVending: '3.90%',
-          salesTaxRestaurant: '2.90%',
-          salesTaxCStore: '2.00%',
-          grossReceiptsTax: '0.00%',
-        },
-      ],
+      countyNew: {
+        state: null,
+        name: '',
+        tax: '',
+      },
     }
+  },
+  methods: {
+    selectState(state) {
+      this.countyNew.state = state
+    },
+    addCounty() {
+      this.mutationAction(
+        CreateCounty,
+        {
+          countyInput: {
+            name: this.countyNew.name,
+            state: {
+              connect: Number(this.countyNew.state.id),
+            },
+            tax: this.countyNew.tax,
+          },
+        },
+        Counties,
+        'Add county success',
+        'Add county error'
+      )
+    },
+    confirmEdit(county) {
+      const editedCounty = {
+        id: county.id,
+        name: county.name,
+        state: {
+          connect: this.countyNew.state.id,
+        },
+        tax: county.tax,
+      }
+
+      this.mutationAction(
+        UpdateCounty,
+        { countyInput: editedCounty },
+        Counties,
+        'Edit county success',
+        'Edit county error'
+      )
+    },
+    confirmDelete(id) {
+      this.mutationAction(
+        DeleteCounty,
+        { id },
+        Counties,
+        'Delete state success',
+        'Delete state error'
+      )
+    },
   },
 }
 </script>
@@ -88,7 +191,20 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 250px 150px;
+  grid-template-columns: 100px 250px 150px 60px;
   column-gap: 30px;
+}
+
+.icon {
+  cursor: pointer;
+
+  &--add {
+    grid-column: 4;
+    justify-self: end;
+  }
+}
+
+.buttons-area {
+  margin-top: 25px;
 }
 </style>
