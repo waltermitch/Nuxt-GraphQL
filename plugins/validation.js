@@ -5,6 +5,7 @@ import {
   double,
   email,
   between,
+  alpha,
 } from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
@@ -64,4 +65,9 @@ extend('password', {
     return value === target
   },
   message: 'Confirm password does not match',
+})
+
+extend('alpha', {
+  ...alpha,
+  message: 'Field should be alphabetic',
 })
