@@ -1,0 +1,9 @@
+#import '../fragments/state.gql'
+
+query States {
+  states {
+    data {
+      ...StateFragment
+    }
+  }
+}
