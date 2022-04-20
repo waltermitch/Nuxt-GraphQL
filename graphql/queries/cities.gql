@@ -1,7 +1,13 @@
-#import '../fragments/city.gql
+#import '../fragments/city.gql'
+#import '../fragments/state.gql'
 
 query Cities {
   cities {
-    ...CityFragment
+    data {
+      ...CityFragment
+      state {
+        ...StateFragment
+      }
+    }
   }
 }
