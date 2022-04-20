@@ -25,14 +25,14 @@
             class="table-row"
           >
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model="state.code"
               rules="required|alpha"
             />
             <span v-else>{{ state.code }}</span>
 
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model.number="state.salesTaxCafeteria"
               type="number"
               rules="required|double"
@@ -40,7 +40,7 @@
             <span v-else>{{ addPercentSign(state.salesTaxCafeteria) }}</span>
 
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model.number="state.salesTaxVending"
               type="number"
               rules="required|double"
@@ -48,7 +48,7 @@
             <span v-else> {{ addPercentSign(state.salesTaxVending) }}</span>
 
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model.number="state.salesTaxRestaurant"
               type="number"
               rules="required|double"
@@ -58,7 +58,7 @@
             </span>
 
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model.number="state.salesTaxStore"
               type="number"
               rules="required|double"
@@ -68,7 +68,7 @@
             </span>
 
             <CustomInput
-              v-if="isEditState === state.id"
+              v-if="isEdit === state.id"
               v-model.number="state.grossReceiptsTax"
               type="number"
               rules="required|double"
@@ -78,10 +78,10 @@
             </span>
 
             <CustomTableIconsColumn
-              :is-edit-active="isEditState === state.id"
-              :is-delete-active="isDeleteState === state.id"
-              @edit="editState(state.id)"
-              @delete="deleteState(state.id)"
+              :is-edit-active="isEdit === state.id"
+              :is-delete-active="isDelete === state.id"
+              @edit="edit(state.id)"
+              @delete="deleteItem(state.id)"
               @cancel="cancelEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(state)"
@@ -89,7 +89,7 @@
             />
           </CustomTableRow>
 
-          <CustomTableRow v-if="isAddState" class="table-row">
+          <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput v-model="stateNew.code" rules="required|alpha" />
 
             <CustomInput
@@ -134,10 +134,10 @@
       </CustomTable>
     </ValidationObserver>
 
-    <div v-if="isAddState" class="buttons-area">
+    <div v-if="isAdd" class="buttons-area">
       <DefaultButton @event="addState"> Add State </DefaultButton>
 
-      <DefaultButton @event="cancel"> Cancel </DefaultButton>
+      <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
     </div>
   </PageContentWrapper>
 </template>
@@ -153,10 +153,10 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
+import { accountingMixin } from '~/mixins/accountingMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import { addPercentSign } from '~/helpers/helpers'
 export default {
   name: 'HQStateContent',
   components: {
@@ -167,7 +167,7 @@ export default {
     DefaultButton,
     CustomTableIconsColumn,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
   apollo: {
     states: {
       query: States,
@@ -175,9 +175,6 @@ export default {
   },
   data() {
     return {
-      isAddState: false,
-      isEditState: false,
-      isDeleteState: false,
       stateNew: {
         code: '',
         salesTaxCafeteria: '',
@@ -189,16 +186,6 @@ export default {
     }
   },
   methods: {
-    addPercentSign,
-    addRow() {
-      this.isAddState = true
-    },
-    editState(stateID) {
-      this.isEditState = stateID
-    },
-    cancelEdit() {
-      this.isEditState = null
-    },
     confirmEdit(state) {
       const editedState = {
         id: state.id,
@@ -218,12 +205,6 @@ export default {
         'Edit state error'
       )
     },
-    deleteState(stateID) {
-      this.isDeleteState = stateID
-    },
-    cancelDelete() {
-      this.isDeleteState = null
-    },
     confirmDelete(id) {
       this.mutationAction(
         DeleteState,
@@ -241,10 +222,6 @@ export default {
         'Add state success',
         'Add state error'
       )
-    },
-    cancel() {
-      this.addState = false
-      this.clearState()
     },
   },
 }
