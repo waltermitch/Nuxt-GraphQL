@@ -12,7 +12,11 @@
       </div>
     </main>
 
-    <FormSubmissionMessage v-if="showMessage" :type="messageType" />
+    <FormSubmissionMessage
+      v-if="showMessage"
+      :type="messageType"
+      :message="message"
+    />
   </div>
 </template>
 
