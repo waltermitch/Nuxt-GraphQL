@@ -1,0 +1,7 @@
+fragment CityFragment on City {
+  id
+  name
+  tax
+  createdAt
+  updatedAt
+}
