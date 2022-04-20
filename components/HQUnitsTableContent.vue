@@ -31,19 +31,7 @@
             {{ unit.state }}
           </span>
 
-          <div class="icons-area">
-            <img
-              class="icon"
-              src="~assets/images/icons/review/edit.svg"
-              alt=""
-            />
-
-            <img
-              class="icon"
-              src="~assets/images/icons/review/trash-can.svg"
-              alt=""
-            />
-          </div>
+          <CustomTableIconsColumn />
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -54,12 +42,14 @@
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow'
+import CustomTableIconsColumn from './CustomTableIconsColumn'
 export default {
   name: 'HQUnitsTableContent',
   components: {
     PageContentWrapper,
     CustomTable,
     CustomTableRow,
+    CustomTableIconsColumn,
   },
   data() {
     return {
@@ -90,20 +80,5 @@ export default {
   align-items: center;
   grid-template-columns: 160px 340px 200px 160px 60px;
   column-gap: 30px;
-}
-
-.icons-area {
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  height: 16px;
-  width: 16px;
-  cursor: pointer;
-
-  &:first-child {
-    margin-right: 15px;
-  }
 }
 </style>
