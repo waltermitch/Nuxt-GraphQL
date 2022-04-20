@@ -45,7 +45,7 @@
               rules="required|double"
             />
             <span v-else>
-              {{ county.tax }}
+              {{ addPercentSign(county.tax) }}
             </span>
 
             <CustomTableIconsColumn
