@@ -1,0 +1,7 @@
+fragment VendorFragment on Vendor {
+  id
+  code
+  name
+  createdAt
+  updatedAt
+}

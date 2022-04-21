@@ -1,0 +1,13 @@
+#import '../fragments/vendor.gql'
+#import '../fragments/term.gql'
+
+query Vendors {
+  vendors {
+    data {
+      ...VendorFragment
+      term {
+        ...TermFragment
+      }
+    }
+  }
+}

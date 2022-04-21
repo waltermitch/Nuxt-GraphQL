@@ -1,0 +1,9 @@
+#import '../fragments/term.gql'
+
+query Terms {
+  terms {
+    data {
+      ...TermFragment
+    }
+  }
+}

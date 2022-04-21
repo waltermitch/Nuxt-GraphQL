@@ -1,0 +1,7 @@
+fragment TermFragment on Term {
+  id
+  name
+  dueDays
+  createdAt
+  updatedAt
+}
