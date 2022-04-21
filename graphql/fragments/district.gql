@@ -1,0 +1,8 @@
+fragment DistrictFragment on District {
+  id
+  code
+  name
+  tax
+  createdAt
+  updatedAt
+}
