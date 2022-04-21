@@ -37,7 +37,7 @@
               v-model.number="district.tax"
               rules="required|double"
             />
-            <span v-else>{{ district.tax }}</span>
+            <span v-else>{{ addPercentSign(district.tax) }}</span>
 
             <CustomTableIconsColumn
               :is-edit-active="isEdit === district.id"
