@@ -83,6 +83,12 @@ export default {
       open: false,
     }
   },
+  watch: {
+    options() {
+      this.selected = this.options[0]
+      this.$emit('input', this.selected)
+    },
+  },
   mounted() {
     this.$emit('input', this.selected)
   },
