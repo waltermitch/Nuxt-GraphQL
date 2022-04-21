@@ -32,7 +32,12 @@
           <template #title> City </template>
 
           <template #input>
-            <CustomInput v-model="city" rules="required" />
+            <CustomSelect
+              v-if="state"
+              :options="state.cities"
+              select-by="name"
+              @input="selectCity"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -42,7 +47,12 @@
           <template #title> District </template>
 
           <template #input>
-            <CustomSelect :options="mockedList" @input="selectDistrict" />
+            <CustomSelect
+              v-if="districts"
+              :options="districts.data"
+              select-by="name"
+              @input="selectDistrict"
+            />
           </template>
         </InputWithTitle>
 
@@ -50,7 +60,12 @@
           <template #title> County </template>
 
           <template #input>
-            <CustomSelect :options="mockedList" @input="selectCounty" />
+            <CustomSelect
+              v-if="state"
+              :options="state.counties"
+              select-by="name"
+              @input="selectCounty"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -68,7 +83,12 @@
           <template #title> State </template>
 
           <template #input>
-            <CustomSelect :options="mockedList" @input="selectState" />
+            <CustomSelect
+              v-if="states"
+              :options="states.data"
+              select-by="code"
+              @input="selectState"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -136,6 +156,8 @@
 import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
 import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
+import Districts from '../graphql/queries/districts.gql'
+import States from '../graphql/queries/states.gql'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -150,6 +172,14 @@ export default {
     CustomSelect,
   },
   mixins: [formMixin, unitMaintenanceMixin],
+  apollo: {
+    districts: {
+      query: Districts,
+    },
+    states: {
+      query: States,
+    },
+  },
   data() {
     return {
       unit: '',
@@ -165,18 +195,6 @@ export default {
       mgrLastName: '',
       password: '',
       email: '',
-      mockedList: [
-        {
-          id: 1,
-          value: 'Lorem',
-          name: 'Lorem',
-        },
-        {
-          id: 2,
-          value: 'Ipsum',
-          name: 'Ipsum',
-        },
-      ],
     }
   },
   methods: {
@@ -188,6 +206,9 @@ export default {
     },
     selectState(state) {
       this.state = state
+    },
+    selectCity(city) {
+      this.city = city
     },
   },
 }
