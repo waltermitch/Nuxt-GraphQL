@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
           <template #title> Management Fee - Type </template>
@@ -172,17 +172,21 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <div class="buttons-area">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="saveEvent"
+        >
+          Save
+        </DefaultButton>
+
+        <DefaultButton button-color-gamma="white" @event="cancel">
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
-
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Save
-      </DefaultButton>
-
-      <DefaultButton button-color-gamma="white" @event="cancel">
-        Cancel
-      </DefaultButton>
-    </div>
   </div>
 </template>
 
@@ -208,20 +212,6 @@ export default {
   mixins: [formMixin, unitMaintenanceMixin],
   data() {
     return {
-      managementFeeType: '',
-      managementFeeDollar: '',
-      managementFeePercent: '',
-      administrativeFeeType: '',
-      administrativeFeeDollar: '',
-      administrativeFeePercent: '',
-      supportFeeDollar: '',
-      supportFeeType: '',
-      supportFeePercent: '',
-      benefitsPercent: '',
-      regTax: '',
-      commissionPercent: '',
-      kronos: '',
-      startPeriod: '',
       mockedList: [
         {
           id: 1,
@@ -236,24 +226,137 @@ export default {
       ],
     }
   },
+  computed: {
+    managementFeeType() {
+      return this.unit.managementFeeType
+    },
+    managementFeeDollar: {
+      get() {
+        return this.unit.managementFeeDollar
+      },
+      set(value) {
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR',
+          value
+        )
+      },
+    },
+    managementFeePercent: {
+      get() {
+        return this.unit.managementFeePercent
+      },
+      set(value) {
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT',
+          value
+        )
+      },
+    },
+    administrativeFeeType() {
+      return this.unit.administrativeFeeType
+    },
+    administrativeFeeDollar: {
+      get() {
+        return this.unit.administrativeFeeDollar
+      },
+      set(value) {
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR',
+          value
+        )
+      },
+    },
+    administrativeFeePercent: {
+      get() {
+        return this.unit.administrativeFeePercent
+      },
+      set(value) {
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT',
+          value
+        )
+      },
+    },
+    supportFeeDollar: {
+      get() {
+        return this.unit.supportFeeDollar
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
+      },
+    },
+    supportFeeType() {
+      return this.unit.supportFeeType
+    },
+    supportFeePercent: {
+      get() {
+        return this.unit.supportFeePercent
+      },
+      set(value) {
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT',
+          value
+        )
+      },
+    },
+    benefitsPercent: {
+      get() {
+        return this.unit.benefitsPercent
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
+      },
+    },
+    regTax() {
+      return this.unit.regTax
+    },
+    commissionPercent: {
+      get() {
+        return this.unit.commissionPercent
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
+      },
+    },
+    kronos() {
+      return this.unit.kronos
+    },
+    startPeriod: {
+      get() {
+        return this.unit.startPeriod
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_START_PERIOD', value)
+      },
+    },
+  },
   methods: {
     selectManagementFeeType(managementFeeType) {
-      this.managementFeeType = managementFeeType
+      this.$store.commit(
+        'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_TYPE',
+        managementFeeType
+      )
     },
     selectAdministrativeFeeType(administrativeFeeType) {
-      this.administrativeFeeType = administrativeFeeType
+      this.$store.commit(
+        'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_TYPE',
+        administrativeFeeType
+      )
     },
     selectSupportFeeType(supportFeeType) {
-      this.supportFeeType = supportFeeType
+      this.$store.commit(
+        'unitMaintenance/SET_UNIT_SUPPORT_FEE_TYPE',
+        supportFeeType
+      )
     },
     selectRegTax(regTax) {
-      this.regTax = regTax
+      this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', regTax)
     },
     setIsKronos() {
-      this.kronos = !this.kronos
+      this.$store.commit('unitMaintenance/SET_UNIT_KRONOS', !this.unit.kronos)
     },
     selectStartPeriod(startPeriod) {
-      this.startPeriod = startPeriod
+      this.$store.commit('unitMaintenance/SET_UNIT_START_PERIOD', startPeriod)
     },
   },
 }

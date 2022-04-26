@@ -1,12 +1,12 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
           <template #title> Unit </template>
 
           <template #input>
-            <CustomInput v-model="unit" rules="required" />
+            <CustomInput v-model="unitNum" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -138,17 +138,31 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title>Sysco</template>
+
+          <template #input>
+            <CustomInput v-model="sysco" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <div class="buttons-area">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="nextTab"
+        >
+          Continue
+        </DefaultButton>
+
+        <DefaultButton button-color-gamma="white" @event="cancel">
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
-
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Save
-      </DefaultButton>
-
-      <DefaultButton button-color-gamma="white" @event="cancel">
-        Cancel
-      </DefaultButton>
-    </div>
   </div>
 </template>
 
@@ -162,6 +176,7 @@ import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'HQUnitMaintenanceDetails',
   components: {
@@ -171,7 +186,7 @@ export default {
     CustomInput,
     CustomSelect,
   },
-  mixins: [formMixin, unitMaintenanceMixin],
+  mixins: [formMixin, unitMaintenanceMixin, tabsViewMixin],
   apollo: {
     districts: {
       query: Districts,
@@ -180,22 +195,121 @@ export default {
       query: States,
     },
   },
-  data() {
-    return {
-      unit: '',
-      streetAddress: '',
-      name: '',
-      city: '',
-      district: '',
-      county: '',
-      population: '',
-      state: '',
-      mgrFirstName: '',
-      zipCode: '',
-      mgrLastName: '',
-      password: '',
-      email: '',
-    }
+  computed: {
+    unitNum: {
+      get() {
+        return this.unit.unitNum
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_NUM', value)
+      },
+    },
+    streetAddress: {
+      get() {
+        return this.unit.streetAddress
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_STREET_ADDRESS', value)
+      },
+    },
+    name: {
+      get() {
+        return this.unit.name
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_NAME', value)
+      },
+    },
+    city: {
+      get() {
+        return this.unit.city
+      },
+      set(value) {
+        this.unit.city &&
+          this.$store.commit('unitMaintenance/SET_UNIT_CITY', value)
+      },
+    },
+    district: {
+      get() {
+        return this.unit.district
+      },
+      set(value) {
+        this.unit.district &&
+          this.$store.commit('unitMaintenance/SET_UNIT_DISTRICT', value)
+      },
+    },
+    county: {
+      get() {
+        return this.unit.county
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_COUNTY', value)
+      },
+    },
+    population: {
+      get() {
+        return this.unit.population
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_POPULATION', value)
+      },
+    },
+    state: {
+      get() {
+        return this.unit.state
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_STATE', value)
+      },
+    },
+    mgrFirstName: {
+      get() {
+        return this.unit.mgrFirstName
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_MGR_FIRST_NAME', value)
+      },
+    },
+    zipCode: {
+      get() {
+        return this.unit.zipCode
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_MGR_ZIP_CODE', value)
+      },
+    },
+    mgrLastName: {
+      get() {
+        return this.unit.mgrLastName
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_MGR_LAST_NAME', value)
+      },
+    },
+    password: {
+      get() {
+        return this.unit.password
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_PASSWORD', value)
+      },
+    },
+    email: {
+      get() {
+        return this.unit.email
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_EMAIL', value)
+      },
+    },
+    sysco: {
+      get() {
+        return this.unit.sysco
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_SYSCO', value)
+      },
+    },
   },
   methods: {
     selectDistrict(district) {

@@ -31,7 +31,7 @@
             {{ unit.state }}
           </span>
 
-          <CustomTableIconsColumn />
+          <CustomTableIconsColumn @edit="editUnit(unit.id)" />
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -43,6 +43,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow'
 import CustomTableIconsColumn from './CustomTableIconsColumn'
+import { unitMaintenanceMixin } from '~/mixins/unitMaintenanceMixin'
 export default {
   name: 'HQUnitsTableContent',
   components: {
@@ -51,6 +52,7 @@ export default {
     CustomTableRow,
     CustomTableIconsColumn,
   },
+  mixins: [unitMaintenanceMixin],
   data() {
     return {
       units: [
@@ -70,6 +72,12 @@ export default {
         },
       ],
     }
+  },
+  methods: {
+    editUnit(unitID) {
+      this.setUnitID(unitID)
+      this.showAddUnit()
+    },
   },
 }
 </script>
