@@ -9,7 +9,7 @@
           :class="{
             active: activeTab === index,
           }"
-          @click="activeTab = index"
+          @click="$store.commit('tabsView/SET_ACTIVE_TAB', index)"
         >
           {{ tabHeader }}
         </li>
@@ -25,8 +25,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'TabsView',
+  mixins: [tabsViewMixin],
   props: {
     tabsHeaders: {
       type: Array,
@@ -37,10 +40,10 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      activeTab: 0,
-    }
+  computed: {
+    ...mapGetters({
+      activeTab: 'tabsView/getActiveTab',
+    }),
   },
 }
 </script>
