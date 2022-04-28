@@ -1,5 +1,5 @@
 import { addPercentSign } from '~/helpers/helpers'
-export const accountingMixin = {
+export const tableActionsMixin = {
   data() {
     return {
       isAdd: false,

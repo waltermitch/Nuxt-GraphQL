@@ -91,7 +91,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
@@ -104,7 +104,7 @@ export default {
     CustomTableRow,
     CustomInput,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     districts: {
       query: Districts,

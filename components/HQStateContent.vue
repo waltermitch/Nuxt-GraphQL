@@ -153,7 +153,7 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
@@ -167,7 +167,7 @@ export default {
     DefaultButton,
     CustomTableIconsColumn,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     states: {
       query: States,

@@ -73,7 +73,7 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'HQUnitTypeContent',
   components: {
@@ -83,7 +83,7 @@ export default {
     CustomTableRow,
     CustomInput,
   },
-  mixins: [mutationMixin, accountingMixin],
+  mixins: [mutationMixin, tableActionsMixin],
   apollo: {
     unitTypes: {
       query: UnitTypes,

@@ -96,7 +96,7 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
@@ -110,7 +110,7 @@ export default {
     CustomTableRow,
     CustomSelect,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     vendors: {
       query: Vendors,

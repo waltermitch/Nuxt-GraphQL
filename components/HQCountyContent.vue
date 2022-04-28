@@ -104,14 +104,14 @@ import UpdateCounty from '../graphql/mutations/county/updateCounty.gql'
 import DeleteCounty from '../graphql/mutations/county/deleteCounty.gql'
 import CustomInput from './CustomInput.vue'
 import CustomSelect from './CustomSelect.vue'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQCountyContent',
   components: { ValidationObserver, CustomInput, CustomSelect },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     states: {
       query: States,

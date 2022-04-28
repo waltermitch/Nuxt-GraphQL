@@ -107,7 +107,7 @@ import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
-import { accountingMixin } from '~/mixins/accountingMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
@@ -122,7 +122,7 @@ export default {
     CustomInput,
     DefaultButton,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, accountingMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     cities: {
       query: Cities,
