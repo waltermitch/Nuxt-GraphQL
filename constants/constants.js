@@ -91,24 +91,18 @@ export const HOME_NAV_TABS = [
   },
   {
     id: 7,
-    caption: 'Receipts',
-    pageUrl: '/home/receipts',
-    iconSrc: require('assets/images/icons/home/receipt_long.svg'),
-  },
-  {
-    id: 8,
     caption: 'On-Call Labor',
     pageUrl: '/home/on-call-labor',
     iconSrc: require('assets/images/icons/home/on-call.svg'),
   },
   {
-    id: 9,
+    id: 8,
     caption: 'Accruals',
     pageUrl: '/home/accruals',
     iconSrc: require('assets/images/icons/home/chart-line.svg'),
   },
   {
-    id: 10,
+    id: 9,
     caption: 'ReAccruals',
     pageUrl: '/home/reaccruals',
     iconSrc: require('assets/images/icons/home/chart-line.svg'),
