@@ -1,0 +1,13 @@
+#import '../fragments/unitType.gql'
+#import '../fragments/unit.gql'
+
+query UnitTypes {
+  unitTypes {
+    data {
+      ...UnitTypeFragment
+      units {
+        ...UnitFragment
+      }
+    }
+  }
+}

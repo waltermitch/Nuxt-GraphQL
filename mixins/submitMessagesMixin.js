@@ -1,8 +1,10 @@
 import { mapActions, mapGetters } from 'vuex'
 import FormSubmissionMessage from '~/components/FormSubmissionMessage.vue'
+import { formMixin } from '~/mixins/formMixin'
 
 export const submitMessagesMixin = {
   components: { FormSubmissionMessage },
+  mixins: [formMixin],
   computed: {
     ...mapGetters({
       showMessage: 'formSubmissionMessage/getShowMessage',
@@ -25,6 +27,7 @@ export const submitMessagesMixin = {
       this.setShowMessage(true)
       this.setMessageType(type)
       this.setMessage(message)
+      this.scrollToTop()
       this.hideMessage()
     },
   },

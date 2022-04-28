@@ -1,4 +1,8 @@
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+import { formMixin } from '~/mixins/formMixin'
+
 export const mutationMixin = {
+  mixins: [submitMessagesMixin, formMixin],
   methods: {
     async mutationAction(
       mutation,
