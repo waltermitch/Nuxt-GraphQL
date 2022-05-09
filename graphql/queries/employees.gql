@@ -1,0 +1,9 @@
+#import '../fragments/employee.gql'
+
+query Employees {
+  employees {
+    data {
+      ...EmployeeFragment
+    }
+  }
+}

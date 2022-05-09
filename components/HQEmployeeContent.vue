@@ -1,198 +1,231 @@
 <template>
   <PageContentWrapper>
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Employee Selector </template>
+    <ValidationObserver ref="form" v-slot="{ invalid }">
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Employee Selector </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="employees"
+              :options="employees.data"
+              select-by="id"
+              :disabled="isAddNewEmployee"
+              @input="selectEmployee"
+            />
+          </template>
+        </InputWithTitle>
+
+        <div class="buttons-area">
+          <DefaultButton button-color-gamma="white" @event="addNewEmployee">
+            Add new employee
+          </DefaultButton>
+
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="!isAddNewEmployee"
+            @event="cancelAdd"
+          >
+            Cancel Add
+          </DefaultButton>
+
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="invalid"
+            @event="accept"
+          >
+            Accept
+          </DefaultButton>
+        </div>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Employee ID </template>
+
+          <template #input>
+            <CustomInput v-model="employee.id" :disabled="isAddNewEmployee" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Employee First Name </template>
+
+          <template #input>
+            <CustomInput v-model="employee.firstName" rules="required" />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Employee Last Name </template>
+
+          <template #input>
+            <CustomInput v-model="employee.lastName" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Salary Base </template>
+
+          <template #input>
+            <CustomInput
+              v-model.number="employee.salaryBase"
+              rules="required|currency"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Salary Overtime </template>
+
+          <template #input>
+            <CustomInput
+              v-model.number="employee.salaryOvertime"
+              rules="required|currency"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> State Tax Code </template>
+
+          <template #input>
+            <CustomInput v-model="employee.stateTaxCode" rules="required" />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title>Local Tax Code </template>
+
+          <template #input>
+            <CustomInput v-model="employee.localTaxCode" rules="required" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Hourly </template>
+
+          <template #input>
+            <CustomRadioButton
+              :is-active="employee.isHourly"
+              @set-is-active="setEmployeeHourly"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Exempt </template>
+
+          <template #input>
+            <CustomRadioButton
+              :is-active="employee.isExempt"
+              @set-is-active="setEmployeeExempt"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Prod Eligible </template>
+
+          <template #input>
+            <CustomRadioButton
+              :is-active="employee.isProdEligible"
+              @set-is-active="setEmployeeProdEligible"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Active </template>
+
+          <template #input>
+            <CustomRadioButton
+              :is-active="employee.isActive"
+              @set-is-active="setEmployeeActive"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputWithTitle v-if="isAddNewEmployee">
+        <template #title> Employee Unit </template>
 
         <template #input>
           <CustomSelect
-            :options="employees"
-            select-by="employeeID"
-            :disabled="isAddNewEmployee"
-            @input="selectEmployee"
+            v-if="units"
+            multi-select
+            :options="units.data"
+            @input="selectEmployeeUnit"
           />
         </template>
       </InputWithTitle>
 
-      <div class="buttons-area">
-        <DefaultButton button-color-gamma="white" @event="addNewEmployee">
-          Add new employee
-        </DefaultButton>
+      <CustomTable v-else class="table">
+        <template #header>
+          <div class="table-row">
+            <span>Unit</span>
 
-        <DefaultButton
-          button-color-gamma="white"
-          :disabled="!isAddNewEmployee"
-          @event="cancelAdd"
-        >
-          Cancel Add
-        </DefaultButton>
+            <span>Active</span>
 
-        <DefaultButton button-color-gamma="white" @event="accept">
-          Accept
-        </DefaultButton>
-      </div>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Employee ID </template>
-
-        <template #input>
-          <CustomInput v-model="employee.employeeID" />
+            <span>Unit Name</span>
+          </div>
         </template>
-      </InputWithTitle>
-    </InputRow>
 
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Employee First Name </template>
+        <template #content>
+          <CustomTableRow
+            v-for="unit in employee.units"
+            :key="unit.id"
+            class="table-row"
+          >
+            {{ unit.unitID }}
 
-        <template #input>
-          <CustomInput v-model="employee.firstName" />
+            <CustomRadioButton :is-is-active="unit.isActive" />
+
+            {{ unit.unitName }}
+          </CustomTableRow>
         </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title> Employee Last Name </template>
-
-        <template #input>
-          <CustomInput v-model="employee.lastName" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Salary Base </template>
-
-        <template #input>
-          <CustomInput v-model="employee.salaryBase" rules="currency" />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title> Salary Overtime </template>
-
-        <template #input>
-          <CustomInput v-model="employee.salaryOverTie" rules="currency" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title> State Tax Code </template>
-
-        <template #input>
-          <CustomInput v-model="employee.stateTaxCode" />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title>Local Tax Code </template>
-
-        <template #input>
-          <CustomInput v-model="employee.localTaxCode" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Hourly </template>
-
-        <template #input>
-          <CustomRadioButton
-            :is-active="employee.hourly"
-            @set-is-active="setEmployeeHourly"
-          />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title> Exempt </template>
-
-        <template #input>
-          <CustomRadioButton
-            :is-active="employee.exempt"
-            @set-is-active="setEmployeeExempt"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title> Prod Eligible </template>
-
-        <template #input>
-          <CustomRadioButton
-            :is-active="employee.prodEligible"
-            @set-is-active="setEmployeeProdEligible"
-          />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title> Active </template>
-
-        <template #input>
-          <CustomRadioButton
-            :is-active="employee.active"
-            @set-is-active="setEmployeeActive"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputWithTitle v-if="isAddNewEmployee">
-      <template #title> Employee Unit </template>
-
-      <template #input>
-        <CustomSelect :options="units" @input="selectEmployeeUnit" />
-      </template>
-    </InputWithTitle>
-
-    <CustomTable v-else class="table">
-      <template #header>
-        <div class="table-row">
-          <span>Unit</span>
-
-          <span>Active</span>
-
-          <span>Unit Name</span>
-        </div>
-      </template>
-
-      <template #content>
-        <CustomTableRow
-          v-for="unit in employee.units"
-          :key="unit.id"
-          class="table-row"
-        >
-          {{ unit.unitID }}
-
-          <CustomRadioButton :is-active="unit.active" />
-
-          {{ unit.unitName }}
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+      </CustomTable>
+    </ValidationObserver>
   </PageContentWrapper>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
+import Employees from '../graphql/queries/employees.gql'
+import Units from '../graphql/queries/units.gql'
+import CreateEmployee from '../graphql/mutations/employee/createEmployee.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQEmployeeContent',
   components: {
+    ValidationObserver,
     PageContentWrapper,
     InputRow,
     InputWithTitle,
     CustomSelect,
+  },
+  mixins: [mutationMixin],
+  apollo: {
+    employees: {
+      query: Employees,
+    },
+    units: {
+      query: Units,
+    },
   },
   data() {
     return {
@@ -200,52 +233,6 @@ export default {
         ...this.initialStateEmployee(),
       },
       isAddNewEmployee: false,
-      employees: [
-        {
-          id: 0,
-          employeeID: 1309,
-          firstName: 'Name',
-          lastName: 'LastName',
-          salaryBase: '$15.00',
-          salaryOverTie: '$22.50',
-          stateTaxCode: 'VA',
-          hourly: true,
-          exempt: false,
-          prodEligible: false,
-          active: true,
-          localTaxCode: '',
-          units: [
-            {
-              id: 0,
-              unitID: 178,
-              active: true,
-              unitName: 'Version',
-            },
-          ],
-        },
-        {
-          id: 1,
-          employeeID: 1311,
-          firstName: 'Name1',
-          lastName: 'LastName1',
-          salaryBase: '$15.00',
-          salaryOverTie: '$22.50',
-          stateTaxCode: 'VA',
-          hourly: true,
-          exempt: false,
-          prodEligible: false,
-          active: true,
-          localTaxCode: '',
-          units: [
-            {
-              id: 0,
-              unitID: 178,
-              active: true,
-              unitName: 'Version',
-            },
-          ],
-        },
-      ],
       units: [
         {
           id: 0,
@@ -266,45 +253,58 @@ export default {
     initialStateEmployee() {
       return {
         id: '',
-        employeeID: '',
         firstName: '',
         lastName: '',
         salaryBase: '',
-        salaryOverTie: '',
+        salaryOvertime: '',
         stateTaxCode: '',
-        hourly: false,
-        exempt: false,
-        prodEligible: false,
-        active: false,
+        isHourly: false,
+        isExempt: false,
+        isProdEligible: false,
+        isActive: false,
         localTaxCode: '',
         units: [],
       }
     },
     selectEmployee(item) {
-      this.employee = item
+      if (item) {
+        this.employee = item
+      }
     },
     addNewEmployee() {
       this.isAddNewEmployee = true
       this.employee = this.initialStateEmployee()
     },
-    accept() {},
+    async accept() {
+      const { id, units, ...employeeInput } = this.employee
+      await this.mutationAction(
+        CreateEmployee,
+        {
+          employeeInput,
+        },
+        Employees,
+        'Add employee success',
+        'Add employee error'
+      )
+    },
     cancelAdd() {
+      this.employee = this.employees.data[0]
       this.isAddNewEmployee = false
     },
     setEmployeeHourly() {
-      this.employee.hourly = !this.employee.hourly
+      this.employee.isHourly = !this.employee.isHourly
     },
     setEmployeeExempt() {
-      this.employee.exempt = !this.employee.exempt
+      this.employee.isExempt = !this.employee.isExempt
     },
     setEmployeeProdEligible() {
-      this.employee.prodEligible = !this.employee.prodEligible
+      this.employee.isProdEligible = !this.employee.isProdEligible
     },
     setEmployeeActive() {
-      this.employee.active = !this.employee.active
+      this.employee.isActive = !this.employee.isActive
     },
     selectEmployeeUnit(unit) {
-      this.employee.units = [unit]
+      this.employee.units = [...this.employee.units, unit]
     },
   },
 }
