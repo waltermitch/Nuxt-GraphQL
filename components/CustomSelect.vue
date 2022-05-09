@@ -10,6 +10,9 @@
       @click="disabled ? null : toggleSelect()"
     >
       <span v-if="disabled"></span>
+      <span v-else-if="multiSelect">
+        {{ selectedOptions }}
+      </span>
       <span v-else>
         {{ selected && selected[selectBy] }}
       </span>
@@ -72,6 +75,10 @@ export default {
       type: [Object, String],
       default: null,
     },
+    multiSelect: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -80,8 +87,14 @@ export default {
         : this.options.length > 0
         ? this.options[0]
         : null,
+      selectedList: [],
       open: false,
     }
+  },
+  computed: {
+    selectedOptions() {
+      return this.selectedList.map((item) => item[this.selectBy]).join(', ')
+    },
   },
   watch: {
     options() {
@@ -99,6 +112,17 @@ export default {
       }
     },
     selectOption(option) {
+      if (this.multiSelect) {
+        if (this.selectedList.find((item) => item.id === option.id)) {
+          console.log(this.selectedList, option)
+          this.selectedList = this.selectedList.filter(
+            (item) => item.id !== option.id
+          )
+        } else {
+          this.selectedList.push(option)
+        }
+      }
+
       this.selected = option
       if (this.open) {
         this.$emit('input', option)
