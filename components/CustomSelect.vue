@@ -69,7 +69,7 @@ export default {
       default: false,
     },
     selectedItem: {
-      type: Object,
+      type: [Object, String],
       default: null,
     },
   },
@@ -100,8 +100,10 @@ export default {
     },
     selectOption(option) {
       this.selected = option
+      if (this.open) {
+        this.$emit('input', option)
+      }
       this.open = false
-      this.$emit('input', option)
     },
   },
 }
