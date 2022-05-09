@@ -11,9 +11,10 @@ export const mutationMixin = {
       successMessage,
       errorMessage
     ) {
-      const formValidated = await this.$refs.form.validate()
+      const formValidated =
+        this.$refs.form && (await this.$refs.form.validate())
 
-      if (formValidated) {
+      if (formValidated || !this.$refs.form) {
         try {
           await this.$apollo.mutate({
             mutation,

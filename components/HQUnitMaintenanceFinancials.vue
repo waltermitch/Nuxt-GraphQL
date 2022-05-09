@@ -7,7 +7,7 @@
 
           <template #input>
             <CustomInput
-              v-model="payrollTax"
+              v-model="payrollTaxPercent"
               rules="required"
               placeholder="0%"
             />
@@ -19,7 +19,7 @@
 
           <template #input>
             <CustomInput
-              v-model="benefitDollars"
+              v-model="benefitsAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -45,7 +45,7 @@
 
           <template #input>
             <CustomInput
-              v-model="commissionDollars"
+              v-model="commissionAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -59,7 +59,7 @@
 
           <template #input>
             <CustomInput
-              v-model="vacationDollars"
+              v-model="vacationAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -85,7 +85,7 @@
 
           <template #input>
             <CustomInput
-              v-model="businessInsurance"
+              v-model="businessInsuranceAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -142,20 +142,26 @@ export default {
   },
   mixins: [formMixin, unitMaintenanceMixin, tabsViewMixin],
   computed: {
-    payrollTax: {
+    payrollTaxPercent: {
       get() {
-        return this.unit.payrollTax
+        return this.unit.payrollTaxPercent
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_PAYROLL_TAX', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_PAYROLL_TAX',
+          Number(value)
+        )
       },
     },
-    benefitDollars: {
+    benefitsAmount: {
       get() {
-        return this.unit.benefitDollars
+        return this.unit.benefitsAmount
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BENEFIT_DOLLARS', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_BENEFIT_DOLLARS',
+          Number(value)
+        )
       },
     },
     vendingIncome: {
@@ -163,23 +169,32 @@ export default {
         return this.unit.vendingIncome
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_VENDING_INCOME', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_VENDING_INCOME',
+          Number(value)
+        )
       },
     },
-    commissionDollars: {
+    commissionAmount: {
       get() {
-        return this.unit.commissionDollars
+        return this.unit.commissionAmount
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_DOLLARS', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_COMMISSION_DOLLARS',
+          Number(value)
+        )
       },
     },
-    vacationDollars: {
+    vacationAmount: {
       get() {
-        return this.unit.vacationDollars
+        return this.unit.vacationAmount
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_VACATION_DOLLARS', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_VACATION_DOLLARS',
+          Number(value)
+        )
       },
     },
     isVending() {
@@ -188,12 +203,15 @@ export default {
     isActive() {
       return this.unit.isActive
     },
-    businessInsurance: {
+    businessInsuranceAmount: {
       get() {
-        return this.unit.businessInsurance
+        return this.unit.businessInsuranceAmount
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_BUSINESS_INSURANCE',
+          Number(value)
+        )
       },
     },
   },

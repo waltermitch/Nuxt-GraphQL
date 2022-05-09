@@ -6,7 +6,7 @@
           <template #title> Unit </template>
 
           <template #input>
-            <CustomInput v-model="unitNum" rules="required" />
+            <CustomInput v-model="code" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -14,7 +14,7 @@
           <template #title> Street Address </template>
 
           <template #input>
-            <CustomInput v-model="streetAddress" rules="required" />
+            <CustomInput v-model="address" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -35,6 +35,7 @@
             <CustomSelect
               v-if="state"
               :options="state.cities"
+              :selected-item="unitID && unit.city"
               select-by="name"
               @input="selectCity"
             />
@@ -50,6 +51,7 @@
             <CustomSelect
               v-if="districts"
               :options="districts.data"
+              :selected-item="unitID && unit.district"
               select-by="name"
               @input="selectDistrict"
             />
@@ -86,6 +88,7 @@
             <CustomSelect
               v-if="states"
               :options="states.data"
+              :selected-item="unitID && unit.city.state"
               select-by="code"
               @input="selectState"
             />
@@ -98,7 +101,7 @@
           <template #title> Mgr First Name </template>
 
           <template #input>
-            <CustomInput v-model="mgrFirstName" rules="required" />
+            <CustomInput v-model="managerFirstName" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -106,7 +109,7 @@
           <template #title> Zip Code </template>
 
           <template #input>
-            <CustomInput v-model="zipCode" rules="required" />
+            <CustomInput v-model="zip" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -116,7 +119,20 @@
           <template #title> Mgr Last Name </template>
 
           <template #input>
-            <CustomInput v-model="mgrLastName" rules="required" />
+            <CustomInput v-model="managerLastName" rules="required" />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title>Location Manager</template>
+
+          <template #input>
+            <CustomSelect
+              v-if="users"
+              :options="users.data.filter((user) => !user.isAdmin)"
+              select-by="email"
+              @input="selectUser"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -126,7 +142,11 @@
           <template #title> Password </template>
 
           <template #input>
-            <CustomInput v-model="password" rules="required" type="password" />
+            <CustomInput
+              v-model="payrollPassword"
+              rules="required"
+              type="password"
+            />
           </template>
         </InputWithTitle>
 
@@ -134,7 +154,11 @@
           <template #title> Email </template>
 
           <template #input>
-            <CustomInput v-model="email" rules="email|required" type="email" />
+            <CustomInput
+              v-model="emailAccount"
+              rules="email|required"
+              type="email"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -144,7 +168,7 @@
           <template #title>Sysco</template>
 
           <template #input>
-            <CustomInput v-model="sysco" rules="required" />
+            <CustomInput v-model="sysco" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -172,6 +196,7 @@ import { formMixin } from '../mixins/formMixin'
 import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
 import Districts from '../graphql/queries/districts.gql'
 import States from '../graphql/queries/states.gql'
+import Users from '../graphql/queries/users.gql'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -194,19 +219,22 @@ export default {
     states: {
       query: States,
     },
+    users: {
+      query: Users,
+    },
   },
   computed: {
-    unitNum: {
+    code: {
       get() {
-        return this.unit.unitNum
+        return this.unit.code
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_NUM', value)
       },
     },
-    streetAddress: {
+    address: {
       get() {
-        return this.unit.streetAddress
+        return this.unit.address
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_STREET_ADDRESS', value)
@@ -225,8 +253,7 @@ export default {
         return this.unit.city
       },
       set(value) {
-        this.unit.city &&
-          this.$store.commit('unitMaintenance/SET_UNIT_CITY', value)
+        this.$store.commit('unitMaintenance/SET_UNIT_CITY', value)
       },
     },
     district: {
@@ -234,8 +261,7 @@ export default {
         return this.unit.district
       },
       set(value) {
-        this.unit.district &&
-          this.$store.commit('unitMaintenance/SET_UNIT_DISTRICT', value)
+        this.$store.commit('unitMaintenance/SET_UNIT_DISTRICT', value)
       },
     },
     county: {
@@ -251,7 +277,7 @@ export default {
         return this.unit.population
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_POPULATION', value)
+        this.$store.commit('unitMaintenance/SET_UNIT_POPULATION', Number(value))
       },
     },
     state: {
@@ -262,41 +288,41 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_STATE', value)
       },
     },
-    mgrFirstName: {
+    managerFirstName: {
       get() {
-        return this.unit.mgrFirstName
+        return this.unit.managerFirstName
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_MGR_FIRST_NAME', value)
       },
     },
-    zipCode: {
+    zip: {
       get() {
-        return this.unit.zipCode
+        return this.unit.zip
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_MGR_ZIP_CODE', value)
       },
     },
-    mgrLastName: {
+    managerLastName: {
       get() {
-        return this.unit.mgrLastName
+        return this.unit.managerLastName
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_MGR_LAST_NAME', value)
       },
     },
-    password: {
+    payrollPassword: {
       get() {
-        return this.unit.password
+        return this.unit.payrollPassword
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_PASSWORD', value)
       },
     },
-    email: {
+    emailAccount: {
       get() {
-        return this.unit.email
+        return this.unit.emailAccount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_EMAIL', value)
@@ -308,6 +334,14 @@ export default {
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_SYSCO', value)
+      },
+    },
+    usersData: {
+      get() {
+        return this.unit.users
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_USERS', value)
       },
     },
   },
@@ -323,6 +357,9 @@ export default {
     },
     selectCity(city) {
       this.city = city
+    },
+    selectUser(user) {
+      this.usersData = user
     },
   },
 }

@@ -18,7 +18,7 @@
 
           <template #input>
             <CustomInput
-              v-model="managementFeeDollar"
+              v-model="managementAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -32,7 +32,7 @@
 
           <template #input>
             <CustomInput
-              v-model="managementFeePercent"
+              v-model="managementPercent"
               rules="required"
               placeholder="0%"
             />
@@ -57,7 +57,7 @@
 
           <template #input>
             <CustomInput
-              v-model="administrativeFeeDollar"
+              v-model="administrativeAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -71,7 +71,7 @@
 
           <template #input>
             <CustomInput
-              v-model="administrativeFeePercent"
+              v-model="administrativePercent"
               rules="required"
               placeholder="0%"
             />
@@ -93,7 +93,7 @@
 
           <template #input>
             <CustomInput
-              v-model="supportFeeDollar"
+              v-model="supportAmount"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -107,7 +107,7 @@
 
           <template #input>
             <CustomInput
-              v-model="supportFeePercent"
+              v-model="supportPercent"
               rules="required"
               placeholder="0%"
             />
@@ -128,13 +128,14 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <!-- TODO Need more information on reg tax field-->
+        <!-- <InputWithTitle>
           <template #title> Reg Tax </template>
 
           <template #input>
             <CustomSelect :options="mockedList" @input="selectRegTax" />
           </template>
-        </InputWithTitle>
+        </InputWithTitle> -->
       </InputRow>
 
       <InputRow>
@@ -156,7 +157,7 @@
           <template #input>
             <CustomRadioButton
               class="radio-button"
-              :is-active="kronos"
+              :is-active="isKronos"
               @set-is-active="setIsKronos"
             />
           </template>
@@ -168,7 +169,7 @@
           <template #title> Start Period </template>
 
           <template #input>
-            <CustomSelect :options="mockedList" @input="selectStartPeriod" />
+            <CustomSelect :options="datesList" @input="selectStartPeriod" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -177,7 +178,7 @@
         <DefaultButton
           button-color-gamma="red"
           :disabled="invalid"
-          @event="saveEvent"
+          @event="unitID ? updateUnit() : addUnit()"
         >
           Save
         </DefaultButton>
@@ -192,13 +193,16 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { formMixin } from '../mixins/formMixin'
 import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
+import CreateUnit from '../graphql/mutations/unit/createUnit.gql'
+import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
+import Units from '../graphql/queries/units.gql'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQUnitMaintenanceFees',
   components: {
@@ -209,19 +213,27 @@ export default {
     CustomSelect,
     CustomRadioButton,
   },
-  mixins: [formMixin, unitMaintenanceMixin],
+  mixins: [unitMaintenanceMixin, mutationMixin],
   data() {
+    // TODO Remove mocked data
     return {
       mockedList: [
         {
           id: 1,
-          value: 'Lorem',
-          name: 'Lorem',
+          value: 'DolarsPerWeek',
+          name: 'DolarsPerWeek',
         },
         {
           id: 2,
-          value: 'Ipsum',
-          name: 'Ipsum',
+          value: 'DolarsPerWeek',
+          name: 'DolarsPerWeek',
+        },
+      ],
+      datesList: [
+        {
+          id: 1,
+          value: '2021-05-23',
+          name: '2021-05-23',
         },
       ],
     }
@@ -230,72 +242,75 @@ export default {
     managementFeeType() {
       return this.unit.managementFeeType
     },
-    managementFeeDollar: {
+    managementAmount: {
       get() {
-        return this.unit.managementFeeDollar
+        return this.unit.managementAmount
       },
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR',
-          value
+          Number(value)
         )
       },
     },
-    managementFeePercent: {
+    managementPercent: {
       get() {
-        return this.unit.managementFeePercent
+        return this.unit.managementPercent
       },
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT',
-          value
+          Number(value)
         )
       },
     },
     administrativeFeeType() {
       return this.unit.administrativeFeeType
     },
-    administrativeFeeDollar: {
+    administrativeAmount: {
       get() {
-        return this.unit.administrativeFeeDollar
+        return this.unit.administrativeAmount
       },
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR',
-          value
+          Number(value)
         )
       },
     },
-    administrativeFeePercent: {
+    administrativePercent: {
       get() {
-        return this.unit.administrativeFeePercent
+        return this.unit.administrativePercent
       },
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT',
-          value
+          Number(value)
         )
       },
     },
-    supportFeeDollar: {
+    supportAmount: {
       get() {
-        return this.unit.supportFeeDollar
+        return this.unit.supportAmount
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR',
+          Number(value)
+        )
       },
     },
     supportFeeType() {
       return this.unit.supportFeeType
     },
-    supportFeePercent: {
+    supportPercent: {
       get() {
-        return this.unit.supportFeePercent
+        return this.unit.supportPercent
       },
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT',
-          value
+          Number(value)
         )
       },
     },
@@ -304,7 +319,10 @@ export default {
         return this.unit.benefitsPercent
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_BENEFITS_PERCENT',
+          Number(value)
+        )
       },
     },
     regTax() {
@@ -315,48 +333,106 @@ export default {
         return this.unit.commissionPercent
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
+        this.$store.commit(
+          'unitMaintenance/SET_UNIT_COMMISSION_PERCENT',
+          Number(value)
+        )
       },
     },
-    kronos() {
-      return this.unit.kronos
+    isKronos() {
+      return this.unit.isKronos
     },
-    startPeriod: {
-      get() {
-        return this.unit.startPeriod
-      },
-      set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_START_PERIOD', value)
-      },
+    startPeriod() {
+      return this.unit.startPeriod.value
     },
   },
   methods: {
     selectManagementFeeType(managementFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_TYPE',
-        managementFeeType
+        managementFeeType.value
       )
     },
     selectAdministrativeFeeType(administrativeFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_TYPE',
-        administrativeFeeType
+        administrativeFeeType.value
       )
     },
     selectSupportFeeType(supportFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_SUPPORT_FEE_TYPE',
-        supportFeeType
+        supportFeeType.value
       )
     },
     selectRegTax(regTax) {
       this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', regTax)
     },
     setIsKronos() {
-      this.$store.commit('unitMaintenance/SET_UNIT_KRONOS', !this.unit.kronos)
+      this.$store.commit('unitMaintenance/SET_UNIT_KRONOS', !this.unit.isKronos)
     },
     selectStartPeriod(startPeriod) {
-      this.$store.commit('unitMaintenance/SET_UNIT_START_PERIOD', startPeriod)
+      this.$store.commit(
+        'unitMaintenance/SET_UNIT_START_PERIOD',
+        startPeriod.value
+      )
+    },
+    async addUnit() {
+      // eslint-disable-next-line no-unused-vars
+      const { state, users, ...unitInput } = this.unit
+      await this.mutationAction(
+        CreateUnit,
+        {
+          unitInput: {
+            ...unitInput,
+            district: {
+              connect: Number(this.unit.district.id),
+            },
+            county: {
+              connect: Number(this.unit.county.id),
+            },
+            city: {
+              connect: Number(this.unit.city.id),
+            },
+            users: {
+              sync: users.map((user) => Number(user.id)),
+            },
+          },
+        },
+        Units,
+        'Add unit success',
+        'Add unit error'
+      )
+      this.hideAddUnit()
+    },
+    async updateUnit() {
+      if (this.unitID) {
+        const { state, users, __typename, ...unitInput } = this.unit
+        await this.mutationAction(
+          UpdateUnit,
+          {
+            unitInput: {
+              ...unitInput,
+              district: {
+                connect: Number(this.unit.district.id),
+              },
+              county: {
+                connect: Number(this.unit.county.id),
+              },
+              city: {
+                connect: Number(this.unit.city.id),
+              },
+              users: {
+                sync: users.map((user) => user.id),
+              },
+            },
+          },
+          Units,
+          'Edit unit success',
+          'Edit unit error'
+        )
+        this.hideAddUnit()
+      }
     },
   },
 }

@@ -1,0 +1,5 @@
+mutation UpdateUnit($unitInput: UpdateUnitInput!) {
+  updateUnit(unitInput: $unitInput) {
+    id
+  }
+}

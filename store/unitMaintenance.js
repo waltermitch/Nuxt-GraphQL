@@ -2,41 +2,65 @@ export const state = () => ({
   showAddUnit: 'HQUnitsTableContent',
   unitID: '',
   unit: {
-    unitNum: '',
-    streetAddress: '',
+    code: '',
+    address: '',
     name: '',
-    city: '',
+    city: {
+      id: '',
+      name: '',
+      tax: '',
+      createdAt: '',
+      updatedAt: '',
+      state: {
+        id: '',
+        code: '',
+      },
+    },
     district: '',
     county: '',
     population: '',
-    state: '',
-    mgrFirstName: '',
-    zipCode: '',
-    mgrLastName: '',
-    password: '',
-    email: '',
+    state: {
+      id: '',
+      code: '',
+      salesTaxCafeteria: '',
+      salesTaxVending: '',
+      salesTaxRestaurant: '',
+      salesTaxStore: '',
+      grossReceiptsTax: '',
+      createdAt: '',
+      updatedAt: '',
+      cities: [],
+      counties: [],
+    },
+    managerFirstName: '',
+    zip: '',
+    managerLastName: '',
+    payrollPassword: '',
+    emailAccount: '',
+    users: [],
     sysco: '',
-    payrollTax: '',
-    benefitDollars: '',
+    payrollTaxPercent: '',
+    benefitsAmount: '',
     vendingIncome: '',
-    commissionDollars: '',
-    vacationDollars: '',
+    commissionAmount: '',
+    vacationAmount: '',
     isVending: false,
     isActive: false,
-    businessInsurance: '',
+    businessInsuranceAmount: '',
     managementFeeType: '',
-    managementFeeDollar: '',
-    managementFeePercent: '',
+    managementAmount: '',
+    managementPercent: '',
     administrativeFeeType: '',
-    administrativeFeeDollar: '',
-    administrativeFeePercent: '',
-    supportFeeDollar: '',
+    administrativeAmount: '',
+    administrativePercent: '',
+    supportAmount: '',
     supportFeeType: '',
-    supportFeePercent: '',
+    supportPercent: '',
     benefitsPercent: '',
-    regTax: '',
+    //  TODO Need more information on reg tax field
+    // regTax: '',
     commissionPercent: '',
-    kronos: '',
+    isKronos: false,
     startPeriod: '',
   },
 })
@@ -52,61 +76,76 @@ export const mutations = {
     state.unit = payload
   },
   SET_UNIT_NUM(state, payload) {
-    state.unit.unitNum = payload
+    state.unit.code = payload
   },
   SET_UNIT_STREET_ADDRESS(state, payload) {
-    state.unit.streetAddress = payload
+    state.unit.address = payload
   },
   SET_UNIT_NAME(state, payload) {
     state.unit.name = payload
   },
   SET_UNIT_CITY(state, payload) {
-    state.unit.city = payload
+    state.unit = {
+      ...state.unit,
+      city: payload,
+    }
   },
   SET_UNIT_DISTRICT(state, payload) {
-    state.unit.district = payload
+    state.unit = {
+      ...state.unit,
+      district: payload,
+    }
   },
   SET_UNIT_COUNTY(state, payload) {
-    state.unit.county = payload
+    state.unit = {
+      ...state.unit,
+      county: payload,
+    }
   },
   SET_UNIT_POPULATION(state, payload) {
     state.unit.population = payload
   },
   SET_UNIT_STATE(state, payload) {
-    state.unit.state = payload
+    state.unit = {
+      ...state.unit,
+      state: payload,
+    }
   },
   SET_UNIT_MGR_FIRST_NAME(state, payload) {
-    state.unit.mgrFirstName = payload
+    state.unit.managerFirstName = payload
   },
   SET_UNIT_MGR_LAST_NAME(state, payload) {
-    state.unit.mgrLastName = payload
+    state.unit.managerLastName = payload
   },
   SET_UNIT_MGR_ZIP_CODE(state, payload) {
-    state.unit.zipCode = payload
+    state.unit.zip = payload
   },
   SET_UNIT_PASSWORD(state, payload) {
-    state.unit.password = payload
+    state.unit.payrollPassword = payload
   },
   SET_UNIT_EMAIL(state, payload) {
-    state.unit.email = payload
+    state.unit.emailAccount = payload
   },
   SET_UNIT_SYSCO(state, payload) {
     state.unit.sysco = payload
   },
+  SET_UNIT_USERS(state, payload) {
+    state.unit.users = [payload]
+  },
   SET_UNIT_PAYROLL_TAX(state, payload) {
-    state.unit.payrollTax = payload
+    state.unit.payrollTaxPercent = payload
   },
   SET_UNIT_BENEFIT_DOLLARS(state, payload) {
-    state.unit.benefitDollars = payload
+    state.unit.benefitsAmount = payload
   },
   SET_UNIT_VENDING_INCOME(state, payload) {
     state.unit.vendingIncome = payload
   },
   SET_UNIT_COMMISSION_DOLLARS(state, payload) {
-    state.unit.commissionDollars = payload
+    state.unit.commissionAmount = payload
   },
   SET_UNIT_VACATION_DOLLARS(state, payload) {
-    state.unit.vacationDollars = payload
+    state.unit.vacationAmount = payload
   },
   SET_UNIT_IS_VENDING(state, payload) {
     state.unit.isVending = payload
@@ -115,34 +154,43 @@ export const mutations = {
     state.unit.isActive = payload
   },
   SET_UNIT_BUSINESS_INSURANCE(state, payload) {
-    state.unit.businessInsurance = payload
+    state.unit.businessInsuranceAmount = payload
   },
   SET_UNIT_MANAGEMENT_FEE_TYPE(state, payload) {
-    state.unit.managementFeeType = payload
+    state.unit = {
+      ...state.unit,
+      managementFeeType: payload,
+    }
   },
   SET_UNIT_MANAGEMENT_FEE_DOLLAR(state, payload) {
-    state.unit.managementFeeDollar = payload
+    state.unit.managementAmount = payload
   },
   SET_UNIT_MANAGEMENT_FEE_PERCENT(state, payload) {
-    state.unit.managementFeePercent = payload
+    state.unit.managementPercent = payload
   },
   SET_UNIT_ADMINISTRATIVE_FEE_TYPE(state, payload) {
-    state.unit.administrativeFeeType = payload
+    state.unit = {
+      ...state.unit,
+      administrativeFeeType: payload,
+    }
   },
   SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR(state, payload) {
-    state.unit.administrativeFeeDollar = payload
+    state.unit.administrativeAmount = payload
   },
   SET_UNIT_ADMINISTRATIVE_FEE_PERCENT(state, payload) {
-    state.unit.administrativeFeePercent = payload
+    state.unit.administrativePercent = payload
   },
   SET_UNIT_SUPPORT_FEE_TYPE(state, payload) {
-    state.unit.supportFeeType = payload
+    state.unit = {
+      ...state.unit,
+      supportFeeType: payload,
+    }
   },
   SET_UNIT_SUPPORT_FEE_DOLLAR(state, payload) {
-    state.unit.supportFeeDollar = payload
+    state.unit.supportAmount = payload
   },
   SET_UNIT_SUPPORT_FEE_PERCENT(state, payload) {
-    state.unit.supportFeePercent = payload
+    state.unit.supportPercent = payload
   },
   SET_UNIT_BENEFITS_PERCENT(state, payload) {
     state.unit.benefitsPercent = payload
@@ -154,10 +202,13 @@ export const mutations = {
     state.unit.commissionPercent = payload
   },
   SET_UNIT_KRONOS(state, payload) {
-    state.unit.kronos = payload
+    state.unit.isKronos = payload
   },
   SET_UNIT_START_PERIOD(state, payload) {
-    state.unit.startPeriod = payload
+    state.unit = {
+      ...state.unit,
+      startPeriod: payload,
+    }
   },
 }
 

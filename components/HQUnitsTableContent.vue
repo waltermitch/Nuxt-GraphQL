@@ -13,10 +13,14 @@
         </div>
       </template>
 
-      <template #content>
-        <CustomTableRow v-for="unit in units" :key="unit.id" class="table-row">
+      <template v-if="units" #content>
+        <CustomTableRow
+          v-for="unit in units.data"
+          :key="unit.id"
+          class="table-row"
+        >
           <span>
-            {{ unit.unit }}
+            {{ unit.code }}
           </span>
 
           <span>
@@ -24,14 +28,20 @@
           </span>
 
           <span>
-            {{ unit.city }}
+            {{ unit.city.name }}
           </span>
 
           <span>
-            {{ unit.state }}
+            {{ unit.city.state.code }}
           </span>
 
-          <CustomTableIconsColumn @edit="editUnit(unit.id)" />
+          <CustomTableIconsColumn
+            :is-delete-active="isDelete === unit.id"
+            @edit="editUnit(unit)"
+            @delete="deleteItem(unit.id)"
+            @cancel-delete="cancelDelete"
+            @confirm-delete="confirmDelete(unit.id)"
+          />
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -39,11 +49,15 @@
 </template>
 
 <script>
+import Units from '../graphql/queries/units.gql'
+import DeleteUnit from '../graphql/mutations/unit/deleteUnit.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow'
 import CustomTableIconsColumn from './CustomTableIconsColumn'
 import { unitMaintenanceMixin } from '~/mixins/unitMaintenanceMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQUnitsTableContent',
   components: {
@@ -52,31 +66,26 @@ export default {
     CustomTableRow,
     CustomTableIconsColumn,
   },
-  mixins: [unitMaintenanceMixin],
-  data() {
-    return {
-      units: [
-        {
-          id: 0,
-          unit: 123,
-          name: 'lorem ipsum',
-          city: 'lorem ipsum',
-          state: 'PA',
-        },
-        {
-          id: 1,
-          unit: 456,
-          name: 'lorem ipsum',
-          city: 'lorem ipsum',
-          state: 'PA',
-        },
-      ],
-    }
+  mixins: [unitMaintenanceMixin, tableActionsMixin, mutationMixin],
+  apollo: {
+    units: {
+      query: Units,
+    },
   },
   methods: {
-    editUnit(unitID) {
-      this.setUnitID(unitID)
+    editUnit(unit) {
+      this.setUnit(unit)
+      this.setUnitID(unit.id)
       this.showAddUnit()
+    },
+    confirmDelete(id) {
+      this.mutationAction(
+        DeleteUnit,
+        { id },
+        Units,
+        'Delete unit success',
+        'Delete unit error'
+      )
     },
   },
 }

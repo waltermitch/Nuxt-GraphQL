@@ -4,4 +4,8 @@ fragment CityFragment on City {
   tax
   createdAt
   updatedAt
+  state {
+    id
+    code
+  }
 }
