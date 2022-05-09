@@ -48,6 +48,14 @@
           >
             Accept
           </DefaultButton>
+
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="isAddNewEmployee"
+            @event="deleteEmployee"
+          >
+            Delete employee
+          </DefaultButton>
         </div>
       </InputRow>
 
@@ -217,6 +225,7 @@ import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
 import CreateEmployee from '../graphql/mutations/employee/createEmployee.gql'
 import UpdateEmployee from '../graphql/mutations/employee/updateEmployee.gql'
+import DeleteEmployee from '../graphql/mutations/employee/deleteEmployee.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -330,6 +339,15 @@ export default {
     },
     selectEmployeeUnit(unit) {
       this.employee.units = [...this.employee.units, unit]
+    },
+    deleteEmployee() {
+      this.mutationAction(
+        DeleteEmployee,
+        { id: this.employee.id },
+        Employees,
+        'Delete employee success',
+        'Delete employee error'
+      )
     },
   },
 }
