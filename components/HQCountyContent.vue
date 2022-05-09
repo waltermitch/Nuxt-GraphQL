@@ -173,8 +173,8 @@ export default {
         DeleteCounty,
         { id },
         Counties,
-        'Delete state success',
-        'Delete state error'
+        'Delete unit success',
+        'Delete unit error'
       )
     },
   },
