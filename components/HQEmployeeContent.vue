@@ -17,16 +17,28 @@
         </InputWithTitle>
 
         <div class="buttons-area">
-          <DefaultButton button-color-gamma="white" @event="addNewEmployee">
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="isEditNewEmployee"
+            @event="addNewEmployee"
+          >
             Add new employee
           </DefaultButton>
 
           <DefaultButton
             button-color-gamma="white"
-            :disabled="!isAddNewEmployee"
+            :disabled="isAddNewEmployee"
+            @event="editEmployee"
+          >
+            Edit employee
+          </DefaultButton>
+
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="!isAddNewEmployee && !isEditNewEmployee"
             @event="cancelAdd"
           >
-            Cancel Add
+            {{ isEditNewEmployee ? 'Cancel Edit' : 'Cancel Add' }}
           </DefaultButton>
 
           <DefaultButton
@@ -204,6 +216,7 @@ import { ValidationObserver } from 'vee-validate'
 import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
 import CreateEmployee from '../graphql/mutations/employee/createEmployee.gql'
+import UpdateEmployee from '../graphql/mutations/employee/updateEmployee.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -233,20 +246,7 @@ export default {
         ...this.initialStateEmployee(),
       },
       isAddNewEmployee: false,
-      units: [
-        {
-          id: 0,
-          value: '101',
-          name: '101',
-          unitName: 'Drinker',
-        },
-        {
-          id: 1,
-          value: '102',
-          name: '102',
-          unitName: 'Biddle',
-        },
-      ],
+      isEditNewEmployee: false,
     }
   },
   methods: {
@@ -271,25 +271,50 @@ export default {
         this.employee = item
       }
     },
-    addNewEmployee() {
+    async addNewEmployee() {
+      await this.$apollo.query({
+        query: Units,
+      })
       this.isAddNewEmployee = true
       this.employee = this.initialStateEmployee()
     },
+    editEmployee() {
+      this.isEditNewEmployee = true
+    },
     async accept() {
-      const { id, units, ...employeeInput } = this.employee
-      await this.mutationAction(
-        CreateEmployee,
-        {
-          employeeInput,
-        },
-        Employees,
-        'Add employee success',
-        'Add employee error'
-      )
+      const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
+        this.employee
+      this.isAddNewEmployee
+        ? await this.mutationAction(
+            CreateEmployee,
+            {
+              employeeInput,
+            },
+            Employees,
+            'Add employee success',
+            'Add employee error'
+          )
+        : await this.mutationAction(
+            UpdateEmployee,
+            {
+              employeeInput: {
+                id,
+                ...employeeInput,
+              },
+            },
+            Employees,
+            'Update employee success',
+            'Update employee error'
+          )
     },
     cancelAdd() {
-      this.employee = this.employees.data[0]
-      this.isAddNewEmployee = false
+      this.employee = {
+        ...this.employees.data[0],
+        units: [],
+      }
+      this.isAddNewEmployee
+        ? (this.isAddNewEmployee = false)
+        : (this.isEditNewEmployee = false)
     },
     setEmployeeHourly() {
       this.employee.isHourly = !this.employee.isHourly
