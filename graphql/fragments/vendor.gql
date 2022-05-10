@@ -1,7 +1,12 @@
+#import './term.gql'
+
 fragment VendorFragment on Vendor {
   id
   code
   name
   createdAt
   updatedAt
+  term {
+    ...TermFragment
+  }
 }

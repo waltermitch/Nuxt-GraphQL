@@ -5,9 +5,6 @@ query Vendors {
   vendors {
     data {
       ...VendorFragment
-      term {
-        ...TermFragment
-      }
     }
   }
 }
