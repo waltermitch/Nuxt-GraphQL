@@ -47,7 +47,7 @@
 
         <template v-if="registers" #content>
           <CustomTableRow
-            v-for="register in registers.data"
+            v-for="register in unitRegisters"
             :key="register.id"
             class="table-row"
           >
@@ -241,6 +241,13 @@ export default {
         resetNonResetable: false,
       },
     }
+  },
+  computed: {
+    unitRegisters() {
+      return this.registers.data.filter(
+        (register) => register.unit.id === this.unit.id
+      )
+    },
   },
   methods: {
     selectUnit(unit) {
