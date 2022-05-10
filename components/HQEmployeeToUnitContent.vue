@@ -5,7 +5,12 @@
         <template #title> Unit </template>
 
         <template #input>
-          <CustomSelect :options="units" @input="selectUnit" />
+          <CustomSelect
+            v-if="units"
+            :options="units.data"
+            select-by="code"
+            @input="selectUnit"
+          />
         </template>
       </InputWithTitle>
 
@@ -13,12 +18,12 @@
         <template #title> Name </template>
 
         <template #input>
-          <CustomInput v-model="unit.unitName" />
+          <CustomInput v-model="unit.name" />
         </template>
       </InputWithTitle>
     </InputRow>
 
-    <CustomTable class="table">
+    <CustomTable v-if="employees" class="table">
       <template #header>
         <div class="table-row">
           <span> Employee ID </span>
@@ -31,7 +36,7 @@
 
       <template #content>
         <CustomTableRow
-          v-for="employee in employees"
+          v-for="employee in employees.data"
           :key="employee.id"
           class="table-row"
         >
@@ -58,75 +63,25 @@
 </template>
 
 <script>
+import Employees from '../graphql/queries/employees.gql'
+import Units from '../graphql/queries/units.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 export default {
   name: 'HQEmployeeToUnitContent',
   components: {
     PageContentWrapper,
   },
+  apollo: {
+    employees: {
+      query: Employees,
+    },
+    units: {
+      query: Units,
+    },
+  },
   data() {
     return {
       unit: '',
-      units: [
-        {
-          id: 0,
-          value: '101',
-          name: '101',
-          unitName: 'Drinker',
-        },
-        {
-          id: 1,
-          value: '102',
-          name: '102',
-          unitName: 'Biddle',
-        },
-      ],
-      employees: [
-        {
-          id: 0,
-          employeeID: 1309,
-          firstName: 'Name',
-          lastName: 'LastName',
-          salaryBase: '$15.00',
-          salaryOverTie: '$22.50',
-          stateTaxCode: 'VA',
-          hourly: true,
-          exempt: false,
-          prodEligible: false,
-          active: true,
-          localTaxCode: '',
-          units: [
-            {
-              id: 0,
-              unitID: 178,
-              active: true,
-              unitName: 'Version',
-            },
-          ],
-        },
-        {
-          id: 1,
-          employeeID: 1311,
-          firstName: 'Name1',
-          lastName: 'LastName1',
-          salaryBase: '$15.00',
-          salaryOverTie: '$22.50',
-          stateTaxCode: 'VA',
-          hourly: true,
-          exempt: false,
-          prodEligible: false,
-          active: true,
-          localTaxCode: '',
-          units: [
-            {
-              id: 0,
-              unitID: 178,
-              active: true,
-              unitName: 'Version',
-            },
-          ],
-        },
-      ],
     }
   },
   methods: {
