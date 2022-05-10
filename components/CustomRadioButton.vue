@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @click="setIsActive">
+  <div class="container" @click="disabled ? null : setIsActive()">
     <div class="radio-container" :style="{ width, height, borderRadius }">
       <div
         class="radio"
@@ -53,6 +53,10 @@ export default {
     radioBorderRadius: {
       type: String,
       default: '0px',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

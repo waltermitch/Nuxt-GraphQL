@@ -6,7 +6,12 @@
           <template #title> Unit </template>
 
           <template #input>
-            <CustomSelect :options="mockedUnits" @input="selectUnit" />
+            <CustomSelect
+              v-if="units"
+              :options="units.data"
+              select-by="id"
+              @input="selectUnit"
+            />
           </template>
         </InputWithTitle>
 
@@ -14,7 +19,7 @@
           <template #title> Name </template>
 
           <template #input>
-            <CustomInput v-model="unitName" rules="required" />
+            <span> {{ unit.name }}</span>
           </template>
         </InputWithTitle>
       </InputRow>
@@ -30,62 +35,164 @@
 
             <span>Reg Bank</span>
 
-            <span>Non-Resettable</span>
+            <span>Non-Resetable</span>
 
             <span>Commission</span>
 
             <span>Active</span>
 
-            <span>Reset Non-Resettable</span>
+            <span>Reset Non-Resetable</span>
           </div>
         </template>
 
-        <template #content>
+        <template v-if="registers" #content>
           <CustomTableRow
-            v-for="item in units"
-            :key="item.id"
+            v-for="register in registers.data"
+            :key="register.id"
             class="table-row"
           >
-            <span>
-              {{ item.unitID }}
+            <CustomInput
+              v-if="isEdit === register.id"
+              v-model="register.code"
+              rules="required"
+            />
+            <span v-else>
+              {{ register.code }}
             </span>
 
-            <span>
-              {{ item.name }}
+            <CustomInput
+              v-if="isEdit === register.id"
+              v-model="register.name"
+              rules="required"
+            />
+            <span v-else>
+              {{ register.name }}
             </span>
 
-            <CustomSelect :options="item.type" @input="selectUnitsType" />
-
-            <span>
-              {{ item.regBank }}
+            <CustomSelect
+              v-if="registerTypes && isEdit === register.id"
+              :options="registerTypes.data"
+              @input="selectRegisterType"
+            />
+            <span v-else>
+              {{ register.registerType.name }}
             </span>
 
-            <span>
-              {{ item.nonResettable }}
-            </span>
+            <CustomInput
+              v-if="isEdit === register.id"
+              v-model.number="register.bank"
+              type="number"
+              rules="required|double"
+            />
+            <span v-else> {{ register.bank }}$ </span>
 
-            <span>
-              {{ item.commission }}
-            </span>
+            <CustomInput
+              v-if="isEdit === register.id"
+              v-model.number="register.nonResetable"
+              type="number"
+              rules="required|double"
+            />
+            <span v-else> {{ register.nonResetable }}$ </span>
+
+            <CustomInput
+              v-if="isEdit === register.id"
+              v-model.number="register.commission"
+              type="number"
+              rules="required|double"
+            />
+            <span v-else> {{ register.commission }}% </span>
 
             <CustomRadioButton
-              :is-active="item.active"
-              @set-is-active="setIsActive(item)"
+              :is-active="register.isActive"
+              :disabled="isEdit !== register.id"
+              @set-is-active="setIsActive(register)"
             />
 
             <CustomRadioButton
-              :is-active="item.resetNonResettable"
-              @set-is-active="setResetNonResettable(item)"
+              :is-active="register.resetNonResetable"
+              :disabled="isEdit !== register.id"
+              @set-is-active="setResetNonResetable(register)"
+            />
+
+            <CustomTableIconsColumn
+              :is-edit-active="isEdit === register.id"
+              :is-delete-active="isDelete === register.id"
+              @edit="edit(register.id)"
+              @delete="deleteItem(register.id)"
+              @cancel="cancelEdit"
+              @cancel-delete="cancelDelete"
+              @confirm-edit="confirmEdit(register)"
+              @confirm-delete="confirmDelete(register.id)"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomInput v-model="registerNew.code" rules="required" />
+
+            <CustomInput v-model="registerNew.name" rules="required" />
+
+            <CustomSelect
+              v-if="registerTypes"
+              :options="registerTypes.data"
+              @input="selectRegisterType"
+            />
+
+            <CustomInput
+              v-model.number="registerNew.bank"
+              type="number"
+              rules="required|double"
+            />
+
+            <CustomInput
+              v-model.number="registerNew.nonResetable"
+              type="number"
+              rules="required|double"
+            />
+
+            <CustomInput
+              v-model.number="registerNew.commission"
+              type="number"
+              rules="required|double"
+            />
+
+            <CustomRadioButton
+              :is-active="registerNew.isActive"
+              @set-is-active="setIsActive"
+            />
+
+            <CustomRadioButton
+              :is-active="registerNew.resetNonResetable"
+              @set-is-active="setResetNonResetable"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow class="table-row add-row">
+            <img
+              src="~assets/images/icons/home/add.svg"
+              class="icon icon--add"
+              @click="addRow"
             />
           </CustomTableRow>
         </template>
       </CustomTable>
+
+      <div v-if="isAdd" class="buttons-area">
+        <DefaultButton @event="addRegister"> Add Register </DefaultButton>
+
+        <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+      </div>
     </ValidationObserver>
   </PageContentWrapper>
 </template>
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import Units from '../graphql/queries/units.gql'
+import Registers from '../graphql/queries/registers.gql'
+import RegisterTypes from '../graphql/queries/registersType.gql'
+import CreateRegister from '../graphql/mutations/register/createRegister.gql'
+import UpdateRegister from '../graphql/mutations/register/updateRegister.gql'
+import DeleteRegister from '../graphql/mutations/register/deleteRegister.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -93,6 +200,8 @@ import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTable from './CustomTable.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQRegistersContent',
   components: {
@@ -105,105 +214,114 @@ export default {
     CustomTable,
     CustomRadioButton,
   },
+  mixins: [mutationMixin, tableActionsMixin],
+  apollo: {
+    units: {
+      query: Units,
+      prefetch: true,
+    },
+    registers: {
+      query: Registers,
+    },
+    registerTypes: {
+      query: RegisterTypes,
+    },
+  },
   data() {
     return {
       unit: '',
-      unitName: '',
-      mockedUnits: [
-        {
-          id: 0,
-          value: 101,
-          name: '101',
-        },
-        {
-          id: 1,
-          value: 102,
-          name: '102',
-        },
-      ],
-      units: [
-        {
-          id: 0,
-          unitID: '#001',
-          name: 'Register #001',
-          type: [
-            {
-              id: 0,
-              value: 'cafeteria',
-              name: 'Cafeteria',
-            },
-          ],
-          regBank: '$250.00',
-          nonResettable: '$822.34',
-          commission: '0%',
-          active: true,
-          resetNonResettable: false,
-        },
-        {
-          id: 1,
-          unitID: '#002',
-          name: 'Register #002',
-          type: [
-            {
-              id: 0,
-              value: 'cafeteria',
-              name: 'Cafeteria',
-            },
-          ],
-          regBank: '$250.00',
-          nonResettable: '$822.34',
-          commission: '0%',
-          active: true,
-          resetNonResettable: false,
-        },
-        {
-          id: 2,
-          unitID: '#003',
-          name: 'Register #003',
-          type: [
-            {
-              id: 0,
-              value: 'cafeteria',
-              name: 'Cafeteria',
-            },
-          ],
-          regBank: '$250.00',
-          nonResettable: '$822.34',
-          commission: '0%',
-          active: true,
-          resetNonResettable: false,
-        },
-      ],
+      registerNew: {
+        code: '',
+        name: '',
+        registerType: {},
+        bank: '',
+        nonResetable: '',
+        commission: '',
+        isActive: false,
+        resetNonResetable: false,
+      },
     }
   },
   methods: {
     selectUnit(unit) {
       this.unit = unit
     },
-    selectUnitsType(item) {},
-    setIsActive(item) {
-      this.units = this.units.map((unit) => {
-        if (item.id === unit.id) {
-          return {
-            ...unit,
-            active: !unit.active,
-          }
-        }
-
-        return unit
-      })
+    selectRegisterType(type) {
+      this.registerType = type
     },
-    setResetNonResettable(item) {
-      this.units = this.units.map((unit) => {
-        if (item.id === unit.id) {
-          return {
-            ...unit,
-            resetNonResettable: !unit.resetNonResettable,
-          }
-        }
+    setIsActive(register) {
+      if (register) {
+        register.isActive = !register.isActive
+      } else {
+        this.registerNew.isActive = !this.registerNew.isActive
+      }
+    },
+    setResetNonResetable(register) {
+      if (register) {
+        register.resetNonResetable = !register.resetNonResetable
+      } else {
+        this.registerNew.resetNonResetable = !this.registerNew.resetNonResetable
+      }
+    },
+    async addRegister() {
+      const unit = this.unit
 
-        return unit
-      })
+      await this.mutationAction(
+        CreateRegister,
+        {
+          registerInput: {
+            unit: {
+              connect: Number(this.unit.id),
+            },
+            ...this.registerNew,
+            registerType: {
+              connect: Number(this.registerType.id),
+            },
+          },
+        },
+        Registers,
+        'Add register success',
+        'Add register error'
+      )
+
+      this.unit = unit
+    },
+    async confirmEdit(register) {
+      const { __typename, createdAt, updatedAt, ...registerInput } = register
+
+      const unit = this.unit
+
+      await this.mutationAction(
+        UpdateRegister,
+        {
+          registerInput: {
+            ...registerInput,
+            registerType: {
+              connect: Number(this.registerType.id),
+            },
+            unit: {
+              connect: Number(register.unit.id),
+            },
+          },
+        },
+        Registers,
+        'Edit register success',
+        'Edit register error'
+      )
+
+      this.unit = unit
+    },
+    async confirmDelete(id) {
+      const unit = this.unit
+
+      await this.mutationAction(
+        DeleteRegister,
+        { id },
+        Registers,
+        'Delete register success',
+        'Delete register error'
+      )
+      this.unit = unit
     },
   },
 }
@@ -213,7 +331,20 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 35px 150px 200px repeat(2, 120px) 85px 60px 150px;
+  grid-template-columns: 50px 150px 200px 70px 100px 85px 50px 135px 60px;
   column-gap: 20px;
+}
+
+.icon {
+  cursor: pointer;
+
+  &--add {
+    grid-column: 9;
+    justify-self: end;
+  }
+}
+
+.buttons-area {
+  margin-top: 25px;
 }
 </style>

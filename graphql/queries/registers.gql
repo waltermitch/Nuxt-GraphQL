@@ -1,0 +1,9 @@
+#import '../fragments/register.gql'
+
+query Registers {
+  registers {
+    data {
+      ...RegisterFragment
+    }
+  }
+}

@@ -1,0 +1,9 @@
+#import '../fragments/registerType.gql'
+
+query RegisterTypes {
+  registerTypes {
+    data {
+      ...RegisterTypeFragment
+    }
+  }
+}

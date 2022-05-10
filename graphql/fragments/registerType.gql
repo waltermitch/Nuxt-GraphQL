@@ -1,0 +1,14 @@
+#import './register.gql'
+
+fragment RegisterTypeFragment on RegisterType {
+  id
+  name
+  description
+  registers {
+    ...RegisterFragment
+  }
+  taxType
+  isVending
+  createdAt
+  updatedAt
+}
