@@ -177,7 +177,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <InputWithTitle v-if="isAddNewEmployee || isEditNewEmployee">
+      <InputWithTitle v-if="isAddNewEmployee">
         <template #title> Employee Unit </template>
 
         <template #input>
@@ -186,6 +186,19 @@
             multi-select
             :options="units.data"
             @input="selectEmployeeUnit"
+          />
+        </template>
+      </InputWithTitle>
+
+      <InputWithTitle v-if="isEditNewEmployee">
+        <template #title> Employee Unit </template>
+
+        <template #input>
+          <CustomSelect
+            v-if="units"
+            multi-select
+            :options="units.data"
+            @input="selectEditUnits"
           />
         </template>
       </InputWithTitle>
@@ -256,6 +269,7 @@ export default {
       },
       isAddNewEmployee: false,
       isEditNewEmployee: false,
+      editUnits: [],
     }
   },
   methods: {
@@ -294,6 +308,7 @@ export default {
       const employee = this.employee
       const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
         this.employee
+
       this.isAddNewEmployee
         ? await this.mutationAction(
             CreateEmployee,
@@ -315,7 +330,12 @@ export default {
               employeeInput: {
                 id,
                 units: {
-                  sync: units.map((unit) => unit.id),
+                  sync: this.editUnits
+                    .map((item) => item.id)
+                    .filter(
+                      (value, index, unitsArray) =>
+                        unitsArray.indexOf(value) === index
+                    ),
                 },
                 ...employeeInput,
               },
@@ -355,6 +375,9 @@ export default {
     },
     selectEmployeeUnit(unit) {
       this.employee.units = [...this.employee.units, unit]
+    },
+    selectEditUnits(unit) {
+      this.editUnits = [...this.editUnits, unit]
     },
     deleteEmployee() {
       this.mutationAction(
