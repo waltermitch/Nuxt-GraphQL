@@ -19,7 +19,7 @@
         <div class="buttons-area">
           <DefaultButton
             button-color-gamma="white"
-            :disabled="isEditNewEmployee"
+            :disabled="isEditNewEmployee || isAddNewEmployee"
             @event="addNewEmployee"
           >
             Add new employee
@@ -27,7 +27,7 @@
 
           <DefaultButton
             button-color-gamma="white"
-            :disabled="isAddNewEmployee"
+            :disabled="isEditNewEmployee || isAddNewEmployee"
             @event="editEmployee"
           >
             Edit employee
@@ -51,7 +51,7 @@
 
           <DefaultButton
             button-color-gamma="white"
-            :disabled="isAddNewEmployee"
+            :disabled="isEditNewEmployee || isAddNewEmployee"
             @event="deleteEmployee"
           >
             Delete employee
@@ -177,7 +177,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <InputWithTitle v-if="isAddNewEmployee">
+      <InputWithTitle v-if="isAddNewEmployee || isEditNewEmployee">
         <template #title> Employee Unit </template>
 
         <template #input>
@@ -291,6 +291,7 @@ export default {
       this.isEditNewEmployee = true
     },
     async accept() {
+      const employee = this.employee
       const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
         this.employee
       this.isAddNewEmployee
@@ -323,11 +324,18 @@ export default {
             'Update employee success',
             'Update employee error'
           )
+
+      this.employee = employee
     },
     cancelAdd() {
+      const employee = this.employee
+
       this.employee = {
-        ...this.employees.data[0],
-        units: [],
+        ...employee,
+        units: employee.units.filter(
+          (employee, index, array) =>
+            array.map((x) => x.id).indexOf(employee.id) === index
+        ),
       }
       this.isAddNewEmployee
         ? (this.isAddNewEmployee = false)
