@@ -1,0 +1,9 @@
+#import '../fragments/glTypeCode.gql'
+
+query GlTypeCodes {
+  glTypeCodes {
+    data {
+      ...GlTypeCodeFragment
+    }
+  }
+}

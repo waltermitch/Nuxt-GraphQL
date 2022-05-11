@@ -1,0 +1,11 @@
+#import './glTypeCode.gql'
+
+fragment GlAccountFragment on GlAccount {
+  id
+  name
+  glTypeCode {
+    ...GlTypeCodeFragment
+  }
+  createdAt
+  updatedAt
+}

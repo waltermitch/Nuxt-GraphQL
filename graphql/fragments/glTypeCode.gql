@@ -1,0 +1,7 @@
+fragment GlTypeCodeFragment on GlTypeCode {
+  id
+  code
+  description
+  createdAt
+  updatedAt
+}
