@@ -23,7 +23,7 @@
       </InputWithTitle>
     </InputRow>
 
-    <div class="tables">
+    <CustomTablesArea>
       <CustomTable v-if="vendors" class="table">
         <template #header>
           <div class="table-row">
@@ -104,7 +104,7 @@
           </CustomTableRow>
         </template>
       </CustomTable>
-    </div>
+    </CustomTablesArea>
   </PageContentWrapper>
 </template>
 
@@ -114,11 +114,12 @@ import Units from '../graphql/queries/units.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import DefaultButton from './DefaultButton.vue'
+import CustomTablesArea from './CustomTablesArea.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'HQUnitVendorContent',
-  components: { PageContentWrapper, DefaultButton },
+  components: { PageContentWrapper, DefaultButton, CustomTablesArea },
   apollo: {
     vendors: {
       query: Vendors,
@@ -211,16 +212,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tables {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-
-  @media screen and(max-width: $xl) {
-    flex-direction: column-reverse;
-  }
-}
-
 .table {
   width: fit-content;
   margin-bottom: 20px;
