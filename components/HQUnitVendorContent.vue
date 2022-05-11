@@ -23,85 +23,88 @@
       </InputWithTitle>
     </InputRow>
 
-    <CustomTable v-if="unit.vendors" class="table">
-      <template #header>
-        <div class="table-row">
-          <span> Vendor ID </span>
+    <div class="tables">
+      <CustomTable v-if="vendors" class="table">
+        <template #header>
+          <div class="table-row">
+            <span> Vendor ID </span>
 
-          <span> Vendor Name </span>
+            <span> Vendor Name </span>
 
-          <span> Vendor Term</span>
-        </div>
-      </template>
+            <span> Vendor Term</span>
 
-      <template #content>
-        <CustomTableRow
-          v-for="vendor in unit.vendors"
-          :key="vendor.id"
-          class="table-row"
-        >
-          <span>
-            {{ vendor.id }}
-          </span>
+            <span> Add Vendor to Unit </span>
+          </div>
+        </template>
 
-          <span>
-            {{ vendor.name }}
-          </span>
-
-          <span>
-            {{ vendor.term.name }}
-          </span>
-        </CustomTableRow>
-      </template>
-    </CustomTable>
-
-    <CustomTable v-if="vendors" class="table">
-      <template #header>
-        <div class="table-row">
-          <span> Vendor ID </span>
-
-          <span> Vendor Name </span>
-
-          <span> Vendor Term</span>
-
-          <span> Add Vendor to Unit </span>
-        </div>
-      </template>
-
-      <template #content>
-        <CustomTableRow
-          v-for="vendor in vendors.data"
-          :key="vendor.id"
-          class="table-row"
-        >
-          <span>
-            {{ vendor.id }}
-          </span>
-
-          <span>
-            {{ vendor.name }}
-          </span>
-
-          <span>
-            {{ vendor.term.name }}
-          </span>
-
-          <DefaultButton
-            @event="
-              unit.vendors.find((item) => item.id === vendor.id)
-                ? removeVendorFromUnit(vendor)
-                : addVendorToUnit(vendor)
-            "
+        <template #content>
+          <CustomTableRow
+            v-for="vendor in vendors.data"
+            :key="vendor.id"
+            class="table-row"
           >
-            {{
-              unit.vendors && unit.vendors.find((item) => item.id === vendor.id)
-                ? 'Remove Vendor From Unit'
-                : 'Add Vendor to Unit'
-            }}
-          </DefaultButton>
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+            <span>
+              {{ vendor.id }}
+            </span>
+
+            <span>
+              {{ vendor.name }}
+            </span>
+
+            <span>
+              {{ vendor.term.name }}
+            </span>
+
+            <DefaultButton
+              @event="
+                unit.vendors.find((item) => item.id === vendor.id)
+                  ? removeVendorFromUnit(vendor)
+                  : addVendorToUnit(vendor)
+              "
+            >
+              {{
+                unit.vendors &&
+                unit.vendors.find((item) => item.id === vendor.id)
+                  ? 'Remove Vendor From Unit'
+                  : 'Add Vendor to Unit'
+              }}
+            </DefaultButton>
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+
+      <CustomTable v-if="unit.vendors" class="table">
+        <template #header>
+          <div class="table-row table-row--unit">
+            <span> Vendor ID </span>
+
+            <span> Vendor Name </span>
+
+            <span> Vendor Term</span>
+          </div>
+        </template>
+
+        <template #content>
+          <CustomTableRow
+            v-for="vendor in unit.vendors"
+            :key="vendor.id"
+            class="table-row table-row--unit"
+          >
+            <span>
+              {{ vendor.id }}
+            </span>
+
+            <span>
+              {{ vendor.name }}
+            </span>
+
+            <span>
+              {{ vendor.term.name }}
+            </span>
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+    </div>
   </PageContentWrapper>
 </template>
 
@@ -208,6 +211,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tables {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  @media screen and(max-width: $xl) {
+    flex-direction: column-reverse;
+  }
+}
+
 .table {
   width: fit-content;
   margin-bottom: 20px;
@@ -218,5 +231,9 @@ export default {
   align-items: center;
   grid-template-columns: 80px repeat(2, 100px) 200px;
   column-gap: 20px;
+
+  &--unit {
+    grid-template-columns: 80px repeat(2, 100px);
+  }
 }
 </style>
