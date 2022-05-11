@@ -203,7 +203,7 @@
         </template>
       </InputWithTitle>
 
-      <CustomTable v-else class="table">
+      <CustomTable v-if="!isAddNewEmployee" class="table">
         <template #header>
           <div class="table-row">
             <span>Unit</span>
@@ -349,6 +349,10 @@ export default {
     },
     cancelAdd() {
       const employee = this.employee
+
+      if (this.isAddNewEmployee) {
+        window.location.reload(true)
+      }
 
       this.employee = {
         ...employee,
