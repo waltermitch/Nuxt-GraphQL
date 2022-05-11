@@ -1,58 +1,148 @@
 <template>
   <PageContentWrapper>
-    <ValidationObserver ref="form">
-      <CustomTable class="table">
-        <template #header>
-          <div class="table-row">
-            <span>ID</span>
+    <div class="header">
+      <div>
+        <InputRow class="input-row">
+          <InputWithTitle>
+            <template #title> Unit </template>
 
-            <span>Name</span>
+            <template #input>
+              <CustomSelect
+                v-if="units"
+                :options="units.data"
+                select-by="code"
+                @input="selectUnit"
+              />
+            </template>
+          </InputWithTitle>
+
+          <InputWithTitle>
+            <template #title> Name </template>
+
+            <template #input>
+              <CustomInput v-model="unit.name" />
+            </template>
+          </InputWithTitle>
+        </InputRow>
+
+        <InputRow v-if="unit.unitType" class="input-row">
+          <InputWithTitle>
+            <template #title> Unit Type ID </template>
+
+            <template #input>
+              <span>{{ unit.unitType.id }}</span>
+            </template>
+          </InputWithTitle>
+
+          <InputWithTitle>
+            <template #title> Unit Type Name </template>
+
+            <template #input>
+              <span>{{ unit.unitType.name }}</span>
+            </template>
+          </InputWithTitle>
+        </InputRow>
+        <span v-else>Unit Type has not been assigned to unit yet</span>
+      </div>
+
+      <ValidationObserver ref="form">
+        <h2>Create Unit Type</h2>
+
+        <CustomTable class="table">
+          <template #header>
+            <div class="table-row">
+              <span>ID</span>
+
+              <span>Name</span>
+            </div>
+          </template>
+
+          <template v-if="unitTypes" #content>
+            <CustomTableRow
+              v-for="unitType in unitTypes.data"
+              :key="unitType.id"
+              class="table-row"
+            >
+              <span>{{ unitType.id }}</span>
+
+              <CustomInput
+                v-if="isEdit === unitType.id"
+                v-model="unitType.name"
+                rules="required|alpha"
+              />
+              <span v-else>{{ unitType.name }}</span>
+
+              <CustomTableIconsColumn
+                :is-edit-active="isEdit === unitType.id"
+                :is-delete-active="isDelete === unitType.id"
+                @edit="edit(unitType.id)"
+                @delete="deleteItem(unitType.id)"
+                @cancel="cancelEdit"
+                @cancel-delete="cancelDelete"
+                @confirm-edit="confirmEdit(unitType)"
+                @confirm-delete="confirmDelete(unitType.id)"
+              />
+            </CustomTableRow>
+
+            <CustomTableRow v-if="isAdd" class="table-row">
+              <span>-</span>
+
+              <CustomInput v-model="unitTypeNew.name" rules="required" />
+            </CustomTableRow>
+
+            <CustomTableRow class="table-row add-row">
+              <img
+                src="~assets/images/icons/home/add.svg"
+                class="icon icon--add"
+                @click="addRow"
+              />
+            </CustomTableRow>
+          </template>
+        </CustomTable>
+      </ValidationObserver>
+    </div>
+
+    <CustomTablesArea>
+      <CustomTable v-if="unitTypes" class="table">
+        <template #header>
+          <div class="table-row table-row--unit-types">
+            <span> UnitType ID </span>
+
+            <span> UnitType Name </span>
           </div>
         </template>
 
-        <template v-if="unitTypes" #content>
+        <template #content>
           <CustomTableRow
             v-for="unitType in unitTypes.data"
             :key="unitType.id"
-            class="table-row"
+            class="table-row table-row--unit-types"
           >
-            <span>{{ unitType.id }}</span>
+            <span>
+              {{ unitType.id }}
+            </span>
 
-            <CustomInput
-              v-if="isEdit === unitType.id"
-              v-model="unitType.name"
-              rules="required|alpha"
-            />
-            <span v-else>{{ unitType.name }}</span>
+            <span>
+              {{ unitType.name }}
+            </span>
 
-            <CustomTableIconsColumn
-              :is-edit-active="isEdit === unitType.id"
-              :is-delete-active="isDelete === unitType.id"
-              @edit="edit(unitType.id)"
-              @delete="deleteItem(unitType.id)"
-              @cancel="cancelEdit"
-              @cancel-delete="cancelDelete"
-              @confirm-edit="confirmEdit(unitType)"
-              @confirm-delete="confirmDelete(unitType.id)"
-            />
-          </CustomTableRow>
-
-          <CustomTableRow v-if="isAdd" class="table-row">
-            <span>-</span>
-
-            <CustomInput v-model="unitTypeNew.name" rules="required" />
-          </CustomTableRow>
-
-          <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <DefaultButton
+              @event="
+                unit.unitType && unit.unitType.id === unitType.id
+                  ? removeUnitTypeFromUnit()
+                  : addUnitTypeToUnit(unitType)
+              "
+            >
+              {{
+                unit.unitType && unit.unitType.id === unitType.id
+                  ? 'Remove Unit Type From Unit'
+                  : 'Add Unit Type to Unit'
+              }}
+            </DefaultButton>
           </CustomTableRow>
         </template>
       </CustomTable>
-    </ValidationObserver>
+    </CustomTablesArea>
 
     <div v-if="isAdd" class="buttons-area">
       <DefaultButton @event="addUnitType"> Add UnitType </DefaultButton>
@@ -65,6 +155,8 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import UnitTypes from '../graphql/queries/unitTypes.gql'
+import Units from '../graphql/queries/units.gql'
+import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
 import CreateUnitType from '../graphql/mutations/unitType/createUnitType.gql'
 import DeleteUnitType from '../graphql/mutations/unitType/deleteUnitType.gql'
 import UpdateUnitType from '../graphql/mutations/unitType/updateUnitType.gql'
@@ -72,6 +164,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
+import CustomTablesArea from './CustomTablesArea.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
@@ -82,23 +175,32 @@ export default {
     CustomTable,
     CustomTableRow,
     CustomInput,
+    CustomTablesArea,
   },
   mixins: [mutationMixin, tableActionsMixin],
   apollo: {
+    units: {
+      query: Units,
+    },
     unitTypes: {
       query: UnitTypes,
     },
   },
   data() {
     return {
+      unit: '',
       unitTypeNew: {
         name: '',
       },
     }
   },
   methods: {
-    addUnitType() {
-      this.mutationAction(
+    selectUnit(item) {
+      this.unit = item
+    },
+    async addUnitType() {
+      const unit = this.unit
+      await this.mutationAction(
         CreateUnitType,
         {
           unitTypeInput: {
@@ -109,14 +211,16 @@ export default {
         'Add unitType success',
         'Add unitType error'
       )
+      this.unit = unit
     },
-    confirmEdit(unitType) {
+    async confirmEdit(unitType) {
+      const unit = this.unit
       const editedUnitType = {
         id: unitType.id,
         name: unitType.name,
       }
 
-      this.mutationAction(
+      await this.mutationAction(
         UpdateUnitType,
         {
           unitTypeInput: editedUnitType,
@@ -125,21 +229,107 @@ export default {
         'Add unitType success',
         'Add unitType error'
       )
+      this.unit = unit
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const unit = this.unit
+
+      await this.mutationAction(
         DeleteUnitType,
         { id },
         UnitTypes,
         'Delete unitType success',
         'Delete unitType error'
       )
+      this.unit = unit
+    },
+    async addUnitTypeToUnit(unitType) {
+      const unit = this.unit
+      const { state, users, __typename, ...unitInput } = this.unit
+
+      await this.mutationAction(
+        UpdateUnit,
+        {
+          unitInput: {
+            ...unitInput,
+            district: {
+              connect: Number(this.unit.district.id),
+            },
+            county: {
+              connect: Number(this.unit.county.id),
+            },
+            city: {
+              connect: Number(this.unit.city.id),
+            },
+            users: {
+              sync: users.map((user) => user.id),
+            },
+            vendors: {
+              sync: [...this.unit.vendors.map((vendor) => vendor.id)],
+            },
+            unitType: {
+              connect: Number(unitType.id),
+            },
+          },
+        },
+        Units,
+        'Add Unit Type to unit success',
+        'Add Unit Type to unit error'
+      )
+
+      this.unit = unit
+    },
+    async removeUnitTypeFromUnit() {
+      const unit = this.unit
+      const { state, users, __typename, ...unitInput } = this.unit
+
+      await this.mutationAction(
+        UpdateUnit,
+        {
+          unitInput: {
+            ...unitInput,
+            district: {
+              connect: Number(this.unit.district.id),
+            },
+            county: {
+              connect: Number(this.unit.county.id),
+            },
+            city: {
+              connect: Number(this.unit.city.id),
+            },
+            users: {
+              sync: users.map((user) => user.id),
+            },
+            vendors: {
+              sync: [...this.unit.vendors.map((vendor) => vendor.id)],
+            },
+            unitType: {
+              connect: 0,
+            },
+          },
+        },
+        Units,
+        'Remove Unit Type from unit success',
+        'Remove Unit Type from unit error'
+      )
+
+      this.unit = unit
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  @media screen and(max-width: $xl) {
+    flex-direction: column;
+  }
+}
+
 .table {
   width: fit-content;
 }
@@ -147,8 +337,12 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 300px 60px;
+  grid-template-columns: 100px 200px 60px;
   column-gap: 30px;
+
+  &--unit-types {
+    grid-template-columns: 100px 200px 150px;
+  }
 }
 
 .icon {
