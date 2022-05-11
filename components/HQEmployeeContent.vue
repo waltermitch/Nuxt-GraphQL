@@ -207,11 +207,11 @@
             :key="unit.id"
             class="table-row"
           >
-            {{ unit.unitID }}
+            {{ unit.code }}
 
             <CustomRadioButton :is-is-active="unit.isActive" />
 
-            {{ unit.unitName }}
+            {{ unit.name }}
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -297,7 +297,12 @@ export default {
         ? await this.mutationAction(
             CreateEmployee,
             {
-              employeeInput,
+              employeeInput: {
+                ...employeeInput,
+                units: {
+                  sync: units.map((unit) => unit.id),
+                },
+              },
             },
             Employees,
             'Add employee success',
@@ -308,6 +313,9 @@ export default {
             {
               employeeInput: {
                 id,
+                units: {
+                  sync: units.map((unit) => unit.id),
+                },
                 ...employeeInput,
               },
             },
