@@ -9,6 +9,7 @@
             <CustomSelect
               v-if="units"
               :options="units.data"
+              select-by="code"
               @input="selectUnit"
             />
           </template>
@@ -259,6 +260,8 @@ import CreateGlTypeCode from '../graphql/mutations/glTypeCode/createGlTypeCode.g
 import UpdateGlTypeCode from '../graphql/mutations/glTypeCode/updateGlTypeCode.gql'
 import DeleteGlTypeCode from '../graphql/mutations/glTypeCode/deleteGlTypeCode.gql'
 import CreateGlAccount from '../graphql/mutations/glAccount/createGlAccount.gql'
+import DeleteGlAccount from '../graphql/mutations/glAccount/deleteGlAccount.gql'
+import UpdateGlAccount from '../graphql/mutations/glAccount/updateGlAccount.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -384,14 +387,49 @@ export default {
             glTypeCode: {
               connect: this.glAccountNew.typeCode.id,
             },
-            parent: {
-              connect: this.glAccountNew.parent.id,
-            },
+            ...(this.glAccountNew.parent.id && {
+              parent: {
+                connect: this.glAccountNew.parent.id,
+              },
+            }),
           },
         },
         GlAccounts,
-        'Add Gl Type success',
-        'Add Gl Type error'
+        'Add Gl Account success',
+        'Add Gl Account error'
+      )
+      this.unit = unit
+    },
+    async confirmEdit(glAccount) {
+      const unit = this.unit
+      const editedUnitType = {
+        id: glAccount.id,
+        name: glAccount.name,
+        glTypeCode: {
+          connect: glAccount.glTypeCode.id,
+        },
+      }
+
+      await this.mutationAction(
+        UpdateGlAccount,
+        {
+          GlAccountInput: editedUnitType,
+        },
+        GlAccounts,
+        'Edit Gl Account success',
+        'Edit Gl Account error'
+      )
+      this.unit = unit
+    },
+    async confirmDelete(id) {
+      const unit = this.unit
+
+      await this.mutationAction(
+        DeleteGlAccount,
+        { id },
+        GlAccounts,
+        'Delete Gl Account success',
+        'Delete Gl Account error'
       )
       this.unit = unit
     },
