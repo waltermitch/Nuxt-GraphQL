@@ -1,6 +1,6 @@
 <template>
   <NuxtLink class="tab" :to="to">
-    <img :src="iconSrc" />
+    <img class="icon" :src="iconSrc" />
 
     <span class="caption">
       {{ name }}
@@ -32,11 +32,11 @@ export default {
 .tab {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-right: 5px;
+  padding: 20px 0;
   width: 105px;
-  height: 82px;
   border-radius: 5px;
   transition: $transition;
 
@@ -54,5 +54,10 @@ export default {
 
 .nuxt-link-active {
   background: $firebrick;
+}
+
+.icon {
+  height: 22px;
+  width: 22px;
 }
 </style>
