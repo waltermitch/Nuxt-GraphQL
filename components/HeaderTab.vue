@@ -35,10 +35,10 @@ export default {
   justify-content: center;
   align-items: center;
   margin-right: 5px;
-  width: 89px;
+  width: 105px;
   height: 82px;
   border-radius: 5px;
-  transition: all 0.4s linear;
+  transition: $transition;
 
   &:hover {
     background: $firebrick;

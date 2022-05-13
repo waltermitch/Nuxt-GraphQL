@@ -144,7 +144,7 @@ export default {
 
 .icon {
   cursor: pointer;
-  transition: all linear 0.3s;
+  transition: $transition;
 
   &--active {
     transform: rotateX(180deg);

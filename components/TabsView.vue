@@ -64,7 +64,7 @@ export default {
   font-weight: 500;
   line-height: 40px;
   color: $suva-grey;
-  transition: color linear 0.3s;
+  transition: $transition;
   cursor: pointer;
 
   &:hover {

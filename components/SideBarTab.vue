@@ -34,7 +34,7 @@ export default {
   max-width: 208px;
   padding: 8px 10px;
   border-radius: 3px;
-  transition: all ease-in-out 0.3s;
+  transition: $transition;
 
   img.icon {
     filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(991%)
