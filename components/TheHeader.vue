@@ -29,11 +29,11 @@
             fill="white"
           />
         </svg>
-      </div>
-    </div>
 
-    <div v-if="isShowDropdown" class="logout">
-      <span class="logout-item" @click="logout">Logout</span>
+        <div v-if="isShowDropdown" class="logout">
+          <span class="logout-item" @click="logout">Logout</span>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -108,6 +108,7 @@ export default {
 }
 
 .profile {
+  position: relative;
   display: flex;
   align-items: center;
 
@@ -118,11 +119,12 @@ export default {
 
 .logout {
   position: absolute;
-  right: 10px;
+  right: 0;
+  bottom: -110px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 97px;
+  height: 100px;
   width: 150px;
   background: #ffffff;
   box-shadow: 2px 2px 4px rgba(196, 197, 221, 0.25),
