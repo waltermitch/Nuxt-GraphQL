@@ -27,7 +27,7 @@
 
     <ValidationObserver ref="form">
       <div>
-        <div>
+        <div class="gl-table">
           <h2>Gls</h2>
 
           <CustomTable class="table">
@@ -42,43 +42,83 @@
                 <span> Type </span>
 
                 <span>GL ID</span>
+
+                <span>Action</span>
               </div>
             </template>
 
             <template v-if="glAccounts" #content>
               <CustomTableRow
-                v-for="glAccount in glAccounts.data"
-                :key="glAccount.id"
+                v-for="glAccount in glAccounts.data.filter(
+                  (account) => account.parent === null
+                )"
+                :key="glAccount.createdAt"
                 class="table-row"
               >
-                <span>{{ glAccount.id }}</span>
+                <span v-if="selectedGlSubAccount.idToCheck === glAccount.id">{{
+                  glAccountCopy.id
+                }}</span>
+                <span v-else>{{ glAccount.id }}</span>
 
-                <span v-if="glAccount.child">{{ glAccount.child.id }}</span>
+                <CustomSelect
+                  v-if="glAccount.child.length"
+                  :options="glAccount.child"
+                  select-by="id"
+                  do-not-preselect
+                  @input="selectSubAccountUnit(glAccount, $event)"
+                />
                 <span v-else>-</span>
 
                 <CustomInput
                   v-if="isEdit === glAccount.id"
                   v-model="glAccount.name"
-                  rules="required|alpha"
+                  rules="required"
                 />
                 <span v-else>{{ glAccount.name }}</span>
 
                 <CustomSelect
                   v-if="glTypeCodes && isEdit === glAccount.id"
+                  select-by="description"
                   :options="glTypeCodes.data"
                   @input="selectTypeCode"
                 />
-                <span v-else>{{ glAccount.glTypeCode.id }}</span>
+                <span v-else>{{ glAccount.glTypeCode.description }}</span>
 
                 <CustomInput
                   v-if="isEdit === glAccount.id && glAccount.paren"
                   v-model="glAccount.parent.id"
-                  rules="required|alpha"
+                  rules="required"
                 />
                 <span v-else-if="glAccount.parent">{{
                   glAccount.parent.id
                 }}</span>
                 <span v-else>-</span>
+                <DefaultButton
+                  @event="
+                    unit.glAccounts &&
+                    (selectedGlSubAccount.idToCheck
+                      ? unit.glAccounts.find(
+                          (account) =>
+                            account.id === selectedGlSubAccount.idToCheck
+                        ) && selectedGlSubAccount.id === glAccount.id
+                      : unit.glAccounts.find(
+                          (account) => account.id === glAccount.id
+                        ))
+                      ? removeGlFromUnit(glAccount)
+                      : addGlToUnit(glAccount)
+                  "
+                >
+                  {{
+                    unit.glAccounts &&
+                    (selectedGlSubAccount.idToCheck
+                      ? unit.glAccounts.find(
+                          (acc) => acc.id === selectedGlSubAccount.idToCheck
+                        ) && selectedGlSubAccount.id === glAccount.id
+                      : unit.glAccounts.find((acc) => acc.id === glAccount.id))
+                      ? 'Remove Gl From Unit'
+                      : 'Add Gl to Unit'
+                  }}
+                </DefaultButton>
 
                 <CustomTableIconsColumn
                   :is-edit-active="isEdit === glAccount.id"
@@ -208,46 +248,6 @@
         </div>
       </div>
     </ValidationObserver>
-
-    <!-- <CustomTable class="table">
-      <template #header>
-        <div class="table-row">
-          <span>GL</span>
-
-          <span>Sub</span>
-
-          <span>Name</span>
-
-          <span>Type</span>
-        </div>
-      </template>
-
-      <template #content>
-        <CustomTableRow
-          v-for="item in unitRecords"
-          :key="item.id"
-          class="table-row"
-        >
-          <CustomSelect
-            :options="item.glAccounts"
-            @input="selectGlAccountUnit"
-          />
-
-          <CustomSelect
-            :options="item.subAccounts"
-            @input="selectSubAccountUnit"
-          />
-
-          <span>
-            {{ item.name }}
-          </span>
-
-          <span>
-            {{ item.type }}
-          </span>
-        </CustomTableRow>
-      </template>
-    </CustomTable> -->
   </PageContentWrapper>
 </template>
 
@@ -256,6 +256,7 @@ import { ValidationObserver } from 'vee-validate'
 import Units from '../graphql/queries/units.gql'
 import GlAccounts from '../graphql/queries/glAccounts.gql'
 import GlTypeCodes from '../graphql/queries/glTypeCodes.gql'
+import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
 import CreateGlTypeCode from '../graphql/mutations/glTypeCode/createGlTypeCode.gql'
 import UpdateGlTypeCode from '../graphql/mutations/glTypeCode/updateGlTypeCode.gql'
 import DeleteGlTypeCode from '../graphql/mutations/glTypeCode/deleteGlTypeCode.gql'
@@ -310,6 +311,17 @@ export default {
         code: '',
         description: '',
       },
+      glAccountCopy: {
+        id: '',
+        name: '',
+      },
+      glAccountsCopy: [],
+      subGlAccount: {
+        id: '',
+      },
+      selectedGlSubAccount: {
+        id: null,
+      },
       unitRecords: [
         {
           id: 0,
@@ -360,6 +372,7 @@ export default {
           type: 'expense',
         },
       ],
+      isReload: false,
     }
   },
   methods: {
@@ -373,10 +386,54 @@ export default {
       this.unit = item
     },
     selectTypeCode(item) {
+      if (this.selectedGlSubAccount.id) {
+        this.selectedGlSubAccount.glTypeCode = item
+      }
+
       this.glAccountNew.typeCode = item
     },
-    selectGlAccountUnit(item) {},
-    selectSubAccountUnit(item) {},
+    selectSubAccountUnit(item, event) {
+      if (!this.glAccountCopy.name) {
+        this.glAccountCopy = { ...item }
+        this.glAccountsCopy = [...this.glAccounts.data]
+      }
+      const glSubAccount = this.glAccounts.data.find(
+        (account) => account.id === event.id
+      )
+
+      if (this.selectedGlSubAccount.idToCheck === glSubAccount.id) {
+        this.glAccounts.data = this.glAccountsCopy
+        this.glAccountCopy = {
+          id: '',
+          name: '',
+        }
+        this.selectedGlSubAccount = {
+          id: null,
+        }
+      } else {
+        this.selectedGlSubAccount = {
+          ...this.glAccountCopy,
+          idToCheck: event.id,
+        }
+        this.glAccounts.data = this.glAccountsCopy.map((obj) => {
+          if (obj.id === item.id) {
+            return {
+              ...obj,
+              name: event.name,
+              glTypeCode: {
+                ...obj.glTypeCode,
+                id: glSubAccount.glTypeCode.id,
+                description: glSubAccount.glTypeCode.description,
+              },
+            }
+          }
+
+          return obj
+        })
+      }
+
+      this.isReload = true
+    },
     async addGl() {
       const unit = this.unit
       await this.mutationAction(
@@ -401,37 +458,53 @@ export default {
       this.unit = unit
     },
     async confirmEdit(glAccount) {
+      const reload = this.isReload
       const unit = this.unit
-      const editedUnitType = {
-        id: glAccount.id,
+      const editedGlAccount = {
+        id: this.selectedGlSubAccount.idToCheck
+          ? this.selectedGlSubAccount.idToCheck
+          : glAccount.id,
         name: glAccount.name,
         glTypeCode: {
-          connect: glAccount.glTypeCode.id,
+          connect: this.selectedGlSubAccount.idToCheck
+            ? this.selectedGlSubAccount.glTypeCode.id
+            : this.glAccountNew.typeCode.id,
         },
       }
 
       await this.mutationAction(
         UpdateGlAccount,
         {
-          GlAccountInput: editedUnitType,
+          GlAccountInput: editedGlAccount,
         },
         GlAccounts,
         'Edit Gl Account success',
         'Edit Gl Account error'
       )
       this.unit = unit
+      if (reload) {
+        window.location.reload()
+      }
     },
     async confirmDelete(id) {
       const unit = this.unit
+      const reload = this.isReload
 
       await this.mutationAction(
         DeleteGlAccount,
-        { id },
+        {
+          id: this.selectedGlSubAccount.idToCheck
+            ? this.selectedGlSubAccount.idToCheck
+            : id,
+        },
         GlAccounts,
         'Delete Gl Account success',
         'Delete Gl Account error'
       )
       this.unit = unit
+      if (reload) {
+        window.location.reload()
+      }
     },
     async createGlTypeCode() {
       const unit = this.unit
@@ -480,6 +553,61 @@ export default {
       )
       this.unit = unit
     },
+    async addGlToUnit(glAccount) {
+      const unit = this.unit
+      const { id } = this.unit
+      const reload = this.isReload
+
+      await this.mutationAction(
+        UpdateUnit,
+        {
+          unitInput: {
+            id,
+            glAccounts: {
+              sync: [
+                ...this.unit.glAccounts.map((glAccount) => glAccount.id),
+                this.selectedGlSubAccount.idToCheck
+                  ? this.selectedGlSubAccount.idToCheck
+                  : glAccount.id,
+              ],
+            },
+          },
+        },
+        Units,
+        'Add Gl account to unit success',
+        'Add Gl account to unit error'
+      )
+      this.unit = unit
+      if (reload) {
+        window.location.reload()
+      }
+    },
+    async removeGlFromUnit(glAccount) {
+      const unit = this.unit
+      const { id } = this.unit
+      const reload = this.isReload
+
+      await this.mutationAction(
+        UpdateUnit,
+        {
+          unitInput: {
+            id,
+            glAccounts: {
+              disconnect: this.selectedGlSubAccount.idToCheck
+                ? this.selectedGlSubAccount.idToCheck
+                : glAccount.id,
+            },
+          },
+        },
+        Units,
+        'Remove Gl account from unit success',
+        'Remove Gl account from unit error'
+      )
+      this.unit = unit
+      if (reload) {
+        window.location.reload()
+      }
+    },
   },
 }
 </script>
@@ -492,7 +620,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(2, 80px) 200px 100px 80px 60px;
+  grid-template-columns: repeat(2, 80px) 200px 100px 80px 150px 60px;
   column-gap: 30px;
 
   &--gl-type {
@@ -502,5 +630,9 @@ export default {
 
 .icon {
   cursor: pointer;
+}
+
+.gl-table {
+  margin-bottom: 20px;
 }
 </style>

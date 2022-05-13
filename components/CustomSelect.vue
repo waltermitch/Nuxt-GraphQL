@@ -79,10 +79,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    doNotPreselect: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      selected: this.selectedItem
+      selected: this.doNotPreselect
+        ? null
+        : this.selectedItem
         ? this.selectedItem
         : this.options.length > 0
         ? this.options[0]
@@ -99,11 +105,15 @@ export default {
   watch: {
     options() {
       this.selected = this.options[0]
-      this.$emit('input', this.selected)
+      if (!this.doNotPreselect) {
+        this.$emit('input', this.selected)
+      }
     },
   },
   mounted() {
-    this.$emit('input', this.selected)
+    if (!this.doNotPreselect) {
+      this.$emit('input', this.selected)
+    }
   },
   methods: {
     toggleSelect() {
@@ -114,13 +124,23 @@ export default {
     selectOption(option) {
       if (this.multiSelect) {
         if (this.selectedList.find((item) => item.id === option.id)) {
-          console.log(this.selectedList, option)
           this.selectedList = this.selectedList.filter(
             (item) => item.id !== option.id
           )
         } else {
           this.selectedList.push(option)
         }
+      }
+
+      if (
+        this.doNotPreselect &&
+        this.selected &&
+        option.id === this.selected.id
+      ) {
+        this.selected = null
+        this.open = false
+        this.$emit('input', option)
+        return
       }
 
       this.selected = option

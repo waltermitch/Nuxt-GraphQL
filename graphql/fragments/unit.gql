@@ -5,6 +5,7 @@
 #import './unitType.gql'
 #import './state.gql'
 #import './vendor.gql'
+#import './glAccount.gql'
 
 fragment UnitFragment on Unit {
   id
@@ -37,6 +38,9 @@ fragment UnitFragment on Unit {
   }
   vendors {
     ...VendorFragment
+  }
+  glAccounts {
+    ...GlAccountFragment
   }
   startPeriod
   payrollPassword
