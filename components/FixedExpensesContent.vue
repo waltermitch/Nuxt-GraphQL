@@ -43,11 +43,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -73,6 +69,8 @@ import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'FixedExpensesContent',
   components: {
@@ -82,8 +80,9 @@ export default {
     CustomSelect,
     CustomInput,
     ValidationObserver,
+    CustomTableAddIcon,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, tableActionsMixin],
   data() {
     return {
       items: [
@@ -141,60 +140,56 @@ export default {
   methods: {
     setIsMonthly(expensesItem) {
       // TODO refactor this methods when API would be available
-      this.items = this.items.map((item) => {
-        if (expensesItem.id === item.id) {
-          return {
-            ...item,
-            monthly: !item.monthly,
-          }
-        }
-
-        return {
-          ...item,
-        }
-      })
+      // this.items = this.items.map((item) => {
+      //   if (expensesItem.id === item.id) {
+      //     return {
+      //       ...item,
+      //       monthly: !item.monthly,
+      //     }
+      //   }
+      //   return {
+      //     ...item,
+      //   }
+      // })
     },
     selectGlAccount(item) {
       // TODO refactor this methods when API would be available
-      this.items = this.items.map((listItem) => {
-        listItem.glAccount = listItem.glAccount.map((account) => {
-          if (account.id === item.id) {
-            if (account.selected) {
-              return {
-                ...item,
-                selected: null,
-              }
-            }
-
-            return { ...item }
-          }
-
-          return { ...account }
-        })
-
-        return {
-          ...listItem,
-        }
-      })
+      // this.items = this.items.map((listItem) => {
+      //   listItem.glAccount = listItem.glAccount.map((account) => {
+      //     if (account.id === item.id) {
+      //       if (account.selected) {
+      //         return {
+      //           ...item,
+      //           selected: null,
+      //         }
+      //       }
+      //       return { ...item }
+      //     }
+      //     return { ...account }
+      //   })
+      //   return {
+      //     ...listItem,
+      //   }
+      // })
     },
-    addRow() {
-      this.items.push({
-        id: this.items.length + 1,
-        monthly: false,
-        glAccount: [
-          {
-            id: 1,
-            name: 'Register #2',
-          },
-          {
-            id: 2,
-            name: 'Register #3',
-          },
-        ],
-        amount: '',
-        comment: '',
-      })
-    },
+    // addRow() {
+    //   this.items.push({
+    //     id: this.items.length + 1,
+    //     monthly: false,
+    //     glAccount: [
+    //       {
+    //         id: 1,
+    //         name: 'Register #2',
+    //       },
+    //       {
+    //         id: 2,
+    //         name: 'Register #3',
+    //       },
+    //     ],
+    //     amount: '',
+    //     comment: '',
+    //   })
+    // },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },

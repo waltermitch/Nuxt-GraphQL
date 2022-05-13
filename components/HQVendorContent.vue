@@ -66,11 +66,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -96,9 +92,8 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
-import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQVendorContent',
@@ -109,8 +104,9 @@ export default {
     CustomInput,
     CustomTableRow,
     CustomSelect,
+    CustomTableAddIcon,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin],
   apollo: {
     vendors: {
       query: Vendors,

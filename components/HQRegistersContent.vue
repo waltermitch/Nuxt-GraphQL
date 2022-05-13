@@ -167,11 +167,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -179,7 +175,7 @@
       <div v-if="isAdd" class="buttons-area">
         <DefaultButton @event="addRegister"> Add Register </DefaultButton>
 
-        <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+        <DefaultButton @event="cancelAddRegister"> Cancel </DefaultButton>
       </div>
     </ValidationObserver>
   </PageContentWrapper>
@@ -200,6 +196,7 @@ import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTable from './CustomTable.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
@@ -213,6 +210,7 @@ export default {
     CustomInput,
     CustomTable,
     CustomRadioButton,
+    CustomTableAddIcon,
   },
   mixins: [mutationMixin, tableActionsMixin],
   apollo: {
@@ -329,6 +327,10 @@ export default {
         'Delete register error'
       )
       this.unit = unit
+    },
+    cancelAddRegister() {
+      this.isAdd = false
+      this.isHide = false
     },
   },
 }

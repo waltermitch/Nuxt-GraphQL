@@ -5,11 +5,13 @@ export const tableActionsMixin = {
       isAdd: false,
       isEdit: false,
       isDelete: false,
+      isHide: false,
     }
   },
   methods: {
     addPercentSign,
     addRow() {
+      this.isHide = true
       this.isAdd = true
     },
     edit(ID) {

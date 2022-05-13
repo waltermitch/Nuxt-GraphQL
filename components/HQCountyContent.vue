@@ -77,11 +77,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -104,13 +100,19 @@ import UpdateCounty from '../graphql/mutations/county/updateCounty.gql'
 import DeleteCounty from '../graphql/mutations/county/deleteCounty.gql'
 import CustomInput from './CustomInput.vue'
 import CustomSelect from './CustomSelect.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQCountyContent',
-  components: { ValidationObserver, CustomInput, CustomSelect },
+  components: {
+    ValidationObserver,
+    CustomInput,
+    CustomSelect,
+    CustomTableAddIcon,
+  },
   mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     states: {

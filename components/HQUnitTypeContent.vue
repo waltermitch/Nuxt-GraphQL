@@ -91,14 +91,16 @@
             </CustomTableRow>
 
             <CustomTableRow class="table-row add-row">
-              <img
-                src="~assets/images/icons/home/add.svg"
-                class="icon icon--add"
-                @click="addRow"
-              />
+              <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
             </CustomTableRow>
           </template>
         </CustomTable>
+
+        <div v-if="isAdd" class="buttons-area">
+          <DefaultButton @event="addUnitType"> Add UnitType </DefaultButton>
+
+          <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+        </div>
       </ValidationObserver>
     </div>
 
@@ -143,12 +145,6 @@
         </template>
       </CustomTable>
     </CustomTablesArea>
-
-    <div v-if="isAdd" class="buttons-area">
-      <DefaultButton @event="addUnitType"> Add UnitType </DefaultButton>
-
-      <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
-    </div>
   </PageContentWrapper>
 </template>
 
@@ -165,6 +161,7 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTablesArea from './CustomTablesArea.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
@@ -176,6 +173,7 @@ export default {
     CustomTableRow,
     CustomInput,
     CustomTablesArea,
+    CustomTableAddIcon,
   },
   mixins: [mutationMixin, tableActionsMixin],
   apollo: {

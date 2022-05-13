@@ -45,11 +45,7 @@
         </ValidationObserver>
 
         <CustomTableRow class="table-row add-row">
-          <img
-            src="~assets/images/icons/home/add.svg"
-            class="icon icon--add"
-            @click="addRow"
-          />
+          <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -72,10 +68,18 @@ import { formMixin } from '../mixins/formMixin'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'PurchaseOrdersItems',
-  components: { CustomTable, CustomTableRow, CustomInput, ValidationObserver },
-  mixins: [formMixin],
+  components: {
+    CustomTable,
+    CustomTableRow,
+    CustomInput,
+    ValidationObserver,
+    CustomTableAddIcon,
+  },
+  mixins: [formMixin, tableActionsMixin],
   data() {
     return {
       items: [
@@ -90,15 +94,15 @@ export default {
     }
   },
   methods: {
-    addRow() {
-      this.items.push({
-        id: this.items.length,
-        amount: '',
-        inventoryCategory: '',
-        glAccount: '',
-        ext: '',
-      })
-    },
+    // addRow() {
+    //   this.items.push({
+    //     id: this.items.length,
+    //     amount: '',
+    //     inventoryCategory: '',
+    //     glAccount: '',
+    //     ext: '',
+    //   })
+    // },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },

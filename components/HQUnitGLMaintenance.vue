@@ -150,11 +150,7 @@
               </CustomTableRow>
 
               <CustomTableRow class="table-row add-row">
-                <img
-                  src="~assets/images/icons/home/add.svg"
-                  class="icon icon--add"
-                  @click="addRow"
-                />
+                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
               </CustomTableRow>
             </template>
           </CustomTable>
@@ -229,10 +225,9 @@
               </CustomTableRow>
 
               <CustomTableRow class="table-row add-row table-row--gl-type">
-                <img
-                  src="~assets/images/icons/home/add.svg"
-                  class="icon icon--add"
-                  @click="addGlTypeRow"
+                <CustomTableAddIcon
+                  :is-hide="isHideTypeCodes"
+                  @add-row="addGlTypeRow"
                 />
               </CustomTableRow>
             </template>
@@ -270,6 +265,7 @@ import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
@@ -283,6 +279,7 @@ export default {
     CustomInput,
     CustomTable,
     CustomTableRow,
+    CustomTableAddIcon,
   },
   apollo: {
     units: {
@@ -373,14 +370,17 @@ export default {
         },
       ],
       isReload: false,
+      isHideTypeCodes: false,
     }
   },
   methods: {
     addGlTypeRow() {
       this.isAddGlTypeCode = true
+      this.isHideTypeCodes = true
     },
     cancelAddGlTypeCode() {
       this.isAddGlTypeCode = false
+      this.isHideTypeCodes = false
     },
     selectUnit(item) {
       this.unit = item

@@ -39,11 +39,7 @@
         </CustomTableRow>
 
         <CustomTableRow class="table-row add-row">
-          <img
-            src="~assets/images/icons/home/add.svg"
-            class="icon icon--add"
-            @click="addRow"
-          />
+          <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
@@ -89,6 +85,8 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'CateringSalesItems',
   components: {
@@ -97,8 +95,9 @@ export default {
     CustomTableRow,
     DefaultButton,
     ValidationObserver,
+    CustomTableAddIcon,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, tableActionsMixin],
   data() {
     return {
       items: [
@@ -131,15 +130,15 @@ export default {
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },
-    addRow() {
-      this.items.push({
-        id: this.items.length,
-        amount: '',
-        name: '',
-        price: '',
-        ext: '',
-      })
-    },
+    // addRow() {
+    //   this.items.push({
+    //     id: this.items.length,
+    //     amount: '',
+    //     name: '',
+    //     price: '',
+    //     ext: '',
+    //   })
+    // },
   },
 }
 </script>

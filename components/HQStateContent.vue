@@ -124,11 +124,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <img
-              src="~assets/images/icons/home/add.svg"
-              class="icon icon--add"
-              @click="addRow"
-            />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -153,6 +149,7 @@ import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
+import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
@@ -166,6 +163,7 @@ export default {
     CustomInput,
     DefaultButton,
     CustomTableIconsColumn,
+    CustomTableAddIcon,
   },
   mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
