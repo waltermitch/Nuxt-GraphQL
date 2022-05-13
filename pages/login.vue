@@ -19,7 +19,12 @@
           <template #title>Password</template>
 
           <template #input>
-            <CustomInput v-model="password" type="password" rules="required" />
+            <CustomInput
+              v-model="password"
+              type="password"
+              rules="required"
+              @event="login"
+            />
           </template>
         </InputWithTitle>
       </ValidationObserver>

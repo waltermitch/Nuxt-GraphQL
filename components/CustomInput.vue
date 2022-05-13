@@ -13,6 +13,7 @@
       :disabled="disabled"
       :readonly="readonly"
       :class="classes"
+      @keyup.enter="$emit('event')"
       @input="setValue($event.target.value)"
     />
     <span class="error">{{ errors[0] }}</span>
