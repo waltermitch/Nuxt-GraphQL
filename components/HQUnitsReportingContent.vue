@@ -33,7 +33,7 @@
         </CustomTable>
       </div>
 
-      <div>
+      <div class="table-column">
         <span class="table-header">Units Not Yet Reporting</span>
 
         <CustomTable>
@@ -131,6 +131,7 @@ export default {
 <style lang="scss" scoped>
 .tables-area {
   display: flex;
+  width: 100%;
 }
 
 .table-row {
@@ -152,8 +153,10 @@ export default {
 }
 
 .table-column {
-  &:first-child {
-    margin-right: 100px;
+  width: 100%;
+
+  &:last-child {
+    margin-left: 60px;
   }
 }
 
