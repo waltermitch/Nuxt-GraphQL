@@ -23,6 +23,7 @@ export default {
 
   @media screen and(max-width: $xl) {
     flex-direction: column-reverse;
+    margin-right: 0;
   }
 }
 </style>
