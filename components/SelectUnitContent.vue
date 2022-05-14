@@ -37,7 +37,6 @@ import CustomSelect from './CustomSelect.vue'
 import DefaultButton from './DefaultButton.vue'
 import SelectUnit from '~/graphql/mutations/unit/selectUnit'
 import Me from '~/graphql/queries/me.query.gql'
-// import Units from '~/graphql/queries/units.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'SelectUnitContent',
@@ -47,9 +46,6 @@ export default {
     me: {
       query: Me,
     },
-    // units: {
-    //   query: Units,
-    // },
   },
   data() {
     return {
@@ -62,20 +58,22 @@ export default {
       setShowMessage: 'formSubmissionMessage/setShowMessage',
       setMessageType: 'formSubmissionMessage/setMessageType',
     }),
-    submitEvent() {
+    async submitEvent() {
       if (!this.unit) {
         this.selectError = true
       }
 
       const { id } = this.unit
 
-      this.mutationAction(
+      await this.mutationAction(
         SelectUnit,
         { id },
         Me,
         'Select Unit Success',
         'select unit error'
       )
+
+      this.$router.push('/home/close-register')
     },
     selectUnit(unit) {
       this.unit = unit
