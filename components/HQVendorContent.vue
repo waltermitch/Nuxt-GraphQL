@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable class="table">
+      <CustomTable>
         <template #header>
           <div class="table-row">
             <span>Vendor Number</span>
@@ -187,10 +187,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
-  width: fit-content;
-}
-
 .table-row {
   display: grid;
   align-items: center;
