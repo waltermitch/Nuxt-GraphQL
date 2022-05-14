@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow>
-        <CustomTable>
+        <CustomTable class="table-compact">
           <template #header>
             <span> Period End date </span>
           </template>
@@ -177,7 +177,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
+.table-compact {
   width: fit-content;
 }
 

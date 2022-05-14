@@ -18,8 +18,8 @@
         </DefaultButton>
       </InputRow>
 
-      <InputRow>
-        <CustomTable class="table">
+      <CustomTablesArea>
+        <CustomTable>
           <template #header>
             <div class="table-row">
               <span>Unit Id</span>
@@ -46,7 +46,7 @@
           </template>
         </CustomTable>
 
-        <CustomTable class="table">
+        <CustomTable>
           <template #header>
             <div>
               <span>Period End date</span>
@@ -67,7 +67,7 @@
             </CustomTableContent>
           </template>
         </CustomTable>
-      </InputRow>
+      </CustomTablesArea>
     </ValidationObserver>
   </PageContentWrapper>
 </template>
@@ -80,6 +80,7 @@ import InputRow from './InputRow.vue'
 import CustomTableContent from './CustomTableContent.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
+import CustomTablesArea from './CustomTablesArea.vue'
 export default {
   name: 'HQMonthlyOperatingReports',
   components: {
@@ -89,6 +90,7 @@ export default {
     CustomTableContent,
     CustomTableRow,
     DefaultButton,
+    CustomTablesArea,
   },
   data() {
     return {
@@ -140,10 +142,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
-  width: fit-content;
-}
-
 .table-row {
   display: grid;
   align-items: center;

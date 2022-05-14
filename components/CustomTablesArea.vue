@@ -17,6 +17,10 @@ export default {
   justify-content: space-between;
   margin-top: 20px;
 
+  div.table:first-child {
+    margin-right: 60px;
+  }
+
   @media screen and(max-width: $xl) {
     flex-direction: column-reverse;
   }
