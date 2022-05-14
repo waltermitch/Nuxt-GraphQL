@@ -6,10 +6,18 @@
 
         <template #input>
           <CustomSelect
-            :options="mockedList"
+            v-if="me.units"
+            :options="me.units"
+            select-by="name"
+            :selected-item="me.selectedUnit"
             :error="selectError"
             @input="selectUnit"
           />
+
+          <span v-else
+            >The user isn't the location manager of any location yet. Please
+            reach admin to add you as location manager</span
+          >
         </template>
       </InputWithTitle>
 
@@ -27,24 +35,26 @@ import { mapActions } from 'vuex'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import DefaultButton from './DefaultButton.vue'
+import SelectUnit from '~/graphql/mutations/unit/selectUnit'
+import Me from '~/graphql/queries/me.query.gql'
+// import Units from '~/graphql/queries/units.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'SelectUnitContent',
   components: { InputWithTitle, CustomSelect, DefaultButton },
+  mixins: [mutationMixin],
+  apollo: {
+    me: {
+      query: Me,
+    },
+    // units: {
+    //   query: Units,
+    // },
+  },
   data() {
     return {
       unit: '',
       selectError: false,
-      // TODO remove when API would be available
-      mockedList: [
-        {
-          id: 1,
-          name: 'Register #2',
-        },
-        {
-          id: 2,
-          name: 'Register #3',
-        },
-      ],
     }
   },
   methods: {
@@ -57,17 +67,15 @@ export default {
         this.selectError = true
       }
 
-      if (this.unit) {
-        this.setShowMessage(true)
-        this.setMessageType('success')
-      } else {
-        this.setShowMessage(true)
-        this.setMessageType('error')
-      }
+      const { id } = this.unit
 
-      setTimeout(() => {
-        this.setShowMessage(false)
-      }, 4000)
+      this.mutationAction(
+        SelectUnit,
+        { id },
+        Me,
+        'Select Unit Success',
+        'select unit error'
+      )
     },
     selectUnit(unit) {
       this.unit = unit

@@ -1,7 +1,18 @@
+#import '../fragments/unit.gql'
+
 query Me {
   me {
     id
     firstName
+    lastName
+    selectedUnit {
+      ...UnitFragment
+    }
+    email
+    units {
+      ...UnitFragment
+    }
     isAdmin
+    isActive
   }
 }
