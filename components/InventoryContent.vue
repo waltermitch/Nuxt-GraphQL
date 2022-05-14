@@ -49,6 +49,7 @@
                 v-model="item.currentAmount"
                 rules="required|currency"
                 placeholder="$0.00"
+                do-not-show-error-message
               />
             </CustomTableRow>
 

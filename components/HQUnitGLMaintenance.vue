@@ -73,6 +73,7 @@
                   v-if="isEdit === glAccount.id"
                   v-model="glAccount.name"
                   rules="required"
+                  do-not-show-error-message
                 />
                 <span v-else>{{ glAccount.name }}</span>
 
@@ -88,6 +89,7 @@
                   v-if="isEdit === glAccount.id && glAccount.paren"
                   v-model="glAccount.parent.id"
                   rules="required"
+                  do-not-show-error-message
                 />
                 <span v-else-if="glAccount.parent">{{
                   glAccount.parent.id
@@ -137,7 +139,11 @@
 
                 <span>-</span>
 
-                <CustomInput v-model="glAccountNew.name" rules="required" />
+                <CustomInput
+                  v-model="glAccountNew.name"
+                  rules="required"
+                  do-not-show-error-message
+                />
 
                 <CustomSelect
                   v-if="glTypeCodes"
@@ -188,6 +194,7 @@
                   v-if="isEdit === glTypeCode.id"
                   v-model="glTypeCode.code"
                   rules="required"
+                  do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.code }}</span>
 
@@ -195,6 +202,7 @@
                   v-if="isEdit === glTypeCode.id"
                   v-model="glTypeCode.description"
                   rules="required"
+                  do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.description }}</span>
 
@@ -216,11 +224,16 @@
               >
                 <span>-</span>
 
-                <CustomInput v-model="glTypeCodeNew.code" rules="required" />
+                <CustomInput
+                  v-model="glTypeCodeNew.code"
+                  rules="required"
+                  do-not-show-error-message
+                />
 
                 <CustomInput
                   v-model="glTypeCodeNew.description"
                   rules="required"
+                  do-not-show-error-message
                 />
               </CustomTableRow>
 

@@ -33,6 +33,7 @@
               v-if="isEdit === county.id"
               v-model="county.name"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>
               {{ county.name }}
@@ -43,6 +44,7 @@
               v-model.number="county.tax"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>
               {{ addPercentSign(county.tax) }}
@@ -67,12 +69,17 @@
               @input="selectState"
             />
 
-            <CustomInput v-model="countyNew.name" rules="required" />
+            <CustomInput
+              v-model="countyNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomInput
               v-model.number="countyNew.tax"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
           </CustomTableRow>
 

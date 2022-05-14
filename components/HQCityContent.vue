@@ -33,6 +33,7 @@
               v-if="isEdit === city.id"
               v-model="city.name"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>
               {{ city.name }}
@@ -42,6 +43,7 @@
               v-if="isEdit === city.id"
               v-model.number="city.tax"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>
               {{ addPercentSign(city.tax) }}
@@ -66,12 +68,17 @@
               @input="selectState"
             />
 
-            <CustomInput v-model="cityNew.name" rules="required" />
+            <CustomInput
+              v-model="cityNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomInput
               v-model.number="cityNew.tax"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
           </CustomTableRow>
 

@@ -90,36 +90,45 @@
           </CustomTableRow>
 
           <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput v-model="stateNew.code" rules="required|alpha" />
+            <CustomInput
+              v-model="stateNew.code"
+              rules="required|alpha"
+              do-not-show-error-message
+            />
 
             <CustomInput
               v-model.number="stateNew.salesTaxCafeteria"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="stateNew.salesTaxVending"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="stateNew.salesTaxRestaurant"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="stateNew.salesTaxStore"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="stateNew.grossReceiptsTax"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
           </CustomTableRow>
 

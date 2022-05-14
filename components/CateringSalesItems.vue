@@ -15,19 +15,29 @@
 
       <template #content>
         <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
-          <CustomInput v-model="item.quantity" rules="required|numeric" />
+          <CustomInput
+            v-model="item.quantity"
+            do-not-show-error-message
+            rules="required|numeric"
+          />
 
-          <CustomInput v-model="item.name" rules="required" />
+          <CustomInput
+            v-model="item.name"
+            do-not-show-error-message
+            rules="required"
+          />
 
           <CustomInput
             v-model="item.price"
             rules="required|currency"
+            do-not-show-error-message
             placeholder="$0.00"
           />
 
           <CustomInput
             v-model="item.ext"
             rules="required|currency"
+            do-not-show-error-message
             placeholder="$0.00"
           />
 
@@ -54,6 +64,7 @@
           <CustomInput
             v-model="tax"
             placeholder="$0.00"
+            do-not-show-error-message
             rules="required|currency"
           />
         </CustomTableRow>

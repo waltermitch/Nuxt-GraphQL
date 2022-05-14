@@ -29,6 +29,7 @@
           <CustomInput
             v-model="item.amount"
             placeholder="$0.00"
+            do-not-show-error-message
             :rules="{
               between: [1, `${leftToDistribute + Number(item.amount)}`],
             }"

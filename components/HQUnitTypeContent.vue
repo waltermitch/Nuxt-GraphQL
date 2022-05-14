@@ -69,6 +69,7 @@
                 v-if="isEdit === unitType.id"
                 v-model="unitType.name"
                 rules="required|alpha"
+                do-not-show-error-message
               />
               <span v-else>{{ unitType.name }}</span>
 
@@ -87,7 +88,11 @@
             <CustomTableRow v-if="isAdd" class="table-row">
               <span>-</span>
 
-              <CustomInput v-model="unitTypeNew.name" rules="required" />
+              <CustomInput
+                v-model="unitTypeNew.name"
+                rules="required"
+                do-not-show-error-message
+              />
             </CustomTableRow>
 
             <CustomTableRow class="table-row add-row">

@@ -16,7 +16,7 @@
       @keyup.enter="$emit('event')"
       @input="setValue($event.target.value)"
     />
-    <span class="error">{{ errors[0] }}</span>
+    <span v-if="!doNotShowErrorMessage" class="error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
 
@@ -53,6 +53,10 @@ export default {
     vid: {
       type: String,
       default: '',
+    },
+    doNotShowErrorMessage: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

@@ -22,6 +22,7 @@
               v-if="isEdit === vendor.id"
               v-model="vendor.code"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>{{ vendor.code }}</span>
 
@@ -29,6 +30,7 @@
               v-if="isEdit === vendor.id"
               v-model="vendor.name"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>{{ vendor.name }}</span>
 
@@ -54,9 +56,17 @@
           </CustomTableRow>
 
           <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput v-model="vendorNew.code" rules="required" />
+            <CustomInput
+              v-model="vendorNew.code"
+              rules="required"
+              do-not-show-error-message
+            />
 
-            <CustomInput v-model="vendorNew.name" rules="required" />
+            <CustomInput
+              v-model="vendorNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomSelect
               :options="terms.data"

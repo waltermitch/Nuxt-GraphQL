@@ -20,20 +20,30 @@
             :key="item.id"
             class="table-row"
           >
-            <CustomInput v-model="item.amount" rules="required" />
+            <CustomInput
+              v-model="item.amount"
+              rules="required"
+              do-not-show-error-message
+            />
 
-            <CustomInput v-model="item.inventoryCategory" rules="required" />
+            <CustomInput
+              v-model="item.inventoryCategory"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomInput
               v-model="item.glAccount"
               rules="required|currency"
               placeholder="$0.00"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model="item.ext"
               rules="required|currency"
               placeholder="$0.00"
+              do-not-show-error-message
             />
 
             <img

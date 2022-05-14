@@ -22,6 +22,7 @@
               v-if="isEdit === district.id"
               v-model="district.code"
               rules="required|alpha"
+              do-not-show-error-message
             />
             <span v-else>{{ district.code }}</span>
 
@@ -29,6 +30,7 @@
               v-if="isEdit === district.id"
               v-model="district.name"
               rules="required|alpha"
+              do-not-show-error-message
             />
             <span v-else>{{ district.name }}</span>
 
@@ -36,6 +38,7 @@
               v-if="isEdit === district.id"
               v-model.number="district.tax"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>{{ addPercentSign(district.tax) }}</span>
 
@@ -52,13 +55,22 @@
           </CustomTableRow>
 
           <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput v-model="districtNew.code" rules="required" />
+            <CustomInput
+              v-model="districtNew.code"
+              rules="required"
+              do-not-show-error-message
+            />
 
-            <CustomInput v-model="districtNew.name" rules="required" />
+            <CustomInput
+              v-model="districtNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomInput
               v-model.number="districtNew.tax"
               rules="required|double"
+              do-not-show-error-message
             />
           </CustomTableRow>
 

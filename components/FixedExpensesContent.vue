@@ -30,10 +30,15 @@
             <CustomInput
               v-model="item.amount"
               rules="required|double|currency"
+              do-not-show-error-message
               placeholder="$0.00"
             />
 
-            <CustomInput v-model="item.comment" rules="required" />
+            <CustomInput
+              v-model="item.comment"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <img
               src="~assets/images/icons/home/delete.svg"

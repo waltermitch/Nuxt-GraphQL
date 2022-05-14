@@ -55,6 +55,7 @@
               v-if="isEdit === register.id"
               v-model="register.code"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>
               {{ register.code }}
@@ -64,6 +65,7 @@
               v-if="isEdit === register.id"
               v-model="register.name"
               rules="required"
+              do-not-show-error-message
             />
             <span v-else>
               {{ register.name }}
@@ -83,6 +85,7 @@
               v-model.number="register.bank"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else> {{ register.bank }}$ </span>
 
@@ -91,6 +94,7 @@
               v-model.number="register.nonResetable"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else> {{ register.nonResetable }}$ </span>
 
@@ -99,6 +103,7 @@
               v-model.number="register.commission"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else> {{ register.commission }}% </span>
 
@@ -127,9 +132,17 @@
           </CustomTableRow>
 
           <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput v-model="registerNew.code" rules="required" />
+            <CustomInput
+              v-model="registerNew.code"
+              rules="required"
+              do-not-show-error-message
+            />
 
-            <CustomInput v-model="registerNew.name" rules="required" />
+            <CustomInput
+              v-model="registerNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
 
             <CustomSelect
               v-if="registerTypes"
@@ -141,18 +154,21 @@
               v-model.number="registerNew.bank"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="registerNew.nonResetable"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomInput
               v-model.number="registerNew.commission"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
 
             <CustomRadioButton
