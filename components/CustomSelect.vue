@@ -158,6 +158,7 @@ export default {
   position: relative;
   width: 100%;
   height: 40px;
+  font-size: $font-s;
   outline: none;
 }
 
