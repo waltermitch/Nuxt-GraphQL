@@ -407,7 +407,15 @@ export default {
     },
     async updateUnit() {
       if (this.unitID) {
-        const { state, users, __typename, ...unitInput } = this.unit
+        const {
+          state,
+          users,
+          __typename,
+          unitType,
+          glAccounts,
+          vendors,
+          ...unitInput
+        } = this.unit
         await this.mutationAction(
           UpdateUnit,
           {
