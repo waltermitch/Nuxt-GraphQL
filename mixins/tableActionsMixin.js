@@ -15,9 +15,11 @@ export const tableActionsMixin = {
       this.isAdd = true
     },
     edit(ID) {
+      this.isHide = true
       this.isEdit = ID
     },
     cancelEdit() {
+      this.isHide = false
       this.isEdit = null
     },
     deleteItem(ID) {
