@@ -19,7 +19,6 @@ export default {
 <style lang="scss" scoped>
 .table {
   width: 100%;
-  max-width: 1105px;
   background: #fff;
   border: 1px solid $gainsboro;
   border-radius: 8px;
