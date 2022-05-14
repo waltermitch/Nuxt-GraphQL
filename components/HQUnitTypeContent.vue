@@ -109,47 +109,45 @@
       </ValidationObserver>
     </div>
 
-    <CustomTablesArea>
-      <CustomTable v-if="unitTypes" class="table">
-        <template #header>
-          <div class="table-row table-row--unit-types">
-            <span> UnitType ID </span>
+    <CustomTable v-if="unitTypes" class="unit-types-table">
+      <template #header>
+        <div class="table-row table-row--unit-types">
+          <span> UnitType ID </span>
 
-            <span> UnitType Name </span>
-          </div>
-        </template>
+          <span> UnitType Name </span>
+        </div>
+      </template>
 
-        <template #content>
-          <CustomTableRow
-            v-for="unitType in unitTypes.data"
-            :key="unitType.id"
-            class="table-row table-row--unit-types"
+      <template #content>
+        <CustomTableRow
+          v-for="unitType in unitTypes.data"
+          :key="unitType.id"
+          class="table-row table-row--unit-types"
+        >
+          <span>
+            {{ unitType.id }}
+          </span>
+
+          <span>
+            {{ unitType.name }}
+          </span>
+
+          <DefaultButton
+            @event="
+              unit.unitType && unit.unitType.id === unitType.id
+                ? removeUnitTypeFromUnit()
+                : addUnitTypeToUnit(unitType)
+            "
           >
-            <span>
-              {{ unitType.id }}
-            </span>
-
-            <span>
-              {{ unitType.name }}
-            </span>
-
-            <DefaultButton
-              @event="
-                unit.unitType && unit.unitType.id === unitType.id
-                  ? removeUnitTypeFromUnit()
-                  : addUnitTypeToUnit(unitType)
-              "
-            >
-              {{
-                unit.unitType && unit.unitType.id === unitType.id
-                  ? 'Remove Unit Type From Unit'
-                  : 'Add Unit Type to Unit'
-              }}
-            </DefaultButton>
-          </CustomTableRow>
-        </template>
-      </CustomTable>
-    </CustomTablesArea>
+            {{
+              unit.unitType && unit.unitType.id === unitType.id
+                ? 'Remove Unit Type From Unit'
+                : 'Add Unit Type to Unit'
+            }}
+          </DefaultButton>
+        </CustomTableRow>
+      </template>
+    </CustomTable>
   </PageContentWrapper>
 </template>
 
@@ -165,7 +163,6 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
-import CustomTablesArea from './CustomTablesArea.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
@@ -177,7 +174,6 @@ export default {
     CustomTable,
     CustomTableRow,
     CustomInput,
-    CustomTablesArea,
     CustomTableAddIcon,
   },
   mixins: [mutationMixin, tableActionsMixin],
@@ -333,10 +329,6 @@ export default {
   }
 }
 
-.table {
-  width: fit-content;
-}
-
 .table-row {
   display: grid;
   align-items: center;
@@ -346,6 +338,10 @@ export default {
   &--unit-types {
     grid-template-columns: 100px 200px 150px;
   }
+}
+
+.unit-types-table {
+  margin-top: 50px;
 }
 
 .icon {

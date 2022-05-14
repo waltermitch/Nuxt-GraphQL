@@ -28,7 +28,7 @@
     <ValidationObserver ref="form">
       <div>
         <div class="gl-table">
-          <h2>Gls</h2>
+          <h2 class="table-header">Gls</h2>
 
           <CustomTable class="table">
             <template #header>
@@ -169,7 +169,7 @@
         </div>
 
         <div>
-          <h2>Gl Types</h2>
+          <h2 class="table-header">Gl Types</h2>
 
           <CustomTable class="table">
             <template #header>
@@ -626,10 +626,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table {
-  width: fit-content;
-}
-
 .table-row {
   display: grid;
   align-items: center;
@@ -647,5 +643,9 @@ export default {
 
 .gl-table {
   margin-bottom: 20px;
+}
+
+.table-header {
+  margin-bottom: 8px;
 }
 </style>
