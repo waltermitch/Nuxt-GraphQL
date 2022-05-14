@@ -26,7 +26,7 @@
               @input="selectState"
             />
             <span v-else>
-              {{ county.state.code }}
+              {{ county.state && county.state.code }}
             </span>
 
             <CustomInput
