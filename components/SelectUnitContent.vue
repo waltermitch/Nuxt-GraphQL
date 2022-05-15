@@ -9,7 +9,7 @@
             v-if="me.units"
             :options="me.units"
             select-by="name"
-            :selected-item="me.selectedUnit"
+            :selected-item="selectedUnit"
             :error="selectError"
             @input="selectUnit"
           />
@@ -31,22 +31,17 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import DefaultButton from './DefaultButton.vue'
 import SelectUnit from '~/graphql/mutations/unit/selectUnit'
 import Me from '~/graphql/queries/me.query.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'SelectUnitContent',
   components: { InputWithTitle, CustomSelect, DefaultButton },
-  mixins: [mutationMixin],
-  apollo: {
-    me: {
-      query: Me,
-    },
-  },
+  mixins: [mutationMixin, meMixin],
   data() {
     return {
       unit: '',
@@ -54,10 +49,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      setShowMessage: 'formSubmissionMessage/setShowMessage',
-      setMessageType: 'formSubmissionMessage/setMessageType',
-    }),
     async submitEvent() {
       if (!this.unit) {
         this.selectError = true

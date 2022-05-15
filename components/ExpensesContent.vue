@@ -1,18 +1,6 @@
 <template>
   <div class="content">
-    <PageSubheader>
-      <PageSubheaderItem>
-        <template #title>398</template>
-
-        <template #subtitle>Unit Number</template>
-      </PageSubheaderItem>
-
-      <PageSubheaderItem>
-        <template #title>09/21/2019</template>
-
-        <template #subtitle>Period End</template>
-      </PageSubheaderItem>
-    </PageSubheader>
+    <PageSubHeaderContent />
 
     <PageContentWrapper>
       <ValidationObserver ref="form">
@@ -127,8 +115,6 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
-import PageSubheader from './PageSubheader.vue'
-import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -137,11 +123,10 @@ import CustomRadioButton from './CustomRadioButton.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import DefaultButton from './DefaultButton.vue'
+import PageSubHeaderContent from './PageSubHeaderContent.vue'
 export default {
   name: 'ExpensesContent',
   components: {
-    PageSubheader,
-    PageSubheaderItem,
     PageContentWrapper,
     InputRow,
     InputWithTitle,
@@ -151,6 +136,7 @@ export default {
     CustomTextarea,
     DefaultButton,
     ValidationObserver,
+    PageSubHeaderContent,
   },
   mixins: [formMixin],
   data() {

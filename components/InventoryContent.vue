@@ -1,18 +1,6 @@
 <template>
   <div class="content">
-    <PageSubheader>
-      <PageSubheaderItem>
-        <template #title>398</template>
-
-        <template #subtitle>Unit Number</template>
-      </PageSubheaderItem>
-
-      <PageSubheaderItem>
-        <template #title>09/21/2019</template>
-
-        <template #subtitle>Period End</template>
-      </PageSubheaderItem>
-    </PageSubheader>
+    <PageSubHeaderContent />
 
     <PageContentWrapper>
       <CustomTable>
@@ -80,20 +68,18 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
-import PageSubheader from './PageSubheader.vue'
-import PageSubheaderItem from './PageSubheaderItem.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
+import PageSubHeaderContent from './PageSubHeaderContent.vue'
 export default {
   name: 'InventoryContent',
   components: {
-    PageSubheader,
-    PageSubheaderItem,
     PageContentWrapper,
     CustomTable,
     CustomTableRow,
     ValidationObserver,
+    PageSubHeaderContent,
   },
   mixins: [formMixin],
   data() {
