@@ -6,7 +6,7 @@
           <template #title>Order Number</template>
 
           <template #input>
-            <CustomInput v-model="orderNumber" rules="required" />
+            <CustomInput v-model="orderNumber" rules="required" disabled />
           </template>
         </InputWithTitle>
 
@@ -51,7 +51,7 @@
 
           <template #input>
             <CustomInput
-              v-model="deliveryDateAndTime"
+              v-model="deliveryDate"
               rules="required|dateWithTime"
               placeholder="mm/dd/yyyy hh:mm"
             />
@@ -91,7 +91,7 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="taxable"
+              :is-active="isTaxable"
               @set-is-active="setIsTaxable"
             />
           </template>
@@ -112,7 +112,7 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="cashOrder"
+              :is-active="isCashOrder"
               @set-is-active="setIsCashOrder"
             />
           </template>
@@ -121,8 +121,8 @@
     </ValidationObserver>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Save
+      <DefaultButton button-color-gamma="red" @event="nextTab">
+        Continue
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
@@ -140,6 +140,8 @@ import CustomInput from './CustomInput.vue'
 import InputRow from './InputRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
 import DefaultButton from './DefaultButton.vue'
+import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'CateringSalesDetails',
   components: {
@@ -150,28 +152,100 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, cateringSalesMixin, tabsViewMixin],
   data() {
     return {
       orderNumber: '',
-      description: '',
-      orderDate: '',
-      phone: '',
-      deliveryDateAndTime: '',
-      headCount: '',
-      orderedBy: '',
-      orderedFor: '',
-      taxable: false,
-      chargeNumber: '',
-      cashOrder: false,
     }
+  },
+  computed: {
+    description: {
+      get() {
+        return this.getDescription
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_DESCRIPTION', value)
+      },
+    },
+    orderDate: {
+      get() {
+        return this.getOrderDate
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_ORDER_DATE', value)
+      },
+    },
+    phone: {
+      get() {
+        return this.getPhoneNumber
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_PHONE_NUMBER', value)
+      },
+    },
+    deliveryDate: {
+      get() {
+        return this.getDeliveryDate
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_DELIVERY_DATE', value)
+      },
+    },
+    headCount: {
+      get() {
+        return this.getHeadCount
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_HEAD_COUNT', value)
+      },
+    },
+    orderedBy: {
+      get() {
+        return this.getOrderBy
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_ORDER_BY', value)
+      },
+    },
+    orderedFor: {
+      get() {
+        return this.getOrderFor
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_ORDER_FOR', value)
+      },
+    },
+    isTaxable: {
+      get() {
+        return this.getIsTaxable
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_IS_TAXABLE', value)
+      },
+    },
+    chargeNumber: {
+      get() {
+        return this.getChargeNumber
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_CHARGE_NUMBER', value)
+      },
+    },
+    isCashOrder: {
+      get() {
+        return this.getIsCashOrder
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_IS_CASH_ORDER', value)
+      },
+    },
   },
   methods: {
     setIsTaxable() {
-      this.taxable = !this.taxable
+      this.isTaxable = !this.isTaxable
     },
     setIsCashOrder() {
-      this.cashOrder = !this.cashOrder
+      this.isCashOrder = !this.isCashOrder
     },
   },
 }

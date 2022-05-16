@@ -1,0 +1,9 @@
+#import '../fragments/cateringOrder.gql'
+
+query CateringOrders {
+  cateringOrders {
+    data {
+      ...CateringOrderFragment
+    }
+  }
+}

@@ -14,7 +14,11 @@
       </template>
 
       <template #content>
-        <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
+        <CustomTableRow
+          v-for="item in combinedItemsArray"
+          :key="item.id"
+          class="table-row"
+        >
           <CustomInput
             v-model="item.quantity"
             do-not-show-error-message
@@ -22,7 +26,7 @@
           />
 
           <CustomInput
-            v-model="item.name"
+            v-model="item.menuItem"
             do-not-show-error-message
             rules="required"
           />
@@ -41,16 +45,46 @@
             placeholder="$0.00"
           />
 
-          <img
-            src="~assets/images/icons/home/delete.svg"
-            class="icon"
-            @click="deleteRow(item.id)"
+          <img src="~assets/images/icons/home/delete.svg" class="icon" />
+        </CustomTableRow>
+
+        <CustomTableRow v-if="isAdd" class="table-row">
+          <CustomInput
+            v-model.number="newItem.quantity"
+            do-not-show-error-message
+            rules="required|numeric"
+          />
+
+          <CustomInput
+            v-model="newItem.menuItem"
+            do-not-show-error-message
+            rules="required"
+          />
+
+          <CustomInput
+            v-model.number="newItem.price"
+            rules="required|currency"
+            do-not-show-error-message
+            placeholder="$0.00"
+          />
+
+          <CustomInput
+            v-model.number="newItem.ext"
+            rules="required|currency"
+            do-not-show-error-message
+            placeholder="$0.00"
           />
         </CustomTableRow>
 
         <CustomTableRow class="table-row add-row">
           <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
+
+        <div v-if="isAdd" class="buttons-area add-item-buttons">
+          <DefaultButton @event="addItem"> Add Item </DefaultButton>
+
+          <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+        </div>
 
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Price</span>
@@ -78,8 +112,8 @@
     </CustomTable>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Save
+      <DefaultButton button-color-gamma="red" @event="nextTab">
+        Continue
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent"
@@ -98,6 +132,8 @@ import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'CateringSalesItems',
   components: {
@@ -108,48 +144,46 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, tableActionsMixin],
+  mixins: [formMixin, tableActionsMixin, cateringSalesMixin, tabsViewMixin],
   data() {
     return {
-      items: [
-        {
-          id: 0,
-          quantity: 1,
-          name: 'Item Name',
-          price: '$0.00',
-          ext: '$0.00',
-        },
-        {
-          id: 1,
-          quantity: '',
-          name: '',
-          price: '',
-          ext: '',
-        },
-        {
-          id: 2,
-          quantity: '',
-          name: '',
-          price: '',
-          ext: '',
-        },
-      ],
-      tax: '',
+      items: [],
+      newItem: {
+        quantity: '',
+        menuItem: '',
+        price: '',
+        ext: '',
+      },
     }
   },
-  methods: {
-    deleteRow(id) {
-      this.items = this.items.filter((item) => item.id !== id)
+  computed: {
+    combinedItemsArray() {
+      return [...this.items, ...this.getItems]
     },
-    // addRow() {
-    //   this.items.push({
-    //     id: this.items.length,
-    //     amount: '',
-    //     name: '',
-    //     price: '',
-    //     ext: '',
-    //   })
-    // },
+    tax: {
+      get() {
+        return this.getTax
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_TAX', value)
+      },
+    },
+  },
+  methods: {
+    addItem() {
+      if (this.newItem.quantity) {
+        this.$store.commit('cateringSales/SET_ITEMS', this.newItem)
+      }
+
+      this.isAdd = false
+      this.isHide = false
+      this.newItem = {
+        quantity: '',
+        menuItem: '',
+        price: '',
+        ext: '',
+      }
+    },
   },
 }
 </script>
@@ -184,6 +218,10 @@ export default {
   button:first-child {
     margin-right: 11px;
   }
+}
+
+.add-item-buttons {
+  margin-left: 25px;
 }
 
 .icon {

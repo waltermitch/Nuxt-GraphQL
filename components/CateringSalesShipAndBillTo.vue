@@ -36,64 +36,10 @@
           </template>
         </InputWithTitle>
       </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Ship To City</template>
-
-          <template #input>
-            <CustomInput v-model="shipToCity" rules="required" />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title>Bill To City</template>
-
-          <template #input>
-            <CustomInput v-model="billToCity" rules="required" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Ship To State</template>
-
-          <template #input>
-            <CustomInput v-model="shipToState" rules="required" />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title>Bill To State</template>
-
-          <template #input>
-            <CustomInput v-model="billToState" rules="required" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
-          <template #title>Ship To Zip Code</template>
-
-          <template #input>
-            <CustomInput v-model="shipToZipCode" rules="required" />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title>Bill To Zip Code</template>
-
-          <template #input>
-            <CustomInput v-model="billToZipCode" rules="required" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
     </ValidationObserver>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
+      <DefaultButton button-color-gamma="red" @event="CreateCateringOrder">
         Save
       </DefaultButton>
 
@@ -107,26 +53,88 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
+import CreateCateringOrder from '../graphql/mutations/cateringOrder/createCateringOrder.gql'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
+import Me from '~/graphql/queries/me.query.gql'
+import { formatDate, formatDateAndTime } from '~/helpers/helpers'
 export default {
   name: 'CateringSalesShipAndBillTo',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin],
+  mixins: [formMixin, mutationMixin, cateringSalesMixin],
   data() {
-    return {
-      shipToName: '',
-      billToName: '',
-      shipToAddress: '',
-      billToAddress: '',
-      shipToCity: '',
-      billToCity: '',
-      shipToState: '',
-      billToState: '',
-      shipToZipCode: '',
-      billToZipCode: '',
-    }
+    return {}
+  },
+  computed: {
+    shipToName: {
+      get() {
+        return this.getShipToName
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_SHIP_TO_NAME', value)
+      },
+    },
+    billToName: {
+      get() {
+        return this.getBillToName
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_BILL_TO_NAME', value)
+      },
+    },
+    shipToAddress: {
+      get() {
+        return this.getShipToAddress
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_SHIP_TO_ADDRESS', value)
+      },
+    },
+    billToAddress: {
+      get() {
+        return this.getBillToAddress
+      },
+      set(value) {
+        this.$store.commit('cateringSales/SET_BILL_TO_ADDRESS', value)
+      },
+    },
+  },
+  methods: {
+    formatDate,
+    formatDateAndTime,
+    async CreateCateringOrder() {
+      await this.mutationAction(
+        CreateCateringOrder,
+        {
+          cateringOrderInput: {
+            description: this.getDescription,
+            deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
+            headCount: Number(this.getHeadCount),
+            items: {
+              create: this.getItems.map((item) => item),
+            },
+            phoneNumber: this.getPhoneNumber,
+            orderBy: this.getOrderBy,
+            orderFor: this.getOrderFor,
+            orderDate: this.formatDate(this.getOrderDate),
+            isTaxable: this.getIsTaxable,
+            tax: Number(this.getTax),
+            shipToName: this.getShipToName,
+            shipToAddress: this.getShipToAddress,
+            billToName: this.getBillToName,
+            billToAddress: this.getBillToAddress,
+            isCashOrder: this.getIsCashOrder,
+            chargeNumber: this.getChargeNumber,
+          },
+        },
+        Me,
+        'Add unit success',
+        'Add unit error'
+      )
+    },
   },
 }
 </script>
