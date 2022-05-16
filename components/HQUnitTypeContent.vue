@@ -78,7 +78,7 @@
                 :is-delete-active="isDelete === unitType.id"
                 @edit="edit(unitType.id)"
                 @delete="deleteItem(unitType.id)"
-                @cancel="cancelEdit"
+                @cancel="cancelUnitTypeEdit"
                 @cancel-delete="cancelDelete"
                 @confirm-edit="confirmEdit(unitType)"
                 @confirm-delete="confirmDelete(unitType.id)"
@@ -109,7 +109,7 @@
       </ValidationObserver>
     </div>
 
-    <CustomTable v-if="unitTypes" class="unit-types-table">
+    <CustomTable v-if="unitTypesCopy" class="unit-types-table">
       <template #header>
         <div class="table-row table-row--unit-types">
           <span> UnitType ID </span>
@@ -120,7 +120,7 @@
 
       <template #content>
         <CustomTableRow
-          v-for="unitType in unitTypes.data"
+          v-for="unitType in unitTypesCopy"
           :key="unitType.id"
           class="table-row table-row--unit-types"
         >
@@ -191,7 +191,23 @@ export default {
       unitTypeNew: {
         name: '',
       },
+      unitTypesCopy: [],
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        unitTypes: { data },
+      },
+    } = await this.$apollo.query({
+      query: UnitTypes,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.unitTypesCopy = data
+  },
+  destroyed() {
+    this.unitTypes.data = this.unitTypesCopy
   },
   methods: {
     selectUnit(item) {
@@ -244,28 +260,14 @@ export default {
     },
     async addUnitTypeToUnit(unitType) {
       const unit = this.unit
-      const { state, users, __typename, ...unitInput } = this.unit
+      const unitTypesCopy = this.unitTypesCopy
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
-            ...unitInput,
-            district: {
-              connect: Number(this.unit.district.id),
-            },
-            county: {
-              connect: Number(this.unit.county.id),
-            },
-            city: {
-              connect: Number(this.unit.city.id),
-            },
-            users: {
-              sync: users.map((user) => user.id),
-            },
-            vendors: {
-              sync: [...this.unit.vendors.map((vendor) => vendor.id)],
-            },
+            id,
             unitType: {
               connect: Number(unitType.id),
             },
@@ -276,32 +278,19 @@ export default {
         'Add Unit Type to unit error'
       )
 
+      this.unitTypesCopy = unitTypesCopy
+
       this.unit = unit
     },
     async removeUnitTypeFromUnit() {
       const unit = this.unit
-      const { state, users, __typename, ...unitInput } = this.unit
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
-            ...unitInput,
-            district: {
-              connect: Number(this.unit.district.id),
-            },
-            county: {
-              connect: Number(this.unit.county.id),
-            },
-            city: {
-              connect: Number(this.unit.city.id),
-            },
-            users: {
-              sync: users.map((user) => user.id),
-            },
-            vendors: {
-              sync: [...this.unit.vendors.map((vendor) => vendor.id)],
-            },
+            id,
             unitType: {
               connect: 0,
             },
@@ -313,6 +302,10 @@ export default {
       )
 
       this.unit = unit
+    },
+    cancelUnitTypeEdit() {
+      this.unitTypes.data = this.unitTypesCopy
+      this.cancelEdit()
     },
   },
 }

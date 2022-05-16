@@ -28,6 +28,7 @@
               v-if="isEdit === state.id"
               v-model="state.code"
               rules="required|alpha"
+              do-not-show-error-message
             />
             <span v-else>{{ state.code }}</span>
 
@@ -36,6 +37,7 @@
               v-model.number="state.salesTaxCafeteria"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>{{ addPercentSign(state.salesTaxCafeteria) }}</span>
 
@@ -44,6 +46,7 @@
               v-model.number="state.salesTaxVending"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else> {{ addPercentSign(state.salesTaxVending) }}</span>
 
@@ -52,6 +55,7 @@
               v-model.number="state.salesTaxRestaurant"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>
               {{ addPercentSign(state.salesTaxRestaurant) }}
@@ -62,6 +66,7 @@
               v-model.number="state.salesTaxStore"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>
               {{ addPercentSign(state.salesTaxStore) }}
@@ -72,6 +77,7 @@
               v-model.number="state.grossReceiptsTax"
               type="number"
               rules="required|double"
+              do-not-show-error-message
             />
             <span v-else>
               {{ addPercentSign(state.grossReceiptsTax) }}
@@ -82,7 +88,7 @@
               :is-delete-active="isDelete === state.id"
               @edit="edit(state.id)"
               @delete="deleteItem(state.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelStateEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(state)"
               @confirm-delete="confirmDelete(state.id)"
@@ -190,7 +196,23 @@ export default {
         salesTaxStore: '',
         grossReceiptsTax: '',
       },
+      statesCopy: [],
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        states: { data },
+      },
+    } = await this.$apollo.query({
+      query: States,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.statesCopy = data
+  },
+  destroyed() {
+    this.states.data = this.statesCopy
   },
   methods: {
     confirmEdit(state) {
@@ -229,6 +251,10 @@ export default {
         'Add state success',
         'Add state error'
       )
+    },
+    cancelStateEdit() {
+      this.states.data = this.statesCopy
+      this.cancelEdit()
     },
   },
 }

@@ -54,7 +54,7 @@
               :is-delete-active="isDelete === city.id"
               @edit="edit(city.id)"
               @delete="deleteItem(city.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelCityEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(city)"
               @confirm-delete="confirmDelete(city.id)"
@@ -143,7 +143,23 @@ export default {
         state: null,
         tax: '',
       },
+      citiesCopy: [],
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        cities: { data },
+      },
+    } = await this.$apollo.query({
+      query: Cities,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.citiesCopy = data
+  },
+  destroyed() {
+    this.cities.data = this.citiesCopy
   },
   methods: {
     selectState(state) {
@@ -192,6 +208,10 @@ export default {
         'Delete state success',
         'Delete state error'
       )
+    },
+    cancelCityEdit() {
+      this.cities.data = this.citiesCopy
+      this.cancelEdit()
     },
   },
 }

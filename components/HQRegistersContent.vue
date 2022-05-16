@@ -124,7 +124,7 @@
               :is-delete-active="isDelete === register.id"
               @edit="edit(register.id)"
               @delete="deleteItem(register.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelRegisterEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(register)"
               @confirm-delete="confirmDelete(register.id)"
@@ -254,6 +254,7 @@ export default {
         isActive: false,
         resetNonResetable: false,
       },
+      registersCopy: [],
     }
   },
   computed: {
@@ -262,6 +263,21 @@ export default {
         (register) => register.unit.id === this.unit.id
       )
     },
+  },
+  async mounted() {
+    const {
+      data: {
+        registers: { data },
+      },
+    } = await this.$apollo.query({
+      query: Registers,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.registersCopy = data
+  },
+  destroyed() {
+    this.registers.data = this.registersCopy
   },
   methods: {
     selectUnit(unit) {
@@ -347,6 +363,10 @@ export default {
     cancelAddRegister() {
       this.isAdd = false
       this.isHide = false
+    },
+    cancelRegisterEdit() {
+      this.registers.data = this.registersCopy
+      this.cancelEdit()
     },
   },
 }

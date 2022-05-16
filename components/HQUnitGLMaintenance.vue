@@ -70,7 +70,7 @@
                 <span v-else>-</span>
 
                 <CustomInput
-                  v-if="isEdit === glAccount.id"
+                  v-if="editGlAccountId === glAccount.id"
                   v-model="glAccount.name"
                   rules="required"
                   do-not-show-error-message
@@ -78,7 +78,7 @@
                 <span v-else>{{ glAccount.name }}</span>
 
                 <CustomSelect
-                  v-if="glTypeCodes && isEdit === glAccount.id"
+                  v-if="glTypeCodes && editGlAccountId === glAccount.id"
                   select-by="description"
                   :options="glTypeCodes.data"
                   @input="selectTypeCode"
@@ -86,7 +86,7 @@
                 <span v-else>{{ glAccount.glTypeCode.description }}</span>
 
                 <CustomInput
-                  v-if="isEdit === glAccount.id && glAccount.paren"
+                  v-if="editGlAccountId === glAccount.id && glAccount.paren"
                   v-model="glAccount.parent.id"
                   rules="required"
                   do-not-show-error-message
@@ -123,11 +123,11 @@
                 </DefaultButton>
 
                 <CustomTableIconsColumn
-                  :is-edit-active="isEdit === glAccount.id"
+                  :is-edit-active="editGlAccountId === glAccount.id"
                   :is-delete-active="isDelete === glAccount.id"
-                  @edit="edit(glAccount.id)"
+                  @edit="editGlAccount(glAccount.id)"
                   @delete="deleteItem(glAccount.id)"
-                  @cancel="cancelEdit"
+                  @cancel="cancelGlAccountsEdit"
                   @cancel-delete="cancelDelete"
                   @confirm-edit="confirmEdit(glAccount)"
                   @confirm-delete="confirmDelete(glAccount.id)"
@@ -191,7 +191,7 @@
                 <span>{{ glTypeCode.id }}</span>
 
                 <CustomInput
-                  v-if="isEdit === glTypeCode.id"
+                  v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCode.code"
                   rules="required"
                   do-not-show-error-message
@@ -199,7 +199,7 @@
                 <span v-else>{{ glTypeCode.code }}</span>
 
                 <CustomInput
-                  v-if="isEdit === glTypeCode.id"
+                  v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCode.description"
                   rules="required"
                   do-not-show-error-message
@@ -207,11 +207,11 @@
                 <span v-else>{{ glTypeCode.description }}</span>
 
                 <CustomTableIconsColumn
-                  :is-edit-active="isEdit === glTypeCode.id"
+                  :is-edit-active="editGlTypeCodeId === glTypeCode.id"
                   :is-delete-active="isDelete === glTypeCode.id"
-                  @edit="edit(glTypeCode.id)"
+                  @edit="editGlTypeCode(glTypeCode.id)"
                   @delete="deleteItem(glTypeCode.id)"
-                  @cancel="cancelEdit"
+                  @cancel="cancelGlTypeCodesCopyEdit"
                   @cancel-delete="cancelDelete"
                   @confirm-edit="confirmEditGlTypeCode(glTypeCode)"
                   @confirm-delete="confirmDeleteGlTypeCode(glTypeCode.id)"
@@ -384,7 +384,34 @@ export default {
       ],
       isReload: false,
       isHideTypeCodes: false,
+      glTypeCodesCopy: [],
+      editGlTypeCodeId: '',
+      editGlAccountId: '',
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        glAccounts: { data },
+      },
+    } = await this.$apollo.query({
+      query: GlAccounts,
+      fetchPolicy: 'no-cache',
+    })
+
+    const {
+      data: { glTypeCodes },
+    } = await this.$apollo.query({
+      query: GlTypeCodes,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.glAccountsCopy = data
+    this.glTypeCodesCopy = glTypeCodes.data
+  },
+  destroyed() {
+    this.glAccounts.data = this.glAccountsCopy
+    this.glTypeCodes.data = this.glTypeCodesCopy
   },
   methods: {
     addGlTypeRow() {
@@ -620,6 +647,20 @@ export default {
       if (reload) {
         window.location.reload()
       }
+    },
+    editGlTypeCode(id) {
+      this.editGlTypeCodeId = id
+    },
+    editGlAccount(id) {
+      this.editGlAccountId = id
+    },
+    cancelGlAccountsEdit() {
+      this.glAccounts.data = this.glAccountsCopy
+      this.cancelEdit()
+    },
+    cancelGlTypeCodesCopyEdit() {
+      this.glTypeCodes.data = this.glTypeCodesCopy
+      this.cancelEdit()
     },
   },
 }

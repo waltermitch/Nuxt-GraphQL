@@ -55,7 +55,7 @@
               :is-delete-active="isDelete === county.id"
               @edit="edit(county.id)"
               @delete="deleteItem(county.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelCountyEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(county)"
               @confirm-delete="confirmDelete(county.id)"
@@ -136,7 +136,23 @@ export default {
         name: '',
         tax: '',
       },
+      countiesCopy: [],
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        counties: { data },
+      },
+    } = await this.$apollo.query({
+      query: Counties,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.countiesCopy = data
+  },
+  destroyed() {
+    this.counties.data = this.countiesCopy
   },
   methods: {
     selectState(state) {
@@ -185,6 +201,10 @@ export default {
         'Delete unit success',
         'Delete unit error'
       )
+    },
+    cancelCountyEdit() {
+      this.counties.data = this.countiesCopy
+      this.cancelEdit()
     },
   },
 }

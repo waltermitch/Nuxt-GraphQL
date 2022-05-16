@@ -47,7 +47,7 @@
               :is-delete-active="isDelete === district.id"
               @edit="edit(district.id)"
               @delete="deleteItem(district.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelDistrictEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(district)"
               @confirm-delete="confirmDelete(district.id)"
@@ -127,7 +127,23 @@ export default {
         name: '',
         tax: '',
       },
+      districtsCopy: [],
     }
+  },
+  async mounted() {
+    const {
+      data: {
+        districts: { data },
+      },
+    } = await this.$apollo.query({
+      query: Districts,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.districtsCopy = data
+  },
+  destroyed() {
+    this.districts.data = this.districtsCopy
   },
   methods: {
     addDistrict() {
@@ -171,6 +187,10 @@ export default {
         'Delete state success',
         'Delete state error'
       )
+    },
+    cancelDistrictEdit() {
+      this.districts.data = this.districtsCopy
+      this.cancelEdit()
     },
   },
 }
