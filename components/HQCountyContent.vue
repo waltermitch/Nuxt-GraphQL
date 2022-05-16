@@ -136,25 +136,29 @@ export default {
         name: '',
         tax: '',
       },
-      countiesCopy: [],
     }
   },
-  async mounted() {
-    const {
-      data: {
-        counties: { data },
-      },
-    } = await this.$apollo.query({
-      query: Counties,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.countiesCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.counties.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.counties.data = this.countiesCopy
+  async destroyed() {
+    this.counties.data = await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          counties: { data },
+        },
+      } = await this.$apollo.query({
+        query: Counties,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     selectState(state) {
       this.countyNew.state = state
     },
@@ -202,8 +206,8 @@ export default {
         'Delete unit error'
       )
     },
-    cancelCountyEdit() {
-      this.counties.data = this.countiesCopy
+    async cancelCountyEdit() {
+      this.counties.data = await this.fetchData()
       this.cancelEdit()
     },
   },

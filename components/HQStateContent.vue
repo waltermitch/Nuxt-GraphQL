@@ -196,25 +196,29 @@ export default {
         salesTaxStore: '',
         grossReceiptsTax: '',
       },
-      statesCopy: [],
     }
   },
-  async mounted() {
-    const {
-      data: {
-        states: { data },
-      },
-    } = await this.$apollo.query({
-      query: States,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.statesCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.states.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.states.data = this.statesCopy
+  async destroyed() {
+    this.states.data = await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          states: { data },
+        },
+      } = await this.$apollo.query({
+        query: States,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     confirmEdit(state) {
       const editedState = {
         id: state.id,
@@ -252,8 +256,8 @@ export default {
         'Add state error'
       )
     },
-    cancelStateEdit() {
-      this.states.data = this.statesCopy
+    async cancelStateEdit() {
+      this.states.data = await this.fetchData()
       this.cancelEdit()
     },
   },

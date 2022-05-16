@@ -143,25 +143,29 @@ export default {
         state: null,
         tax: '',
       },
-      citiesCopy: [],
     }
   },
-  async mounted() {
-    const {
-      data: {
-        cities: { data },
-      },
-    } = await this.$apollo.query({
-      query: Cities,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.citiesCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.cities.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.cities.data = this.citiesCopy
+  async destroyed() {
+    this.cities.data = await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          cities: { data },
+        },
+      } = await this.$apollo.query({
+        query: Cities,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     selectState(state) {
       this.cityNew.state = state
     },
@@ -209,8 +213,8 @@ export default {
         'Delete state error'
       )
     },
-    cancelCityEdit() {
-      this.cities.data = this.citiesCopy
+    async cancelCityEdit() {
+      this.cities.data = await this.fetchData()
       this.cancelEdit()
     },
   },

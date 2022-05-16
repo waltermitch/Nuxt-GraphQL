@@ -389,31 +389,43 @@ export default {
       editGlAccountId: '',
     }
   },
-  async mounted() {
-    const {
-      data: {
-        glAccounts: { data },
-      },
-    } = await this.$apollo.query({
-      query: GlAccounts,
-      fetchPolicy: 'no-cache',
-    })
-
-    const {
-      data: { glTypeCodes },
-    } = await this.$apollo.query({
-      query: GlTypeCodes,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.glAccountsCopy = data
-    this.glTypeCodesCopy = glTypeCodes.data
+  watch: {
+    async editGlTypeCodeId(oldVal, newVal) {
+      this.glAccounts.data = await this.fetchGlAccountsData()
+    },
+    async editGlAccountId(oldVal, newVal) {
+      this.glTypeCodes.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.glAccounts.data = this.glAccountsCopy
-    this.glTypeCodes.data = this.glTypeCodesCopy
+  async destroyed() {
+    this.glAccounts.data = await this.fetchGlAccountsData()
+    this.glTypeCodes.data = await this.fetchData()
   },
   methods: {
+    async fetchGlAccountsData() {
+      const {
+        data: {
+          glAccounts: { data },
+        },
+      } = await this.$apollo.query({
+        query: GlAccounts,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
+    async fetchData() {
+      const {
+        data: {
+          glTypeCodes: { data },
+        },
+      } = await this.$apollo.query({
+        query: GlTypeCodes,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     addGlTypeRow() {
       this.isAddGlTypeCode = true
       this.isHideTypeCodes = true
@@ -654,13 +666,15 @@ export default {
     editGlAccount(id) {
       this.editGlAccountId = id
     },
-    cancelGlAccountsEdit() {
-      this.glAccounts.data = this.glAccountsCopy
-      this.cancelEdit()
+    async cancelGlAccountsEdit() {
+      this.glAccounts.data = await this.fetchGlAccountsData()
+      this.isHide = false
+      this.editGlAccountId = null
     },
-    cancelGlTypeCodesCopyEdit() {
-      this.glTypeCodes.data = this.glTypeCodesCopy
-      this.cancelEdit()
+    async cancelGlTypeCodesCopyEdit() {
+      this.glTypeCodes.data = await this.fetchData()
+      this.isHide = false
+      this.editGlTypeCodeId = null
     },
   },
 }

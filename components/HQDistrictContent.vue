@@ -127,25 +127,29 @@ export default {
         name: '',
         tax: '',
       },
-      districtsCopy: [],
     }
   },
-  async mounted() {
-    const {
-      data: {
-        districts: { data },
-      },
-    } = await this.$apollo.query({
-      query: Districts,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.districtsCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.districts.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.districts.data = this.districtsCopy
+  async destroyed() {
+    this.districts.data = await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          districts: { data },
+        },
+      } = await this.$apollo.query({
+        query: Districts,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     addDistrict() {
       this.mutationAction(
         CreateDistrict,
@@ -188,8 +192,8 @@ export default {
         'Delete state error'
       )
     },
-    cancelDistrictEdit() {
-      this.districts.data = this.districtsCopy
+    async cancelDistrictEdit() {
+      this.districts.data = await this.fetchData()
       this.cancelEdit()
     },
   },

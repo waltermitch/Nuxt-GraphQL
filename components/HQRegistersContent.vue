@@ -254,7 +254,6 @@ export default {
         isActive: false,
         resetNonResetable: false,
       },
-      registersCopy: [],
     }
   },
   computed: {
@@ -264,22 +263,27 @@ export default {
       )
     },
   },
-  async mounted() {
-    const {
-      data: {
-        registers: { data },
-      },
-    } = await this.$apollo.query({
-      query: Registers,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.registersCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.registers.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.registers.data = this.registersCopy
+  async destroyed() {
+    this.registers.data = await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          registers: { data },
+        },
+      } = await this.$apollo.query({
+        query: Registers,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     selectUnit(unit) {
       this.unit = unit
     },
@@ -364,8 +368,8 @@ export default {
       this.isAdd = false
       this.isHide = false
     },
-    cancelRegisterEdit() {
-      this.registers.data = this.registersCopy
+    async cancelRegisterEdit() {
+      this.registers.data = await this.fetchData()
       this.cancelEdit()
     },
   },
