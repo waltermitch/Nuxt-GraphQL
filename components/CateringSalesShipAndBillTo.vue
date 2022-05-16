@@ -39,8 +39,8 @@
     </ValidationObserver>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="CreateCateringOrder">
-        Save
+      <DefaultButton button-color-gamma="red" @event="cateringOrderAction">
+        {{ `${getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
@@ -54,6 +54,7 @@
 import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
 import CreateCateringOrder from '../graphql/mutations/cateringOrder/createCateringOrder.gql'
+import UpdateCateringOrder from '../graphql/mutations/cateringOrder/updateCateringOrder.gql'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
@@ -131,9 +132,48 @@ export default {
           },
         },
         Me,
-        'Add unit success',
-        'Add unit error'
+        'Add catering order success',
+        'Add catering order error'
       )
+    },
+    async UpdateCateringOrder() {
+      await this.mutationAction(
+        UpdateCateringOrder,
+        {
+          cateringOrderInput: {
+            id: this.getId,
+            description: this.getDescription,
+            deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
+            headCount: Number(this.getHeadCount),
+            items: {
+              create: this.getItems.map((item) => {
+                const { __typename, id, ...obj } = item
+
+                return obj
+              }),
+            },
+            phoneNumber: this.getPhoneNumber,
+            orderBy: this.getOrderBy,
+            orderFor: this.getOrderFor,
+            orderDate: this.formatDate(this.getOrderDate),
+            isTaxable: this.getIsTaxable,
+            tax: Number(this.getTax),
+            shipToName: this.getShipToName,
+            shipToAddress: this.getShipToAddress,
+            billToName: this.getBillToName,
+            billToAddress: this.getBillToAddress,
+            isCashOrder: this.getIsCashOrder,
+            chargeNumber: this.getChargeNumber,
+          },
+        },
+        Me,
+        'Edit catering order success',
+        'Edit catering order error'
+      )
+      this.$router.push('/review/catering-sales')
+    },
+    cateringOrderAction() {
+      this.getIsEdit ? this.UpdateCateringOrder() : this.CreateCateringOrder()
     },
   },
 }

@@ -19,6 +19,7 @@ export const cateringSalesMixin = {
       getBillToAddress: 'cateringSales/getBillToAddress',
       getIsCashOrder: 'cateringSales/getIsCashOrder',
       getChargeNumber: 'cateringSales/getChargeNumber',
+      getIsEdit: 'cateringSales/getIsEdit',
     }),
   },
 }

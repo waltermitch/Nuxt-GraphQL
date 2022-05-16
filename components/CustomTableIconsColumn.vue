@@ -48,6 +48,7 @@ export default {
 .icons-area {
   display: flex;
   align-items: center;
+  justify-self: end;
 }
 
 .icon {

@@ -7,7 +7,7 @@ export const formatDate = (timeStamp) => {
 
 export const formatDateAndTime = (timeStamp) => {
   const timeStampArray = timeStamp.split(' ')
-  const date = timeStampArray[0].split('/').reverse().join('-')
+  const date = timeStampArray[0].split('/')
   const time = timeStampArray[1]
 
   return `${date[2]}-${date[0]}-${date[1]} ${time}:00`

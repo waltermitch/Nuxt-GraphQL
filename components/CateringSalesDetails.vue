@@ -62,7 +62,7 @@
           <template #title>Head Count</template>
 
           <template #input>
-            <CustomInput v-model="headCount" rules="required" />
+            <CustomInput v-model.number="headCount" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>

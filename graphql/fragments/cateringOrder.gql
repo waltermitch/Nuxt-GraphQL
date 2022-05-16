@@ -4,7 +4,7 @@ fragment CateringOrderFragment on CateringOrder {
   id
   description
   items {
-    ...CateringOrderItem
+    ...CateringOrderItemFragment
   }
   deliveryDate
   headCount
@@ -15,7 +15,7 @@ fragment CateringOrderFragment on CateringOrder {
   isTaxable
   tax
   shipToName
-  shiptToAddress
+  shipToAddress
   billToName
   billToAddress
   isCashOrder

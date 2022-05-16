@@ -6,7 +6,7 @@
 
         <template #input>
           <CustomSelect
-            v-if="me.units"
+            v-if="me"
             :options="me.units"
             select-by="name"
             :selected-item="selectedUnit"
