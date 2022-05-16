@@ -1,24 +1,8 @@
+import { CATERING_ORDER } from '~/constants/cateringOrder'
+
 export const state = () => ({
   isEdit: false,
-  cateringOrder: {
-    id: '',
-    description: '',
-    items: [],
-    deliveryDate: '',
-    headCount: '',
-    phoneNumber: '',
-    orderBy: '',
-    orderFor: '',
-    orderDate: '',
-    isTaxable: false,
-    tax: '',
-    shipToName: '',
-    shipToAddress: '',
-    billToName: '',
-    billToAddress: '',
-    isCashOrder: false,
-    chargeNumber: '',
-  },
+  cateringOrder: CATERING_ORDER,
 })
 
 export const mutations = {

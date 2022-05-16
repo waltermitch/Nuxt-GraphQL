@@ -40,10 +40,13 @@
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="cateringOrderAction">
-        {{ `${getIsEdit ? 'Save' : 'Edit'}` }}
+        {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEvent">
+      <DefaultButton
+        button-color-gamma="white"
+        @event="getIsEdit ? cancelEdit() : cancelCreate()"
+      >
         Cancel
       </DefaultButton>
     </div>

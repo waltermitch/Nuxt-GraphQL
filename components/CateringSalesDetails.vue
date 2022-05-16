@@ -125,7 +125,10 @@
         Continue
       </DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEvent">
+      <DefaultButton
+        button-color-gamma="white"
+        @event="getIsEdit ? cancelEdit() : cancelCreate()"
+      >
         Cancel
       </DefaultButton>
     </div>

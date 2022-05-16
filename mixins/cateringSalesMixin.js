@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import { CATERING_ORDER } from '~/constants/cateringOrder'
 export const cateringSalesMixin = {
   computed: {
     ...mapGetters({
@@ -21,5 +22,14 @@ export const cateringSalesMixin = {
       getChargeNumber: 'cateringSales/getChargeNumber',
       getIsEdit: 'cateringSales/getIsEdit',
     }),
+  },
+  methods: {
+    cancelEdit() {
+      this.$router.push('/review/catering-sales')
+    },
+    cancelCreate() {
+      console.log('cancelCreate')
+      this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
+    },
   },
 }
