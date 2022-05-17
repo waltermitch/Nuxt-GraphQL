@@ -268,7 +268,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 40px repeat(5, 150px) 60px;
+  grid-template-columns: 40px repeat(5, 150px) auto;
   column-gap: 30px;
 }
 

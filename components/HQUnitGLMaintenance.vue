@@ -684,11 +684,11 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(2, 80px) 200px 100px 80px 150px 60px;
+  grid-template-columns: repeat(2, 80px) 200px 100px 80px 150px auto;
   column-gap: 30px;
 
   &--gl-type {
-    grid-template-columns: 80px 100px 100px 60px;
+    grid-template-columns: 80px 100px 100px auto;
   }
 }
 

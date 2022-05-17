@@ -132,19 +132,21 @@
             {{ unitType.name }}
           </span>
 
-          <DefaultButton
-            @event="
-              unit.unitType && unit.unitType.id === unitType.id
-                ? removeUnitTypeFromUnit()
-                : addUnitTypeToUnit(unitType)
-            "
-          >
-            {{
-              unit.unitType && unit.unitType.id === unitType.id
-                ? 'Remove Unit Type From Unit'
-                : 'Add Unit Type to Unit'
-            }}
-          </DefaultButton>
+          <div class="button">
+            <DefaultButton
+              @event="
+                unit.unitType && unit.unitType.id === unitType.id
+                  ? removeUnitTypeFromUnit()
+                  : addUnitTypeToUnit(unitType)
+              "
+            >
+              {{
+                unit.unitType && unit.unitType.id === unitType.id
+                  ? 'Remove Unit Type From Unit'
+                  : 'Add Unit Type to Unit'
+              }}
+            </DefaultButton>
+          </div>
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -325,11 +327,11 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 200px 60px;
+  grid-template-columns: 100px 200px auto;
   column-gap: 30px;
 
   &--unit-types {
-    grid-template-columns: 100px 200px 150px;
+    grid-template-columns: 100px 200px auto;
   }
 }
 
@@ -344,5 +346,10 @@ export default {
     grid-column: 3;
     justify-self: end;
   }
+}
+
+.button {
+  width: 250px;
+  justify-self: end;
 }
 </style>

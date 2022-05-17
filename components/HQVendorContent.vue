@@ -190,7 +190,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px repeat(2, 200px) 60px;
+  grid-template-columns: 100px repeat(2, 200px) auto;
   column-gap: 30px;
 }
 

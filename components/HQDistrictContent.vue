@@ -204,7 +204,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 200px 100px 60px;
+  grid-template-columns: 100px 200px 100px auto;
   column-gap: 30px;
 }
 

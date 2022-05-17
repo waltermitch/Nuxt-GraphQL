@@ -95,7 +95,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 160px 340px 200px 160px 60px;
+  grid-template-columns: 160px 340px 200px 160px auto;
   column-gap: 30px;
 }
 </style>

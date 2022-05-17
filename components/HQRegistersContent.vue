@@ -380,7 +380,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 50px 150px 200px 70px 100px 85px 50px 135px 60px;
+  grid-template-columns: 50px 150px 200px 70px 100px 85px 50px 135px auto;
   column-gap: 20px;
 }
 
