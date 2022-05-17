@@ -61,8 +61,8 @@
     </ValidationObserver>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Accept
+      <DefaultButton button-color-gamma="red" @event="nextTab">
+        Continue
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
@@ -79,6 +79,9 @@ import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 import InputRow from './InputRow.vue'
 import DefaultButton from './DefaultButton.vue'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'PurchaseOrdersDetails',
   components: {
@@ -88,16 +91,54 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, purchaseOrderMixin, tabsViewMixin, tableActionsMixin],
   data() {
     return {
-      invoiceNumber: '',
-      purchaseDate: '',
-      vendor: '',
-      poNumber: '',
-      purchaseTotal: '',
+
     }
   },
+  computed:{
+    invoiceNumber: {
+      get() {
+        return this.getInvoiceNumber
+      },
+      set(value) {
+        this.$store.commit('purchaseOrders/SET_INVOICE_NUMBER', value)
+      },
+    },
+    purchaseDate: {
+      get() {
+        return this.getPurchaseDate
+      },
+      set(value) {
+        this.$store.commit('purchaseOrders/SET_PURCHASE_DATE', value)
+      },
+    },
+    vendor: {
+      get() {
+        return this.getVendor
+      },
+      set(value) {
+        this.$store.commit('purchaseOrders/SET_VENDOR', value)
+      },
+    },
+    poNumber: {
+      get() {
+        return this.getPoNumber
+      },
+      set(value) {
+        this.$store.commit('purchaseOrders/SET_PO_NUMBER', value)
+      },
+    },
+    purchaseTotal: {
+      get() {
+        return this.getPurchaseTotal
+      },
+      set(value) {
+        this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', value)
+      },
+    },
+  }
 }
 </script>
 
