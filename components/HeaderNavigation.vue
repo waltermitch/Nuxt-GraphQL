@@ -37,5 +37,9 @@ export default {
 .navigation {
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: $md) {
+    flex-direction: column;
+  }
 }
 </style>

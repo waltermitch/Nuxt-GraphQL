@@ -6,7 +6,9 @@
           <img src="~assets/images/header/logo.svg" />
         </NuxtLink>
 
-        <HeaderNavigation v-if="!onlyLogo" />
+        <div class="nav">
+          <HeaderNavigation v-if="!onlyLogo" />
+        </div>
       </div>
 
       <div v-if="!onlyLogo" class="profile">
@@ -31,6 +33,9 @@
         </svg>
 
         <div v-if="isShowDropdown" class="logout">
+          <div class="nav--mobile">
+            <HeaderNavigation v-if="!onlyLogo" />
+          </div>
           <span class="logout-item" @click="logout">Logout</span>
         </div>
       </div>
@@ -89,6 +94,18 @@ export default {
   }
 }
 
+.nav {
+  @media screen and (max-width: $md) {
+    display: none;
+  }
+
+  &--mobile {
+    @media screen and (min-width: calc($md + 1px)) {
+      display: none;
+    }
+  }
+}
+
 .logo {
   display: flex;
   margin-right: 80px;
@@ -131,10 +148,27 @@ export default {
     -2px -2px 4px rgba(196, 197, 221, 0.25);
   border-radius: 2px;
 
+  @media screen and (max-width: $md) {
+    display: flex;
+    flex-direction: column;
+    height: unset;
+    width: unset;
+    padding: 20px 15px;
+    bottom: -425px;
+    background: $nero;
+  }
+
   &-item {
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
+
+    @media screen and (max-width: $md) {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $white-smoke;
+    }
 
     &:hover {
       color: $firebrick;
