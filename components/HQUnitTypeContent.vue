@@ -196,22 +196,30 @@ export default {
       unitTypesCopy: [],
     }
   },
-  async mounted() {
-    const {
-      data: {
-        unitTypes: { data },
-      },
-    } = await this.$apollo.query({
-      query: UnitTypes,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.unitTypesCopy = data
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.unitTypes.data = await this.fetchData()
+    },
   },
-  destroyed() {
-    this.unitTypes.data = this.unitTypesCopy
+  async destroyed() {
+    this.unitTypes.data = await this.fetchData()
+  },
+  async mounted() {
+    this.unitTypesCopy = [...(await this.fetchData())]
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          unitTypes: { data },
+        },
+      } = await this.$apollo.query({
+        query: UnitTypes,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
     selectUnit(item) {
       this.unit = item
     },
@@ -228,6 +236,7 @@ export default {
         'Add unitType success',
         'Add unitType error'
       )
+      this.unitTypesCopy = [...(await this.fetchData())]
       this.unit = unit
     },
     async confirmEdit(unitType) {
@@ -247,6 +256,7 @@ export default {
         'Add unitType error'
       )
       this.unit = unit
+      this.unitTypesCopy = [...(await this.fetchData())]
     },
     async confirmDelete(id) {
       const unit = this.unit
@@ -259,10 +269,10 @@ export default {
         'Delete unitType error'
       )
       this.unit = unit
+      this.unitTypesCopy = [...(await this.fetchData())]
     },
     async addUnitTypeToUnit(unitType) {
       const unit = this.unit
-      const unitTypesCopy = this.unitTypesCopy
       const { id } = this.unit
 
       await this.mutationAction(
@@ -280,7 +290,7 @@ export default {
         'Add Unit Type to unit error'
       )
 
-      this.unitTypesCopy = unitTypesCopy
+      this.unitTypesCopy = [...(await this.fetchData())]
 
       this.unit = unit
     },
@@ -305,8 +315,8 @@ export default {
 
       this.unit = unit
     },
-    cancelUnitTypeEdit() {
-      this.unitTypes.data = this.unitTypesCopy
+    async cancelUnitTypeEdit() {
+      this.unitTypes.data = await this.fetchData()
       this.cancelEdit()
     },
   },
