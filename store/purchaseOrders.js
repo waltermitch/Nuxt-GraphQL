@@ -1,16 +1,24 @@
+import {PURCHASE_ORDER} from "~/constants/purchaseOrder";
+
+
 export const state = () => ({
-  id: '',
-  invoiceNumber: '',
-  purchaseDate: '',
-  vendor: '',
-  poNumber: '',
-  purchaseTotal: '',
-  items: [],
+  isEdit: false,
+  purchaseOrder: PURCHASE_ORDER,
+  deleteItemIDs: [],
 })
 
 export const mutations = {
+  SET_CATERING_ORDER(state, payload) {
+    state.purchaseOrder = payload
+  },
   SET_ID(state, payload) {
     state.id = payload
+  },
+  SET_IS_EDIT(state, payload) {
+    state.isEdit = payload
+  },
+  SET_DELETE_ITEM_IDS(state, payload) {
+    state.deleteItemIDs = [...state.deleteItemIDs, payload]
   },
   SET_INVOICE_NUMBER(state, payload) {
     state.invoiceNumber = payload
@@ -39,6 +47,6 @@ export const getters = {
   getVendor: (state) => state.vendor,
   getPoNumber: (state) => state.poNumber,
   getPurchaseTotal: (state) => state.purchaseTotal,
-
+  getIsEdit: (state) => state.isEdit,
   getItems: (state) => state.items,
 }

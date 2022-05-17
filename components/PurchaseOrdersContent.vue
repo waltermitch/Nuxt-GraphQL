@@ -16,6 +16,7 @@ import PurchaseOrdersItems from './PurchaseOrdersItems.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { meMixin } from '~/mixins/meMixin'
+import {CATERING_ORDER} from "~/constants/cateringOrder";
 export default {
   name: 'PurchaseOrdersContent',
   components: {
@@ -29,6 +30,10 @@ export default {
       tabsHeaders: ['Details', 'Items'],
       tabs: [PurchaseOrdersDetails, PurchaseOrdersItems],
     }
+  },
+  destroyed() {
+    this.$store.commit('purchaseOrders/SET_IS_EDIT', false)
+    this.$store.commit('purchaseOrders/SET_CATERING_ORDER', CATERING_ORDER)
   },
 }
 </script>
