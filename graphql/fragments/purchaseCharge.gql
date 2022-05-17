@@ -1,0 +1,10 @@
+#import './glAccount.gql'
+
+fragment PurchaseChargeFragment on PurchaseCharge {
+  id
+  amount
+  glAccount {
+    ...GlAccountFragment
+  }
+  purchase
+}

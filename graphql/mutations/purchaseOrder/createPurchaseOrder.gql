@@ -1,5 +1,5 @@
-mutation CreateCateringOrder($cateringOrderInput: CreateCateringOrderInput!) {
-  createCateringOrder(cateringOrderInput: $cateringOrderInput) {
+mutation CreatePurchase($purchaseInput: CreatePurchaseInput!) {
+  createPurchase(purchaseInput: $purchaseInput) {
     id
   }
 }

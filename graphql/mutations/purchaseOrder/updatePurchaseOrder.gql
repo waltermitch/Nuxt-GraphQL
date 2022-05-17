@@ -1,5 +1,5 @@
-mutation UpdateCateringOrder($cateringOrderInput: UpdateCateringOrderInput!) {
-  updateCateringOrder(cateringOrderInput: $cateringOrderInput) {
+mutation UpdatePurchase($purchaseInput: UpdatePurchaseInput!) {
+  updatePurchase(purchaseInput: $purchaseInput) {
     id
   }
 }

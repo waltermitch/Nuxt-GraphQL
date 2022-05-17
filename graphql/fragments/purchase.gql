@@ -1,0 +1,15 @@
+#import './unit.gql'
+#import './purchaseCharge.gql'
+
+fragment PurchaseFragment on Purchase {
+  id
+  number
+  date
+  vendor
+  unit {
+    ...UnitFragment
+  }
+  items {
+    ...PurchaseChargeFragment
+  }
+}

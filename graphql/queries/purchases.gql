@@ -1,0 +1,9 @@
+#import '../fragments/purchase.gql'
+
+query Purchases {
+  purchases {
+    data {
+      ...PurchaseFragment
+    }
+  }
+}

@@ -198,7 +198,7 @@ export default {
   },
   computed: {
     combinedItemsArray() {
-      return [...this.items, ...this.getItems]
+      return [...this.getItems]
     },
     tax: {
       get() {
