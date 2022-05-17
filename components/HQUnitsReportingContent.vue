@@ -10,7 +10,7 @@
       </InputWithTitle>
     </div>
 
-    <CustomTablesArea>
+    <div class="tables">
       <div class="table-column">
         <span class="table-header">Units Reporting In</span>
 
@@ -62,7 +62,7 @@
           </template>
         </CustomTable>
       </div>
-    </CustomTablesArea>
+    </div>
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="sendUnitsUpdate">
@@ -76,14 +76,12 @@
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
-import CustomTablesArea from './CustomTablesArea.vue'
 export default {
   name: 'HQUnitsReportingContent',
   components: {
     PageContentWrapper,
     CustomTable,
     CustomTableRow,
-    CustomTablesArea,
   },
   data() {
     return {
@@ -149,21 +147,26 @@ export default {
   margin-top: 32px;
 }
 
-.table-column {
-  width: 100%;
-
-  &:last-child {
-    width: 25%;
-    margin-left: 60px;
-  }
-
-  @media screen and(max-width: $xl) {
-    margin-left: 0;
-  }
-}
-
 .table-header {
   display: block;
   margin-bottom: 20px;
+}
+
+.tables {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  div.table-column {
+    &:first-child {
+      width: 75%;
+      margin-right: 60px;
+    }
+
+    &:last-child {
+      width: 25%;
+    }
+  }
 }
 </style>
