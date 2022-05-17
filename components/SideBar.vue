@@ -20,9 +20,15 @@ export default {
 
 <style lang="scss" scoped>
 .sidebar {
+  position: relative;
   height: 100%;
   width: 240px;
   padding: 16px;
   border-right: 1px solid $white-smoke;
+
+  @media screen and (max-width: $md) {
+    width: 80px;
+    min-width: 80px;
+  }
 }
 </style>
