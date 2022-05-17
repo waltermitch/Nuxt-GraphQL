@@ -28,7 +28,7 @@
           >
             <span>{{ cateringOrder.id }}</span>
 
-            <span>{{ cateringOrder.deliveryDate }}</span>
+            <span>{{ formatDateFromAPI(cateringOrder.orderDate) }}</span>
 
             <span>{{ cateringOrder.chargeNumber }}</span>
 
@@ -56,6 +56,7 @@ import CateringOrders from '~/graphql/queries/cateringOrders'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import DeleteCateringOrder from '~/graphql/mutations/cateringOrder/deleteCateringOrder'
+import { formatDateFromAPI, formatDateAndTimeFromAPI } from '~/helpers/helpers'
 export default {
   name: 'CateringSalesReviewContent',
   components: { InputWithTitle, CustomSelect, CustomTable, CustomTableRow },
@@ -81,11 +82,17 @@ export default {
     }
   },
   methods: {
+    formatDateFromAPI,
+    formatDateAndTimeFromAPI,
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
     editCateringOrder(cateringOrder) {
-      this.$store.commit('cateringSales/SET_CATERING_ORDER', cateringOrder)
+      this.$store.commit('cateringSales/SET_CATERING_ORDER', {
+        ...cateringOrder,
+        orderDate: this.formatDateFromAPI(cateringOrder.orderDate),
+        deliveryDate: this.formatDateAndTimeFromAPI(cateringOrder.deliveryDate),
+      })
       this.$store.commit('cateringSales/SET_IS_EDIT', true)
       this.$router.push('/home/catering-sales')
     },

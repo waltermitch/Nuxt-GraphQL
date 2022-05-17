@@ -12,3 +12,18 @@ export const formatDateAndTime = (timeStamp) => {
 
   return `${date[2]}-${date[0]}-${date[1]} ${time}:00`
 }
+
+export const formatDateFromAPI = (timestamp) => {
+  const dateArr = timestamp.split('-')
+
+  return `${dateArr[1]}/${dateArr[2]}/${dateArr[0]}`
+}
+
+export const formatDateAndTimeFromAPI = (timestamp) => {
+  const dateAndTimeArr = timestamp.split(' ')
+
+  const dateArr = dateAndTimeArr[0].split('-')
+  const timeArr = dateAndTimeArr[1].split(':')
+
+  return `${dateArr[1]}/${dateArr[2]}/${dateArr[0]} ${timeArr[0]}:${timeArr[1]}`
+}

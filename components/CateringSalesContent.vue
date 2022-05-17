@@ -17,6 +17,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CateringSalesItems from './CateringSalesItems.vue'
 import CateringSalesShipAndBillTo from './CateringSalesShipAndBillTo.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
+import { CATERING_ORDER } from '~/constants/cateringOrder'
 export default {
   name: 'CateringSalesContent',
   components: {
@@ -37,6 +38,10 @@ export default {
         CateringSalesShipAndBillTo,
       ],
     }
+  },
+  destroyed() {
+    this.$store.commit('cateringSales/SET_IS_EDIT', false)
+    this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
   },
 }
 </script>

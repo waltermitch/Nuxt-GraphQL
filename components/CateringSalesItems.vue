@@ -20,32 +20,70 @@
           class="table-row"
         >
           <CustomInput
-            v-model="item.quantity"
+            v-if="!getIsEdit"
+            v-model.number="item.quantity"
+            rules="required|numeric"
+            do-not-show-error-message
+          />
+          <CustomInput
+            v-else
+            :value="item.quantity"
             do-not-show-error-message
             rules="required|numeric"
+            @input="(e) => updateItems(item, Number(e), 'quantity')"
           />
 
           <CustomInput
+            v-if="!getIsEdit"
             v-model="item.menuItem"
             do-not-show-error-message
             rules="required"
           />
+          <CustomInput
+            v-else
+            :value="item.menuItem"
+            do-not-show-error-message
+            rules="required"
+            @input="(e) => updateItems(item, e, 'menuItem')"
+          />
 
           <CustomInput
-            v-model="item.price"
+            v-if="!getIsEdit"
+            v-model.number="item.price"
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
           />
+          <CustomInput
+            v-else
+            :value="item.price"
+            rules="required|currency"
+            do-not-show-error-message
+            placeholder="$0.00"
+            @input="(e) => updateItems(item, Number(e), 'price')"
+          />
 
           <CustomInput
-            v-model="item.ext"
+            v-if="!getIsEdit"
+            v-model.number="item.ext"
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
           />
+          <CustomInput
+            v-else
+            :value="item.ext"
+            rules="required|currency"
+            do-not-show-error-message
+            placeholder="$0.00"
+            @input="(e) => updateItems(item, Number(e), 'ext')"
+          />
 
-          <img src="~assets/images/icons/home/delete.svg" class="icon" />
+          <img
+            src="~assets/images/icons/home/delete.svg"
+            class="icon"
+            @click="deleteItem(item.id)"
+          />
         </CustomTableRow>
 
         <CustomTableRow v-if="isAdd" class="table-row">
@@ -172,18 +210,47 @@ export default {
     },
   },
   methods: {
-    addItem() {
-      if (this.newItem.quantity) {
-        this.$store.commit('cateringSales/SET_ITEMS', this.newItem)
-      }
+    updateItems(item, event, itemProp) {
+      this.$store.commit(
+        'cateringSales/SET_ITEMS',
+        this.getItems.map((vuexItem) => {
+          if (vuexItem.id === item.id) {
+            return {
+              ...vuexItem,
+              [itemProp]: event,
+            }
+          }
 
-      this.isAdd = false
-      this.isHide = false
-      this.newItem = {
-        quantity: '',
-        menuItem: '',
-        price: '',
-        ext: '',
+          return vuexItem
+        })
+      )
+    },
+    deleteItem(id) {
+      if (this.getIsEdit && id) {
+        this.$store.commit('cateringSales/SET_DELETE_ITEM_IDS', id)
+      }
+      this.$store.commit(
+        'cateringSales/SET_ITEMS',
+        this.getItems.filter((item) => item.id !== id)
+      )
+    },
+    async addItem() {
+      const formValidated =
+        this.$refs.form && (await this.$refs.form.validate())
+
+      if (formValidated) {
+        if (this.newItem.quantity) {
+          this.$store.commit('cateringSales/SET_ITEM', this.newItem)
+        }
+
+        this.isAdd = false
+        this.isHide = false
+        this.newItem = {
+          quantity: '',
+          menuItem: '',
+          price: '',
+          ext: '',
+        }
       }
     },
   },

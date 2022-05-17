@@ -3,6 +3,7 @@ import { CATERING_ORDER } from '~/constants/cateringOrder'
 export const state = () => ({
   isEdit: false,
   cateringOrder: CATERING_ORDER,
+  deleteItemIDs: [],
 })
 
 export const mutations = {
@@ -12,14 +13,20 @@ export const mutations = {
   SET_IS_EDIT(state, payload) {
     state.isEdit = payload
   },
+  SET_DELETE_ITEM_IDS(state, payload) {
+    state.deleteItemIDs = [...state.deleteItemIDs, payload]
+  },
   SET_ID(state, payload) {
     state.cateringOrder.id = payload
   },
   SET_DESCRIPTION(state, payload) {
     state.cateringOrder.description = payload
   },
-  SET_ITEMS(state, payload) {
+  SET_ITEM(state, payload) {
     state.cateringOrder.items = [...state.cateringOrder.items, payload]
+  },
+  SET_ITEMS(state, payload) {
+    state.cateringOrder.items = [...payload]
   },
   SET_DELIVERY_DATE(state, payload) {
     state.cateringOrder.deliveryDate = payload
@@ -84,4 +91,7 @@ export const getters = {
   getIsCashOrder: (state) => state.cateringOrder.isCashOrder,
   getChargeNumber: (state) => state.cateringOrder.chargeNumber,
   getIsEdit: (state) => state.isEdit,
+  getDeleteItemIDs: (state) => state.deleteItemIDs,
+  getItemsWithoutId: (state) =>
+    state.cateringOrder.items.filter((item) => !item.id),
 }

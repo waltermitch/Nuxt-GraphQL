@@ -21,6 +21,8 @@ export const cateringSalesMixin = {
       getIsCashOrder: 'cateringSales/getIsCashOrder',
       getChargeNumber: 'cateringSales/getChargeNumber',
       getIsEdit: 'cateringSales/getIsEdit',
+      getDeleteItemIDs: 'cateringSales/getDeleteItemIDs',
+      getItemsWithoutId: 'cateringSales/getItemsWithoutId',
     }),
   },
   methods: {
@@ -28,7 +30,6 @@ export const cateringSalesMixin = {
       this.$router.push('/review/catering-sales')
     },
     cancelCreate() {
-      console.log('cancelCreate')
       this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
     },
   },

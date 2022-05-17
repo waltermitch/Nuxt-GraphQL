@@ -63,7 +63,7 @@ import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
-import Me from '~/graphql/queries/me.query.gql'
+import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import { formatDate, formatDateAndTime } from '~/helpers/helpers'
 export default {
   name: 'CateringSalesShipAndBillTo',
@@ -134,7 +134,7 @@ export default {
             chargeNumber: this.getChargeNumber,
           },
         },
-        Me,
+        CateringOrders,
         'Add catering order success',
         'Add catering order error'
       )
@@ -149,11 +149,15 @@ export default {
             deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
             headCount: Number(this.getHeadCount),
             items: {
-              create: this.getItems.map((item) => {
-                const { __typename, id, ...obj } = item
+              delete: this.getDeleteItemIDs,
+              update: this.getItems
+                .map((item) => {
+                  const { __typename, ...obj } = item
 
-                return obj
-              }),
+                  return obj
+                })
+                .filter((item) => item.id),
+              create: this.getItemsWithoutId,
             },
             phoneNumber: this.getPhoneNumber,
             orderBy: this.getOrderBy,
@@ -169,7 +173,7 @@ export default {
             chargeNumber: this.getChargeNumber,
           },
         },
-        Me,
+        CateringOrders,
         'Edit catering order success',
         'Edit catering order error'
       )
