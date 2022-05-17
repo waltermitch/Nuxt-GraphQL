@@ -27,13 +27,15 @@
             {{ unit.name }}
           </span>
 
-          <span>
+          <span v-if="unit.city">
             {{ unit.city.name }}
           </span>
+          <span v-else>-</span>
 
-          <span>
+          <span v-if="unit.city">
             {{ unit.city.state.code }}
           </span>
+          <span v-else>-</span>
 
           <CustomTableIconsColumn
             :is-delete-active="isDelete === unit.id"
