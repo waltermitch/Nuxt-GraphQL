@@ -16,7 +16,7 @@
       <template #content>
         <ValidationObserver ref="form">
           <CustomTableRow
-            v-for="item in items"
+            v-for="item in combinedItemsArray"
             :key="item.id"
             class="table-row"
           >
@@ -52,11 +52,45 @@
               @click="deleteRow(item.id)"
             />
           </CustomTableRow>
+
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomInput
+              v-model.number="newItem.amount"
+              do-not-show-error-message
+              rules="required|numeric"
+            />
+
+            <CustomInput
+              v-model="newItem.inventoryCategory"
+              do-not-show-error-message
+              rules="required"
+            />
+
+            <CustomInput
+              v-model.number="newItem.glAccount"
+              rules="required|currency"
+              do-not-show-error-message
+              placeholder="$0.00"
+            />
+
+            <CustomInput
+              v-model.number="newItem.ext"
+              rules="required|currency"
+              do-not-show-error-message
+              placeholder="$0.00"
+            />
+          </CustomTableRow>
         </ValidationObserver>
 
         <CustomTableRow class="table-row add-row">
           <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
+
+        <div v-if="isAdd" class="buttons-area add-item-buttons">
+          <DefaultButton @event="addItem"> Add Item </DefaultButton>
+
+          <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+        </div>
       </template>
     </CustomTable>
 
@@ -79,6 +113,7 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
   name: 'PurchaseOrdersItems',
@@ -89,30 +124,38 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, tableActionsMixin],
+  mixins: [formMixin, purchaseOrderMixin, tableActionsMixin],
   data() {
     return {
-      items: [
-        {
-          id: 0,
-          amount: '',
-          inventoryCategory: '',
-          glAccount: '',
-          ext: '',
-        },
-      ],
+      items: [],
+      newItem: {
+        amount: '',
+        inventoryCategory: '',
+        glAccount: '',
+        ext: '',
+      },
     }
   },
+  computed: {
+    combinedItemsArray() {
+      return [...this.items, ...this.getItems]
+    },
+  },
   methods: {
-    // addRow() {
-    //   this.items.push({
-    //     id: this.items.length,
-    //     amount: '',
-    //     inventoryCategory: '',
-    //     glAccount: '',
-    //     ext: '',
-    //   })
-    // },
+    addItem() {
+      if (this.newItem.amount) {
+        this.$store.commit('purchaseOrders/SET_ITEMS', this.newItem)
+      }
+
+      this.isAdd = false
+      this.isHide = false
+      this.newItem = {
+        amount: '',
+        inventoryCategory: '',
+        glAccount: '',
+        ext: '',
+      }
+    },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },
