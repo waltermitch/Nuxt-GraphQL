@@ -31,8 +31,8 @@
             <CustomSelect
               v-if="vendors"
               :options="vendors.data"
-              :selected-item="getVendor.id && getVendor"
-              select-by="code"
+              :selected-item="getIsEdit && getVendor"
+              select-by="name"
               @input="selectVendor"
             />
           </template>
