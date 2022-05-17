@@ -88,7 +88,7 @@
             <CustomSelect
               v-if="states"
               :options="states.data"
-              :selected-item="unitID && unit.city.state"
+              :selected-item="unitID && unit.city && unit.city.state"
               select-by="code"
               @input="selectState"
             />
