@@ -1,5 +1,4 @@
-import {PURCHASE_ORDER} from "~/constants/purchaseOrder";
-
+import { PURCHASE_ORDER } from '~/constants/purchaseOrder'
 
 export const state = () => ({
   isEdit: false,
@@ -12,41 +11,47 @@ export const mutations = {
     state.purchaseOrder = payload
   },
   SET_ID(state, payload) {
-    state.id = payload
+    state.purchaseOrder.id = payload
   },
   SET_IS_EDIT(state, payload) {
-    state.isEdit = payload
+    state.purchaseOrder.isEdit = payload
   },
   SET_DELETE_ITEM_IDS(state, payload) {
-    state.deleteItemIDs = [...state.deleteItemIDs, payload]
+    state.purchaseOrder.deleteItemIDs = [...state.deleteItemIDs, payload]
   },
   SET_INVOICE_NUMBER(state, payload) {
-    state.invoiceNumber = payload
+    state.purchaseOrder.invoiceNumber = payload
   },
   SET_PURCHASE_DATE(state, payload) {
-    state.purchaseDate = payload
+    state.purchaseOrder.purchaseDate = payload
   },
   SET_VENDOR(state, payload) {
-    state.vendor = payload
+    state.purchaseOrder = {
+      ...state.purchaseOrder,
+      vendor: payload,
+    }
   },
   SET_PO_NUMBER(state, payload) {
-    state.poNumber = payload
+    state.purchaseOrder.poNumber = payload
   },
   SET_PURCHASE_TOTAL(state, payload) {
-    state.purchaseTotal = payload
+    state.purchaseOrder.purchaseTotal = payload
+  },
+  SET_ITEM(state, payload) {
+    state.purchaseOrder.items = [...state.purchaseOrder.items, payload]
   },
   SET_ITEMS(state, payload) {
-    state.items = [...state.items, payload]
+    state.purchaseOrder.items = [...payload]
   },
 }
 
 export const getters = {
-  getId: (state) => state.id,
-  getInvoiceNumber: (state) => state.invoiceNumber,
-  getPurchaseDate: (state) => state.purchaseDate,
-  getVendor: (state) => state.vendor,
-  getPoNumber: (state) => state.poNumber,
-  getPurchaseTotal: (state) => state.purchaseTotal,
+  getId: (state) => state.purchaseOrder.id,
+  getInvoiceNumber: (state) => state.purchaseOrder.invoiceNumber,
+  getPurchaseDate: (state) => state.purchaseOrder.purchaseDate,
+  getVendor: (state) => state.purchaseOrder.vendor,
+  getPoNumber: (state) => state.purchaseOrder.poNumber,
+  getPurchaseTotal: (state) => state.purchaseOrder.purchaseTotal,
   getIsEdit: (state) => state.isEdit,
-  getItems: (state) => state.items,
+  getItems: (state) => state.purchaseOrder.items,
 }

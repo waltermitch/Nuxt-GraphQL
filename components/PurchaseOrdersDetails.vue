@@ -28,10 +28,12 @@
           <template #title>Vendor</template>
 
           <template #input>
-            <CustomInput
-              v-model="vendor"
-              rules="required|date"
-              placeholder="mm/dd/yyyy"
+            <CustomSelect
+              v-if="vendors"
+              :options="vendors.data"
+              :selected-item="getVendor.id && getVendor"
+              select-by="code"
+              @input="selectVendor"
             />
           </template>
         </InputWithTitle>
@@ -82,6 +84,7 @@ import DefaultButton from './DefaultButton.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
+import Vendors from '~/graphql/queries/vendors.gql'
 export default {
   name: 'PurchaseOrdersDetails',
   components: {
@@ -91,13 +94,16 @@ export default {
     DefaultButton,
     ValidationObserver,
   },
+  apollo: {
+    vendors: {
+      query: Vendors,
+    },
+  },
   mixins: [formMixin, purchaseOrderMixin, tabsViewMixin, tableActionsMixin],
   data() {
-    return {
-
-    }
+    return {}
   },
-  computed:{
+  computed: {
     invoiceNumber: {
       get() {
         return this.getInvoiceNumber
@@ -138,7 +144,12 @@ export default {
         this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', value)
       },
     },
-  }
+  },
+  methods: {
+    selectVendor(vendor) {
+      this.vendor = vendor
+    },
+  },
 }
 </script>
 

@@ -98,9 +98,9 @@
       <DefaultButton button-color-gamma="red" @event="purchaseOrderAction">
         {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
-<!--      <DefaultButton button-color-gamma="red" @event="saveEvent">-->
-<!--        Accept-->
-<!--      </DefaultButton>-->
+      <!--      <DefaultButton button-color-gamma="red" @event="saveEvent">-->
+      <!--        Accept-->
+      <!--      </DefaultButton>-->
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
         Cancel
@@ -120,8 +120,8 @@ import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import {formatDate} from "~/helpers/helpers"
-import CateringOrders from "~/graphql/queries/cateringOrders.gql"
+import { formatDate } from '~/helpers/helpers'
+import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -150,8 +150,7 @@ export default {
   },
   methods: {
     addItem() {
-      const formValidated =
-        this.$refs.form && this.$refs.form.validate()
+      const formValidated = this.$refs.form && this.$refs.form.validate()
 
       if (formValidated) {
         if (this.newItem.amount) {
