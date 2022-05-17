@@ -18,7 +18,12 @@ export default {
   margin-top: 20px;
 
   div.table:first-child {
+    width: 75%;
     margin-right: 60px;
+  }
+
+  div.table:last-child {
+    width: 25%;
   }
 
   @media screen and(max-width: $xl) {

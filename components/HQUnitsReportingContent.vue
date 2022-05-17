@@ -153,6 +153,7 @@ export default {
   width: 100%;
 
   &:last-child {
+    width: 25%;
     margin-left: 60px;
   }
 
