@@ -24,35 +24,36 @@
           </div>
         </template>
 
-        <template #content>
+        <template v-if="purchases" #content>
           <CustomTableRow
-            v-for="item in items"
-            :key="item.id"
+            v-for="purchase in purchases.data"
+            :key="purchase.id"
             class="table-row table-content-row"
           >
-            <span>{{ item.po }}</span>
+            <span>{{ purchase.id }}</span>
 
-            <span>{{ item.purchaseDate }}</span>
+            <span>{{ formatDateFromAPI(purchase.date) }}</span>
 
-            <span>{{ item.invoiceNum }}</span>
+            <span>{{ purchase.number }}</span>
 
-            <span>{{ item.vendorNum }}</span>
+            <span>{{ purchase.vendor.code }}</span>
 
-            <span>{{ item.total }}</span>
+            <span
+              >{{
+                purchase.items.reduce((prev, current) => {
+                  return Number(prev) + Number(current.amount)
+                }, 0)
+              }}$</span
+            >
 
-            <div>
-              <img
-                class="icon"
-                src="~assets/images/icons/review/edit.svg"
-                alt=""
-              />
-
-              <img
-                class="icon"
-                src="~assets/images/icons/review/trash-can.svg"
-                alt=""
-              />
-            </div>
+            <CustomTableIconsColumn
+              :is-edit-active="isEdit === purchase.id"
+              :is-delete-active="isDelete === purchase.id"
+              @edit="editPurchaseOrder(purchase)"
+              @delete="deleteItem(purchase.id)"
+              @cancel-delete="cancelDelete"
+              @confirm-delete="confirmDelete(purchase.id)"
+            />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -65,9 +66,27 @@ import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
+import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
+import Purchases from '~/graphql/queries/purchases.gql'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { formatDateFromAPI } from '~/helpers/helpers'
+import DeletePurchase from '~/graphql/mutations/purchaseOrder/deletePurchase'
 export default {
   name: 'WeeklyPurchasesContent',
-  components: { InputWithTitle, CustomSelect, CustomTable, CustomTableRow },
+  components: {
+    InputWithTitle,
+    CustomSelect,
+    CustomTable,
+    CustomTableRow,
+    CustomTableIconsColumn,
+  },
+  apollo: {
+    purchases: {
+      query: Purchases,
+    },
+  },
+  mixins: [tableActionsMixin, mutationMixin],
   data() {
     return {
       mockedList: [
@@ -80,38 +99,31 @@ export default {
           name: '22/04/2022',
         },
       ],
-      items: [
-        {
-          id: 0,
-          po: 123,
-          purchaseDate: 'mm/dd/yyyy',
-          invoiceNum: '123',
-          vendorNum: '123',
-          total: '$0.00',
-        },
-        {
-          id: 1,
-          po: 123,
-          purchaseDate: 'mm/dd/yyyy',
-          invoiceNum: '123',
-          vendorNum: '123',
-          total: '$0.00',
-        },
-        {
-          id: 2,
-          po: 123,
-          purchaseDate: 'mm/dd/yyyy',
-          invoiceNum: '123',
-          vendorNum: '123',
-          total: '$0.00',
-        },
-      ],
       periodEndDate: null,
     }
   },
   methods: {
+    formatDateFromAPI,
     selectPeriodEndDate(item) {
       this.periodEndDate = item
+    },
+    editPurchaseOrder(purchase) {
+      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', {
+        ...purchase,
+        purchaseDate: this.formatDateFromAPI(purchase.date),
+        invoiceNumber: purchase.number,
+      })
+      this.$store.commit('purchaseOrders/SET_IS_EDIT', true)
+      this.$router.push('/home/purchase-orders')
+    },
+    confirmDelete(id) {
+      this.mutationAction(
+        DeletePurchase,
+        { id },
+        Purchases,
+        'Delete purchase success',
+        'Delete purchase error'
+      )
     },
   },
 }

@@ -1,5 +1,5 @@
-mutation UpdatePurchase($purchaseInput: UpdatePurchaseInput!) {
-  updatePurchase(purchaseInput: $purchaseInput) {
+mutation UpdatePurchase($PurchaseInput: UpdatePurchaseInput!) {
+  updatePurchase(PurchaseInput: $PurchaseInput) {
     id
   }
 }

@@ -6,5 +6,8 @@ fragment PurchaseChargeFragment on PurchaseCharge {
   glAccount {
     ...GlAccountFragment
   }
-  purchase
+  purchase {
+    id
+    number
+  }
 }

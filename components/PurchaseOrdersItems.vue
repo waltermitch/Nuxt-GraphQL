@@ -19,17 +19,33 @@
             class="table-row"
           >
             <CustomInput
+              v-if="!getIsEdit"
               v-model="item.amount"
-              rules="required"
+              rules="required|numeric"
               do-not-show-error-message
             />
-
+            <CustomInput
+              v-else
+              :value="item.amount"
+              rules="required|numeric"
+              do-not-show-error-message
+              @input="(e) => updateItems(item, Number(e), 'amount')"
+            />
+            <!-- TODO Finish when inventory API will be ready -->
             <CustomInput
               v-model="item.inventoryCategory"
               do-not-show-error-message
             />
 
             <CustomSelect
+              v-if="glAccounts && !getIsEdit"
+              :options="glAccounts.data"
+              select-by="name"
+              :selected-item="item.glAccount"
+              @input="selectGlAccount(item, $event)"
+            />
+            <CustomSelect
+              v-else-if="glAccounts"
               :options="glAccounts.data"
               select-by="name"
               :selected-item="item.glAccount"
@@ -49,7 +65,7 @@
               do-not-show-error-message
               rules="required|numeric"
             />
-
+            <!-- TODO Finish when inventory API will be ready -->
             <CustomInput
               v-model="newItem.inventoryCategory"
               do-not-show-error-message
@@ -90,7 +106,10 @@
         {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEvent">
+      <DefaultButton
+        button-color-gamma="white"
+        @event="getIsEdit ? cancelEdit() : cancelCreate()"
+      >
         Cancel
       </DefaultButton>
     </div>
@@ -109,10 +128,10 @@ import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { formatDate } from '~/helpers/helpers'
-import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import Me from '~/graphql/queries/me.query.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import Purchases from '~/graphql/queries/purchases.gql'
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -155,6 +174,21 @@ export default {
   },
   methods: {
     formatDate,
+    updateItems(item, event, itemProp) {
+      this.$store.commit(
+        'purchaseOrders/SET_ITEMS',
+        this.getItems.map((vuexItem) => {
+          if (vuexItem.id === item.id) {
+            return {
+              ...vuexItem,
+              [itemProp]: event,
+            }
+          }
+
+          return vuexItem
+        })
+      )
+    },
     addItem() {
       const formValidated = this.$refs.form && this.$refs.form.validate()
 
@@ -183,8 +217,7 @@ export default {
       )
     },
     selectGlAccount(item, glAccount) {
-      console.log(item)
-      console.log(glAccount)
+      this.updateItems(item, glAccount, 'glAccount')
     },
     selectNewItemGlAccount(glAccount) {
       this.newItem.glAccount = glAccount
@@ -212,42 +245,41 @@ export default {
             },
           },
         },
-        CateringOrders,
-        'Add catering order success',
-        'Add catering order error'
+        Purchases,
+        'Add purchase order success',
+        'Add purchase order error'
       )
     },
     async UpdatePurchaseOrder() {
       await this.mutationAction(
         UpdatePurchaseOrder,
         {
-          cateringOrderInput: {
+          PurchaseInput: {
             id: this.getId,
-            invoiceNumber: this.invoiceNumber,
-            purchaseDate: this.formatDate(this.purchaseDate),
+            number: this.getInvoiceNumber,
+            date: this.formatDate(this.getPurchaseDate),
             vendor: {
-              connect: this.vendor.id,
+              connect: this.getVendor.id,
             },
-            items: {
-              delete: this.getDeleteItemIDs,
-              update: this.getItems
-                .map((item) => {
-                  const { __typename, ...obj } = item
+            // TODO Finish when inventory API will be ready
+            // items: {
+            //   delete: this.getDeleteItemIDs,
+            //   update: this.getItems
+            //     .map((item) => {
+            //       const { __typename, ...obj } = item
 
-                  return obj
-                })
-                .filter((item) => item.id),
-              create: this.getItemsWithoutId,
-            },
-            poNumber: this.poNumber,
-            purchaseTotal: this.purchaseTotal,
+            //       return obj
+            //     })
+            //     .filter((item) => item.id),
+            //   create: this.getItemsWithoutId,
+            // },
           },
         },
-        CateringOrders,
-        'Edit catering order success',
-        'Edit catering order error'
+        Purchases,
+        'Edit purchase order success',
+        'Edit purchase order error'
       )
-      this.$router.push('/review/catering-sales')
+      this.$router.push('/review/weekly-purchases')
     },
     purchaseOrderAction() {
       this.getIsEdit ? this.UpdatePurchaseOrder() : this.CreatePurchaseOrder()

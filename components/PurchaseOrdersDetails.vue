@@ -67,7 +67,10 @@
         Continue
       </DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEvent">
+      <DefaultButton
+        button-color-gamma="white"
+        @event="getIsEdit ? cancelEdit() : cancelCreate()"
+      >
         Cancel
       </DefaultButton>
     </div>
@@ -99,10 +102,7 @@ export default {
       query: Vendors,
     },
   },
-  mixins: [formMixin, purchaseOrderMixin, tabsViewMixin, tableActionsMixin],
-  data() {
-    return {}
-  },
+  mixins: [formMixin, tabsViewMixin, tableActionsMixin, purchaseOrderMixin],
   computed: {
     invoiceNumber: {
       get() {
@@ -144,6 +144,16 @@ export default {
         this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', value)
       },
     },
+  },
+  mounted() {
+    if (this.getIsEdit) {
+      this.$store.commit(
+        'purchaseOrders/SET_PURCHASE_TOTAL',
+        (this.purchaseTotal = this.getItems.reduce((prev, current) => {
+          return Number(prev) + Number(current.amount)
+        }, 0))
+      )
+    }
   },
   methods: {
     selectVendor(vendor) {

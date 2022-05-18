@@ -7,14 +7,14 @@ export const state = () => ({
 })
 
 export const mutations = {
-  SET_CATERING_ORDER(state, payload) {
+  SET_PURCHASE_ORDER(state, payload) {
     state.purchaseOrder = payload
   },
   SET_ID(state, payload) {
     state.purchaseOrder.id = payload
   },
   SET_IS_EDIT(state, payload) {
-    state.purchaseOrder.isEdit = payload
+    state.isEdit = payload
   },
   SET_DELETE_ITEM_IDS(state, payload) {
     state.purchaseOrder.deleteItemIDs = [...state.deleteItemIDs, payload]
