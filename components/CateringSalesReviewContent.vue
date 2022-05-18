@@ -101,8 +101,8 @@ export default {
         DeleteCateringOrder,
         { id },
         CateringOrders,
-        'Delete state success',
-        'Delete state error'
+        'Delete catering order success',
+        'Delete catering order error'
       )
     },
   },
