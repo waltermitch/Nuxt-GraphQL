@@ -1,0 +1,9 @@
+#import '../fragments/inventoryCategory.gql'
+
+query InventoryCategories {
+  inventoryCategories {
+    data {
+      ...InventoryCategoryFragment
+    }
+  }
+}

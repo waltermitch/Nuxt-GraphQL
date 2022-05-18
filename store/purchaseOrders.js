@@ -17,7 +17,7 @@ export const mutations = {
     state.isEdit = payload
   },
   SET_DELETE_ITEM_IDS(state, payload) {
-    state.purchaseOrder.deleteItemIDs = [...state.deleteItemIDs, payload]
+    state.deleteItemIDs = [...state.deleteItemIDs, payload]
   },
   SET_INVOICE_NUMBER(state, payload) {
     state.purchaseOrder.invoiceNumber = payload
@@ -54,4 +54,7 @@ export const getters = {
   getPurchaseTotal: (state) => state.purchaseOrder.purchaseTotal,
   getIsEdit: (state) => state.isEdit,
   getItems: (state) => state.purchaseOrder.items,
+  getDeleteItemIDs: (state) => state.deleteItemIDs,
+  getItemsWithoutId: (state) =>
+    state.purchaseOrder.items.filter((item) => !item.id),
 }

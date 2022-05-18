@@ -37,7 +37,7 @@
             @input="(e) => updateItems(item, e, 'menuItem')"
           />
 
-          <span v-if="!getIsEdit">{{ item.price }}</span>
+          <span v-if="!getIsEdit">{{ item.price }}$</span>
           <CustomInput
             v-else
             :value="item.price"
@@ -47,7 +47,7 @@
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
 
-          <span v-if="!getIsEdit">{{ item.ext }}</span>
+          <span v-if="!getIsEdit">{{ item.ext }}$</span>
           <CustomInput
             v-else
             :value="item.ext"

@@ -18,12 +18,7 @@
             :key="item.id"
             class="table-row"
           >
-            <CustomInput
-              v-if="!getIsEdit"
-              v-model="item.amount"
-              rules="required|numeric"
-              do-not-show-error-message
-            />
+            <span v-if="!getIsEdit">{{ item.amount }}$</span>
             <CustomInput
               v-else
               :value="item.amount"
@@ -31,19 +26,18 @@
               do-not-show-error-message
               @input="(e) => updateItems(item, Number(e), 'amount')"
             />
-            <!-- TODO Finish when inventory API will be ready -->
-            <CustomInput
-              v-model="item.inventoryCategory"
-              do-not-show-error-message
+
+            <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
+            <CustomSelect
+              v-else-if="inventoryCategories"
+              :options="inventoryCategories.data"
+              select-by="name"
+              do-not-preselect
+              :selected-item="item.inventoryCategory"
+              @input="selectInventoryCategory(item, $event)"
             />
 
-            <CustomSelect
-              v-if="glAccounts && !getIsEdit"
-              :options="glAccounts.data"
-              select-by="name"
-              :selected-item="item.glAccount"
-              @input="selectGlAccount(item, $event)"
-            />
+            <span v-if="!getIsEdit">{{ item.glAccount.name }}</span>
             <CustomSelect
               v-else-if="glAccounts"
               :options="glAccounts.data"
@@ -54,7 +48,7 @@
 
             <img
               src="~assets/images/icons/home/delete.svg"
-              class="icon"
+              class="icon icon--delete"
               @click="deleteItem(item.id)"
             />
           </CustomTableRow>
@@ -65,19 +59,23 @@
               do-not-show-error-message
               rules="required|numeric"
             />
-            <!-- TODO Finish when inventory API will be ready -->
-            <CustomInput
-              v-model="newItem.inventoryCategory"
-              do-not-show-error-message
-              rules="required"
+
+            <CustomSelect
+              v-if="inventoryCategories"
+              :options="inventoryCategories.data"
+              select-by="name"
+              do-not-preselect
+              @input="selectNewItemInventoryCategory"
             />
 
             <CustomSelect
-              v-if="glAccounts"
+              v-if="glAccounts && !isSelectedGlAccount"
               :options="glAccounts.data"
               select-by="name"
               @input="selectNewItemGlAccount"
             />
+
+            <span v-if="isSelectedGlAccount">{{ selectedGlAccount.name }}</span>
           </CustomTableRow>
         </ValidationObserver>
 
@@ -132,6 +130,8 @@ import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import Me from '~/graphql/queries/me.query.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import Purchases from '~/graphql/queries/purchases.gql'
+import InventoryCategories from '~/graphql/queries/inventoryCategories.gql'
+import { PURCHASE_ORDER } from '~/constants/purchaseOrder'
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -141,13 +141,16 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, purchaseOrderMixin, tableActionsMixin, mutationMixin],
+  mixins: [formMixin, tableActionsMixin, mutationMixin, purchaseOrderMixin],
   apollo: {
     glAccounts: {
       query: GlAccounts,
     },
     me: {
       query: Me,
+    },
+    inventoryCategories: {
+      query: InventoryCategories,
     },
   },
   data() {
@@ -157,6 +160,7 @@ export default {
         inventoryCategory: '',
         glAccount: '',
       },
+      isSelectedGlAccount: false,
     }
   },
   computed: {
@@ -170,6 +174,9 @@ export default {
       }, 0)
 
       return this.getPurchaseTotal - totalAmount
+    },
+    selectedGlAccount() {
+      return this.newItem.glAccount
     },
   },
   methods: {
@@ -197,6 +204,8 @@ export default {
           this.$store.commit('purchaseOrders/SET_ITEM', this.newItem)
         }
 
+        this.isSelectedGlAccount = false
+
         this.isAdd = false
         this.isHide = false
         this.newItem = {
@@ -219,8 +228,26 @@ export default {
     selectGlAccount(item, glAccount) {
       this.updateItems(item, glAccount, 'glAccount')
     },
+    selectInventoryCategory(item, inventoryCategory) {
+      this.updateItems(item, inventoryCategory, 'inventoryCategory')
+    },
     selectNewItemGlAccount(glAccount) {
-      this.newItem.glAccount = glAccount
+      this.newItem = {
+        ...this.newItem,
+        glAccount,
+      }
+    },
+    selectNewItemInventoryCategory(inventoryCategory) {
+      if (inventoryCategory.id === this.newItem.inventoryCategory.id) {
+        this.isSelectedGlAccount = false
+      } else {
+        this.newItem.inventoryCategory = inventoryCategory
+        this.newItem = {
+          ...this.newItem,
+          glAccount: inventoryCategory.glAccount,
+        }
+        this.isSelectedGlAccount = true
+      }
     },
     async CreatePurchaseOrder() {
       await this.mutationAction(
@@ -229,17 +256,28 @@ export default {
           PurchaseInput: {
             number: this.getInvoiceNumber,
             date: this.formatDate(this.getPurchaseDate),
-            unit_id: this.me.selectedUnit.id,
             vendor: {
               connect: this.getVendor.id,
             },
             items: {
               create: this.getItems.map((item) => {
-                return {
-                  glAccount: {
-                    connect: item.glAccount.id,
-                  },
-                  amount: item.amount,
+                if (item.inventoryCategory) {
+                  return {
+                    glAccount: {
+                      connect: item.glAccount.id,
+                    },
+                    inventoryCategory: {
+                      connect: item.inventoryCategory.id,
+                    },
+                    amount: item.amount,
+                  }
+                } else {
+                  return {
+                    glAccount: {
+                      connect: item.glAccount.id,
+                    },
+                    amount: item.amount,
+                  }
                 }
               }),
             },
@@ -249,6 +287,7 @@ export default {
         'Add purchase order success',
         'Add purchase order error'
       )
+      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
     },
     async UpdatePurchaseOrder() {
       await this.mutationAction(
@@ -261,18 +300,30 @@ export default {
             vendor: {
               connect: this.getVendor.id,
             },
-            // TODO Finish when inventory API will be ready
-            // items: {
-            //   delete: this.getDeleteItemIDs,
-            //   update: this.getItems
-            //     .map((item) => {
-            //       const { __typename, ...obj } = item
-
-            //       return obj
-            //     })
-            //     .filter((item) => item.id),
-            //   create: this.getItemsWithoutId,
-            // },
+            items: {
+              delete: this.getDeleteItemIDs,
+              update: this.getItems.map((item) => {
+                if (item.inventoryCategory) {
+                  return {
+                    glAccount: {
+                      connect: item.glAccount.id,
+                    },
+                    inventoryCategory: {
+                      connect: item.inventoryCategory.id,
+                    },
+                    amount: item.amount,
+                  }
+                } else {
+                  return {
+                    glAccount: {
+                      connect: item.glAccount.id,
+                    },
+                    amount: item.amount,
+                  }
+                }
+              }),
+              create: this.getItemsWithoutId,
+            },
           },
         },
         Purchases,
@@ -292,7 +343,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 206px 345px 192px 60px;
+  grid-template-columns: 206px 345px 192px 1fr;
   column-gap: 20px;
 }
 
@@ -305,6 +356,10 @@ export default {
 
   &--add {
     grid-column: 5;
+  }
+
+  &--delete {
+    justify-self: end;
   }
 }
 

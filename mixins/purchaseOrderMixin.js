@@ -11,15 +11,15 @@ export const purchaseOrderMixin = {
       getPoNumber: 'purchaseOrders/getPoNumber',
       getPurchaseTotal: 'purchaseOrders/getPurchaseTotal',
       getItems: 'purchaseOrders/getItems',
+      getDeleteItemIDs: 'purchaseOrders/getDeleteItemIDs',
+      getItemsWithoutId: 'purchaseOrders/getItemsWithoutId',
     }),
   },
   methods: {
     cancelEdit() {
-      console.log('cancelEdit')
       this.$router.push('/review/weekly-purchases')
     },
     cancelCreate() {
-      console.log('cancelCreate')
       this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
     },
   },

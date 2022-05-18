@@ -65,6 +65,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import { formatDate, formatDateAndTime } from '~/helpers/helpers'
+import { CATERING_ORDER } from '~/constants/cateringOrder'
 export default {
   name: 'CateringSalesShipAndBillTo',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
@@ -138,6 +139,7 @@ export default {
         'Add catering order success',
         'Add catering order error'
       )
+      this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
     },
     async UpdateCateringOrder() {
       await this.mutationAction(
