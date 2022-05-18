@@ -6,7 +6,7 @@
           <template #title>Order Number</template>
 
           <template #input>
-            <CustomInput v-model="orderNumber" rules="required" disabled />
+            <CustomInput v-model="getId" rules="required" disabled />
           </template>
         </InputWithTitle>
 
@@ -156,11 +156,6 @@ export default {
     ValidationObserver,
   },
   mixins: [formMixin, cateringSalesMixin, tabsViewMixin],
-  data() {
-    return {
-      orderNumber: '',
-    }
-  },
   computed: {
     description: {
       get() {
