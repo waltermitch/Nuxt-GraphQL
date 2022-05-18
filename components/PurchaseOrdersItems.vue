@@ -8,8 +8,6 @@
           <span>Inventory Category</span>
 
           <span>GL Account</span>
-
-          <span>Ext</span>
         </div>
       </template>
 
@@ -28,24 +26,14 @@
 
             <CustomInput
               v-model="item.inventoryCategory"
-              rules="required"
               do-not-show-error-message
             />
 
-            <template #input>
-              <CustomSelect
-                v-if="glAccounts"
-                :options="glAccounts.data"
-                select-by="name"
-                @input="selectGlAccount(item, $event)"
-              />
-            </template>
-
-            <CustomInput
-              v-model="item.ext"
-              rules="required|currency"
-              placeholder="$0.00"
-              do-not-show-error-message
+            <CustomSelect
+              :options="glAccounts.data"
+              select-by="name"
+              :selected-item="item.glAccount"
+              @input="selectGlAccount(item, $event)"
             />
 
             <img
@@ -74,17 +62,10 @@
               select-by="name"
               @input="selectNewItemGlAccount"
             />
-
-            <CustomInput
-              v-model.number="newItem.ext"
-              rules="required|currency"
-              do-not-show-error-message
-              placeholder="$0.00"
-            />
           </CustomTableRow>
         </ValidationObserver>
 
-        <CustomTableRow class="table-row add-row">
+        <CustomTableRow v-if="leftToDistribute > 0" class="table-row add-row">
           <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
 
@@ -96,13 +77,18 @@
       </template>
     </CustomTable>
 
+    <InputWithTitle class="left">
+      <template #title>Left to distribute</template>
+
+      <template #input>
+        <span>{{ leftToDistribute }}$</span>
+      </template>
+    </InputWithTitle>
+
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="purchaseOrderAction">
         {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
-      <!--      <DefaultButton button-color-gamma="red" @event="saveEvent">-->
-      <!--        Accept-->
-      <!--      </DefaultButton>-->
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
         Cancel
@@ -125,6 +111,8 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { formatDate } from '~/helpers/helpers'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
+import Me from '~/graphql/queries/me.query.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -134,29 +122,39 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, purchaseOrderMixin, tableActionsMixin],
+  mixins: [formMixin, purchaseOrderMixin, tableActionsMixin, mutationMixin],
   apollo: {
     glAccounts: {
       query: GlAccounts,
     },
+    me: {
+      query: Me,
+    },
   },
   data() {
     return {
-      items: [],
       newItem: {
         amount: '',
         inventoryCategory: '',
         glAccount: '',
-        ext: '',
       },
     }
   },
   computed: {
     combinedItemsArray() {
-      return [...this.items, ...this.getItems]
+      return [...this.getItems]
+    },
+
+    leftToDistribute() {
+      const totalAmount = this.getItems.reduce((prev, current) => {
+        return Number(prev) + Number(current.amount)
+      }, 0)
+
+      return this.getPurchaseTotal - totalAmount
     },
   },
   methods: {
+    formatDate,
     addItem() {
       const formValidated = this.$refs.form && this.$refs.form.validate()
 
@@ -191,60 +189,69 @@ export default {
     selectNewItemGlAccount(glAccount) {
       this.newItem.glAccount = glAccount
     },
-  },
-  formatDate,
-  async CreatePurchaseOrder() {
-    await this.mutationAction(
-      CreatePurchaseOrder,
-      {
-        cateringOrderInput: {
-          invoiceNumber: this.invoiceNumber,
-          purchaseDate: this.formatDate(this.purchaseDate),
-          vendor: this.formatDate(this.vendor),
-          items: {
-            create: this.getItems.map((item) => item),
+    async CreatePurchaseOrder() {
+      await this.mutationAction(
+        CreatePurchaseOrder,
+        {
+          PurchaseInput: {
+            number: this.getInvoiceNumber,
+            date: this.formatDate(this.getPurchaseDate),
+            unit_id: this.me.selectedUnit.id,
+            vendor: {
+              connect: this.getVendor.id,
+            },
+            items: {
+              create: this.getItems.map((item) => {
+                return {
+                  glAccount: {
+                    connect: item.glAccount.id,
+                  },
+                  amount: item.amount,
+                }
+              }),
+            },
           },
-          poNumber: this.poNumber,
-          purchaseTotal: this.purchaseTotal,
         },
-      },
-      CateringOrders,
-      'Add catering order success',
-      'Add catering order error'
-    )
-  },
-  async UpdatePurchaseOrder() {
-    await this.mutationAction(
-      UpdatePurchaseOrder,
-      {
-        cateringOrderInput: {
-          id: this.getId,
-          invoiceNumber: this.invoiceNumber,
-          purchaseDate: this.formatDate(this.purchaseDate),
-          vendor: this.formatDate(this.vendor),
-          items: {
-            delete: this.getDeleteItemIDs,
-            update: this.getItems
-              .map((item) => {
-                const { __typename, ...obj } = item
+        CateringOrders,
+        'Add catering order success',
+        'Add catering order error'
+      )
+    },
+    async UpdatePurchaseOrder() {
+      await this.mutationAction(
+        UpdatePurchaseOrder,
+        {
+          cateringOrderInput: {
+            id: this.getId,
+            invoiceNumber: this.invoiceNumber,
+            purchaseDate: this.formatDate(this.purchaseDate),
+            vendor: {
+              connect: this.vendor.id,
+            },
+            items: {
+              delete: this.getDeleteItemIDs,
+              update: this.getItems
+                .map((item) => {
+                  const { __typename, ...obj } = item
 
-                return obj
-              })
-              .filter((item) => item.id),
-            create: this.getItemsWithoutId,
+                  return obj
+                })
+                .filter((item) => item.id),
+              create: this.getItemsWithoutId,
+            },
+            poNumber: this.poNumber,
+            purchaseTotal: this.purchaseTotal,
           },
-          poNumber: this.poNumber,
-          purchaseTotal: this.purchaseTotal,
         },
-      },
-      CateringOrders,
-      'Edit catering order success',
-      'Edit catering order error'
-    )
-    this.$router.push('/review/catering-sales')
-  },
-  purchaseOrderAction() {
-    this.getIsEdit ? this.UpdatePurchaseOrder() : this.CreatePurchaseOrder()
+        CateringOrders,
+        'Edit catering order success',
+        'Edit catering order error'
+      )
+      this.$router.push('/review/catering-sales')
+    },
+    purchaseOrderAction() {
+      this.getIsEdit ? this.UpdatePurchaseOrder() : this.CreatePurchaseOrder()
+    },
   },
 }
 </script>
@@ -253,7 +260,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 206px 345px 192px 213px 20px;
+  grid-template-columns: 206px 345px 192px 60px;
   column-gap: 20px;
 }
 
@@ -276,5 +283,9 @@ export default {
   button:first-child {
     margin-right: 11px;
   }
+}
+
+.left {
+  margin-top: 20px;
 }
 </style>

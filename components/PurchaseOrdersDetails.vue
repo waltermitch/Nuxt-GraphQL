@@ -42,7 +42,7 @@
           <template #title>PO Number</template>
 
           <template #input>
-            <CustomInput v-model="poNumber" rules="required" />
+            <CustomInput v-model="getId" rules="required" disabled />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -53,7 +53,7 @@
 
           <template #input>
             <CustomInput
-              v-model="purchaseTotal"
+              v-model.number="purchaseTotal"
               rules="required|currency"
               placeholder="$0.00"
             />
