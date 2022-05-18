@@ -32,12 +32,14 @@
               do-not-show-error-message
             />
 
-            <CustomInput
-              v-model="item.glAccount"
-              rules="required|currency"
-              placeholder="$0.00"
-              do-not-show-error-message
-            />
+            <template #input>
+              <CustomSelect
+                v-if="glAccounts"
+                :options="glAccounts.data"
+                select-by="name"
+                @input="selectGlAccount(item, $event)"
+              />
+            </template>
 
             <CustomInput
               v-model="item.ext"
@@ -66,11 +68,11 @@
               rules="required"
             />
 
-            <CustomInput
-              v-model.number="newItem.glAccount"
-              rules="required|currency"
-              do-not-show-error-message
-              placeholder="$0.00"
+            <CustomSelect
+              v-if="glAccounts"
+              :options="glAccounts.data"
+              select-by="name"
+              @input="selectNewItemGlAccount"
             />
 
             <CustomInput
@@ -122,6 +124,7 @@ import { purchaseOrderMixin } from '~/mixins/purchaseOrderMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { formatDate } from '~/helpers/helpers'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
+import GlAccounts from '~/graphql/queries/glAccounts.gql'
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -132,6 +135,11 @@ export default {
     CustomTableAddIcon,
   },
   mixins: [formMixin, purchaseOrderMixin, tableActionsMixin],
+  apollo: {
+    glAccounts: {
+      query: GlAccounts,
+    },
+  },
   data() {
     return {
       items: [],
@@ -154,7 +162,7 @@ export default {
 
       if (formValidated) {
         if (this.newItem.amount) {
-          this.$store.commit('purchaseOrders/SET_ITEMS', this.newItem)
+          this.$store.commit('purchaseOrders/SET_ITEM', this.newItem)
         }
 
         this.isAdd = false
@@ -175,6 +183,13 @@ export default {
         'purchaseOrders/SET_ITEMS',
         this.getItems.filter((item) => item.id !== id)
       )
+    },
+    selectGlAccount(item, glAccount) {
+      console.log(item)
+      console.log(glAccount)
+    },
+    selectNewItemGlAccount(glAccount) {
+      this.newItem.glAccount = glAccount
     },
   },
   formatDate,
