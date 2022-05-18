@@ -19,12 +19,7 @@
           :key="item.id"
           class="table-row"
         >
-          <CustomInput
-            v-if="!getIsEdit"
-            v-model.number="item.quantity"
-            rules="required|numeric"
-            do-not-show-error-message
-          />
+          <span v-if="!getIsEdit">{{ item.quantity }}</span>
           <CustomInput
             v-else
             :value="item.quantity"
@@ -33,12 +28,7 @@
             @input="(e) => updateItems(item, Number(e), 'quantity')"
           />
 
-          <CustomInput
-            v-if="!getIsEdit"
-            v-model="item.menuItem"
-            do-not-show-error-message
-            rules="required"
-          />
+          <span v-if="!getIsEdit">{{ item.menuItem }}</span>
           <CustomInput
             v-else
             :value="item.menuItem"
@@ -47,13 +37,7 @@
             @input="(e) => updateItems(item, e, 'menuItem')"
           />
 
-          <CustomInput
-            v-if="!getIsEdit"
-            v-model.number="item.price"
-            rules="required|currency"
-            do-not-show-error-message
-            placeholder="$0.00"
-          />
+          <span v-if="!getIsEdit">{{ item.price }}</span>
           <CustomInput
             v-else
             :value="item.price"
@@ -63,13 +47,7 @@
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
 
-          <CustomInput
-            v-if="!getIsEdit"
-            v-model.number="item.ext"
-            rules="required|currency"
-            do-not-show-error-message
-            placeholder="$0.00"
-          />
+          <span v-if="!getIsEdit">{{ item.ext }}</span>
           <CustomInput
             v-else
             :value="item.ext"
