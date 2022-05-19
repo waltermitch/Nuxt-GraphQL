@@ -32,7 +32,7 @@
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>11/11/2021</template>
+        <template #title>{{ formatDateForCloseRegister(new Date()) }}</template>
 
         <template #subtitle>Close Date</template>
       </PageSubheaderItem>
@@ -155,6 +155,7 @@ import ClosRegisterPettyCash from './CloseRegisterPettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CloseRegisterFinishCloseout from './CloseRegisterFinishCloseout'
+import { formatDateForCloseRegister } from '~/helpers/helpers'
 import Registers from '~/graphql/queries/registers.gql'
 import Me from '~/graphql/queries/me.query.gql'
 export default {
@@ -200,6 +201,7 @@ export default {
     }
   },
   methods: {
+    formatDateForCloseRegister,
     selectRegister(register) {
       this.register = register
     },
