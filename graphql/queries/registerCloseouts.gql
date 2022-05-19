@@ -1,0 +1,9 @@
+#import '../fragments/registerCloseout.gql'
+
+query RegisterCloseouts {
+  registerCloseouts {
+    data {
+      ...RegisterCloseouts
+    }
+  }
+}

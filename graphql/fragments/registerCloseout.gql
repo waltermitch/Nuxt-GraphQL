@@ -1,0 +1,43 @@
+#import './register.gql'
+#import './registerCloseoutItem.gql'
+#import './unit.gql'
+
+fragment RegisterCloseoutFragment on RegisterCloseout {
+  id
+  register {
+    ...RegisterFragment
+  }
+  items {
+    ...RegisterCloseoutItemFragment
+  }
+  unit {
+    ...UnitFragment
+  }
+  nonResetable
+  netTotal
+  lastNonResetable
+  netOV
+  totalToDistribute
+  netCharge
+  taxFromTheTape
+  netVoucher
+  overringTax
+  netCash
+  chargeTax
+  voucherTax
+  cashTax
+  totalPettyCache
+  actualCacheDeposit
+  calculatedCacheDeposit
+  overShort
+  customerCountBreakfast
+  netSalesBreakfast
+  customerCountLunch
+  netSalesLunch
+  customerCountDinner
+  netSalesDinner
+  customerCountTotals
+  netSalesTotals
+  closeDate
+  periodEnd
+}

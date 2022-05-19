@@ -1,0 +1,5 @@
+mutation UpdateRegister($updateRegisterCloseout: UpdateRegisterCloseoutInput!) {
+  updateRegister(updateRegisterCloseout: $updateRegisterCloseout) {
+    id
+  }
+}

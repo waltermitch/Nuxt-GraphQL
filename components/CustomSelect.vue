@@ -109,6 +109,12 @@ export default {
         this.$emit('input', this.selected)
       }
     },
+    selectedItem: {
+      handler(newValue, oldValue) {
+        this.selected = newValue
+      },
+      deep: true,
+    },
   },
   mounted() {
     if (!this.doNotPreselect) {

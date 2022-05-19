@@ -2,7 +2,7 @@
   <div>
     <PageSubheader>
       <PageSubheaderItem>
-        <template #title>398</template>
+        <template #title>{{ me.selectedUnit.id }}</template>
 
         <template #subtitle>Unit Number</template>
       </PageSubheaderItem>
@@ -14,13 +14,13 @@
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>Reg#2</template>
+        <template #title>{{ register.id }}</template>
 
-        <template #subtitle>Register Name</template>
+        <template #subtitle>Register id</template>
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>Register#2</template>
+        <template #title>{{ register.name }}</template>
 
         <template #subtitle>Register Name</template>
       </PageSubheaderItem>
@@ -48,17 +48,23 @@
               <template #title>Register ID</template>
 
               <template #input>
-                <CustomInput v-model="registerId" />
+                <CustomSelect
+                  :options="registers.data"
+                  select-by="id"
+                  :selected-item="register"
+                  @input="selectRegister"
+                />
               </template>
             </InputWithTitle>
 
             <InputWithTitle>
               <template #title>Register Name</template>
 
-              <template #input>
+              <template v-if="registers" #input>
                 <CustomSelect
-                  :options="mockedList"
-                  @input="selectRegisterName"
+                  :options="registers.data"
+                  :selected-item="register"
+                  @input="selectRegister"
                 />
               </template>
             </InputWithTitle>
@@ -149,6 +155,8 @@ import ClosRegisterPettyCash from './CloseRegisterPettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CloseRegisterFinishCloseout from './CloseRegisterFinishCloseout'
+import Registers from '~/graphql/queries/registers.gql'
+import Me from '~/graphql/queries/me.query.gql'
 export default {
   name: 'CloseRegisterContent',
   components: {
@@ -164,12 +172,19 @@ export default {
     FinishCloseout,
     PageContentWrapper,
   },
+  apollo: {
+    registers: {
+      query: Registers,
+    },
+    me: {
+      query: Me,
+    },
+  },
   data() {
     return {
       tabsHeaders: ['Sales Info', 'Petty Cash', 'Finish Closeout'],
       tabs: [SalesInfo, ClosRegisterPettyCash, CloseRegisterFinishCloseout],
-      registerId: null,
-      registerName: '',
+      register: '',
       mockedList: [
         {
           id: 1,
@@ -185,8 +200,8 @@ export default {
     }
   },
   methods: {
-    selectRegisterName(item) {
-      this.registerName = item
+    selectRegister(register) {
+      this.register = register
     },
   },
 }

@@ -1,0 +1,5 @@
+mutation CreateRegister($registerCloseoutInput: CreateRegisterCloseoutInput!) {
+  createRegister(registerCloseoutInput: $registerCloseoutInput) {
+    id
+  }
+}
