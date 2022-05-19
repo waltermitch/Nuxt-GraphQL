@@ -1,5 +1,5 @@
 mutation CreateRegister($registerCloseoutInput: CreateRegisterCloseoutInput!) {
-  createRegister(registerCloseoutInput: $registerCloseoutInput) {
+  createRegisterCloseout(registerCloseoutInput: $registerCloseoutInput) {
     id
   }
 }

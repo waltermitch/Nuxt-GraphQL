@@ -47,7 +47,7 @@
             <InputWithTitle>
               <template #title>Register ID</template>
 
-              <template #input>
+              <template v-if="registers" #input>
                 <CustomSelect
                   :options="registers.data"
                   select-by="id"
@@ -72,7 +72,7 @@
 
           <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
         </div>
-        <!-- TODO get real data whe API available -->
+        <!-- TODO PECZIS  calculations-->
         <div class="total">
           <div class="total-section">
             <div class="total-row">
@@ -204,6 +204,7 @@ export default {
     formatDateForCloseRegister,
     selectRegister(register) {
       this.register = register
+      this.$store.commit('closeRegister/SET_REGISTER', register)
     },
   },
 }

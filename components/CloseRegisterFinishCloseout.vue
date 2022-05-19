@@ -143,11 +143,14 @@
     </ValidationObserver>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Accept
+      <DefaultButton button-color-gamma="red" @event="closeRegisterOrderAction">
+        {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEvent">
+      <DefaultButton
+        button-color-gamma="white"
+        @event="getIsEdit ? cancelEdit() : cancelCreate()"
+      >
         Cancel
       </DefaultButton>
     </div>
@@ -160,24 +163,160 @@ import { formMixin } from '../mixins/formMixin'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
+import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import CreateRegisterCloseout from '~/graphql/mutations/registerCloseout/createRegisterCloseout'
+import { formatDateForCloseRegisterAPI } from '~/helpers/helpers'
 export default {
   name: 'CloseRegisterFinishCloseout',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin],
-  data() {
-    return {
-      actualCashDeposit: '',
-      calculatedCashDeposit: '',
-      overShort: '',
-      customerCountBreakfast: '',
-      customerCountLunch: '',
-      netSalesBreakfast: '',
-      netSalesLunch: '',
-      customerCountDinner: '',
-      netSalesDinner: '',
-      customerCountTotals: '',
-      netSalesTotals: '',
-    }
+  mixins: [formMixin, closeRegisterMixin, mutationMixin],
+  computed: {
+    actualCashDeposit: {
+      get() {
+        return this.getActualCacheDeposit
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_ACTUAL_CACHE_DEPOSIT', value)
+      },
+    },
+    calculatedCashDeposit: {
+      get() {
+        return this.getCalculatedCacheDeposit
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_CALCULATED_CACHE_DEPOSIT', value)
+      },
+    },
+    overShort: {
+      get() {
+        return this.getOverShort
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_OVER_SHORT', value)
+      },
+    },
+    customerCountBreakfast: {
+      get() {
+        return this.getCustomerCountBreakfast
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_BREAKFAST', value)
+      },
+    },
+    customerCountLunch: {
+      get() {
+        return this.getCustomerCountLunch
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_LUNCH', value)
+      },
+    },
+    netSalesBreakfast: {
+      get() {
+        return this.getNetSalesBreakfast
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_NET_SALES_BREAKFAST', value)
+      },
+    },
+    netSalesLunch: {
+      get() {
+        return this.getNetSalesLunch
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_NET_SALES_LUNCH', value)
+      },
+    },
+    customerCountDinner: {
+      get() {
+        return this.getCustomerCountDinner
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_DINNER', value)
+      },
+    },
+    netSalesDinner: {
+      get() {
+        return this.getNetSalesDinner
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_NET_SALES_DINNER', value)
+      },
+    },
+    customerCountTotals: {
+      get() {
+        return this.getCustomerCountTotals
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_TOTALS', value)
+      },
+    },
+    netSalesTotals: {
+      get() {
+        return this.getNetSalesTotals
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_NET_SALES_TOTALS', value)
+      },
+    },
+  },
+  methods: {
+    formatDateForCloseRegisterAPI,
+    async CreateCloseRegister() {
+      await this.mutationAction(
+        CreateRegisterCloseout,
+        {
+          registerCloseoutInput: {
+            nonResetable: this.getNonResetable,
+            netTotal: this.getNetTotal,
+            lastNonResetable: this.getLastNonResetable,
+            netOV: this.getNetOV,
+            totalToDistribute: this.getTotalToDistribute,
+            netCharge: this.getNetCharge,
+            taxFromTheTape: this.getTaxFromTheTape,
+            netVoucher: this.getNetVoucher,
+            overringTax: this.getOverringTax,
+            netCash: this.getNetCash,
+            chargeTax: this.getChargeTax,
+            voucherTax: this.getVoucherTax,
+            cashTax: this.getCashTax,
+            totalPettyCache: this.getTotalPettyCache,
+            actualCacheDeposit: this.getActualCacheDeposit,
+            calculatedCacheDeposit: this.getCalculatedCacheDeposit,
+            overShort: this.getOverShort,
+            customerCountBreakfast: this.getCustomerCountBreakfast,
+            netSalesBreakfast: this.getNetSalesBreakfast,
+            customerCountLunch: this.getCustomerCountLunch,
+            netSalesLunch: this.getNetSalesLunch,
+            customerCountDinner: this.getCustomerCountDinner,
+            netSalesDinner: this.getNetSalesDinner,
+            customerCountTotals: this.getCustomerCountTotals,
+            netSalesTotals: this.getNetSalesTotals,
+            closeDate: this.formatDateForCloseRegisterAPI(new Date()),
+            // TODO ADD When PeriodEnd API will be ready
+            periodEnd: this.formatDateForCloseRegisterAPI(new Date()),
+            items: {
+              create: this.getItems.map((item) => {
+                return {
+                  glAccountId: Number(item.glAccount.id),
+                  amount: item.amount,
+                }
+              }),
+            },
+            register: {
+              connect: this.getRegister.id,
+            },
+          },
+        },
+        'Close Register success',
+        'Close Register error'
+      )
+    },
+    UpdateCloseRegister() {},
+    closeRegisterOrderAction() {
+      this.getIsEdit ? this.UpdateCloseRegister() : this.CreateCloseRegister()
+    },
   },
 }
 </script>

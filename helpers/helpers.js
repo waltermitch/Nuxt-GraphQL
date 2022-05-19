@@ -27,3 +27,17 @@ export const formatDateAndTimeFromAPI = (timestamp) => {
 
   return `${dateArr[1]}/${dateArr[2]}/${dateArr[0]} ${timeArr[0]}:${timeArr[1]}`
 }
+
+export const formatDateForCloseRegister = (timestamp) => {
+  const day = timestamp.getDate()
+  const month = timestamp.getMonth() + 1
+  const year = timestamp.getFullYear()
+  return `${month}/${day}/${year}`
+}
+
+export const formatDateForCloseRegisterAPI = (timestamp) => {
+  const day = timestamp.getDate()
+  const month = timestamp.getMonth() + 1
+  const year = timestamp.getFullYear()
+  return `${year}-${month}-${day} 00:00:00`
+}

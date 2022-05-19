@@ -1,130 +1,193 @@
 <template>
   <div>
-    <div class="input-row">
-      <InputWithTitle>
-        <template #title> Total Petty Cash </template>
+    <ValidationObserver ref="form">
+      <div class="input-row">
+        <InputWithTitle>
+          <template #title> Total Petty Cash </template>
 
-        <template #input>
-          <CustomInput v-model="totalPettyCash" rules="required|currency" />
+          <template #input>
+            <CustomInput v-model="totalPettyCash" rules="required|currency" />
+          </template>
+        </InputWithTitle>
+      </div>
+
+      <CustomTable>
+        <template #header>
+          <div class="table-row">
+            <span>GL Account</span>
+
+            <span>Amount</span>
+          </div>
         </template>
-      </InputWithTitle>
-    </div>
 
-    <CustomTable>
-      <template #header>
-        <div class="table-row">
-          <span>GL Account</span>
+        <template #content>
+          <CustomTableRow
+            v-for="item in getItems"
+            :key="item.id"
+            class="table-row"
+          >
+            <CustomSelect
+              v-if="glAccounts && getIsEdit"
+              :options="glAccounts.data"
+              select-by="name"
+              :selected-item="item.glAccount"
+              @input="selectGlAccount(item, $event)"
+            />
 
-          <span>Amount</span>
-        </div>
-      </template>
+            <span v-else>{{ item.glAccount.name }}</span>
+            <CustomInput
+              :value="item.amount"
+              placeholder="$0.00"
+              do-not-show-error-message
+              :rules="{
+                between: [1, `${leftToDistribute + Number(item.amount)}`],
+              }"
+              @input="(e) => updateItems(item, Number(e), 'amount')"
+            />
+            <img
+              src="~assets/images/icons/home/delete.svg"
+              class="icon"
+              @click="deleteRow(item.id)"
+            />
+          </CustomTableRow>
 
-      <template #content>
-        <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
-          <CustomSelect
-            :options="glAccounts"
-            @input="selectGLAccount(item.id, $event)"
-          />
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomSelect
+              v-if="glAccounts"
+              :options="glAccounts.data"
+              select-by="name"
+              @input="selectWewItemGlAccount"
+            />
 
-          <CustomInput
-            v-model="item.amount"
-            placeholder="$0.00"
-            do-not-show-error-message
-            :rules="{
-              between: [1, `${leftToDistribute + Number(item.amount)}`],
-            }"
-          />
-          <img
-            src="~assets/images/icons/home/delete.svg"
-            class="icon"
-            @click="deleteRow(item.id)"
-          />
-        </CustomTableRow>
+            <CustomInput
+              v-model="newItem.amount"
+              placeholder="$0.00"
+              do-not-show-error-message
+              :rules="{
+                between: [1, `${leftToDistribute + Number(newItem.amount)}`],
+              }"
+            />
+          </CustomTableRow>
 
-        <CustomTableRow class="table-row add-row">
-          <img
-            src="~assets/images/icons/home/add.svg"
-            class="icon icon--add"
-            @click="addRow"
-          />
-        </CustomTableRow>
+          <CustomTableRow v-if="leftToDistribute > 0" class="table-row add-row">
+            <img
+              src="~assets/images/icons/home/add.svg"
+              class="icon icon--add"
+              @click="addRow"
+            />
+          </CustomTableRow>
 
-        <CustomTableRow class="table-row footer">
-          <span>Left To Distribute</span>
+          <div v-if="isAdd" class="buttons-area add-item-buttons">
+            <DefaultButton @event="addItem"> Add Item </DefaultButton>
 
-          <span>${{ leftToDistribute }}</span>
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+            <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+          </div>
+
+          <CustomTableRow class="table-row footer">
+            <span>Left To Distribute</span>
+
+            <span>${{ leftToDistribute }}</span>
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+    </ValidationObserver>
   </div>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
+import GlAccounts from '~/graphql/queries/glAccounts.gql'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
+import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'ClosRegisterPettyCash',
   components: {
+    ValidationObserver,
     CustomTable,
     CustomTableRow,
     CustomSelect,
     CustomInput,
     InputWithTitle,
   },
+  mixins: [tableActionsMixin, closeRegisterMixin, tabsViewMixin],
+  apollo: {
+    glAccounts: {
+      query: GlAccounts,
+    },
+  },
   data() {
     return {
-      totalPettyCash: '',
-      items: [
-        {
-          id: 0,
-          amount: '',
-        },
-      ],
-      glAccounts: [
-        {
-          id: 0,
-          name: 'Food Costs - Cafeterias',
-        },
-        {
-          id: 1,
-          name: 'Paper Costs - Cafeterias',
-        },
-      ],
+      newItem: {
+        glAccount: '',
+        amount: '',
+      },
     }
   },
   computed: {
     leftToDistribute() {
-      const totalAmount = this.items.reduce((prev, current) => {
+      const totalAmount = this.getItems.reduce((prev, current) => {
         return Number(prev) + Number(current.amount)
       }, 0)
 
       return this.totalPettyCash - totalAmount
     },
+    totalPettyCash: {
+      get() {
+        return this.getTotalPettyCache
+      },
+      set(value) {
+        this.$store.commit('closeRegister/SET_TOTAL_PETTY_CACHE', value)
+      },
+    },
   },
   methods: {
-    addRow() {
-      this.items.push({
-        id: this.items.length,
-        amount: '',
-      })
+    addItem() {
+      const formValidated = this.$refs.form && this.$refs.form.validate()
+
+      if (formValidated) {
+        if (this.newItem.amount) {
+          this.$store.commit('closeRegister/SET_ITEM', this.newItem)
+        }
+
+        this.isSelectedGlAccount = false
+
+        this.isAdd = false
+        this.isHide = false
+        this.newItem = {
+          amount: '',
+          glAccount: '',
+        }
+      }
     },
     deleteRow(id) {
       this.items = this.items.filter((item) => item.id !== id)
     },
-    selectGLAccount(id, glAccount) {
-      this.items = this.items.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            glAccount,
+    updateItems(item, event, itemProp) {
+      this.$store.commit(
+        'closeRegister/SET_ITEMS',
+        this.getItems.map((vuexItem) => {
+          if (vuexItem.id === item.id) {
+            return {
+              ...vuexItem,
+              [itemProp]: event,
+            }
           }
-        }
 
-        return { ...item }
-      })
+          return vuexItem
+        })
+      )
+    },
+    selectGlAccount(item, glAccount) {
+      this.updateItems(item, glAccount, 'glAccount')
+    },
+    selectWewItemGlAccount(glAccount) {
+      this.newItem.glAccount = glAccount
     },
   },
 }
