@@ -34,6 +34,7 @@ export default {
     ExpensesContent,
   },
   mixins: [sideBarNavTabsMixin(HOME_NAV_TABS)],
+
 }
 </script>
 

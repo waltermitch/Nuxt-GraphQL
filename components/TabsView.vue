@@ -57,7 +57,8 @@ export default {
   display: flex;
   border-bottom: 2px solid $white-smoke;
   @media screen and (max-width: $lg) {
-    overflow: auto;
+    overflow-x: auto;
+    padding-bottom: 3px;
   }
 }
 

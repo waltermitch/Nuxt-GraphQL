@@ -15,7 +15,6 @@
     </template>
   </BasePageLayout>
 </template>
-</template>
 
 <script>
 import { REPORTS_NAV_TABS } from '~/constants/constants'
@@ -35,6 +34,9 @@ export default {
     OpenReportContent
   },
   mixins: [sideBarNavTabsMixin(REPORTS_NAV_TABS)],
+  created() {
+    this.$store.commit('sidebar/SET_MENU', this.navTabs)
+  }
 }
 </script>
 

@@ -35,7 +35,11 @@ export default {
   },
   mixins: [sideBarNavTabsMixin(HQ_REPORT_TABS)],
   layout: 'hqlayout',
+  created() {
+    this.$store.commit('sidebar/SET_MENU', this.navTabs)
+  }
 }
+
 </script>
 
 <style lang="scss" scoped></style>

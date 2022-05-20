@@ -222,6 +222,15 @@ export default {
   }
 }
 
+.subheader{
+  overflow: auto;
+  div{
+    @media screen and (max-width: $lg) {
+      margin-right: 15px;
+    }
+  }
+}
+
 .inputs-block {
   width: 100%;
 }
@@ -239,7 +248,6 @@ export default {
   padding-top: 18px;
 
   &-section {
-
     @media screen and (min-width: $lg) {
       padding-left: 34px;
       padding-right: 54px;

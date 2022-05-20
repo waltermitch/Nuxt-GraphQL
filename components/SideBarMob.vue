@@ -12,7 +12,7 @@
         <span class="logout-item caption" @click="logout">Logout</span>
       </div>
       <div class="sidebar-mob__page">
-        <SideBarNavigation :nav-tabs="navTabs"/>
+        <SideBarNavigation :nav-tabs="menuItem"/>
       </div>
     </div>
     <div v-show="isShowSideBar" class="sidebar-mob-back" @click="closeSidebar"></div>
@@ -37,6 +37,7 @@ export default {
   computed: {
     ...mapGetters({
       isShowSideBar: 'sidebar/getIsShowSideBar',
+      menuItem: 'sidebar/getMenu',
     }),
   },
   methods: {

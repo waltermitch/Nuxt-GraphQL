@@ -43,6 +43,9 @@ export default {
   },
   mixins: [sideBarNavTabsMixin(HQ_UNITS_TABS)],
   layout: 'hqlayout',
+  created() {
+    this.$store.commit('sidebar/SET_MENU', this.navTabs)
+  },
   methods: {
     cloneUnit() {},
   },

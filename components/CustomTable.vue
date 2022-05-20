@@ -1,11 +1,13 @@
 <template>
   <div class="table">
-    <div class="header">
-      <slot name="header"></slot>
-    </div>
+    <div>
+      <div class="header">
+        <slot name="header"></slot>
+      </div>
 
-    <div class="content">
-      <slot name="content"></slot>
+      <div class="content">
+        <slot name="content"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +24,9 @@ export default {
   background: #fff;
   border: 1px solid $gainsboro;
   border-radius: 8px;
+  @media screen and (max-width: $lg) {
+    overflow-x: auto;
+  }
 }
 
 .header {

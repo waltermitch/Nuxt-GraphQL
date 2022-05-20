@@ -34,6 +34,9 @@ export default {
     CateringSalesReviewContent,
   },
   mixins: [sideBarNavTabsMixin(REVIEW_NAV_TABS)],
+  created() {
+    this.$store.commit('sidebar/SET_MENU', this.navTabs)
+  }
 }
 </script>
 
