@@ -68,7 +68,7 @@
               <CustomInput
                 v-if="isEdit === unitType.id"
                 v-model="unitType.name"
-                rules="required|alpha"
+                rules="required"
                 do-not-show-error-message
               />
               <span v-else>{{ unitType.name }}</span>
