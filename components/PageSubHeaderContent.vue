@@ -7,7 +7,9 @@
     </PageSubheaderItem>
 
     <PageSubheaderItem>
-      <template #title>{{ selectedUnit && selectedUnit.periodEnd }}</template>
+      <template #title>{{
+        selectedUnit && formatDateFromAPI(selectedUnit.activePeriod.periodEnd)
+      }}</template>
 
       <template #subtitle>Period End</template>
     </PageSubheaderItem>
@@ -18,10 +20,14 @@
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
 import { meMixin } from '~/mixins/meMixin'
+import { formatDateFromAPI } from '~/helpers/helpers'
 export default {
   name: 'PageSubHeaderContent',
   components: { PageSubheader, PageSubheaderItem },
   mixins: [meMixin],
+  methods: {
+    formatDateFromAPI,
+  },
 }
 </script>
 

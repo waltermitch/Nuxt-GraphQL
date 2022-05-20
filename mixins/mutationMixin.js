@@ -16,13 +16,15 @@ export const mutationMixin = {
 
       if (formValidated || !this.$refs.form) {
         try {
-          await this.$apollo.mutate({
+          const res = await this.$apollo.mutate({
             mutation,
             variables: variablesObject,
             refetchQueries: [{ query: queryToRefetch }],
           })
           this.clearState()
           this.showSubmitMessage(successMessage, 'success')
+
+          return res
         } catch (error) {
           this.showSubmitMessage(errorMessage, 'error')
         }

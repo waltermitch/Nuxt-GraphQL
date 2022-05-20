@@ -16,25 +16,25 @@
           </div>
         </template>
 
-        <template #content>
+        <template v-if="inventoryCategories" #content>
           <ValidationObserver ref="form">
             <CustomTableRow
-              v-for="item in items"
+              v-for="item in inventoriesCopy"
               :key="item.id"
               class="table-row"
             >
               <span class="table-text">
-                {{ item.category }}
+                {{ item.id }}
               </span>
 
               <span class="table-text">
                 {{ item.name }}
               </span>
 
-              <span class="table-text"> ${{ item.previousAmount }} </span>
+              <span class="table-text"> ${{ item.inventoryAmount }} </span>
 
               <CustomInput
-                v-model="item.currentAmount"
+                v-model="item.newAmount"
                 rules="required|currency"
                 placeholder="$0.00"
                 do-not-show-error-message
@@ -53,7 +53,7 @@
       </CustomTable>
 
       <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="saveEvent">
+        <DefaultButton button-color-gamma="red" @event="updateInventories">
           Save
         </DefaultButton>
 
@@ -72,6 +72,9 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
+import InventoryCategories from '~/graphql/queries/inventoryCategories.gql'
+import UpdateInventories from '~/graphql/mutations/inventoryCategories/updateInventories.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'InventoryContent',
   components: {
@@ -81,40 +84,67 @@ export default {
     ValidationObserver,
     PageSubHeaderContent,
   },
-  mixins: [formMixin],
+  apollo: {
+    inventoryCategories: {
+      query: InventoryCategories,
+    },
+  },
+  mixins: [formMixin, mutationMixin],
   data() {
     return {
-      totalPreviousAmount: '75.00',
-      items: [
-        {
-          id: 0,
-          category: 'Lorem ipsum',
-          name: 'Lorem ipsum',
-          previousAmount: '15.00',
-          currentAmount: '',
-        },
-        {
-          id: 1,
-          category: 'Lorem ipsum',
-          name: 'Lorem ipsum',
-          previousAmount: '25.00',
-          currentAmount: '',
-        },
-        {
-          id: 2,
-          category: 'Lorem ipsum',
-          name: 'Lorem ipsum',
-          previousAmount: '35.00',
-          currentAmount: '',
-        },
-      ],
+      inventoriesCopy: [],
     }
   },
   computed: {
-    totalCurrentValue() {
-      return this.items.reduce((prev, current) => {
-        return Number(prev) + Number(current.currentAmount)
+    totalPreviousAmount() {
+      return this.inventoriesCopy.reduce((prev, current) => {
+        return Number(prev) + Number(current.inventoryAmount)
       }, 0)
+    },
+    totalCurrentValue() {
+      return this.inventoriesCopy.reduce((prev, current) => {
+        return Number(prev) + Number(current.newAmount)
+      }, 0)
+    },
+  },
+  async mounted() {
+    const {
+      data: {
+        inventoryCategories: { data },
+      },
+    } = await this.$apollo.query({
+      query: InventoryCategories,
+      fetchPolicy: 'no-cache',
+    })
+
+    this.inventoriesCopy = data.map((item) => ({
+      ...item,
+      newAmount: '',
+    }))
+  },
+  methods: {
+    async updateInventories() {
+      const {
+        data: { updateInventories },
+      } = await this.mutationAction(
+        UpdateInventories,
+        {
+          inventoriesInput: this.inventoriesCopy.map((item) => {
+            return {
+              id: item.id,
+              amount: Number(item.newAmount),
+            }
+          }),
+        },
+        InventoryCategories,
+        'Update Inventory Categories success',
+        'Update Inventory Categories error'
+      )
+
+      this.inventoriesCopy = updateInventories.map((item) => ({
+        ...item,
+        newAmount: '',
+      }))
     },
   },
 }
