@@ -18,9 +18,7 @@
             :key="item.id"
             class="table-row"
           >
-            <span v-if="!getIsEdit">{{ item.amount }}$</span>
             <CustomInput
-              v-else
               :value="item.amount"
               rules="required|numeric"
               do-not-show-error-message
@@ -32,7 +30,6 @@
               v-else-if="inventoryCategories"
               :options="inventoryCategories.data"
               select-by="name"
-              do-not-preselect
               :selected-item="item.inventoryCategory"
               @input="selectInventoryCategory(item, $event)"
             />
@@ -185,7 +182,11 @@ export default {
       this.$store.commit(
         'purchaseOrders/SET_ITEMS',
         this.getItems.map((vuexItem) => {
-          if (vuexItem.id === item.id) {
+          if (
+            item.id
+              ? vuexItem.id === item.id
+              : Number(vuexItem.tempId) === Number(item.tempId)
+          ) {
             return {
               ...vuexItem,
               [itemProp]: event,
@@ -201,7 +202,10 @@ export default {
 
       if (formValidated) {
         if (this.newItem.amount) {
-          this.$store.commit('purchaseOrders/SET_ITEM', this.newItem)
+          this.$store.commit('purchaseOrders/SET_ITEM', {
+            ...this.newItem,
+            tempId: new Date(),
+          })
         }
 
         this.isSelectedGlAccount = false
@@ -230,6 +234,7 @@ export default {
     },
     selectInventoryCategory(item, inventoryCategory) {
       this.updateItems(item, inventoryCategory, 'inventoryCategory')
+      this.updateItems(item, inventoryCategory.glAccount, 'glAccount')
     },
     selectNewItemGlAccount(glAccount) {
       this.newItem = {
@@ -302,7 +307,31 @@ export default {
             },
             items: {
               delete: this.getDeleteItemIDs,
-              update: this.getItems.map((item) => {
+              update: this.getItems
+                .filter((item) => item.id)
+                .map((item) => {
+                  if (item.inventoryCategory) {
+                    return {
+                      id: item.id,
+                      glAccount: {
+                        connect: item.glAccount.id,
+                      },
+                      inventoryCategory: {
+                        connect: item.inventoryCategory.id,
+                      },
+                      amount: item.amount,
+                    }
+                  } else {
+                    return {
+                      id: item.id,
+                      glAccount: {
+                        connect: item.glAccount.id,
+                      },
+                      amount: item.amount,
+                    }
+                  }
+                }),
+              create: this.getItemsWithoutId.map((item) => {
                 if (item.inventoryCategory) {
                   return {
                     glAccount: {
@@ -322,7 +351,6 @@ export default {
                   }
                 }
               }),
-              create: this.getItemsWithoutId,
             },
           },
         },

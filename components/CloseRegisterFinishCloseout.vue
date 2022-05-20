@@ -359,14 +359,21 @@ export default {
             periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
             items: {
               delete: this.getDeleteItemIDs,
-              update: this.getItems.map((item) => {
+              update: this.getItems
+                .filter((item) => item.id)
+                .map((item) => {
+                  return {
+                    id: item.id,
+                    glAccountId: Number(item.glAccount.id),
+                    amount: String(item.amount),
+                  }
+                }),
+              create: this.getItemsWithoutId.map((itm) => {
                 return {
-                  id: item.id,
-                  glAccountId: Number(item.glAccount.id),
-                  amount: item.amount,
+                  glAccountId: Number(itm.glAccount.id),
+                  amount: itm.amount,
                 }
               }),
-              create: this.getItemsWithoutId,
             },
           },
         },
@@ -374,7 +381,7 @@ export default {
         'Close Register success',
         'Close Register error'
       )
-      this.$router.push('/review/weekly-purchases')
+      this.$router.push('/review/register-closeout')
       this.$store.commit('closeRegister/SET_IS_EDIT', false)
       this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
     },

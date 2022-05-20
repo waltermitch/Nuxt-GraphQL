@@ -159,7 +159,10 @@ export default {
                   return obj
                 })
                 .filter((item) => item.id),
-              create: this.getItemsWithoutId,
+              create: this.getItemsWithoutId.map((item) => {
+                const { tempId, ...rest } = item
+                return rest
+              }),
             },
             phoneNumber: this.getPhoneNumber,
             orderBy: this.getOrderBy,

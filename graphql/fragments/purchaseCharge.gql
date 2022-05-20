@@ -1,4 +1,5 @@
 #import './glAccount.gql'
+#import './inventoryCategory.gql'
 
 fragment PurchaseChargeFragment on PurchaseCharge {
   id
@@ -9,5 +10,8 @@ fragment PurchaseChargeFragment on PurchaseCharge {
   purchase {
     id
     number
+  }
+  inventoryCategory {
+    ...InventoryCategoryFragment
   }
 }

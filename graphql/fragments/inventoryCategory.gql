@@ -7,4 +7,5 @@ fragment InventoryCategoryFragment on InventoryCategory {
   glAccount {
     ...GlAccountFragment
   }
+  inventoryAmount
 }

@@ -60,7 +60,7 @@
           <img
             src="~assets/images/icons/home/delete.svg"
             class="icon"
-            @click="deleteItem(item.id)"
+            @click="deleteItem(item)"
           />
         </CustomTableRow>
 
@@ -192,7 +192,11 @@ export default {
       this.$store.commit(
         'cateringSales/SET_ITEMS',
         this.getItems.map((vuexItem) => {
-          if (vuexItem.id === item.id) {
+          if (
+            item.id
+              ? vuexItem.id === item.id
+              : Number(vuexItem.tempId) === Number(item.tempId)
+          ) {
             return {
               ...vuexItem,
               [itemProp]: event,
@@ -203,13 +207,20 @@ export default {
         })
       )
     },
-    deleteItem(id) {
-      if (this.getIsEdit && id) {
-        this.$store.commit('cateringSales/SET_DELETE_ITEM_IDS', id)
+    deleteItem(cateringOrder) {
+      if (this.getIsEdit && cateringOrder.id) {
+        this.$store.commit(
+          'cateringSales/SET_DELETE_ITEM_IDS',
+          cateringOrder.id
+        )
       }
       this.$store.commit(
         'cateringSales/SET_ITEMS',
-        this.getItems.filter((item) => item.id !== id)
+        this.getItems.filter((vuexItem) =>
+          cateringOrder.id
+            ? Number(vuexItem.id) !== Number(cateringOrder.id)
+            : Number(vuexItem.tempId) !== Number(cateringOrder.tempId)
+        )
       )
     },
     async addItem() {
@@ -218,7 +229,10 @@ export default {
 
       if (formValidated) {
         if (this.newItem.quantity) {
-          this.$store.commit('cateringSales/SET_ITEM', this.newItem)
+          this.$store.commit('cateringSales/SET_ITEM', {
+            ...this.newItem,
+            tempId: new Date(),
+          })
         }
 
         this.isAdd = false

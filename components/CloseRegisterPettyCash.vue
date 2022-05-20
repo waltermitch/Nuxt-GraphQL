@@ -31,8 +31,10 @@
               :options="glAccounts.data"
               select-by="name"
               :selected-item="
-                glAccounts.data.find(
-                  (glAccount) => glAccount.id == item.glAccountId
+                glAccounts.data.find((glAccount) =>
+                  item.glAccountId
+                    ? glAccount.id == item.glAccountId
+                    : glAccount.id == item.glAccount.id
                 )
               "
               @input="selectGlAccount(item, $event)"
@@ -51,7 +53,7 @@
             <img
               src="~assets/images/icons/home/delete.svg"
               class="icon"
-              @click="deleteRow(item.id)"
+              @click="deleteRow(item)"
             />
           </CustomTableRow>
 
@@ -113,6 +115,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import { formMixin } from '../mixins/formMixin'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
@@ -132,7 +135,7 @@ export default {
     CustomInput,
     InputWithTitle,
   },
-  mixins: [tableActionsMixin, closeRegisterMixin, tabsViewMixin],
+  mixins: [formMixin, tableActionsMixin, closeRegisterMixin, tabsViewMixin],
   apollo: {
     glAccounts: {
       query: GlAccounts,
@@ -169,7 +172,10 @@ export default {
 
       if (formValidated) {
         if (this.newItem.amount) {
-          this.$store.commit('closeRegister/SET_ITEM', this.newItem)
+          this.$store.commit('closeRegister/SET_ITEM', {
+            ...this.newItem,
+            tempId: new Date(),
+          })
         }
 
         this.isSelectedGlAccount = false
@@ -182,14 +188,28 @@ export default {
         }
       }
     },
-    deleteRow(id) {
-      this.items = this.items.filter((item) => item.id !== id)
+    deleteRow(item) {
+      if (this.getIsEdit && item.id) {
+        this.$store.commit('closeRegister/SET_DELETE_ITEM_IDS', item.id)
+      }
+      this.$store.commit(
+        'closeRegister/SET_ITEMS',
+        this.getItems.filter((vuexItem) =>
+          item.id
+            ? Number(vuexItem.id) !== Number(item.id)
+            : Number(vuexItem.tempId) !== Number(item.tempId)
+        )
+      )
     },
     updateItems(item, event, itemProp) {
       this.$store.commit(
         'closeRegister/SET_ITEMS',
         this.getItems.map((vuexItem) => {
-          if (vuexItem.id === item.id) {
+          if (
+            item.id
+              ? vuexItem.id === item.id
+              : Number(vuexItem.tempId) === Number(item.tempId)
+          ) {
             return {
               ...vuexItem,
               [itemProp]: event,
