@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <InputRow>
+      <InputRow class="input-row-mob">
         <CustomTable class="table-compact">
           <template #header>
             <span> Period End date </span>
@@ -31,7 +31,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable>
+      <CustomTable :w-table="550">
         <template #header>
           <div class="table-row">
             <span>Select</span>
@@ -190,5 +190,15 @@ export default {
 
 .footer-row {
   grid-template-columns: repeat(3, 150px);
+}
+
+.input-row-mob{
+  @media screen and (max-width: $md) {
+    display: block;
+    >div{
+      width: 100%;
+      margin-bottom: 20px ;
+    }
+  }
 }
 </style>

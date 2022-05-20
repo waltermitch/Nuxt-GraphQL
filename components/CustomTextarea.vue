@@ -53,6 +53,9 @@ export default {
   border: 1px solid $gainsboro;
   border-radius: 3px;
   resize: none;
+  @media screen and (max-width: $lg) {
+   width: 100% !important;
+  }
 }
 
 .error {

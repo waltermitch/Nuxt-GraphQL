@@ -9,7 +9,7 @@
     </InputWithTitle>
 
     <div class="table">
-      <CustomTable>
+      <CustomTable :w-table="500">
         <template #header>
           <div class="table-row">
             <span>Order Number</span>
@@ -17,6 +17,7 @@
             <span>Order Date</span>
 
             <span>Charge #</span>
+            <span></span>
           </div>
         </template>
 
@@ -27,11 +28,8 @@
             class="table-row table-content-row"
           >
             <span>{{ cateringOrder.id }}</span>
-
             <span>{{ formatDateFromAPI(cateringOrder.orderDate) }}</span>
-
             <span>{{ cateringOrder.chargeNumber }}</span>
-
             <CustomTableIconsColumn
               :is-edit-active="isEdit === cateringOrder.id"
               :is-delete-active="isDelete === cateringOrder.id"
@@ -117,7 +115,12 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 170px 320px 150px auto;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 170px 320px 150px auto;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 120px 120px 120px auto;
+  }
   column-gap: 20px;
 }
 

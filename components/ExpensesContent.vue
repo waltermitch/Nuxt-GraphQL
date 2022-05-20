@@ -4,7 +4,7 @@
 
     <PageContentWrapper>
       <ValidationObserver ref="form">
-        <InputRow>
+        <InputRow class="input-row-mob">
           <InputWithTitle>
             <template #title>Expense Date</template>
 
@@ -200,14 +200,28 @@ export default {
   }
 
   &-area {
-    position: absolute;
-    top: 30px;
-
+    @media screen and (min-width: $xs) {
+      position: absolute;
+      top: 30px;
+    }
     div.container {
       margin-bottom: 18px;
 
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.input-row-mob{
+  @media screen and (max-width: $xs) {
+   display: block;
+  }
+  .container{
+    &:first-child{
+      @media screen and (max-width: $xs) {
+        margin-bottom: 16px;
       }
     }
   }

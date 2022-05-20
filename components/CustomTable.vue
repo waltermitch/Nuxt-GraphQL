@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <div>
+    <div class="table-content" :style="{width: wTable+'px'}">
       <div class="header">
         <slot name="header"></slot>
       </div>
@@ -15,6 +15,11 @@
 <script>
 export default {
   name: 'CustomTable',
+  props: {
+    wTable:{
+      type: Number,
+    }
+  }
 }
 </script>
 
@@ -26,6 +31,12 @@ export default {
   border-radius: 8px;
   @media screen and (max-width: $lg) {
     overflow-x: auto;
+  }
+}
+
+.table-content{
+  @media screen and (max-width: $lg) {
+    //min-width: 500px;
   }
 }
 

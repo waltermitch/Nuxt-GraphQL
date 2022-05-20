@@ -24,7 +24,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable>
+      <CustomTable :w-table="1000">
         <template #header>
           <div class="table-row">
             <span>ID</span>
@@ -380,7 +380,12 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 50px 150px 200px 70px 100px 85px 50px 135px auto;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 50px 150px 200px 70px 100px 85px 50px 135px auto;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 50px 120px 120px 70px 100px 85px 50px 120px auto;
+  }
   column-gap: 20px;
 }
 

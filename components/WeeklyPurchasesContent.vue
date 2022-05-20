@@ -1,15 +1,15 @@
 <template>
   <PageContentWrapper>
     <InputWithTitle>
-      <template #title> Period End Date </template>
+      <template #title> Period End Date</template>
 
       <template #input>
-        <CustomSelect :options="mockedList" @input="selectPeriodEndDate" />
+        <CustomSelect :options="mockedList" @input="selectPeriodEndDate"/>
       </template>
     </InputWithTitle>
 
     <div class="table">
-      <CustomTable>
+      <CustomTable class="table-purchases" :w-table="720">
         <template #header>
           <div class="table-row">
             <span> PO </span>
@@ -21,6 +21,7 @@
             <span> Vendor Num </span>
 
             <span> Total </span>
+            <span></span>
           </div>
         </template>
 
@@ -39,7 +40,7 @@
             <span>{{ purchase.vendor.code }}</span>
 
             <span
-              >{{
+            >{{
                 purchase.items.reduce((prev, current) => {
                   return Number(prev) + Number(current.amount)
                 }, 0)
@@ -68,10 +69,11 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
 import Purchases from '~/graphql/queries/purchases.gql'
-import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import { mutationMixin } from '~/mixins/mutationMixin'
-import { formatDateFromAPI } from '~/helpers/helpers'
+import {tableActionsMixin} from '~/mixins/tableActionsMixin'
+import {mutationMixin} from '~/mixins/mutationMixin'
+import {formatDateFromAPI} from '~/helpers/helpers'
 import DeletePurchase from '~/graphql/mutations/purchaseOrder/deletePurchase'
+
 export default {
   name: 'WeeklyPurchasesContent',
   components: {
@@ -119,7 +121,7 @@ export default {
     confirmDelete(id) {
       this.mutationAction(
         DeletePurchase,
-        { id },
+        {id},
         Purchases,
         'Delete purchase success',
         'Delete purchase error'
@@ -130,14 +132,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 .table {
   margin-top: 30px;
+  &-purchases {
+  }
 }
 
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 166px 326px 144px 170px 90px 68px;
+
+  @media screen and (min-width: $md) {
+    grid-template-columns: 166px 326px 144px 170px 90px 68px;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 60px 120px 120px 120px 90px 68px;
+  }
   column-gap: 20px;
 }
 

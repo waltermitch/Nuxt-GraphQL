@@ -23,7 +23,7 @@
       </InputWithTitle>
     </InputRow>
 
-    <CustomTable v-if="employees" class="table">
+    <CustomTable v-if="employees" class="table" :w-table="450">
       <template #header>
         <div class="table-row">
           <span> Employee ID </span>
@@ -108,7 +108,12 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 150px 80px repeat(2, 200px);
+  @media screen and (min-width: $md) {
+    grid-template-columns: 150px 80px repeat(2, 200px);
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 120px 80px repeat(2, 120px);
+  }
 }
 
 .merged-column {

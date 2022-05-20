@@ -254,9 +254,10 @@ export default {
 .total {
   width: 100%;
   max-width: 330px;
-  margin-left: 50px;
   padding-top: 18px;
-
+  @media screen and (min-width: $lg) {
+    margin-left: 50px;
+  }
   &-section {
     @media screen and (min-width: $lg) {
       padding-left: 34px;

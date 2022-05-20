@@ -36,7 +36,7 @@
       <div class="table-column">
         <span class="table-header">Units Not Yet Reporting</span>
 
-        <CustomTable>
+        <CustomTable >
           <template #header>
             <div class="table-row table-row--two">
               <span>Unit</span>
@@ -135,7 +135,12 @@ export default {
   grid-template-columns: 100px;
 
   &--two {
-    grid-template-columns: 100px 300px;
+    @media screen and (min-width: $md) {
+      grid-template-columns: 100px 300px;
+    }
+    @media screen and (max-width: $md) {
+      grid-template-columns: 60px 220px;
+    }
   }
 }
 
@@ -153,19 +158,33 @@ export default {
 }
 
 .tables {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-top: 20px;
 
+  margin-top: 20px;
+  @media screen and (min-width: $md) {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
   div.table-column {
     &:first-child {
-      width: 75%;
-      margin-right: 60px;
+
+      @media screen and (min-width: $md) {
+        width: 75%;
+        margin-right: 60px;
+      }
+      @media screen and (max-width: $md) {
+       width: 100%;
+        margin-bottom: 20px;
+      }
     }
 
     &:last-child {
-      width: 25%;
+      @media screen and (min-width: $md) {
+        width: 25%;
+      }
+      @media screen and (max-width: $md) {
+        width: 100%;
+      }
     }
   }
 }

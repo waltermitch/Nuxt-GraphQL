@@ -1,6 +1,6 @@
 <template>
   <PageContentWrapper>
-    <CustomTable>
+    <CustomTable :w-table="520">
       <template #header>
         <div class="table-row">
           <span>Unit</span>
@@ -61,7 +61,12 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 80px repeat(2, 300px) 80px;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 80px repeat(2, 300px) 80px;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 80px repeat(2, 120px) 80px;
+  }
   column-gap: 30px;
 }
 </style>

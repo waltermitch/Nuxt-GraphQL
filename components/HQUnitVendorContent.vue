@@ -24,7 +24,7 @@
     </InputRow>
 
     <CustomTablesArea>
-      <CustomTable v-if="vendors" class="table">
+      <CustomTable v-if="vendors" class="table" :w-table="580">
         <template #header>
           <div class="table-row">
             <span> Vendor ID </span>

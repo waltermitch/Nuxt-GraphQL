@@ -136,8 +136,13 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 40px 150px 320px;
   column-gap: 20px;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 40px 150px 320px;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 40px 120px 120px;
+  }
 }
 
 .input {
