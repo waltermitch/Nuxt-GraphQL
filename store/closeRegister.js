@@ -155,4 +155,7 @@ export const getters = {
   getCloseDate: (state) => state.closeRegister.closeDate,
   getPeriodEnd: (state) => state.closeRegister.periodEnd,
   getIsEdit: (state) => state.isEdit,
+  getDeleteItemIDs: (state) => state.deleteItemIDs,
+  getItemsWithoutId: (state) =>
+    state.closeRegister.items.filter((item) => !item.id),
 }

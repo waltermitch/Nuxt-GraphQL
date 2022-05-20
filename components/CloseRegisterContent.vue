@@ -2,25 +2,34 @@
   <div>
     <PageSubheader>
       <PageSubheaderItem>
-        <template #title>{{ me.selectedUnit.id }}</template>
+        <template v-if="me" #title>{{ me.selectedUnit.id }}</template>
 
         <template #subtitle>Unit Number</template>
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>09/21/2019</template>
+        <template #title>{{
+          getIsEdit
+            ? formatDateFromAPI(getPeriodEnd)
+            : me.selectedUnit.activePeriod &&
+              formatDateFromAPI(me.selectedUnit.activePeriod.periodEnd)
+        }}</template>
 
         <template #subtitle>Period End</template>
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>{{ register.id }}</template>
+        <template #title>{{
+          getIsEdit ? getRegister.id : register.id
+        }}</template>
 
         <template #subtitle>Register id</template>
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>{{ register.name }}</template>
+        <template #title>{{
+          getIsEdit ? getRegister.name : register.name
+        }}</template>
 
         <template #subtitle>Register Name</template>
       </PageSubheaderItem>
@@ -51,6 +60,7 @@
                 <CustomSelect
                   :options="registers.data"
                   select-by="id"
+                  :disabled="getIsEdit"
                   :selected-item="register"
                   @input="selectRegister"
                 />
@@ -63,6 +73,7 @@
               <template v-if="registers" #input>
                 <CustomSelect
                   :options="registers.data"
+                  :disabled="getIsEdit"
                   :selected-item="register"
                   @input="selectRegister"
                 />
@@ -145,7 +156,6 @@
 /* eslint-disable vue/no-unused-components */
 import PageSubheader from './PageSubheader.vue'
 import PageSubheaderItem from './PageSubheaderItem.vue'
-import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import InputRow from './InputRow.vue'
 import CustomSelect from './CustomSelect.vue'
@@ -155,15 +165,19 @@ import ClosRegisterPettyCash from './CloseRegisterPettyCash.vue'
 import FinishCloseout from './FinishCloseout.vue'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CloseRegisterFinishCloseout from './CloseRegisterFinishCloseout'
-import { formatDateForCloseRegister } from '~/helpers/helpers'
+import {
+  formatDateForCloseRegister,
+  formatDateFromAPI,
+} from '~/helpers/helpers'
+import { CLOSE_REGISTER } from '~/constants/closeRegister'
 import Registers from '~/graphql/queries/registers.gql'
 import Me from '~/graphql/queries/me.query.gql'
+import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 export default {
   name: 'CloseRegisterContent',
   components: {
     PageSubheader,
     PageSubheaderItem,
-    CustomInput,
     InputWithTitle,
     InputRow,
     CustomSelect,
@@ -173,6 +187,7 @@ export default {
     FinishCloseout,
     PageContentWrapper,
   },
+  mixins: [closeRegisterMixin],
   apollo: {
     registers: {
       query: Registers,
@@ -186,25 +201,20 @@ export default {
       tabsHeaders: ['Sales Info', 'Petty Cash', 'Finish Closeout'],
       tabs: [SalesInfo, ClosRegisterPettyCash, CloseRegisterFinishCloseout],
       register: '',
-      mockedList: [
-        {
-          id: 1,
-          value: 'register#2',
-          name: 'Register #2',
-        },
-        {
-          id: 2,
-          value: 'register#3',
-          name: 'Register #3',
-        },
-      ],
     }
+  },
+  destroyed() {
+    this.$store.commit('closeRegister/SET_IS_EDIT', false)
+    this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
   },
   methods: {
     formatDateForCloseRegister,
+    formatDateFromAPI,
     selectRegister(register) {
-      this.register = register
-      this.$store.commit('closeRegister/SET_REGISTER', register)
+      if (!this.getIsEdit) {
+        this.register = register
+        this.$store.commit('closeRegister/SET_REGISTER', register)
+      }
     },
   },
 }
@@ -222,9 +232,9 @@ export default {
   }
 }
 
-.subheader{
+.subheader {
   overflow: auto;
-  div{
+  div {
     @media screen and (max-width: $lg) {
       margin-right: 15px;
     }

@@ -17,7 +17,7 @@ export default {
   components: { SideBarTab },
   props: {
     navTabs: {
-      type: Array,
+      type: [Array, String],
       required: true,
     },
   },

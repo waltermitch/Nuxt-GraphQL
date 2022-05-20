@@ -166,11 +166,20 @@ import CustomInput from './CustomInput.vue'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import CreateRegisterCloseout from '~/graphql/mutations/registerCloseout/createRegisterCloseout'
+import UpdateRegisterCloseout from '~/graphql/mutations/registerCloseout/updateRegisterCloseout'
+import RegisterCloseouts from '~/graphql/queries/registerCloseouts'
 import { formatDateForCloseRegisterAPI } from '~/helpers/helpers'
+import { CLOSE_REGISTER } from '~/constants/closeRegister'
+import Me from '~/graphql/queries/me.query.gql'
 export default {
   name: 'CloseRegisterFinishCloseout',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
   mixins: [formMixin, closeRegisterMixin, mutationMixin],
+  apollo: {
+    me: {
+      query: Me,
+    },
+  },
   computed: {
     actualCashDeposit: {
       get() {
@@ -294,8 +303,7 @@ export default {
             customerCountTotals: this.getCustomerCountTotals,
             netSalesTotals: this.getNetSalesTotals,
             closeDate: this.formatDateForCloseRegisterAPI(new Date()),
-            // TODO ADD When PeriodEnd API will be ready
-            periodEnd: this.formatDateForCloseRegisterAPI(new Date()),
+            periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
             items: {
               create: this.getItems.map((item) => {
                 return {
@@ -309,11 +317,67 @@ export default {
             },
           },
         },
+        RegisterCloseouts,
         'Close Register success',
         'Close Register error'
       )
+      this.$router.push('/home/close-register')
+      // this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
     },
-    UpdateCloseRegister() {},
+    async UpdateCloseRegister() {
+      await this.mutationAction(
+        UpdateRegisterCloseout,
+        {
+          registerCloseoutInput: {
+            id: this.getId,
+            nonResetable: this.getNonResetable,
+            netTotal: this.getNetTotal,
+            lastNonResetable: this.getLastNonResetable,
+            netOV: this.getNetOV,
+            totalToDistribute: this.getTotalToDistribute,
+            netCharge: this.getNetCharge,
+            taxFromTheTape: this.getTaxFromTheTape,
+            netVoucher: this.getNetVoucher,
+            overringTax: this.getOverringTax,
+            netCash: this.getNetCash,
+            chargeTax: this.getChargeTax,
+            voucherTax: this.getVoucherTax,
+            cashTax: this.getCashTax,
+            totalPettyCache: this.getTotalPettyCache,
+            actualCacheDeposit: this.getActualCacheDeposit,
+            calculatedCacheDeposit: this.getCalculatedCacheDeposit,
+            overShort: this.getOverShort,
+            customerCountBreakfast: this.getCustomerCountBreakfast,
+            netSalesBreakfast: this.getNetSalesBreakfast,
+            customerCountLunch: this.getCustomerCountLunch,
+            netSalesLunch: this.getNetSalesLunch,
+            customerCountDinner: this.getCustomerCountDinner,
+            netSalesDinner: this.getNetSalesDinner,
+            customerCountTotals: this.getCustomerCountTotals,
+            netSalesTotals: this.getNetSalesTotals,
+            closeDate: this.formatDateForCloseRegisterAPI(new Date()),
+            periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
+            items: {
+              delete: this.getDeleteItemIDs,
+              update: this.getItems.map((item) => {
+                return {
+                  id: item.id,
+                  glAccountId: Number(item.glAccount.id),
+                  amount: item.amount,
+                }
+              }),
+              create: this.getItemsWithoutId,
+            },
+          },
+        },
+        RegisterCloseouts,
+        'Close Register success',
+        'Close Register error'
+      )
+      this.$router.push('/review/weekly-purchases')
+      this.$store.commit('closeRegister/SET_IS_EDIT', false)
+      this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+    },
     closeRegisterOrderAction() {
       this.getIsEdit ? this.UpdateCloseRegister() : this.CreateCloseRegister()
     },

@@ -40,4 +40,6 @@ fragment RegisterCloseoutFragment on RegisterCloseout {
   netSalesTotals
   closeDate
   periodEnd
+  updatedAt
+  createdAt
 }

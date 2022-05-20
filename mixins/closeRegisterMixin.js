@@ -36,6 +36,8 @@ export const closeRegisterMixin = {
       getCloseDate: 'closeRegister/getCloseDate',
       getPeriodEnd: 'closeRegister/getPeriodEnd',
       getIsEdit: 'closeRegister/getIsEdit',
+      getDeleteItemIDs: 'closeRegister/getDeleteItemIDs',
+      getItemsWithoutId: 'closeRegister/getItemsWithoutId',
     }),
   },
   methods: {

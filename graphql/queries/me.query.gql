@@ -7,6 +7,13 @@ query Me {
     lastName
     selectedUnit {
       ...UnitFragment
+      activePeriod {
+        id
+        periodEnd
+        year
+        month
+        week
+      }
     }
     email
     units {

@@ -30,11 +30,15 @@
               v-if="glAccounts && getIsEdit"
               :options="glAccounts.data"
               select-by="name"
-              :selected-item="item.glAccount"
+              :selected-item="
+                glAccounts.data.find(
+                  (glAccount) => glAccount.id == item.glAccountId
+                )
+              "
               @input="selectGlAccount(item, $event)"
             />
+            <span v-else-if="!getIsEdit">{{ item.glAccount.name }}</span>
 
-            <span v-else>{{ item.glAccount.name }}</span>
             <CustomInput
               :value="item.amount"
               placeholder="$0.00"
@@ -90,6 +94,19 @@
           </CustomTableRow>
         </template>
       </CustomTable>
+
+      <div class="buttons-area">
+        <DefaultButton button-color-gamma="red" @event="nextTab">
+          Continue
+        </DefaultButton>
+
+        <DefaultButton
+          button-color-gamma="white"
+          @event="getIsEdit ? cancelEdit() : cancelCreate()"
+        >
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
   </div>
 </template>
@@ -223,5 +240,9 @@ export default {
   font-weight: 700;
   text-align: right;
   height: 60px;
+}
+
+.buttons-area {
+  margin-top: 25px;
 }
 </style>

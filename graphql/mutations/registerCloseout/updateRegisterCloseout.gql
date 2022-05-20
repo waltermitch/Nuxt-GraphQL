@@ -1,5 +1,7 @@
-mutation UpdateRegister($updateRegisterCloseout: UpdateRegisterCloseoutInput!) {
-  updateRegister(updateRegisterCloseout: $updateRegisterCloseout) {
+mutation UpdateRegisterCloseout(
+  $registerCloseoutInput: UpdateRegisterCloseoutInput!
+) {
+  updateRegisterCloseout(registerCloseoutInput: $registerCloseoutInput) {
     id
   }
 }

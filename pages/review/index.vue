@@ -7,7 +7,7 @@ export default {
   name: 'ReviewIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
-    redirectTo: '/review/weekly-purchases',
+    redirectTo: '/review/register-closeout',
   },
 }
 </script>
