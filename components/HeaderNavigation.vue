@@ -38,7 +38,7 @@ export default {
   display: flex;
   align-items: center;
 
-  @media screen and (max-width: $md) {
+  @media screen and (max-width: $lg) {
     flex-direction: column;
   }
 }

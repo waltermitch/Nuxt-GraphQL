@@ -43,11 +43,15 @@ export default {
 }
 
 .header {
-  padding: 24px 20px 22px;
   background: #fff;
   border-bottom: 1px solid $white-smoke;
   width: 100%;
-
+  @media screen and (min-width: $lg) {
+    padding: 24px 20px 22px;
+  }
+  @media screen and (max-width: $lg) {
+    padding: 15px 10px;
+  }
   h3 {
     margin-bottom: 2px;
   }

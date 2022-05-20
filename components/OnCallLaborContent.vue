@@ -72,9 +72,14 @@ export default {
 .content {
   div.subheader {
     justify-content: flex-start;
-
+    overflow: auto;
     div {
-      margin-right: 120px;
+      @media screen and (min-width: $lg) {
+        margin-right: 120px;
+      }
+      @media screen and (max-width: $lg) {
+        margin-right: 30px;
+      }
     }
   }
 }

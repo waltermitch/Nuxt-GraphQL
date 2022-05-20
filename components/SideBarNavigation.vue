@@ -1,11 +1,5 @@
 <template>
-  <nav class="navigation" :class="{ 'navigation--active': isShowSideBar }">
-    <img
-      src="~assets/images/icons/circle-arrow-right-solid.svg"
-      class="icon"
-      :class="{ 'icon--active': isShowSideBar }"
-      @click="setIsShowSideBar"
-    />
+  <nav class="navigation">
     <SideBarTab
       v-for="tab in navTabs"
       :key="tab.id"
@@ -17,7 +11,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import SideBarTab from './SideBarTab.vue'
 export default {
   name: 'SideBarNavigation',
@@ -26,16 +19,6 @@ export default {
     navTabs: {
       type: Array,
       required: true,
-    },
-  },
-  computed: {
-    ...mapGetters({
-      isShowSideBar: 'sidebar/getIsShowSideBar',
-    }),
-  },
-  methods: {
-    setIsShowSideBar() {
-      this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
     },
   },
 }
@@ -66,7 +49,7 @@ export default {
   margin-left: 10px;
   margin-bottom: 10px;
 
-  @media screen and (min-width: calc($md + 1px)) {
+  @media screen and (min-width: calc($lg + 1px)) {
     display: none;
   }
 

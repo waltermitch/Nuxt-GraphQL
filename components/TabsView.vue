@@ -56,6 +56,9 @@ export default {
 .list {
   display: flex;
   border-bottom: 2px solid $white-smoke;
+  @media screen and (max-width: $lg) {
+    overflow: auto;
+  }
 }
 
 .item {
@@ -66,7 +69,9 @@ export default {
   color: $suva-grey;
   transition: $transition;
   cursor: pointer;
-
+  @media screen and (max-width: $lg) {
+    white-space: nowrap;
+  }
   &:hover {
     margin-bottom: -2px;
     color: $firebrick;

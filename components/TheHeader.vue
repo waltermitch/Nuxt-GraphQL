@@ -6,6 +6,8 @@
           <img src="~assets/images/header/logo.svg" />
         </NuxtLink>
 
+        <button type="button" class="btn-humburger" @click="setIsShowSideBar"><img src="~assets/images/icons/menu.svg"></button>
+
         <div class="nav">
           <HeaderNavigation v-if="!onlyLogo" />
         </div>
@@ -60,9 +62,13 @@ export default {
   data() {
     return {
       isShowDropdown: false,
+      isShowSideBar:false,
     }
   },
   methods: {
+    setIsShowSideBar() {
+      this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
+    },
     async logout() {
       const {
         data: { logout },
@@ -92,15 +98,29 @@ export default {
   &-left {
     display: flex;
   }
+  .container{
+    @media screen and (max-width: $lg) {
+      padding: 24px 10px;
+    }
+  }
+}
+
+
+
+.btn-humburger{
+  background: transparent;
+  @media screen and (min-width: $lg) {
+    display: none;
+  }
 }
 
 .nav {
-  @media screen and (max-width: $md) {
+  @media screen and (max-width: $lg) {
     display: none;
   }
 
   &--mobile {
-    @media screen and (min-width: calc($md + 1px)) {
+    @media screen and (min-width: calc($lg + 1px)) {
       display: none;
     }
   }
@@ -111,8 +131,20 @@ export default {
   margin-right: 80px;
 
   img {
-    height: 82px;
-    width: 135px;
+    @media screen and (min-width: $lg) {
+      height: 82px;
+      width: 135px;
+    }
+    @media screen and (max-width: $lg) {
+      height: 30px;
+    }
+  }
+}
+
+.header-left{
+  @media screen and (max-width: $lg) {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
@@ -128,7 +160,9 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-
+  @media screen and (max-width: $lg) {
+    display: none;
+  }
   img {
     margin-right: 10px;
   }
@@ -148,7 +182,7 @@ export default {
     -2px -2px 4px rgba(196, 197, 221, 0.25);
   border-radius: 2px;
 
-  @media screen and (max-width: $md) {
+  @media screen and (max-width: $lg) {
     display: flex;
     flex-direction: column;
     height: unset;
@@ -163,7 +197,7 @@ export default {
     font-size: 16px;
     font-weight: 500;
 
-    @media screen and (max-width: $md) {
+    @media screen and (max-width: $lg) {
       margin-top: 10px;
       font-size: 14px;
       font-weight: 600;

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <TheHeader />
-
+    <SideBarMob />
     <div class="nuxt-container">
       <Nuxt />
     </div>
@@ -9,14 +9,28 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import TheHeader from '@/components/TheHeader'
+import SideBarMob from '@/components/SideBarMob'
 export default {
   name: 'HQLayout',
   components: {
     TheHeader,
+    SideBarMob
   },
   middleware: ['isAuth', 'authAdmin'],
+  computed: {
+    ...mapGetters({
+      isShowSideBar: 'sidebar/getIsShowSideBar',
+    }),
+  },
+  watch: {
+    '$route' () {
+      if(window.innerWidth < 1024){
+        this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
+      }
+    }
+  },
   mounted() {
     this.setRole('admin')
   },
@@ -25,6 +39,7 @@ export default {
       setRole: 'auth/setRole',
     }),
   },
+
 }
 </script>
 

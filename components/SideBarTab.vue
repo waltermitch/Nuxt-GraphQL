@@ -1,14 +1,11 @@
 <template>
-  <NuxtLink :to="pageUrl" class="tab" :class="{ 'tab--active': isShowSideBar }">
+  <NuxtLink :to="pageUrl" class="tab">
     <img :src="iconSrc" class="icon" />
-
-    <span v-show="width > 768" class="caption">{{ caption }}</span>
-    <span v-if="isShowSideBar" class="caption">{{ caption }}</span>
+    <span class="caption">{{ caption }}</span>
   </NuxtLink>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'SideBarTab',
   props: {
@@ -29,11 +26,6 @@ export default {
     return {
       width: process.client && window.innerWidth,
     }
-  },
-  computed: {
-    ...mapGetters({
-      isShowSideBar: 'sidebar/getIsShowSideBar',
-    }),
   },
   mounted() {
     this.$nextTick(() => {

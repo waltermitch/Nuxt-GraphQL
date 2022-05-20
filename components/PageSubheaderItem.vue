@@ -22,6 +22,7 @@ export default {
   font-weight: 700;
   line-height: 26px;
   color: $nero;
+  white-space: nowrap;
 }
 
 .subtitle {
@@ -30,5 +31,6 @@ export default {
   font-weight: 400;
   line-height: 16px;
   color: $suva-grey;
+  white-space: nowrap;
 }
 </style>

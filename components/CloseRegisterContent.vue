@@ -212,9 +212,14 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-  display: flex;
-  justify-content: space-between;
   width: 100%;
+  @media screen and (min-width: $lg) {
+    display: flex;
+    justify-content: space-between;
+  }
+  @media screen and (max-width: $lg) {
+    display: block;
+  }
 }
 
 .inputs-block {
@@ -234,9 +239,11 @@ export default {
   padding-top: 18px;
 
   &-section {
-    padding-left: 34px;
-    padding-right: 54px;
 
+    @media screen and (min-width: $lg) {
+      padding-left: 34px;
+      padding-right: 54px;
+    }
     div:first-child {
       margin-top: 0;
     }

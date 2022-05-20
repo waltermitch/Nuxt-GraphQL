@@ -14,7 +14,12 @@ export default {
 .subheader {
   display: flex;
   justify-content: space-between;
-  padding: 16px 20px;
   border-bottom: 1px solid $white-smoke;
+  @media screen and (min-width: $lg) {
+    padding: 16px 20px;
+  }
+  @media screen and (max-width: $lg) {
+    padding: 15px 10px;
+  }
 }
 </style>

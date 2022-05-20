@@ -26,9 +26,8 @@ export default {
   padding: 16px;
   border-right: 1px solid $white-smoke;
 
-  @media screen and (max-width: $md) {
-    width: 80px;
-    min-width: 80px;
+  @media screen and (max-width: $lg) {
+    display: none;
   }
 }
 </style>
