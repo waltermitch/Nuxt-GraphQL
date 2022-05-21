@@ -21,37 +21,11 @@
             <template #title>Expense Type</template>
 
             <template #input>
-              <div class="radio-buttons-area">
-                <CustomRadioButton
-                  with-title
-                  border-radius="50%"
-                  radio-border-radius="50%"
-                  :is-active="expensesType === 'transfer slip'"
-                  @set-is-active="setExpensesType('transfer slip')"
-                >
-                  Transfer Slip
-                </CustomRadioButton>
-
-                <CustomRadioButton
-                  with-title
-                  border-radius="50%"
-                  radio-border-radius="50%"
-                  :is-active="expensesType === 'shipping ticket'"
-                  @set-is-active="setExpensesType('shipping ticket')"
-                >
-                  Shipping Ticket
-                </CustomRadioButton>
-
-                <CustomRadioButton
-                  with-title
-                  border-radius="50%"
-                  radio-border-radius="50%"
-                  :is-active="expensesType === 'other'"
-                  @set-is-active="setExpensesType('other')"
-                >
-                  Other
-                </CustomRadioButton>
-              </div>
+              <CustomSelect
+                :options="expenseTypes.data"
+                select-by="type"
+                @input="setExpensesType"
+              />
             </template>
           </InputWithTitle>
         </InputRow>
@@ -66,6 +40,21 @@
                 :error="selectError"
                 @input="selectGlAccount"
               />
+            </template>
+          </InputWithTitle>
+
+          <InputWithTitle class="radio-buttons-row">
+            <template #title>Vendor</template>
+
+            <template
+              v-if="
+                vendors &&
+                (expensesType.type === 'Accrual' ||
+                  expensesType.type === 'ReAccrual')
+              "
+              #input
+            >
+              <CustomSelect :options="vendors.data" @input="setVendor" />
             </template>
           </InputWithTitle>
         </InputRow>
@@ -119,7 +108,6 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
-import CustomRadioButton from './CustomRadioButton.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import DefaultButton from './DefaultButton.vue'
@@ -128,6 +116,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import { meMixin } from '~/mixins/meMixin'
 import Expenses from '~/graphql/queries/expenses.gql'
 import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
+import Vendors from '~/graphql/queries/vendors.gql'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { formatDate } from '~/helpers/helpers'
 import CreateExpense from '~/graphql/mutations/expense/createExpense.gql'
@@ -138,7 +127,6 @@ export default {
     InputRow,
     InputWithTitle,
     CustomInput,
-    CustomRadioButton,
     CustomSelect,
     CustomTextarea,
     DefaultButton,
@@ -153,6 +141,9 @@ export default {
     glAccounts: {
       query: GlAccounts,
     },
+    vendors: {
+      query: Vendors,
+    },
   },
   data() {
     return {
@@ -162,12 +153,16 @@ export default {
       amount: '',
       comments: '',
       selectError: false,
+      vendor: '',
     }
   },
   methods: {
     formatDate,
     setExpensesType(expensesType) {
-      this.expensesType = this.expensesType === expensesType ? '' : expensesType
+      this.expensesType = expensesType
+    },
+    setVendor(vendor) {
+      this.vendor = vendor
     },
     acceptEvent() {
       if (!this.glAccount) {
@@ -179,13 +174,19 @@ export default {
         {
           expenseInput: {
             comments: this.comments,
+            ...((this.expensesType.type === 'Accrual' ||
+              this.expensesType.type === 'ReAccrual') && {
+              vendor: {
+                connect: this.vendor.id,
+              },
+            }),
             periodEnd: this.selectedUnit.activePeriod.periodEnd,
             expenseDate: this.formatDate(this.expensesDate),
             glAccount: {
               connect: this.glAccount.id,
             },
             expenseType: {
-              connect: 1,
+              connect: this.expensesType.id,
             },
             amount: this.amount,
           },
