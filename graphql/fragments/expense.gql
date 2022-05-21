@@ -18,7 +18,7 @@ fragment ExpenseFragment on Expense {
     ...GlAccountFragment
   }
   expenseType {
-    ...ExpenseType
+    ...ExpenseTypeFragment
   }
   amount
   createdAt

@@ -24,6 +24,7 @@
               <CustomSelect
                 :options="expenseTypes.data"
                 select-by="type"
+                :selected-item="expenseType"
                 @input="setExpensesType"
               />
             </template>
@@ -38,6 +39,7 @@
               <CustomSelect
                 :options="glAccounts.data"
                 :error="selectError"
+                :selected-item="glAccount"
                 @input="selectGlAccount"
               />
             </template>
@@ -49,12 +51,17 @@
             <template
               v-if="
                 vendors &&
-                (expensesType.type === 'Accrual' ||
-                  expensesType.type === 'ReAccrual')
+                expenseType &&
+                (expenseType.type === 'Accrual' ||
+                  expenseType.type === 'ReAccrual')
               "
               #input
             >
-              <CustomSelect :options="vendors.data" @input="setVendor" />
+              <CustomSelect
+                :options="vendors.data"
+                :selected-item="vendor"
+                @input="setVendor"
+              />
             </template>
           </InputWithTitle>
         </InputRow>
@@ -89,11 +96,14 @@
       </ValidationObserver>
 
       <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="acceptEvent">
+        <DefaultButton button-color-gamma="red" @event="expenseAction">
           Accept
         </DefaultButton>
 
-        <DefaultButton button-color-gamma="white" @event="cancelEvent">
+        <DefaultButton
+          button-color-gamma="white"
+          @event="getIsEdit ? cancelEdit() : cancelCreate()"
+        >
           Cancel
         </DefaultButton>
       </div>
@@ -103,6 +113,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import { mapGetters } from 'vuex'
 import { formMixin } from '../mixins/formMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
@@ -112,6 +123,7 @@ import CustomSelect from './CustomSelect.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import DefaultButton from './DefaultButton.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
+import { EXPENSE } from '~/constants/expense'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { meMixin } from '~/mixins/meMixin'
 import Expenses from '~/graphql/queries/expenses.gql'
@@ -120,6 +132,7 @@ import Vendors from '~/graphql/queries/vendors.gql'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { formatDate } from '~/helpers/helpers'
 import CreateExpense from '~/graphql/mutations/expense/createExpense.gql'
+import UpdateExpense from '~/graphql/mutations/expense/updateExpense.gql'
 export default {
   name: 'ExpensesContent',
   components: {
@@ -147,35 +160,93 @@ export default {
   },
   data() {
     return {
-      expensesDate: '',
-      expensesType: '',
-      glAccount: '',
-      amount: '',
-      comments: '',
       selectError: false,
-      vendor: '',
     }
+  },
+  computed: {
+    ...mapGetters({
+      getIsEdit: 'expense/getIsEdit',
+      getId: 'expense/getId',
+      getExpenseDate: 'expense/getExpenseDate',
+      getExpenseType: 'expense/getExpenseType',
+      getGlAccount: 'expense/getGlAccount',
+      getAmount: 'expense/getAmount',
+      getComments: 'expense/getComments',
+      getVendor: 'expense/getVendor',
+    }),
+    expensesDate: {
+      get() {
+        return this.getExpenseDate
+      },
+      set(value) {
+        this.$store.commit('expense/SET_EXPENSE_DATE', value)
+      },
+    },
+    expenseType: {
+      get() {
+        return this.getExpenseType
+      },
+      set(value) {
+        this.$store.commit('expense/SET_EXPENSE_TYPE', value)
+      },
+    },
+    glAccount: {
+      get() {
+        return this.getGlAccount
+      },
+      set(value) {
+        this.$store.commit('expense/SET_GL_ACCOUNT', value)
+      },
+    },
+    amount: {
+      get() {
+        return this.getAmount
+      },
+      set(value) {
+        this.$store.commit('expense/SET_AMOUNT', value)
+      },
+    },
+    comments: {
+      get() {
+        return this.getComments
+      },
+      set(value) {
+        this.$store.commit('expense/SET_COMMENTS', value)
+      },
+    },
+    vendor: {
+      get() {
+        return this.getVendor
+      },
+      set(value) {
+        this.$store.commit('expense/SET_VENDOR', value)
+      },
+    },
+  },
+  destroyed() {
+    this.$store.commit('expense/SET_IS_EDIT', false)
+    this.cancelCreate()
   },
   methods: {
     formatDate,
-    setExpensesType(expensesType) {
-      this.expensesType = expensesType
+    setExpensesType(expenseType) {
+      this.expenseType = expenseType
     },
     setVendor(vendor) {
       this.vendor = vendor
     },
-    acceptEvent() {
+    async acceptEvent() {
       if (!this.glAccount) {
         this.selectError = true
       }
 
-      this.mutationAction(
+      await this.mutationAction(
         CreateExpense,
         {
           expenseInput: {
             comments: this.comments,
-            ...((this.expensesType.type === 'Accrual' ||
-              this.expensesType.type === 'ReAccrual') && {
+            ...((this.expenseType.type === 'Accrual' ||
+              this.expenseType.type === 'ReAccrual') && {
               vendor: {
                 connect: this.vendor.id,
               },
@@ -186,7 +257,7 @@ export default {
               connect: this.glAccount.id,
             },
             expenseType: {
-              connect: this.expensesType.id,
+              connect: this.expenseType.id,
             },
             amount: this.amount,
           },
@@ -195,9 +266,50 @@ export default {
         'Add Expense success',
         'Add Expense error'
       )
+
+      this.cancelCreate()
+    },
+    async UpdateExpense() {
+      await this.mutationAction(
+        UpdateExpense,
+        {
+          expenseInput: {
+            id: this.getId,
+            comments: this.comments,
+            ...((this.expenseType.type === 'Accrual' ||
+              this.expenseType.type === 'ReAccrual') && {
+              vendor: {
+                connect: this.vendor.id,
+              },
+            }),
+            periodEnd: this.selectedUnit.activePeriod.periodEnd,
+            expenseDate: this.formatDate(this.expensesDate),
+            glAccount: {
+              connect: this.glAccount.id,
+            },
+            expenseType: {
+              connect: this.expenseType.id,
+            },
+            amount: this.amount,
+          },
+        },
+        Expenses,
+        'Update Expense success',
+        'Update Expense error'
+      )
+      this.$router.push('/review/weekly-expenses')
+    },
+    expenseAction() {
+      this.getIsEdit ? this.UpdateExpense() : this.CreateExpense()
     },
     selectGlAccount(account) {
       this.glAccount = account
+    },
+    cancelEdit() {
+      this.$router.push('/review/weekly-expenses')
+    },
+    cancelCreate() {
+      this.$store.commit('expense/SET_EXPENSE', EXPENSE)
     },
   },
 }
