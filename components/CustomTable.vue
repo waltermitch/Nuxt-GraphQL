@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <div class="table-content" :style="{width: wTable+'px'}">
+    <div class="table-content" :style="{ minWidth: wTable + 'px' }">
       <div class="header">
         <slot name="header"></slot>
       </div>
@@ -16,10 +16,10 @@
 export default {
   name: 'CustomTable',
   props: {
-    wTable:{
+    wTable: {
       type: Number,
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -34,7 +34,7 @@ export default {
   }
 }
 
-.table-content{
+.table-content {
   @media screen and (max-width: $lg) {
     //min-width: 500px;
   }

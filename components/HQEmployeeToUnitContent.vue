@@ -45,8 +45,11 @@
           </span>
 
           <CustomRadioButton
-            :is-active="employee.active"
-            @set-is-active="setIsEmployeeActive(employee.id)"
+            v-if="unit.employees"
+            :is-active="
+              !!unit.employees.find((item) => item.id === employee.id)
+            "
+            @set-is-active="setIsEmployeeActive(employee)"
           />
 
           <span>
@@ -66,6 +69,8 @@
 import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
+import UpdateUnit from '~/graphql/mutations/unit/updateUnit.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQEmployeeToUnitContent',
   components: {
@@ -79,6 +84,7 @@ export default {
       query: Units,
     },
   },
+  mixins: [mutationMixin],
   data() {
     return {
       unit: '',
@@ -88,17 +94,27 @@ export default {
     selectUnit(item) {
       this.unit = item
     },
-    setIsEmployeeActive(employeeID) {
-      this.employees = this.employees.map((employee) => {
-        if (employee.id === employeeID) {
-          return {
-            ...employee,
-            active: !employee.active,
-          }
-        }
-
-        return employee
-      })
+    setIsEmployeeActive(employee) {
+      this.mutationAction(
+        UpdateUnit,
+        {
+          unitInput: {
+            id: this.unit.id,
+            employees: {
+              sync: this.unit.employees.some((item) => item.id === employee.id)
+                ? this.unit.employees
+                    .filter((item) => item.id !== employee.id)
+                    .map((employee) => employee.id)
+                : [...this.unit.employees, employee].map(
+                    (employee) => employee.id
+                  ),
+            },
+          },
+        },
+        Units,
+        'Add employee to unit success',
+        'Add employee to unit error'
+      )
     },
   },
 }
