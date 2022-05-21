@@ -35,7 +35,7 @@
 
               <CustomInput
                 v-model="item.newAmount"
-                rules="required|currency"
+                rules="currency"
                 placeholder="$0.00"
                 do-not-show-error-message
               />
@@ -57,7 +57,7 @@
           Save
         </DefaultButton>
 
-        <DefaultButton button-color-gamma="white" @event="cancelEvent"
+        <DefaultButton button-color-gamma="white" @event="cancelUpdate"
           >Cancel</DefaultButton
         >
       </div>
@@ -108,21 +108,24 @@ export default {
     },
   },
   async mounted() {
-    const {
-      data: {
-        inventoryCategories: { data },
-      },
-    } = await this.$apollo.query({
-      query: InventoryCategories,
-      fetchPolicy: 'no-cache',
-    })
-
-    this.inventoriesCopy = data.map((item) => ({
-      ...item,
-      newAmount: '',
-    }))
+    await this.fetchData()
   },
   methods: {
+    async fetchData() {
+      const {
+        data: {
+          inventoryCategories: { data },
+        },
+      } = await this.$apollo.query({
+        query: InventoryCategories,
+        fetchPolicy: 'no-cache',
+      })
+
+      this.inventoriesCopy = data.map((item) => ({
+        ...item,
+        newAmount: '',
+      }))
+    },
     async updateInventories() {
       const {
         data: { updateInventories },
@@ -132,7 +135,7 @@ export default {
           inventoriesInput: this.inventoriesCopy.map((item) => {
             return {
               id: item.id,
-              amount: Number(item.newAmount),
+              amount: Number(item.newAmount) || Number(item.inventoryAmount),
             }
           }),
         },
@@ -145,6 +148,9 @@ export default {
         ...item,
         newAmount: '',
       }))
+    },
+    async cancelUpdate() {
+      await this.fetchData()
     },
   },
 }
