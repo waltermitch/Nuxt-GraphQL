@@ -20,7 +20,7 @@
           <InputWithTitle class="radio-buttons-row">
             <template #title>Expense Type</template>
 
-            <template #input>
+            <template v-if="expenseTypes" #input>
               <CustomSelect
                 :options="expenseTypes.data"
                 select-by="type"
