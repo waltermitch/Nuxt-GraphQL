@@ -1,0 +1,9 @@
+#import '../fragments/expenseType.gql'
+
+query ExpenseTypes {
+  expenseTypes {
+    data {
+      ...ExpenseTypeFragment
+    }
+  }
+}

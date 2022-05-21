@@ -1,0 +1,26 @@
+#import './unit.gql'
+#import './vendor.gql'
+#import './glAccount.gql'
+#import './expenseType.gql'
+
+fragment ExpenseFragment on Expense {
+  id
+  unit {
+    ...UnitFragment
+  }
+  comments
+  vendor {
+    ...VendorFragment
+  }
+  periodEnd
+  expenseDate
+  glAccount {
+    ...GlAccountFragment
+  }
+  expenseType {
+    ...ExpenseType
+  }
+  amount
+  createdAt
+  updatedAt
+}
