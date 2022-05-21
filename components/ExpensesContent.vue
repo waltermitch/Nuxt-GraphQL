@@ -60,9 +60,9 @@
           <InputWithTitle>
             <template #title>GL Account</template>
 
-            <template #input>
+            <template v-if="glAccounts" #input>
               <CustomSelect
-                :options="mockedList"
+                :options="glAccounts.data"
                 :error="selectError"
                 @input="selectGlAccount"
               />
@@ -124,6 +124,13 @@ import CustomSelect from './CustomSelect.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import DefaultButton from './DefaultButton.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { meMixin } from '~/mixins/meMixin'
+import Expenses from '~/graphql/queries/expenses.gql'
+import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
+import GlAccounts from '~/graphql/queries/glAccounts.gql'
+import { formatDate } from '~/helpers/helpers'
+import CreateExpense from '~/graphql/mutations/expense/createExpense.gql'
 export default {
   name: 'ExpensesContent',
   components: {
@@ -138,7 +145,15 @@ export default {
     ValidationObserver,
     PageSubHeaderContent,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, mutationMixin, meMixin],
+  apollo: {
+    expenseTypes: {
+      query: ExpenseTypes,
+    },
+    glAccounts: {
+      query: GlAccounts,
+    },
+  },
   data() {
     return {
       expensesDate: '',
@@ -147,20 +162,10 @@ export default {
       amount: '',
       comments: '',
       selectError: false,
-      // TODO remove when API would be available
-      mockedList: [
-        {
-          id: 1,
-          name: 'Register #2',
-        },
-        {
-          id: 2,
-          name: 'Register #3',
-        },
-      ],
     }
   },
   methods: {
+    formatDate,
     setExpensesType(expensesType) {
       this.expensesType = this.expensesType === expensesType ? '' : expensesType
     },
@@ -169,7 +174,26 @@ export default {
         this.selectError = true
       }
 
-      this.saveEvent()
+      this.mutationAction(
+        CreateExpense,
+        {
+          expenseInput: {
+            comments: this.comments,
+            periodEnd: this.selectedUnit.activePeriod.periodEnd,
+            expenseDate: this.formatDate(this.expensesDate),
+            glAccount: {
+              connect: this.glAccount.id,
+            },
+            expenseType: {
+              connect: 1,
+            },
+            amount: this.amount,
+          },
+        },
+        Expenses,
+        'Add Expense success',
+        'Add Expense error'
+      )
     },
     selectGlAccount(account) {
       this.glAccount = account
@@ -214,12 +238,12 @@ export default {
   }
 }
 
-.input-row-mob{
+.input-row-mob {
   @media screen and (max-width: $xs) {
-   display: block;
+    display: block;
   }
-  .container{
-    &:first-child{
+  .container {
+    &:first-child {
       @media screen and (max-width: $xs) {
         margin-bottom: 16px;
       }
