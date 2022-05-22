@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable>
+      <CustomTable :w-table="520">
         <template #header>
           <div class="table-row">
             <span>State</span>
@@ -112,7 +112,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
-export default {
+export default  {
   name: 'HQCountyContent',
   components: {
     ValidationObserver,
@@ -218,8 +218,13 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 250px 150px auto;
   column-gap: 30px;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 100px 250px 150px auto;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 100px 120px 120px auto;
+  }
 }
 
 .icon {

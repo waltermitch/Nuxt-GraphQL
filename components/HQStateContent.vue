@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable>
+      <CustomTable class="table-full" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>State</span>
@@ -278,6 +278,12 @@ export default {
   &--add {
     grid-column: 7;
     justify-self: end;
+  }
+}
+
+.table-full{
+  @media screen and (min-width: $lg) {
+    width: calc(100vw - 280px);
   }
 }
 

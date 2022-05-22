@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable>
+      <CustomTable :w-table="520">
         <template #header>
           <div class="table-row">
             <span>Vendor Number</span>
@@ -190,8 +190,13 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px repeat(2, 200px) auto;
   column-gap: 30px;
+  @media screen and (min-width: $md) {
+    grid-template-columns: 100px repeat(2, 200px) auto;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 100px repeat(2, 120px) auto;
+  }
 }
 
 .icon {

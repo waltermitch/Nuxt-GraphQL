@@ -5,7 +5,7 @@
         <template #title>Period End Date</template>
 
         <template #input>
-          <CustomSelect :options="mockedData" @input="selectPeriodEndDate" />
+          <CustomSelect :options="mockedData" @input="selectPeriodEndDate"/>
         </template>
       </InputWithTitle>
     </div>
@@ -36,7 +36,7 @@
       <div class="table-column">
         <span class="table-header">Units Not Yet Reporting</span>
 
-        <CustomTable >
+        <CustomTable>
           <template #header>
             <div class="table-row table-row--two">
               <span>Unit</span>
@@ -76,6 +76,7 @@
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
+
 export default {
   name: 'HQUnitsReportingContent',
   components: {
@@ -165,22 +166,30 @@ export default {
     align-items: baseline;
     justify-content: space-between;
   }
+
   div.table-column {
     &:first-child {
-
-      @media screen and (min-width: $md) {
+      @media screen and (min-width: $lg) {
         width: 75%;
         margin-right: 60px;
+
+      }
+      @media screen and (min-width: $md) and (max-width: $lg) {
+        width: 50%;
+        margin-right: 30px;
       }
       @media screen and (max-width: $md) {
-       width: 100%;
+        width: 100%;
         margin-bottom: 20px;
       }
     }
 
     &:last-child {
-      @media screen and (min-width: $md) {
+      @media screen and (min-width: $lg) {
         width: 25%;
+      }
+      @media screen and (min-width: $md) and (max-width: $lg) {
+        width: 50%;
       }
       @media screen and (max-width: $md) {
         width: 100%;

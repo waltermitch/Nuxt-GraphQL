@@ -19,7 +19,7 @@
       </InputRow>
 
       <CustomTablesArea>
-        <CustomTable>
+        <CustomTable class="table-operating">
           <template #header>
             <div class="table-row">
               <span>Unit Id</span>
@@ -46,7 +46,7 @@
           </template>
         </CustomTable>
 
-        <CustomTable>
+        <CustomTable class="table-operating">
           <template #header>
             <div>
               <span>Period End date</span>
@@ -143,7 +143,23 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 300px;
   column-gap: 20px;
+  @media screen and(min-width: $xs) {
+    grid-template-columns: 100px 300px;
+  }
+  @media screen and(max-width: $md) {
+    grid-template-columns: 60px 120px;
+  }
+}
+.table-operating{
+  @media screen and(max-width: $xl) {
+    width: 100% !important;
+    &:last-child{
+      margin-bottom: 20px;
+    }
+    &:first-child{
+      margin-right: 0 !important;
+    }
+  }
 }
 </style>

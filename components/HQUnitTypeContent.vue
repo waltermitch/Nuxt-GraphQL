@@ -4,7 +4,7 @@
       <div>
         <InputRow class="input-row">
           <InputWithTitle>
-            <template #title> Unit </template>
+            <template #title> Unit</template>
 
             <template #input>
               <CustomSelect
@@ -17,17 +17,17 @@
           </InputWithTitle>
 
           <InputWithTitle>
-            <template #title> Name </template>
+            <template #title> Name</template>
 
             <template #input>
-              <CustomInput v-model="unit.name" />
+              <CustomInput v-model="unit.name"/>
             </template>
           </InputWithTitle>
         </InputRow>
 
         <InputRow v-if="unit.unitType" class="input-row">
           <InputWithTitle>
-            <template #title> Unit Type ID </template>
+            <template #title> Unit Type ID</template>
 
             <template #input>
               <span>{{ unit.unitType.id }}</span>
@@ -35,7 +35,7 @@
           </InputWithTitle>
 
           <InputWithTitle>
-            <template #title> Unit Type Name </template>
+            <template #title> Unit Type Name</template>
 
             <template #input>
               <span>{{ unit.unitType.name }}</span>
@@ -44,77 +44,80 @@
         </InputRow>
         <span v-else>Unit Type has not been assigned to unit yet</span>
       </div>
+      <div class="col-left">
+        <ValidationObserver ref="form">
+          <h2>Create Unit Type</h2>
 
-      <ValidationObserver ref="form">
-        <h2>Create Unit Type</h2>
+          <CustomTable class="table" :w-table="400">
+            <template #header>
+              <div class="table-row">
+                <span>ID</span>
 
-        <CustomTable class="table">
-          <template #header>
-            <div class="table-row">
-              <span>ID</span>
+                <span>Name</span>
+                <span></span>
+              </div>
+            </template>
 
-              <span>Name</span>
-            </div>
-          </template>
+            <template v-if="unitTypes" #content>
+              <CustomTableRow
+                v-for="unitType in unitTypes.data"
+                :key="unitType.id"
+                class="table-row"
+              >
+                <span>{{ unitType.id }}</span>
 
-          <template v-if="unitTypes" #content>
-            <CustomTableRow
-              v-for="unitType in unitTypes.data"
-              :key="unitType.id"
-              class="table-row"
-            >
-              <span>{{ unitType.id }}</span>
+                <CustomInput
+                  v-if="isEdit === unitType.id"
+                  v-model="unitType.name"
+                  rules="required"
+                  do-not-show-error-message
+                />
+                <span v-else>{{ unitType.name }}</span>
 
-              <CustomInput
-                v-if="isEdit === unitType.id"
-                v-model="unitType.name"
-                rules="required"
-                do-not-show-error-message
-              />
-              <span v-else>{{ unitType.name }}</span>
+                <CustomTableIconsColumn
+                  :is-edit-active="isEdit === unitType.id"
+                  :is-delete-active="isDelete === unitType.id"
+                  @edit="edit(unitType.id)"
+                  @delete="deleteItem(unitType.id)"
+                  @cancel="cancelUnitTypeEdit"
+                  @cancel-delete="cancelDelete"
+                  @confirm-edit="confirmEdit(unitType)"
+                  @confirm-delete="confirmDelete(unitType.id)"
+                />
+              </CustomTableRow>
 
-              <CustomTableIconsColumn
-                :is-edit-active="isEdit === unitType.id"
-                :is-delete-active="isDelete === unitType.id"
-                @edit="edit(unitType.id)"
-                @delete="deleteItem(unitType.id)"
-                @cancel="cancelUnitTypeEdit"
-                @cancel-delete="cancelDelete"
-                @confirm-edit="confirmEdit(unitType)"
-                @confirm-delete="confirmDelete(unitType.id)"
-              />
-            </CustomTableRow>
+              <CustomTableRow v-if="isAdd" class="table-row">
+                <span>-</span>
 
-            <CustomTableRow v-if="isAdd" class="table-row">
-              <span>-</span>
+                <CustomInput
+                  v-model="unitTypeNew.name"
+                  rules="required"
+                  do-not-show-error-message
+                />
+              </CustomTableRow>
 
-              <CustomInput
-                v-model="unitTypeNew.name"
-                rules="required"
-                do-not-show-error-message
-              />
-            </CustomTableRow>
+              <CustomTableRow class="table-row add-row">
+                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow"/>
+              </CustomTableRow>
+            </template>
+          </CustomTable>
 
-            <CustomTableRow class="table-row add-row">
-              <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
-            </CustomTableRow>
-          </template>
-        </CustomTable>
+          <div v-if="isAdd" class="buttons-area">
+            <DefaultButton @event="addUnitType"> Add UnitType</DefaultButton>
 
-        <div v-if="isAdd" class="buttons-area">
-          <DefaultButton @event="addUnitType"> Add UnitType </DefaultButton>
-
-          <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
-        </div>
-      </ValidationObserver>
+            <DefaultButton @event="cancelAdd"> Cancel</DefaultButton>
+          </div>
+        </ValidationObserver>
+      </div>
     </div>
 
-    <CustomTable v-if="unitTypesCopy" class="unit-types-table">
+    <CustomTable v-if="unitTypesCopy" class="unit-types-table" :w-table="580">
       <template #header>
         <div class="table-row table-row--unit-types">
           <span> UnitType ID </span>
 
           <span> UnitType Name </span>
+          <span></span>
         </div>
       </template>
 
@@ -131,7 +134,6 @@
           <span>
             {{ unitType.name }}
           </span>
-
           <div class="button">
             <DefaultButton
               @event="
@@ -154,7 +156,7 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
+import {ValidationObserver} from 'vee-validate'
 import UnitTypes from '../graphql/queries/unitTypes.gql'
 import Units from '../graphql/queries/units.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
@@ -166,8 +168,9 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
-import { mutationMixin } from '~/mixins/mutationMixin'
-import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import {mutationMixin} from '~/mixins/mutationMixin'
+import {tableActionsMixin} from '~/mixins/tableActionsMixin'
+
 export default {
   name: 'HQUnitTypeContent',
   components: {
@@ -211,7 +214,7 @@ export default {
     async fetchData() {
       const {
         data: {
-          unitTypes: { data },
+          unitTypes: {data},
         },
       } = await this.$apollo.query({
         query: UnitTypes,
@@ -263,7 +266,7 @@ export default {
 
       await this.mutationAction(
         DeleteUnitType,
-        { id },
+        {id},
         UnitTypes,
         'Delete unitType success',
         'Delete unitType error'
@@ -273,7 +276,7 @@ export default {
     },
     async addUnitTypeToUnit(unitType) {
       const unit = this.unit
-      const { id } = this.unit
+      const {id} = this.unit
 
       await this.mutationAction(
         UpdateUnit,
@@ -296,7 +299,7 @@ export default {
     },
     async removeUnitTypeFromUnit() {
       const unit = this.unit
-      const { id } = this.unit
+      const {id} = this.unit
 
       await this.mutationAction(
         UpdateUnit,
@@ -334,14 +337,30 @@ export default {
   }
 }
 
+.col-left{
+  @media screen and(max-width: $md) {
+    width: 100%;
+  }
+}
+
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 100px 200px auto;
+  @media screen and(min-width: $md) {
+    grid-template-columns: 100px 200px auto;
+  }
+  @media screen and(max-width: $md) {
+    grid-template-columns: 30px 120px auto;
+  }
   column-gap: 30px;
 
   &--unit-types {
-    grid-template-columns: 100px 200px auto;
+    @media screen and(min-width: $md) {
+      grid-template-columns: 100px 200px auto;
+    }
+    @media screen and(max-width: $md) {
+      grid-template-columns: 80px 150px 250px;
+    }
   }
 }
 

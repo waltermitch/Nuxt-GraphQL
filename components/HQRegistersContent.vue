@@ -24,7 +24,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable :w-table="1000">
+      <CustomTable class="table-register" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>ID</span>
@@ -387,6 +387,12 @@ export default {
     grid-template-columns: 50px 120px 120px 70px 100px 85px 50px 120px auto;
   }
   column-gap: 20px;
+}
+
+.table-register{
+  @media screen and (min-width: $lg) {
+    width: calc(100vw - 280px);
+  }
 }
 
 .icon {

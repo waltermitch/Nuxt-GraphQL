@@ -29,16 +29,12 @@ export default {
   background: #fff;
   border: 1px solid $gainsboro;
   border-radius: 8px;
+  overflow-x: auto;
   @media screen and (max-width: $lg) {
-    overflow-x: auto;
+
   }
 }
 
-.table-content {
-  @media screen and (max-width: $lg) {
-    //min-width: 500px;
-  }
-}
 
 .header {
   padding: 22px 20px 25px;

@@ -30,7 +30,7 @@
         <div class="gl-table">
           <h2 class="table-header">Gls</h2>
 
-          <CustomTable class="table" :w-table="900">
+          <CustomTable class="table table-gls" :w-table="1000">
             <template #header>
               <div class="table-row">
                 <span>GL</span>
@@ -171,7 +171,7 @@
         <div>
           <h2 class="table-header">Gl Types</h2>
 
-          <CustomTable class="table" :w-table="600">
+          <CustomTable class="table table-gls" :w-table="600">
             <template #header>
               <div class="table-row table-row--gl-type">
                 <span>ID</span>
@@ -689,10 +689,16 @@ export default {
     grid-template-columns: repeat(2, 80px) 200px 100px 80px 150px auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: repeat(2, 80px) 120px 100px 80px 120px auto;
+    grid-template-columns: repeat(2, 80px) 165px 110px 80px 130px auto;
   }
   &--gl-type {
     grid-template-columns: 80px 100px 100px auto;
+  }
+}
+
+.table-gls{
+  @media screen and (min-width: $lg) {
+    width: calc(100vw - 280px);
   }
 }
 

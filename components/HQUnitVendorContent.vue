@@ -24,7 +24,7 @@
     </InputRow>
 
     <CustomTablesArea>
-      <CustomTable v-if="vendors" class="table" :w-table="580">
+      <CustomTable v-if="vendors" class="table table--left" :w-table="580">
         <template #header>
           <div class="table-row">
             <span> Vendor ID </span>
@@ -73,7 +73,7 @@
         </template>
       </CustomTable>
 
-      <CustomTable v-if="unit.vendors" class="table">
+      <CustomTable v-if="unit.vendors" class="table table--right" :w-table="350">
         <template #header>
           <div class="table-row table-row--unit">
             <span> Vendor ID </span>
@@ -220,11 +220,43 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 80px repeat(2, 100px) 200px;
+
+  @media screen and (min-width: $lg) {
+    grid-template-columns: 80px repeat(2, 100px) 220px;
+  }
+  @media screen and (max-width: $lg) {
+    grid-template-columns: 80px repeat(2, 26%) auto;
+  }
   column-gap: 20px;
 
   &--unit {
-    grid-template-columns: 80px repeat(2, 100px);
+    @media screen and (min-width: $lg) {
+      grid-template-columns: 80px repeat(2, 100px);
+    }
+    @media screen and (max-width: $lg) {
+      grid-template-columns: 80px repeat(2, 26%);
+    }
   }
 }
+
+.table{
+  &--right{
+    @media screen and (min-width: $xl) {
+      width: 50% !important;
+    }
+    @media screen and (max-width: $xl) {
+      width: 100% !important;
+    }
+  }
+  &--left{
+    @media screen and (min-width: $xl) {
+      width: 70% !important;
+    }
+    @media screen and (max-width: $xl) {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+  }
+}
+
 </style>

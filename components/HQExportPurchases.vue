@@ -10,7 +10,7 @@
       </InputWithTitle>
     </div>
 
-    <CustomTable>
+    <CustomTable :w-table="500">
       <template #header>
         <div class="table-row">
           <CustomRadioButton

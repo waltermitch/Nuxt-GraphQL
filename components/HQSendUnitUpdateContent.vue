@@ -23,7 +23,7 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable>
+      <CustomTable :w-table="400">
         <template #header>
           <div class="table-row">
             <span> Reset </span>
@@ -149,8 +149,15 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 50px 150px 200px;
   column-gap: 20px;
+
+  @media screen and (min-width: $md) {
+    grid-template-columns: 50px 150px 200px;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 50px 120px 120px;
+  }
+
 }
 
 .button-area {

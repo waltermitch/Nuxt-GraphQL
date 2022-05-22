@@ -23,7 +23,7 @@
       </InputWithTitle>
     </InputRow>
 
-    <CustomTable v-if="employees" class="table" :w-table="450">
+    <CustomTable v-if="employees" class="table" :w-table="470">
       <template #header>
         <div class="table-row">
           <span> Employee ID </span>
