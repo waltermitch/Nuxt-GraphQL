@@ -9,7 +9,7 @@
     </InputWithTitle>
 
     <div class="table">
-      <CustomTable class="">
+      <CustomTable class="" :w-table="750">
         <template #header>
           <div class="table-row">
             <span> Expense Date </span>
@@ -121,12 +121,17 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-
-  @media screen and (min-width: $md) {
-    grid-template-columns: 166px 326px 144px 170px 90px 68px;
+  @media screen and (min-width: $xl){
+    grid-template-columns: 12% 30% 20% 10% 10% 8%;
+  }
+  @media screen and (min-width: $lg) and (max-width: $xl){
+    grid-template-columns: 12% 30% 15% 10% 10% 10%;
+  }
+  @media screen and (min-width: $md) and (max-width: $lg){
+    grid-template-columns: 12% 30% 15% 10% 10% 10%;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 60px 120px 120px 120px 90px 68px;
+    grid-template-columns: 80px 120px 120px 120px 90px 68px;
   }
   column-gap: 20px;
 }

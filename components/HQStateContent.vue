@@ -282,7 +282,7 @@ export default {
 }
 
 .table-full{
-  @media screen and (min-width: $lg) {
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }
 }

@@ -8,8 +8,8 @@
       </template>
     </InputWithTitle>
 
-    <div class="table">
-      <CustomTable class="table-purchases" :w-table="720">
+    <div class="table table-full">
+      <CustomTable class="table-purchases" :w-table="740">
         <template #header>
           <div class="table-row">
             <span> PO </span>
@@ -144,13 +144,22 @@ export default {
   display: grid;
   align-items: center;
 
-  @media screen and (min-width: $md) {
-    grid-template-columns: 166px 326px 144px 170px 90px 68px;
+  @media screen and (min-width: $lg){
+    grid-template-columns: 8% 37% 15% 10% 10% 10%;
+  }
+  @media screen and (min-width: $md) and (max-width: $lg){
+    grid-template-columns: 8% 34% 15% 10% 10% 10%;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 60px 120px 120px 120px 90px 68px;
+    grid-template-columns: 80px 120px 120px 120px 90px 68px;
   }
   column-gap: 20px;
+}
+
+.table-full{
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
+    width: calc(100vw - 280px);
+  }
 }
 
 .table-content-row {

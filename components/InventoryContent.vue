@@ -3,7 +3,7 @@
     <PageSubHeaderContent />
 
     <PageContentWrapper>
-      <CustomTable>
+      <CustomTable class="table-full" :w-table="780">
         <template #header>
           <div class="table-row">
             <span>Category</span>
@@ -175,8 +175,19 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 207px 346px 194px 215px;
   column-gap: 20px;
+  @media screen and (min-width: $lg) {
+    grid-template-columns: 10% 30% 30% 25%;
+  }
+  @media screen and (max-width: $lg) {
+    grid-template-columns: 120px 220px 220px 120px;
+  }
+}
+
+.table-full{
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
+    width: calc(100vw - 280px);
+  }
 }
 
 .table-text {

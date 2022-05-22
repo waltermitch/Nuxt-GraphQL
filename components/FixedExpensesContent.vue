@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable>
+      <CustomTable class="table-full" :w-table="700">
         <template #header>
           <div class="table-row">
             <span>Monthly</span>
@@ -206,8 +206,22 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 150px 325px 192px 300px 20px;
   column-gap: 20px;
+  @media screen and (min-width: $lg){
+    grid-template-columns: 8% 32% 18% 30% 5%;
+  }
+  @media screen and (min-width: $md) and (max-width: $lg){
+    grid-template-columns: 8% 32% 18% 30% 5%;
+  }
+  @media screen and (max-width: $md) {
+    grid-template-columns: 60px 180px 120px 200px 20px;
+  }
+}
+
+.table-full{
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
+    width: calc(100vw - 280px);
+  }
 }
 
 .buttons-area {

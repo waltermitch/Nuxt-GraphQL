@@ -8,8 +8,8 @@
       </template>
     </InputWithTitle>
 
-    <div class="table">
-      <CustomTable>
+    <div class="table table-full">
+      <CustomTable :w-table="750">
         <template #header>
           <div class="table-row">
             <span> id </span>
@@ -129,8 +129,19 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 166px 326px 144px 170px 90px 68px;
   column-gap: 20px;
+  @media screen and (min-width: $lg) {
+    grid-template-columns: 8% 42% 20% 10% 10%;
+  }
+  @media screen and (max-width: $lg) {
+    grid-template-columns: 80px 220px 120px 120px 90px 68px;
+  }
+}
+
+.table-full{
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
+    width: calc(100vw - 280px);
+  }
 }
 
 .table-content-row {
