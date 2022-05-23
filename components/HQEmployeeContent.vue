@@ -34,6 +34,7 @@
           </DefaultButton>
 
           <DefaultButton
+            v-if="isEditNewEmployee || isAddNewEmployee"
             button-color-gamma="white"
             :disabled="!isAddNewEmployee && !isEditNewEmployee"
             @event="cancelAdd"
@@ -42,6 +43,7 @@
           </DefaultButton>
 
           <DefaultButton
+            v-if="isEditNewEmployee || isAddNewEmployee"
             button-color-gamma="white"
             :disabled="invalid"
             @event="accept"
@@ -64,7 +66,35 @@
           <template #title> Employee ID</template>
 
           <template #input>
-            <CustomInput v-model="employee.id" :disabled="isAddNewEmployee"/>
+            <CustomInput v-model="employee.id" :disabled="isAddNewEmployee" />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle v-if="isAddNewEmployee">
+          <template #title> Employee Unit</template>
+
+          <template #input>
+            <CustomSelect
+              v-if="units"
+              multi-select
+              :options="units.data"
+              do-not-preselect
+              @input="selectEmployeeUnit"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle v-if="isEditNewEmployee">
+          <template #title> Employee Unit</template>
+
+          <template #input>
+            <CustomSelect
+              v-if="units"
+              multi-select
+              :options="units.data"
+              do-not-preselect
+              @input="selectEditUnits"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -74,7 +104,7 @@
           <template #title> Employee First Name</template>
 
           <template #input>
-            <CustomInput v-model="employee.firstName" rules="required"/>
+            <CustomInput v-model="employee.firstName" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -82,7 +112,7 @@
           <template #title> Employee Last Name</template>
 
           <template #input>
-            <CustomInput v-model="employee.lastName" rules="required"/>
+            <CustomInput v-model="employee.lastName" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -116,7 +146,7 @@
           <template #title> State Tax Code</template>
 
           <template #input>
-            <CustomInput v-model="employee.stateTaxCode" rules="required"/>
+            <CustomInput v-model="employee.stateTaxCode" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -124,7 +154,7 @@
           <template #title>Local Tax Code</template>
 
           <template #input>
-            <CustomInput v-model="employee.localTaxCode" rules="required"/>
+            <CustomInput v-model="employee.localTaxCode" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -177,32 +207,6 @@
         </InputWithTitle>
       </InputRow>
 
-      <InputWithTitle v-if="isAddNewEmployee">
-        <template #title> Employee Unit</template>
-
-        <template #input>
-          <CustomSelect
-            v-if="units"
-            multi-select
-            :options="units.data"
-            @input="selectEmployeeUnit"
-          />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle v-if="isEditNewEmployee">
-        <template #title> Employee Unit</template>
-
-        <template #input>
-          <CustomSelect
-            v-if="units"
-            multi-select
-            :options="units.data"
-            @input="selectEditUnits"
-          />
-        </template>
-      </InputWithTitle>
-
       <CustomTable v-if="!isAddNewEmployee" class="table" :w-table="500">
         <template #header>
           <div class="table-row">
@@ -222,7 +226,7 @@
           >
             {{ unit.code }}
 
-            <CustomRadioButton :is-is-active="unit.isActive"/>
+            <CustomRadioButton :is-is-active="unit.isActive" />
 
             {{ unit.name }}
           </CustomTableRow>
@@ -233,7 +237,7 @@
 </template>
 
 <script>
-import {ValidationObserver} from 'vee-validate'
+import { ValidationObserver } from 'vee-validate'
 import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
 import CreateEmployee from '../graphql/mutations/employee/createEmployee.gql'
@@ -243,7 +247,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
-import {mutationMixin} from '~/mixins/mutationMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
   name: 'HQEmployeeContent',
@@ -307,44 +311,44 @@ export default {
     },
     async accept() {
       const employee = this.employee
-      const {id, units, __typename, updatedAt, createdAt, ...employeeInput} =
+      const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
         this.employee
 
       this.isAddNewEmployee
         ? await this.mutationAction(
-          CreateEmployee,
-          {
-            employeeInput: {
-              ...employeeInput,
-              units: {
-                sync: units.map((unit) => unit.id),
+            CreateEmployee,
+            {
+              employeeInput: {
+                ...employeeInput,
+                units: {
+                  sync: units.map((unit) => unit.id),
+                },
               },
             },
-          },
-          Employees,
-          'Add employee success',
-          'Add employee error'
-        )
+            Employees,
+            'Add employee success',
+            'Add employee error'
+          )
         : await this.mutationAction(
-          UpdateEmployee,
-          {
-            employeeInput: {
-              id,
-              units: {
-                sync: this.editUnits
-                  .map((item) => item.id)
-                  .filter(
-                    (value, index, unitsArray) =>
-                      unitsArray.indexOf(value) === index
-                  ),
+            UpdateEmployee,
+            {
+              employeeInput: {
+                id,
+                units: {
+                  sync: this.editUnits
+                    .map((item) => item.id)
+                    .filter(
+                      (value, index, unitsArray) =>
+                        unitsArray.indexOf(value) === index
+                    ),
+                },
+                ...employeeInput,
               },
-              ...employeeInput,
             },
-          },
-          Employees,
-          'Update employee success',
-          'Update employee error'
-        )
+            Employees,
+            'Update employee success',
+            'Update employee error'
+          )
 
       this.employee = employee
     },
@@ -387,7 +391,7 @@ export default {
     deleteEmployee() {
       this.mutationAction(
         DeleteEmployee,
-        {id: this.employee.id},
+        { id: this.employee.id },
         Employees,
         'Delete employee success',
         'Delete employee error'
@@ -424,7 +428,6 @@ export default {
         white-space: nowrap;
       }
     }
-
   }
 }
 
