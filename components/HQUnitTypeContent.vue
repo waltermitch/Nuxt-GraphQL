@@ -44,114 +44,87 @@
         </InputRow>
         <span v-else>Unit Type has not been assigned to unit yet</span>
       </div>
-      <div class="col-left">
-        <ValidationObserver ref="form">
-          <h2>Create Unit Type</h2>
-
-          <CustomTable class="table" :w-table="400">
-            <template #header>
-              <div class="table-row">
-                <span>ID</span>
-
-                <span>Name</span>
-                <span></span>
-              </div>
-            </template>
-
-            <template v-if="unitTypes" #content>
-              <CustomTableRow
-                v-for="unitType in unitTypes.data"
-                :key="unitType.id"
-                class="table-row"
-              >
-                <span>{{ unitType.id }}</span>
-
-                <CustomInput
-                  v-if="isEdit === unitType.id"
-                  v-model="unitType.name"
-                  rules="required"
-                  do-not-show-error-message
-                />
-                <span v-else>{{ unitType.name }}</span>
-
-                <CustomTableIconsColumn
-                  :is-edit-active="isEdit === unitType.id"
-                  :is-delete-active="isDelete === unitType.id"
-                  @edit="edit(unitType.id)"
-                  @delete="deleteItem(unitType.id)"
-                  @cancel="cancelUnitTypeEdit"
-                  @cancel-delete="cancelDelete"
-                  @confirm-edit="confirmEdit(unitType)"
-                  @confirm-delete="confirmDelete(unitType.id)"
-                />
-              </CustomTableRow>
-
-              <CustomTableRow v-if="isAdd" class="table-row">
-                <span>-</span>
-
-                <CustomInput
-                  v-model="unitTypeNew.name"
-                  rules="required"
-                  do-not-show-error-message
-                />
-              </CustomTableRow>
-
-              <CustomTableRow class="table-row add-row">
-                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
-              </CustomTableRow>
-            </template>
-          </CustomTable>
-
-          <div v-if="isAdd" class="buttons-area">
-            <DefaultButton @event="addUnitType"> Add UnitType</DefaultButton>
-
-            <DefaultButton @event="cancelAdd"> Cancel</DefaultButton>
-          </div>
-        </ValidationObserver>
-      </div>
     </div>
 
-    <CustomTable v-if="unitTypesCopy" class="unit-types-table" :w-table="580">
-      <template #header>
-        <div class="table-row table-row--unit-types">
-          <span> UnitType ID </span>
+    <ValidationObserver ref="form">
+      <h2 class="unit-type-header">Create Unit Type</h2>
 
-          <span> UnitType Name </span>
-          <span></span>
-        </div>
-      </template>
+      <CustomTable class="table" :w-table="400">
+        <template #header>
+          <div class="table-row">
+            <span>ID</span>
 
-      <template #content>
-        <CustomTableRow
-          v-for="unitType in unitTypesCopy"
-          :key="unitType.id"
-          class="table-row table-row--unit-types"
-        >
-          <span>
-            {{ unitType.id }}
-          </span>
-
-          <span>
-            {{ unitType.name }}
-          </span>
-          <div class="button">
-            <DefaultButton
-              @event="
-                unit.unitType && unit.unitType.id === unitType.id
-                  ? removeUnitTypeFromUnit()
-                  : addUnitTypeToUnit(unitType)
-              "
-            >
-              {{
-                unit.unitType && unit.unitType.id === unitType.id
-                  ? 'Remove Unit Type From Unit'
-                  : 'Add Unit Type to Unit'
-              }}
-            </DefaultButton>
+            <span>Name</span>
+            <span></span>
           </div>
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+        </template>
+
+        <template v-if="unitTypes" #content>
+          <CustomTableRow
+            v-for="unitType in unitTypes.data"
+            :key="unitType.id"
+            class="table-row"
+          >
+            <span>{{ unitType.id }}</span>
+
+            <CustomInput
+              v-if="isEdit === unitType.id"
+              v-model="unitType.name"
+              rules="required"
+              do-not-show-error-message
+            />
+            <span v-else>{{ unitType.name }}</span>
+
+            <div class="button">
+              <DefaultButton
+                @event="
+                  unit.unitType && unit.unitType.id === unitType.id
+                    ? removeUnitTypeFromUnit()
+                    : addUnitTypeToUnit(unitType)
+                "
+              >
+                {{
+                  unit.unitType && unit.unitType.id === unitType.id
+                    ? 'Remove Unit Type From Unit'
+                    : 'Add Unit Type to Unit'
+                }}
+              </DefaultButton>
+            </div>
+
+            <CustomTableIconsColumn
+              :is-edit-active="isEdit === unitType.id"
+              :is-delete-active="isDelete === unitType.id"
+              @edit="edit(unitType.id)"
+              @delete="deleteItem(unitType.id)"
+              @cancel="cancelUnitTypeEdit"
+              @cancel-delete="cancelDelete"
+              @confirm-edit="confirmEdit(unitType)"
+              @confirm-delete="confirmDelete(unitType.id)"
+            />
+          </CustomTableRow>
+
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <span>-</span>
+
+            <CustomInput
+              v-model="unitTypeNew.name"
+              rules="required"
+              do-not-show-error-message
+            />
+          </CustomTableRow>
+
+          <CustomTableRow class="table-row add-row">
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+
+      <div v-if="isAdd" class="buttons-area">
+        <DefaultButton @event="addUnitType"> Add UnitType</DefaultButton>
+
+        <DefaultButton @event="cancelAdd"> Cancel</DefaultButton>
+      </div>
+    </ValidationObserver>
   </PageContentWrapper>
 </template>
 
@@ -349,19 +322,19 @@ export default {
   display: grid;
   align-items: center;
   @media screen and(min-width: $md) {
-    grid-template-columns: 100px 200px auto;
+    grid-template-columns: 100px 200px auto auto;
   }
   @media screen and(max-width: $md) {
-    grid-template-columns: 30px 120px auto;
+    grid-template-columns: 30px 120px auto auto;
   }
   column-gap: 30px;
 
   &--unit-types {
     @media screen and(min-width: $md) {
-      grid-template-columns: 100px 200px auto;
+      grid-template-columns: 100px 200px auto auto;
     }
     @media screen and(max-width: $md) {
-      grid-template-columns: 80px 150px 250px;
+      grid-template-columns: 80px 150px auto 250px;
     }
   }
 }
@@ -374,7 +347,7 @@ export default {
   cursor: pointer;
 
   &--add {
-    grid-column: 3;
+    grid-column: 4;
     justify-self: end;
   }
 }
@@ -382,5 +355,14 @@ export default {
 .button {
   width: 250px;
   justify-self: end;
+}
+
+.buttons-area {
+  margin-top: 25px;
+}
+
+.unit-type-header {
+  margin-top: 30px;
+  margin-bottom: 25px;
 }
 </style>
