@@ -380,7 +380,7 @@ export default {
     async addUnit() {
       // eslint-disable-next-line no-unused-vars
       const { state, users, ...unitInput } = this.unit
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreateUnit,
         {
           unitInput: {
@@ -403,7 +403,9 @@ export default {
         'Add unit success',
         'Add unit error'
       )
-      this.hideAddUnit()
+      if (res) {
+        this.hideAddUnit()
+      }
     },
     async updateUnit() {
       if (this.unitID) {
@@ -416,7 +418,7 @@ export default {
           vendors,
           ...unitInput
         } = this.unit
-        await this.mutationAction(
+        const res = await this.mutationAction(
           UpdateUnit,
           {
             unitInput: {
@@ -439,7 +441,9 @@ export default {
           'Edit unit success',
           'Edit unit error'
         )
-        this.hideAddUnit()
+        if (res) {
+          this.hideAddUnit()
+        }
       }
     },
   },

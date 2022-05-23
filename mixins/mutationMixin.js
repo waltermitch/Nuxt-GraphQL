@@ -26,7 +26,25 @@ export const mutationMixin = {
 
           return res
         } catch (error) {
-          this.showSubmitMessage(errorMessage, 'error')
+          const errorObj = error.graphQLErrors[0]
+          const extensionsErrorName = errorObj.extensions.category
+          if (extensionsErrorName === 'validation') {
+            const propNames = Object.getOwnPropertyNames(
+              error.graphQLErrors[0].extensions.validation
+            )
+            this.showSubmitMessage(
+              error.graphQLErrors[0].extensions.validation[propNames[0]][0],
+              'error'
+            )
+          } else {
+            const errMessage = errorObj.message
+            const errorMessageArray = errMessage.split(';')
+            if (errorMessageArray.length > 1) {
+              this.showSubmitMessage(errorMessageArray[1], 'error')
+            } else {
+              this.showSubmitMessage(errMessage, 'error')
+            }
+          }
         }
       } else {
         this.showSubmitMessage('Form validation failed', 'error')
