@@ -77,7 +77,7 @@ export default {
     },
     selectBySecond: {
       type: String,
-      default: 'id',
+      default: null,
     },
     disabled: {
       type: Boolean,
