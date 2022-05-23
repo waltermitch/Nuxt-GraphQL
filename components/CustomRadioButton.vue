@@ -1,9 +1,15 @@
 <template>
-  <div class="container" @click="disabled ? null : setIsActive()">
+  <div
+    class="container"
+    :class="{
+      ' container--disabled': disabled,
+    }"
+    @click="disabled ? null : setIsActive()"
+  >
     <div class="radio-container" :style="{ width, height, borderRadius }">
       <div
         class="radio"
-        :class="{ 'radio-active': isActive }"
+        :class="{ 'radio-active': isActive, 'radio--disabled': disabled }"
         :style="{
           width: radioWidth,
           height: radioHeight,
@@ -72,10 +78,18 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
+
+  &--disabled {
+    cursor: not-allowed;
+  }
 }
 
 .radio {
   cursor: pointer;
+
+  &--disabled {
+    cursor: not-allowed;
+  }
 
   &-container {
     display: inline-flex;

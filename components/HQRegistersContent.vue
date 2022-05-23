@@ -9,7 +9,8 @@
             <CustomSelect
               v-if="units"
               :options="units.data"
-              select-by="id"
+              select-by="name"
+              select-by-second="id"
               @input="selectUnit"
             />
           </template>
@@ -389,7 +390,7 @@ export default {
   column-gap: 20px;
 }
 
-.table-register{
+.table-register {
   @media screen and (min-width: $lg) {
     width: calc(100vw - 280px);
   }

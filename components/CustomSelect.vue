@@ -14,7 +14,11 @@
         {{ selectedOptions }}
       </span>
       <span v-else>
-        {{ selected && selected[selectBy] }}
+        {{
+          selected && selectBySecond
+            ? `${selected[selectBySecond]} - ${selected[selectBy]}`
+            : selected[selectBy]
+        }}
       </span>
 
       <img
@@ -39,7 +43,11 @@
         class="option"
         @click="selectOption(option)"
       >
-        {{ option[selectBy] }}
+        {{
+          selectBySecond
+            ? `${option[selectBySecond]} - ${option[selectBy]}`
+            : option[selectBy]
+        }}
       </div>
     </div>
 
@@ -66,6 +74,10 @@ export default {
     selectBy: {
       type: String,
       default: 'name',
+    },
+    selectBySecond: {
+      type: String,
+      default: 'id',
     },
     disabled: {
       type: Boolean,
