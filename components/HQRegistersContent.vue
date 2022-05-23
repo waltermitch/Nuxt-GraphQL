@@ -10,7 +10,7 @@
               v-if="units"
               :options="units.data"
               select-by="name"
-              select-by-second="id"
+              select-by-second="code"
               @input="selectUnit"
             />
           </template>
@@ -20,7 +20,7 @@
           <template #title> Name </template>
 
           <template #input>
-            <span> {{ unit.name }}</span>
+            <CustomInput v-model="unit.name" readonly />
           </template>
         </InputWithTitle>
       </InputRow>

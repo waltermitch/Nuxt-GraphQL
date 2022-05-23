@@ -8,7 +8,8 @@
           <CustomSelect
             v-if="units"
             :options="units.data"
-            select-by="code"
+            select-by="name"
+            select-by-second="code"
             @input="selectUnit"
           />
         </template>
@@ -18,7 +19,7 @@
         <template #title> Name </template>
 
         <template #input>
-          <CustomInput v-model="unit.name" />
+          <CustomInput v-model="unit.name" readonly />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -73,7 +74,11 @@
         </template>
       </CustomTable>
 
-      <CustomTable v-if="unit.vendors" class="table table--right" :w-table="350">
+      <CustomTable
+        v-if="unit.vendors"
+        class="table table--right"
+        :w-table="350"
+      >
         <template #header>
           <div class="table-row table-row--unit">
             <span> Vendor ID </span>
@@ -140,25 +145,13 @@ export default {
     },
     async addVendorToUnit(vendor) {
       const unit = this.unit
-      const { state, users, __typename, ...unitInput } = this.unit
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
-            ...unitInput,
-            district: {
-              connect: Number(this.unit.district.id),
-            },
-            county: {
-              connect: Number(this.unit.county.id),
-            },
-            city: {
-              connect: Number(this.unit.city.id),
-            },
-            users: {
-              sync: users.map((user) => user.id),
-            },
+            id,
             vendors: {
               sync: [
                 ...this.unit.vendors.map((vendor) => vendor.id),
@@ -176,25 +169,13 @@ export default {
     },
     async removeVendorFromUnit(vendor) {
       const unit = this.unit
-      const { state, users, __typename, ...unitInput } = this.unit
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
-            ...unitInput,
-            district: {
-              connect: Number(this.unit.district.id),
-            },
-            county: {
-              connect: Number(this.unit.county.id),
-            },
-            city: {
-              connect: Number(this.unit.city.id),
-            },
-            users: {
-              sync: users.map((user) => user.id),
-            },
+            id,
             vendors: {
               disconnect: [Number(vendor.id)],
             },
@@ -239,8 +220,8 @@ export default {
   }
 }
 
-.table{
-  &--right{
+.table {
+  &--right {
     @media screen and (min-width: $xl) {
       width: 50% !important;
     }
@@ -248,7 +229,7 @@ export default {
       width: 100% !important;
     }
   }
-  &--left{
+  &--left {
     @media screen and (min-width: $xl) {
       width: 70% !important;
     }
@@ -258,5 +239,4 @@ export default {
     }
   }
 }
-
 </style>
