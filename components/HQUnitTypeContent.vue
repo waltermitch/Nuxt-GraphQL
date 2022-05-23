@@ -20,7 +20,7 @@
             <template #title> Name</template>
 
             <template #input>
-              <CustomInput v-model="unit.name"/>
+              <CustomInput v-model="unit.name" />
             </template>
           </InputWithTitle>
         </InputRow>
@@ -97,7 +97,7 @@
               </CustomTableRow>
 
               <CustomTableRow class="table-row add-row">
-                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow"/>
+                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
               </CustomTableRow>
             </template>
           </CustomTable>
@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import {ValidationObserver} from 'vee-validate'
+import { ValidationObserver } from 'vee-validate'
 import UnitTypes from '../graphql/queries/unitTypes.gql'
 import Units from '../graphql/queries/units.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
@@ -168,8 +168,8 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
-import {mutationMixin} from '~/mixins/mutationMixin'
-import {tableActionsMixin} from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 
 export default {
   name: 'HQUnitTypeContent',
@@ -214,7 +214,7 @@ export default {
     async fetchData() {
       const {
         data: {
-          unitTypes: {data},
+          unitTypes: { data },
         },
       } = await this.$apollo.query({
         query: UnitTypes,
@@ -266,7 +266,7 @@ export default {
 
       await this.mutationAction(
         DeleteUnitType,
-        {id},
+        { id },
         UnitTypes,
         'Delete unitType success',
         'Delete unitType error'
@@ -276,7 +276,7 @@ export default {
     },
     async addUnitTypeToUnit(unitType) {
       const unit = this.unit
-      const {id} = this.unit
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
@@ -299,7 +299,7 @@ export default {
     },
     async removeUnitTypeFromUnit() {
       const unit = this.unit
-      const {id} = this.unit
+      const { id } = this.unit
 
       await this.mutationAction(
         UpdateUnit,
@@ -307,7 +307,7 @@ export default {
           unitInput: {
             id,
             unitType: {
-              connect: 0,
+              disconnect: true,
             },
           },
         },
@@ -315,6 +315,8 @@ export default {
         'Remove Unit Type from unit success',
         'Remove Unit Type from unit error'
       )
+
+      this.unitTypesCopy = [...(await this.fetchData())]
 
       this.unit = unit
     },
@@ -337,7 +339,7 @@ export default {
   }
 }
 
-.col-left{
+.col-left {
   @media screen and(max-width: $md) {
     width: 100%;
   }
