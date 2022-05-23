@@ -17,7 +17,7 @@
         {{
           selected && selectBySecond
             ? `${selected[selectBySecond]} - ${selected[selectBy]}`
-            : selected[selectBy]
+            : selected && selected[selectBy]
         }}
       </span>
 
