@@ -182,6 +182,10 @@ export default {
       } = await this.$apollo.query({
         query: Cities,
         fetchPolicy: 'no-cache',
+        variables: {
+          first: pageSize,
+          page: 1,
+        },
       })
 
       return data
