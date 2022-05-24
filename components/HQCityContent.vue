@@ -46,7 +46,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ addPercentSign(city.tax) }}
+              {{ city.tax }}
             </span>
 
             <CustomTableIconsColumn
@@ -85,6 +85,10 @@
           <CustomTableRow class="table-row add-row">
             <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
+
+          <CustomTableRow>
+            <LoadingBar v-if="$apollo.loading" />
+          </CustomTableRow>
         </template>
       </CustomTable>
     </ValidationObserver>
@@ -111,10 +115,12 @@ import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import LoadingBar from './LoadingBar.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { pageSize, paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'HQCityContent',
   components: {
@@ -126,11 +132,22 @@ export default {
     CustomInput,
     DefaultButton,
     CustomTableAddIcon,
+    LoadingBar,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [
+    submitMessagesMixin,
+    formMixin,
+    mutationMixin,
+    tableActionsMixin,
+    paginationMixin,
+  ],
   apollo: {
     cities: {
       query: Cities,
+      variables: {
+        first: pageSize,
+        page: 1,
+      },
     },
     states: {
       query: States,
@@ -152,6 +169,9 @@ export default {
   },
   async destroyed() {
     this.cities.data = await this.fetchData()
+  },
+  async mounted() {
+    await this.fetchMore('cities')
   },
   methods: {
     async fetchData() {
