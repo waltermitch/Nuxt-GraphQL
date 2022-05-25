@@ -1,7 +1,7 @@
-#import '../fragments/FixedExpense.gql'
+#import '../fragments/fixedExpense.gql'
 
 query FixedExpense {
   fixedExpenses {
-      ...FixedExpenseFragment
+    ...FixedExpenseFragment
   }
 }
