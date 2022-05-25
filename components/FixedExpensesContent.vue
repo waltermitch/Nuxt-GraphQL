@@ -14,7 +14,7 @@
           </div>
         </template>
 
-        <template #content v-if="fixedExpenses">
+        <template v-if="fixedExpenses" #content>
           <CustomTableRow
             v-for="item in fixedExpenses"
             :key="item.id"
@@ -122,7 +122,7 @@ import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import FixedExpense from '~/graphql/queries/FixedExpense.gql'
+import FixedExpense from '~/graphql/queries/fixedExpense.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import CreateFixedExpense from '~/graphql/mutations/fixedExpense/createFixedExpenses.gql'
 import DeleteFixedExpense from '~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql'
