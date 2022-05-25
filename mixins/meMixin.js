@@ -9,5 +9,8 @@ export const meMixin = {
     selectedUnit() {
       return this.me && this.me.selectedUnit
     },
+    periodEndDate() {
+      return this.selectedUnit && this.selectedUnit.activePeriod.periodEnd
+    },
   },
 }

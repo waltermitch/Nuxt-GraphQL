@@ -17,7 +17,7 @@
 
         <template v-if="registerCloseouts" #content>
           <CustomTableRow
-            v-for="registerCloseout in registerCloseouts"
+            v-for="registerCloseout in currentPeriodData"
             :key="registerCloseout.id"
             class="table-row table-content-row"
           >
@@ -56,6 +56,7 @@ import RegisterCloseouts from '~/graphql/queries/registerCloseouts'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
+import { meMixin } from '~/mixins/meMixin'
 import DeleteRegisterCloseout from '~/graphql/mutations/registerCloseout/deleteRegisterCloseout'
 export default {
   name: 'RegisterCloseoutReviewContent',
@@ -69,7 +70,14 @@ export default {
       query: RegisterCloseouts,
     },
   },
-  mixins: [tableActionsMixin, mutationMixin],
+  mixins: [tableActionsMixin, mutationMixin, meMixin],
+  computed: {
+    currentPeriodData() {
+      return this.registerCloseouts.filter(
+        (registerCloseout) => registerCloseout.periodEnd === this.periodEndDate
+      )
+    },
+  },
   methods: {
     formatDateFromAPI,
     selectPeriodEndDate(item) {

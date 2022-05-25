@@ -20,7 +20,7 @@
 
         <template v-if="expenses" #content>
           <CustomTableRow
-            v-for="expense in expenses"
+            v-for="expense in currentPeriodData"
             :key="expense.id"
             class="table-row table-content-row"
           >
@@ -57,6 +57,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import DeleteExpense from '~/graphql/mutations/expense/deleteExpense.gql'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'WeeklyExpensesContent',
   components: { CustomTable, CustomTableRow },
@@ -65,21 +66,13 @@ export default {
       query: Expenses,
     },
   },
-  mixins: [tableActionsMixin, mutationMixin],
-  data() {
-    return {
-      mockedList: [
-        {
-          id: 1,
-          name: '22/02/2022',
-        },
-        {
-          id: 2,
-          name: '22/04/2022',
-        },
-      ],
-      periodEndDate: null,
-    }
+  mixins: [tableActionsMixin, mutationMixin, meMixin],
+  computed: {
+    currentPeriodData() {
+      return this.expenses.filter(
+        (expense) => expense.periodEnd === this.periodEndDate
+      )
+    },
   },
   methods: {
     formatDateFromAPI,
