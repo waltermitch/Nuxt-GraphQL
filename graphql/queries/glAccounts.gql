@@ -2,14 +2,14 @@
 
 query GlAccounts {
   glAccounts {
-      ...GlAccountFragment
-      parent {
-        id
-        name
-      }
-      child {
-        id
-        name
-      }
+    ...GlAccountFragment
+    parent {
+      id
+      name
+    }
+    child {
+      id
+      name
+    }
   }
 }

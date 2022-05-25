@@ -3,11 +3,9 @@
 
 query UnitTypes {
   unitTypes {
-    data {
-      ...UnitTypeFragment
-      units {
-        ...UnitFragment
-      }
+    ...UnitTypeFragment
+    units {
+      ...UnitFragment
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <PageContentWrapper>
-    <CustomTable :w-table="620">
+    <LoadingBar v-if="$apollo.loading" />
+    <CustomTable v-else :w-table="620">
       <template #header>
         <div class="table-row">
           <span>Unit</span>
@@ -14,11 +15,7 @@
       </template>
 
       <template v-if="units" #content>
-        <CustomTableRow
-          v-for="unit in units.data"
-          :key="unit.id"
-          class="table-row"
-        >
+        <CustomTableRow v-for="unit in units" :key="unit.id" class="table-row">
           <span>
             {{ unit.code }}
           </span>

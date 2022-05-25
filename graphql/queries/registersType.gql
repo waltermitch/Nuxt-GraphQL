@@ -2,8 +2,6 @@
 
 query RegisterTypes {
   registerTypes {
-    data {
-      ...RegisterTypeFragment
-    }
+    ...RegisterTypeFragment
   }
 }

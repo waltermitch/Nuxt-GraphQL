@@ -8,7 +8,7 @@
           <template #input>
             <CustomSelect
               v-if="units"
-              :options="units.data"
+              :options="units"
               select-by="code"
               @input="selectUnit"
             />
@@ -25,7 +25,8 @@
       </InputRow>
     </div>
 
-    <ValidationObserver ref="form">
+    <LoadingBar v-if="$apollo.loading" />
+    <ValidationObserver v-else ref="form">
       <div>
         <div class="gl-table">
           <h2 class="table-header">Gls</h2>
@@ -49,10 +50,10 @@
 
             <template v-if="glAccounts" #content>
               <CustomTableRow
-                v-for="glAccount in glAccounts.data.filter(
+                v-for="glAccount in glAccounts.filter(
                   (account) => account.parent === null
                 )"
-                :key="glAccount.createdAt"
+                :key="glAccount.id"
                 class="table-row"
               >
                 <span v-if="selectedGlSubAccount.idToCheck === glAccount.id">{{
@@ -80,7 +81,7 @@
                 <CustomSelect
                   v-if="glTypeCodes && editGlAccountId === glAccount.id"
                   select-by="description"
-                  :options="glTypeCodes.data"
+                  :options="glTypeCodes"
                   @input="selectTypeCode"
                 />
                 <span v-else>{{ glAccount.glTypeCode.description }}</span>
@@ -148,7 +149,7 @@
                 <CustomSelect
                   v-if="glTypeCodes"
                   select-by="description"
-                  :options="glTypeCodes.data"
+                  :options="glTypeCodes"
                   @input="selectTypeCode"
                 />
 
@@ -184,7 +185,7 @@
 
             <template v-if="glTypeCodes" #content>
               <CustomTableRow
-                v-for="glTypeCode in glTypeCodes.data"
+                v-for="glTypeCode in glTypeCodes"
                 :key="glTypeCode.id"
                 class="table-row table-row--gl-type"
               >
@@ -391,40 +392,36 @@ export default {
   },
   watch: {
     async editGlTypeCodeId(oldVal, newVal) {
-      this.glAccounts.data = await this.fetchGlAccountsData()
+      this.glAccounts = await this.fetchGlAccountsData()
     },
     async editGlAccountId(oldVal, newVal) {
-      this.glTypeCodes.data = await this.fetchData()
+      this.glTypeCodes = await this.fetchData()
     },
   },
   async destroyed() {
-    this.glAccounts.data = await this.fetchGlAccountsData()
-    this.glTypeCodes.data = await this.fetchData()
+    this.glAccounts = await this.fetchGlAccountsData()
+    this.glTypeCodes = await this.fetchData()
   },
   methods: {
     async fetchGlAccountsData() {
       const {
-        data: {
-          glAccounts: { data },
-        },
+        data: { glAccounts },
       } = await this.$apollo.query({
         query: GlAccounts,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return glAccounts
     },
     async fetchData() {
       const {
-        data: {
-          glTypeCodes: { data },
-        },
+        data: { glTypeCodes },
       } = await this.$apollo.query({
         query: GlTypeCodes,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return glTypeCodes
     },
     addGlTypeRow() {
       this.isAddGlTypeCode = true
@@ -447,14 +444,14 @@ export default {
     selectSubAccountUnit(item, event) {
       if (!this.glAccountCopy.name) {
         this.glAccountCopy = { ...item }
-        this.glAccountsCopy = [...this.glAccounts.data]
+        this.glAccountsCopy = [...this.glAccounts]
       }
-      const glSubAccount = this.glAccounts.data.find(
+      const glSubAccount = this.glAccounts.find(
         (account) => account.id === event.id
       )
 
       if (this.selectedGlSubAccount.idToCheck === glSubAccount.id) {
-        this.glAccounts.data = this.glAccountsCopy
+        this.glAccounts = this.glAccountsCopy
         this.glAccountCopy = {
           id: '',
           name: '',
@@ -467,7 +464,7 @@ export default {
           ...this.glAccountCopy,
           idToCheck: event.id,
         }
-        this.glAccounts.data = this.glAccountsCopy.map((obj) => {
+        this.glAccounts = this.glAccountsCopy.map((obj) => {
           if (obj.id === item.id) {
             return {
               ...obj,
@@ -667,12 +664,12 @@ export default {
       this.editGlAccountId = id
     },
     async cancelGlAccountsEdit() {
-      this.glAccounts.data = await this.fetchGlAccountsData()
+      this.glAccounts = await this.fetchGlAccountsData()
       this.isHide = false
       this.editGlAccountId = null
     },
     async cancelGlTypeCodesCopyEdit() {
-      this.glTypeCodes.data = await this.fetchData()
+      this.glTypeCodes = await this.fetchData()
       this.isHide = false
       this.editGlTypeCodeId = null
     },
@@ -696,8 +693,8 @@ export default {
   }
 }
 
-.table-gls{
-  @media screen and (min-width: $lg) and (max-width: $xxl){
+.table-gls {
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }
 }

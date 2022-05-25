@@ -7,7 +7,7 @@
         <template #input>
           <CustomSelect
             v-if="units"
-            :options="units.data"
+            :options="units"
             select-by="name"
             select-by-second="code"
             @input="selectUnit"
@@ -24,7 +24,8 @@
       </InputWithTitle>
     </InputRow>
 
-    <CustomTablesArea>
+    <LoadingBar v-if="$apollo.loading" />
+    <CustomTablesArea v-else>
       <CustomTable v-if="vendors" class="table table--left" :w-table="580">
         <template #header>
           <div class="table-row">
@@ -40,7 +41,7 @@
 
         <template #content>
           <CustomTableRow
-            v-for="vendor in vendors.data"
+            v-for="vendor in vendors"
             :key="vendor.id"
             class="table-row"
           >

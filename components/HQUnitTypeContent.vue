@@ -1,6 +1,7 @@
 <template>
   <PageContentWrapper>
-    <div class="header">
+    <LoadingBar v-if="$apollo.loading" />
+    <div v-else class="header">
       <div>
         <InputRow class="input-row">
           <InputWithTitle>
@@ -9,7 +10,7 @@
             <template #input>
               <CustomSelect
                 v-if="units"
-                :options="units.data"
+                :options="units"
                 select-by="name"
                 select-by-second="code"
                 @input="selectUnit"
@@ -62,7 +63,7 @@
 
         <template v-if="unitTypes" #content>
           <CustomTableRow
-            v-for="unitType in unitTypes.data"
+            v-for="unitType in unitTypes"
             :key="unitType.id"
             class="table-row"
           >
@@ -175,11 +176,11 @@ export default {
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.unitTypes.data = await this.fetchData()
+      this.unitTypes = await this.fetchData()
     },
   },
   async destroyed() {
-    this.unitTypes.data = await this.fetchData()
+    this.unitTypes = await this.fetchData()
   },
   async mounted() {
     this.unitTypesCopy = [...(await this.fetchData())]
@@ -187,15 +188,13 @@ export default {
   methods: {
     async fetchData() {
       const {
-        data: {
-          unitTypes: { data },
-        },
+        data: { unitTypes },
       } = await this.$apollo.query({
         query: UnitTypes,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return unitTypes
     },
     selectUnit(item) {
       this.unit = item
@@ -295,7 +294,7 @@ export default {
       this.unit = unit
     },
     async cancelUnitTypeEdit() {
-      this.unitTypes.data = await this.fetchData()
+      this.unitTypes = await this.fetchData()
       this.cancelEdit()
     },
   },

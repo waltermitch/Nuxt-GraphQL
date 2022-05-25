@@ -2,8 +2,6 @@
 
 query Users {
   users {
-    data {
-      ...UserFragment
-    }
+    ...UserFragment
   }
 }

@@ -8,7 +8,7 @@
           <template #input>
             <CustomSelect
               v-if="units"
-              :options="units.data"
+              :options="units"
               select-by="name"
               select-by-second="code"
               @input="selectUnit"
@@ -25,7 +25,8 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable class="table-register" :w-table="1100">
+      <LoadingBar v-if="$apollo.loading" />
+      <CustomTable v-else class="table-register" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>ID</span>
@@ -74,7 +75,7 @@
 
             <CustomSelect
               v-if="registerTypes && isEdit === register.id"
-              :options="registerTypes.data"
+              :options="registerTypes"
               @input="selectRegisterType"
             />
             <span v-else>
@@ -147,7 +148,7 @@
 
             <CustomSelect
               v-if="registerTypes"
-              :options="registerTypes.data"
+              :options="registerTypes"
               @input="selectRegisterType"
             />
 
@@ -259,31 +260,29 @@ export default {
   },
   computed: {
     unitRegisters() {
-      return this.registers.data.filter(
+      return this.registers.filter(
         (register) => register.unit.id === this.unit.id
       )
     },
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.registers.data = await this.fetchData()
+      this.registers = await this.fetchData()
     },
   },
   async destroyed() {
-    this.registers.data = await this.fetchData()
+    this.registers = await this.fetchData()
   },
   methods: {
     async fetchData() {
       const {
-        data: {
-          registers: { data },
-        },
+        data: { registers },
       } = await this.$apollo.query({
         query: Registers,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return registers
     },
     selectUnit(unit) {
       this.unit = unit
@@ -370,7 +369,7 @@ export default {
       this.isHide = false
     },
     async cancelRegisterEdit() {
-      this.registers.data = await this.fetchData()
+      this.registers = await this.fetchData()
       this.cancelEdit()
     },
   },
@@ -391,7 +390,7 @@ export default {
 }
 
 .table-register {
-  @media screen and (min-width: $lg) and (max-width: $xxl){
+  @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }
 }

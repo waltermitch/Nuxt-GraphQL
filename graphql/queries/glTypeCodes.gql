@@ -2,8 +2,6 @@
 
 query GlTypeCodes {
   glTypeCodes {
-    data {
-      ...GlTypeCodeFragment
-    }
+    ...GlTypeCodeFragment
   }
 }

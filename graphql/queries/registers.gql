@@ -2,8 +2,6 @@
 
 query Registers {
   registers {
-    data {
-      ...RegisterFragment
-    }
+    ...RegisterFragment
   }
 }

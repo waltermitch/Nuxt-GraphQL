@@ -50,7 +50,7 @@
           <template #input>
             <CustomSelect
               v-if="districts"
-              :options="districts.data"
+              :options="districts"
               :selected-item="unitID && unit.district"
               select-by="name"
               @input="selectDistrict"
@@ -65,6 +65,7 @@
             <CustomSelect
               v-if="state"
               :options="state.counties"
+              :selected-item="unitID && unit.county"
               select-by="name"
               @input="selectCounty"
             />
@@ -87,7 +88,7 @@
           <template #input>
             <CustomSelect
               v-if="states"
-              :options="states.data"
+              :options="states"
               :selected-item="unitID && unit.city && unit.city.state"
               select-by="code"
               @input="selectState"
@@ -129,7 +130,7 @@
           <template #input>
             <CustomSelect
               v-if="users"
-              :options="users.data.filter((user) => !user.isAdmin)"
+              :options="users.filter((user) => !user.isAdmin)"
               select-by="email"
               @input="selectUser"
             />
@@ -347,15 +348,18 @@ export default {
   },
   methods: {
     selectDistrict(district) {
+      console.log('district')
       this.district = district
     },
     selectCounty(county) {
+      console.log('county')
       this.county = county
     },
     selectState(state) {
       this.state = state
     },
     selectCity(city) {
+      console.log('city')
       this.city = city
     },
     selectUser(user) {
