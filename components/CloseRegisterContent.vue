@@ -58,7 +58,7 @@
 
               <template v-if="registers" #input>
                 <CustomSelect
-                  :options="registers.data"
+                  :options="registers"
                   select-by="id"
                   :disabled="getIsEdit"
                   :selected-item="register"
@@ -72,7 +72,7 @@
 
               <template v-if="registers" #input>
                 <CustomSelect
-                  :options="registers.data"
+                  :options="registers"
                   :disabled="getIsEdit"
                   :selected-item="register"
                   @input="selectRegister"

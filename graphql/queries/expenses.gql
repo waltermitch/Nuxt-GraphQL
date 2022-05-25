@@ -2,8 +2,6 @@
 
 query Expenses {
   expenses {
-    data {
-      ...ExpenseFragment
-    }
+    ...ExpenseFragment
   }
 }

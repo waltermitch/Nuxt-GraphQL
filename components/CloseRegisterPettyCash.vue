@@ -28,10 +28,10 @@
           >
             <CustomSelect
               v-if="glAccounts && getIsEdit"
-              :options="glAccounts.data"
+              :options="glAccounts"
               select-by="name"
               :selected-item="
-                glAccounts.data.find((glAccount) =>
+                glAccounts.find((glAccount) =>
                   item.glAccountId
                     ? glAccount.id == item.glAccountId
                     : glAccount.id == item.glAccount.id
@@ -60,7 +60,7 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
               v-if="glAccounts"
-              :options="glAccounts.data"
+              :options="glAccounts"
               select-by="name"
               @input="selectWewItemGlAccount"
             />

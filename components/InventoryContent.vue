@@ -2,6 +2,7 @@
   <div class="content">
     <PageSubHeaderContent />
 
+    <LoadingBar v-if="$apollo.loading" />
     <PageContentWrapper>
       <CustomTable class="table-full" :w-table="780">
         <template #header>
@@ -113,15 +114,13 @@ export default {
   methods: {
     async fetchData() {
       const {
-        data: {
-          inventoryCategories: { data },
-        },
+        data: { inventoryCategories },
       } = await this.$apollo.query({
         query: InventoryCategories,
         fetchPolicy: 'no-cache',
       })
 
-      this.inventoriesCopy = data.map((item) => ({
+      this.inventoriesCopy = inventoryCategories.map((item) => ({
         ...item,
         newAmount: '',
       }))
@@ -184,7 +183,7 @@ export default {
   }
 }
 
-.table-full{
+.table-full {
   @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }

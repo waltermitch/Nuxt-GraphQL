@@ -1,14 +1,8 @@
 <template>
   <PageContentWrapper>
-    <InputWithTitle>
-      <template #title> Period End Date</template>
+    <LoadingBar v-if="$apollo.loading" />
 
-      <template #input>
-        <CustomSelect :options="mockedList" @input="selectPeriodEndDate" />
-      </template>
-    </InputWithTitle>
-
-    <div class="table">
+    <div v-else class="table">
       <CustomTable class="" :w-table="750">
         <template #header>
           <div class="table-row">
@@ -26,7 +20,7 @@
 
         <template v-if="expenses" #content>
           <CustomTableRow
-            v-for="expense in expenses.data"
+            v-for="expense in expenses"
             :key="expense.id"
             class="table-row table-content-row"
           >
@@ -121,13 +115,13 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  @media screen and (min-width: $xl){
+  @media screen and (min-width: $xl) {
     grid-template-columns: 12% 30% 20% 10% 10% 8%;
   }
-  @media screen and (min-width: $lg) and (max-width: $xl){
+  @media screen and (min-width: $lg) and (max-width: $xl) {
     grid-template-columns: 12% 30% 15% 10% 10% 10%;
   }
-  @media screen and (min-width: $md) and (max-width: $lg){
+  @media screen and (min-width: $md) and (max-width: $lg) {
     grid-template-columns: 12% 30% 15% 10% 10% 10%;
   }
   @media screen and (max-width: $md) {

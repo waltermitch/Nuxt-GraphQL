@@ -2,8 +2,6 @@
 
 query ExpenseTypes {
   expenseTypes {
-    data {
-      ...ExpenseTypeFragment
-    }
+    ...ExpenseTypeFragment
   }
 }

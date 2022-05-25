@@ -28,7 +28,7 @@
             <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
             <CustomSelect
               v-else-if="inventoryCategories"
-              :options="inventoryCategories.data"
+              :options="inventoryCategories"
               select-by="name"
               :selected-item="item.inventoryCategory"
               @input="selectInventoryCategory(item, $event)"
@@ -37,7 +37,7 @@
             <span v-if="!getIsEdit">{{ item.glAccount.name }}</span>
             <CustomSelect
               v-else-if="glAccounts"
-              :options="glAccounts.data"
+              :options="glAccounts"
               select-by="name"
               :selected-item="item.glAccount"
               @input="selectGlAccount(item, $event)"
@@ -59,7 +59,7 @@
 
             <CustomSelect
               v-if="inventoryCategories"
-              :options="inventoryCategories.data"
+              :options="inventoryCategories"
               select-by="name"
               do-not-preselect
               @input="selectNewItemInventoryCategory"
@@ -67,7 +67,7 @@
 
             <CustomSelect
               v-if="glAccounts && !isSelectedGlAccount"
-              :options="glAccounts.data"
+              :options="glAccounts"
               select-by="name"
               @input="selectNewItemGlAccount"
             />
@@ -93,8 +93,8 @@
 
       <template #input>
         <span>{{ leftToDistribute }}$</span>
-      </template>
-    </InputWithTitle>
+      </template> </InputWithTitle
+    >purchases
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="purchaseOrderAction">

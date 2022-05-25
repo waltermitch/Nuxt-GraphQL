@@ -2,8 +2,6 @@
 
 query RegisterCloseouts {
   registerCloseouts {
-    data {
-      ...RegisterCloseoutFragment
-    }
+    ...RegisterCloseoutFragment
   }
 }

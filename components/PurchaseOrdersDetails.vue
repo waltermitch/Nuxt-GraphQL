@@ -30,7 +30,7 @@
           <template #input>
             <CustomSelect
               v-if="vendors"
-              :options="vendors.data"
+              :options="vendors"
               :selected-item="getIsEdit ? getVendor : null"
               select-by="name"
               @input="selectVendor"

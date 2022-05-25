@@ -1,14 +1,7 @@
 <template>
   <PageContentWrapper>
-    <InputWithTitle>
-      <template #title> Period End Date </template>
-
-      <template #input>
-        <CustomSelect :options="mockedList" @input="selectPeriodEndDate" />
-      </template>
-    </InputWithTitle>
-
-    <div class="table table-full">
+    <LoadingBar v-if="$apollo.loading" />
+    <div v-else class="table table-full">
       <CustomTable :w-table="750">
         <template #header>
           <div class="table-row">
@@ -24,7 +17,7 @@
 
         <template v-if="registerCloseouts" #content>
           <CustomTableRow
-            v-for="registerCloseout in registerCloseouts.data"
+            v-for="registerCloseout in registerCloseouts"
             :key="registerCloseout.id"
             class="table-row table-content-row"
           >
@@ -56,8 +49,6 @@
 </template>
 
 <script>
-import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
@@ -69,8 +60,6 @@ import DeleteRegisterCloseout from '~/graphql/mutations/registerCloseout/deleteR
 export default {
   name: 'RegisterCloseoutReviewContent',
   components: {
-    InputWithTitle,
-    CustomSelect,
     CustomTable,
     CustomTableRow,
     CustomTableIconsColumn,
@@ -81,21 +70,6 @@ export default {
     },
   },
   mixins: [tableActionsMixin, mutationMixin],
-  data() {
-    return {
-      mockedList: [
-        {
-          id: 1,
-          name: '22/02/2022',
-        },
-        {
-          id: 2,
-          name: '22/04/2022',
-        },
-      ],
-      periodEndDate: null,
-    }
-  },
   methods: {
     formatDateFromAPI,
     selectPeriodEndDate(item) {
@@ -138,7 +112,7 @@ export default {
   }
 }
 
-.table-full{
+.table-full {
   @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }

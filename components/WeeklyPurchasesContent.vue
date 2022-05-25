@@ -1,14 +1,7 @@
 <template>
   <PageContentWrapper>
-    <InputWithTitle>
-      <template #title> Period End Date</template>
-
-      <template #input>
-        <CustomSelect :options="mockedList" @input="selectPeriodEndDate"/>
-      </template>
-    </InputWithTitle>
-
-    <div class="table table-full">
+    <LoadingBar v-if="$apollo.loading" />
+    <div v-else class="table table-full">
       <CustomTable class="table-purchases" :w-table="740">
         <template #header>
           <div class="table-row">
@@ -27,7 +20,7 @@
 
         <template v-if="purchases" #content>
           <CustomTableRow
-            v-for="purchase in purchases.data"
+            v-for="purchase in purchases"
             :key="purchase.id"
             class="table-row table-content-row"
           >
@@ -40,7 +33,7 @@
             <span>{{ purchase.vendor.code }}</span>
 
             <span
-            >{{
+              >{{
                 purchase.items.reduce((prev, current) => {
                   return Number(prev) + Number(current.amount)
                 }, 0)
@@ -63,22 +56,18 @@
 </template>
 
 <script>
-import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomTableIconsColumn from './CustomTableIconsColumn.vue'
 import Purchases from '~/graphql/queries/purchases.gql'
-import {tableActionsMixin} from '~/mixins/tableActionsMixin'
-import {mutationMixin} from '~/mixins/mutationMixin'
-import {formatDateFromAPI} from '~/helpers/helpers'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { formatDateFromAPI } from '~/helpers/helpers'
 import DeletePurchase from '~/graphql/mutations/purchaseOrder/deletePurchase'
 
 export default {
   name: 'WeeklyPurchasesContent',
   components: {
-    InputWithTitle,
-    CustomSelect,
     CustomTable,
     CustomTableRow,
     CustomTableIconsColumn,
@@ -89,26 +78,8 @@ export default {
     },
   },
   mixins: [tableActionsMixin, mutationMixin],
-  data() {
-    return {
-      mockedList: [
-        {
-          id: 1,
-          name: '22/02/2022',
-        },
-        {
-          id: 2,
-          name: '22/04/2022',
-        },
-      ],
-      periodEndDate: null,
-    }
-  },
   methods: {
     formatDateFromAPI,
-    selectPeriodEndDate(item) {
-      this.periodEndDate = item
-    },
     editPurchaseOrder(purchase) {
       this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', {
         ...purchase,
@@ -121,7 +92,7 @@ export default {
     confirmDelete(id) {
       this.mutationAction(
         DeletePurchase,
-        {id},
+        { id },
         Purchases,
         'Delete purchase success',
         'Delete purchase error'
@@ -132,8 +103,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
 .table {
   margin-top: 30px;
   &-purchases {
@@ -144,10 +113,10 @@ export default {
   display: grid;
   align-items: center;
 
-  @media screen and (min-width: $lg){
+  @media screen and (min-width: $lg) {
     grid-template-columns: 8% 37% 15% 10% 10% 10%;
   }
-  @media screen and (min-width: $md) and (max-width: $lg){
+  @media screen and (min-width: $md) and (max-width: $lg) {
     grid-template-columns: 8% 34% 15% 10% 10% 10%;
   }
   @media screen and (max-width: $md) {
@@ -156,7 +125,7 @@ export default {
   column-gap: 20px;
 }
 
-.table-full{
+.table-full {
   @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }

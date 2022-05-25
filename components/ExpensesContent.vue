@@ -22,7 +22,7 @@
 
             <template v-if="expenseTypes" #input>
               <CustomSelect
-                :options="expenseTypes.data"
+                :options="expenseTypes"
                 select-by="type"
                 :selected-item="expenseType"
                 @input="setExpensesType"
@@ -37,7 +37,7 @@
 
             <template v-if="glAccounts" #input>
               <CustomSelect
-                :options="glAccounts.data"
+                :options="glAccounts"
                 :error="selectError"
                 :selected-item="glAccount"
                 @input="selectGlAccount"
@@ -58,7 +58,7 @@
               #input
             >
               <CustomSelect
-                :options="vendors.data"
+                :options="vendors"
                 :selected-item="vendor"
                 @input="setVendor"
               />
@@ -235,7 +235,7 @@ export default {
     setVendor(vendor) {
       this.vendor = vendor
     },
-    async acceptEvent() {
+    async CreateExpense() {
       if (!this.glAccount) {
         this.selectError = true
       }

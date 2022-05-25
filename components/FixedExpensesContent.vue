@@ -26,9 +26,13 @@
               @set-is-active="setIsMonthly(item)"
             />
 
-            <CustomSelect  v-if="glAccounts && isEdit === item.id" :options="glAccounts" select-by="name"
-                          :selected-item="item.glAccount"
-                          @input="selectGlAccount"/>
+            <CustomSelect
+              v-if="glAccounts && isEdit === item.id"
+              :options="glAccounts"
+              select-by="name"
+              :selected-item="item.glAccount"
+              @input="selectGlAccount"
+            />
             <span v-else>{{ item.glAccount.name }}</span>
 
             <CustomInput
@@ -49,8 +53,6 @@
             />
             <span v-else>{{ item.comments }}</span>
 
-
-
             <CustomTableIconsColumn
               :is-edit-active="isEdit === item.id"
               :is-delete-active="isDelete === item.id"
@@ -61,7 +63,6 @@
               @confirm-edit="confirmEdit(item)"
               @confirm-delete="confirmDelete(item.id)"
             />
-
           </CustomTableRow>
 
           <CustomTableRow v-if="isAdd" class="table-row">
@@ -70,8 +71,12 @@
               @set-is-active="setIsMonthly"
             />
 
-            <CustomSelect v-if="glAccounts" :options="glAccounts" select-by="name"
-                          @input="selectGlAccount"/>
+            <CustomSelect
+              v-if="glAccounts"
+              :options="glAccounts"
+              select-by="name"
+              @input="selectGlAccount"
+            />
 
             <CustomInput
               v-model="newItem.amount"
@@ -88,7 +93,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow"/>
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -107,8 +112,8 @@
 </template>
 
 <script>
-import {ValidationObserver} from 'vee-validate'
-import {formMixin} from '../mixins/formMixin'
+import { ValidationObserver } from 'vee-validate'
+import { formMixin } from '../mixins/formMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
@@ -116,13 +121,12 @@ import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
-import {tableActionsMixin} from '~/mixins/tableActionsMixin'
-import FixedExpense from "~/graphql/queries/FixedExpense.gql"
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import FixedExpense from '~/graphql/queries/FixedExpense.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import CreateFixedExpense from "~/graphql/mutations/fixedExpense/createFixedExpenses.gql"
-import DeleteFixedExpense from "~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql"
-import UpdateFixedExpense from "~/graphql/mutations/fixedExpense/updateFixedExpense.gql"
-
+import CreateFixedExpense from '~/graphql/mutations/fixedExpense/createFixedExpenses.gql'
+import DeleteFixedExpense from '~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql'
+import UpdateFixedExpense from '~/graphql/mutations/fixedExpense/updateFixedExpense.gql'
 
 export default {
   name: 'FixedExpensesContent',
@@ -148,7 +152,7 @@ export default {
     return {
       newItem: {
         id: '',
-        comments:'',
+        comments: '',
         monthly: false,
         glAccount: '',
         amount: '',
@@ -169,7 +173,7 @@ export default {
               connect: this.newItem.glAccount.id,
             },
             amount: this.newItem.amount,
-            monthly: this.newItem.monthly
+            monthly: this.newItem.monthly,
           },
         },
         FixedExpense,
@@ -201,7 +205,7 @@ export default {
           connect: expense.glAccount.id,
         },
         amount: expense.amount,
-        monthly: expense.monthly
+        monthly: expense.monthly,
       }
 
       this.mutationAction(
@@ -218,18 +222,16 @@ export default {
     },
     async fetchData() {
       const {
-        data: {
-          fixedExpenses: { data },
-        },
+        data: { fixedExpenses },
       } = await this.$apollo.query({
         query: FixedExpense,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return fixedExpenses
     },
     async cancelExpensesEdit() {
-      this.fixedExpenses.data = await this.fetchData()
+      this.fixedExpenses = await this.fetchData()
       this.cancelEdit()
     },
   },

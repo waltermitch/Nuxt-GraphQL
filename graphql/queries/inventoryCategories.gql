@@ -2,8 +2,6 @@
 
 query InventoryCategories {
   inventoryCategories {
-    data {
-      ...InventoryCategoryFragment
-    }
+    ...InventoryCategoryFragment
   }
 }
