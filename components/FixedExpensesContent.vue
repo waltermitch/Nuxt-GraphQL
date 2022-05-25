@@ -14,49 +14,89 @@
           </div>
         </template>
 
-        <template #content>
+        <template #content v-if="fixedExpenses">
           <CustomTableRow
-            v-for="item in items"
+            v-for="item in fixedExpenses"
             :key="item.id"
             class="table-row"
           >
             <CustomRadioButton
               :is-active="item.monthly"
+              :disabled="isEdit !== item.id"
               @set-is-active="setIsMonthly(item)"
             />
 
-            <CustomSelect :options="item.glAccount" @input="selectGlAccount" />
+            <CustomSelect  v-if="glAccounts && isEdit === item.id" :options="glAccounts" select-by="name"
+                          :selected-item="item.glAccount"
+                          @input="selectGlAccount"/>
+            <span v-else>{{ item.glAccount.name }}</span>
 
             <CustomInput
+              v-if="isEdit === item.id"
               v-model="item.amount"
               rules="required|double|currency"
               do-not-show-error-message
               placeholder="$0.00"
             />
 
+            <span v-else>{{ item.amount }}</span>
+
             <CustomInput
-              v-model="item.comment"
+              v-if="isEdit === item.id"
+              v-model="item.comments"
               rules="required"
               do-not-show-error-message
             />
+            <span v-else>{{ item.comments }}</span>
 
-            <img
-              src="~assets/images/icons/home/delete.svg"
-              class="icon"
-              @click="deleteRow(item.id)"
+
+
+            <CustomTableIconsColumn
+              :is-edit-active="isEdit === item.id"
+              :is-delete-active="isDelete === item.id"
+              @edit="edit(item.id)"
+              @delete="deleteItem(item.id)"
+              @cancel="cancelExpensesEdit"
+              @cancel-delete="cancelDelete"
+              @confirm-edit="confirmEdit(item)"
+              @confirm-delete="confirmDelete(item.id)"
+            />
+
+          </CustomTableRow>
+
+          <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomRadioButton
+              :is-active="newItem.monthly"
+              @set-is-active="setIsMonthly"
+            />
+
+            <CustomSelect v-if="glAccounts" :options="glAccounts" select-by="name"
+                          @input="selectGlAccount"/>
+
+            <CustomInput
+              v-model="newItem.amount"
+              rules="required|double|currency"
+              do-not-show-error-message
+              placeholder="$0.00"
+            />
+
+            <CustomInput
+              v-model="newItem.comments"
+              rules="required"
+              do-not-show-error-message
             />
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow"/>
           </CustomTableRow>
         </template>
       </CustomTable>
     </ValidationObserver>
 
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="saveEvent">
-        Save
+    <div v-if="isAdd" class="buttons-area">
+      <DefaultButton button-color-gamma="red" @event="createFixedExpense">
+        Add Expenses
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">
@@ -67,15 +107,23 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
-import { formMixin } from '../mixins/formMixin'
+import {ValidationObserver} from 'vee-validate'
+import {formMixin} from '../mixins/formMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
-import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import GlAccounts from '~/graphql/queries/glAccounts.gql'
+import {tableActionsMixin} from '~/mixins/tableActionsMixin'
+import FixedExpense from "~/graphql/queries/FixedExpense.gql"
+import { mutationMixin } from '~/mixins/mutationMixin'
+import CreateFixedExpense from "~/graphql/mutations/fixedExpense/createFixedExpenses.gql"
+import DeleteFixedExpense from "~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql"
+import UpdateFixedExpense from "~/graphql/mutations/fixedExpense/updateFixedExpense.gql"
+
+
 export default {
   name: 'FixedExpensesContent',
   components: {
@@ -87,116 +135,102 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, tableActionsMixin],
+  mixins: [formMixin, tableActionsMixin, mutationMixin],
+  apollo: {
+    glAccounts: {
+      query: GlAccounts,
+    },
+    fixedExpenses: {
+      query: FixedExpense,
+    },
+  },
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          monthly: true,
-          glAccount: [
-            {
-              id: 1,
-              name: 'Register #2',
-            },
-            {
-              id: 2,
-              name: 'Register #3',
-            },
-          ],
-          amount: '',
-          comment: 'Lorem ipsum',
-        },
-        {
-          id: 2,
-          monthly: false,
-          glAccount: [
-            {
-              id: 1,
-              name: 'Register #2',
-            },
-            {
-              id: 2,
-              name: 'Register #3',
-            },
-          ],
-          amount: '',
-          comment: 'Lorem ipsum',
-        },
-        {
-          id: 3,
-          monthly: false,
-          glAccount: [
-            {
-              id: 1,
-              name: 'Register #2',
-            },
-            {
-              id: 2,
-              name: 'Register #3',
-            },
-          ],
-          amount: '',
-          comment: '',
-        },
-      ],
+      newItem: {
+        id: '',
+        comments:'',
+        monthly: false,
+        glAccount: '',
+        amount: '',
+      },
     }
   },
   methods: {
-    setIsMonthly(expensesItem) {
-      // TODO refactor this methods when API would be available
-      // this.items = this.items.map((item) => {
-      //   if (expensesItem.id === item.id) {
-      //     return {
-      //       ...item,
-      //       monthly: !item.monthly,
-      //     }
-      //   }
-      //   return {
-      //     ...item,
-      //   }
-      // })
+    selectGlAccount(glAccount) {
+      this.newItem.glAccount = glAccount
     },
-    selectGlAccount(item) {
-      // TODO refactor this methods when API would be available
-      // this.items = this.items.map((listItem) => {
-      //   listItem.glAccount = listItem.glAccount.map((account) => {
-      //     if (account.id === item.id) {
-      //       if (account.selected) {
-      //         return {
-      //           ...item,
-      //           selected: null,
-      //         }
-      //       }
-      //       return { ...item }
-      //     }
-      //     return { ...account }
-      //   })
-      //   return {
-      //     ...listItem,
-      //   }
-      // })
+    async createFixedExpense() {
+      await this.mutationAction(
+        CreateFixedExpense,
+        {
+          fixedExpenseInput: {
+            comments: this.newItem.comments,
+            glAccount: {
+              connect: this.newItem.glAccount.id,
+            },
+            amount: this.newItem.amount,
+            monthly: this.newItem.monthly
+          },
+        },
+        FixedExpense,
+        'Add fixed expense success',
+        'Add fixed expense error'
+      )
     },
-    // addRow() {
-    //   this.items.push({
-    //     id: this.items.length + 1,
-    //     monthly: false,
-    //     glAccount: [
-    //       {
-    //         id: 1,
-    //         name: 'Register #2',
-    //       },
-    //       {
-    //         id: 2,
-    //         name: 'Register #3',
-    //       },
-    //     ],
-    //     amount: '',
-    //     comment: '',
-    //   })
-    // },
-    deleteRow(id) {
-      this.items = this.items.filter((item) => item.id !== id)
+    setIsMonthly(fixedExpenses) {
+      if (fixedExpenses) {
+        fixedExpenses.monthly = !fixedExpenses.monthly
+      } else {
+        this.newItem.monthly = !this.newItem.monthly
+      }
+    },
+    async confirmDelete(id) {
+      await this.mutationAction(
+        DeleteFixedExpense,
+        { id },
+        FixedExpense,
+        'Delete Fixed Expense success',
+        'Delete Fixed Expense error'
+      )
+    },
+    confirmEdit(expense) {
+      const editedFixedExpense = {
+        id: expense.id,
+        comments: expense.comments,
+        glAccount: {
+          connect: expense.glAccount.id,
+        },
+        amount: expense.amount,
+        monthly: expense.monthly
+      }
+
+      this.mutationAction(
+        UpdateFixedExpense,
+        { fixedExpenseInput: editedFixedExpense },
+        FixedExpense,
+        'Add Fixed Expense success',
+        'Add Fixed Expense error'
+      )
+    },
+    cancelEvent() {
+      this.isAdd = false
+      this.isHide = false
+    },
+    async fetchData() {
+      const {
+        data: {
+          fixedExpenses: { data },
+        },
+      } = await this.$apollo.query({
+        query: FixedExpense,
+        fetchPolicy: 'no-cache',
+      })
+
+      return data
+    },
+    async cancelExpensesEdit() {
+      this.fixedExpenses.data = await this.fetchData()
+      this.cancelEdit()
     },
   },
 }
@@ -207,10 +241,10 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
-  @media screen and (min-width: $lg){
+  @media screen and (min-width: $lg) {
     grid-template-columns: 8% 32% 18% 30% 5%;
   }
-  @media screen and (min-width: $md) and (max-width: $lg){
+  @media screen and (min-width: $md) and (max-width: $lg) {
     grid-template-columns: 8% 32% 18% 30% 5%;
   }
   @media screen and (max-width: $md) {
@@ -218,7 +252,7 @@ export default {
   }
 }
 
-.table-full{
+.table-full {
   @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }

@@ -4,10 +4,10 @@
 
     <AlertBar>
       <template #icon>
-        <img src="~assets/images/icons/info.svg" alt="" />
+        <img src="~assets/images/icons/info.svg" alt=""/>
       </template>
 
-      <template #title> Please note </template>
+      <template #title> Please note</template>
 
       <template #content>
         Verify that you have completed the following steps by placing a check
@@ -62,11 +62,16 @@
 import AlertBar from './AlertBar.vue'
 import CustomCheckbox from './CustomCheckbox.vue'
 import DefaultButton from './DefaultButton.vue'
+import CloseWeek from "~/graphql/mutations/closeWeek/closeWeek.gql"
+import { mutationMixin } from '~/mixins/mutationMixin'
+
 export default {
   name: 'CloseWeekContent',
-  components: { AlertBar, CustomCheckbox, DefaultButton },
+  components: {AlertBar, CustomCheckbox, DefaultButton},
+  mixins: [mutationMixin],
   data() {
     return {
+      checkbox: ['emailChecked', 'payrollHoursChecked', 'inventoryChecked', 'reaccrualsChecked'],
       emailChecked: {
         id: 1,
         name: 'emailChecked',
@@ -106,8 +111,17 @@ export default {
         checked: !checkboxValue.checked,
       }
     },
-    closeEvent() {},
-    exitEvent() {},
+    exitEvent(){
+      for(const name of this.checkbox){
+        this[name].checked = false
+      }
+    },
+    async closeEvent() {
+      await this.$apollo.mutate({
+        mutation: CloseWeek,
+      })
+     this.exitEvent()
+    },
   },
 }
 </script>
