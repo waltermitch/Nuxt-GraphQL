@@ -3,11 +3,9 @@
 
 query Counties {
   counties {
-    data {
-      ...CountyFragment
-      state {
-        ...StateFragment
-      }
+    ...CountyFragment
+    state {
+      ...StateFragment
     }
   }
 }

@@ -2,8 +2,6 @@
 
 query CateringOrders {
   cateringOrders {
-    data {
-      ...CateringOrderFragment
-    }
+    ...CateringOrderFragment
   }
 }

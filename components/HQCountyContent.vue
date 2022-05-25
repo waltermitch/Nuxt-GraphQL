@@ -1,7 +1,9 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable :w-table="520">
+      <LoadingBar v-if="$apollo.loading" />
+
+      <CustomTable v-else :w-table="520">
         <template #header>
           <div class="table-row">
             <span>State</span>
@@ -14,13 +16,13 @@
 
         <template v-if="counties" #content>
           <CustomTableRow
-            v-for="county in counties.data"
+            v-for="county in counties"
             :key="county.id"
             class="table-row"
           >
             <CustomSelect
               v-if="isEdit === county.id"
-              :options="states.data"
+              :options="states"
               :selected-item="county.state"
               select-by="code"
               @input="selectState"
@@ -47,7 +49,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ addPercentSign(county.tax) }}
+              {{ county.tax }}
             </span>
 
             <CustomTableIconsColumn
@@ -64,7 +66,7 @@
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
-              :options="states.data"
+              :options="states"
               select-by="code"
               @input="selectState"
             />
@@ -112,7 +114,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
-export default  {
+export default {
   name: 'HQCountyContent',
   components: {
     ValidationObserver,
@@ -140,24 +142,22 @@ export default  {
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.counties.data = await this.fetchData()
+      this.counties = await this.fetchData()
     },
   },
   async destroyed() {
-    this.counties.data = await this.fetchData()
+    this.counties = await this.fetchData()
   },
   methods: {
     async fetchData() {
       const {
-        data: {
-          counties: { data },
-        },
+        data: { counties },
       } = await this.$apollo.query({
         query: Counties,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return counties
     },
     selectState(state) {
       this.countyNew.state = state
@@ -207,7 +207,7 @@ export default  {
       )
     },
     async cancelCountyEdit() {
-      this.counties.data = await this.fetchData()
+      this.counties = await this.fetchData()
       this.cancelEdit()
     },
   },

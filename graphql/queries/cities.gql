@@ -1,16 +1,11 @@
 #import '../fragments/city.gql'
 #import '../fragments/state.gql'
 
-query Cities($first: Int!, $page: Int!) {
-  cities(first: $first, page: $page) {
-    paginatorInfo {
-      lastPage
-    }
-    data {
-      ...CityFragment
-      state {
-        ...StateFragment
-      }
+query Cities {
+  cities {
+    ...CityFragment
+    state {
+      ...StateFragment
     }
   }
 }

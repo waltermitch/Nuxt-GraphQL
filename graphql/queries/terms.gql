@@ -2,8 +2,6 @@
 
 query Terms {
   terms {
-    data {
-      ...TermFragment
-    }
+    ...TermFragment
   }
 }

@@ -1,7 +1,8 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable :w-table="520">
+      <LoadingBar v-if="$apollo.loading" />
+      <CustomTable v-else :w-table="520">
         <template #header>
           <div class="table-row">
             <span> State </span>
@@ -14,13 +15,13 @@
 
         <template v-if="cities" #content>
           <CustomTableRow
-            v-for="city in cities.data"
+            v-for="city in cities"
             :key="city.id"
             class="table-row"
           >
             <CustomSelect
               v-if="isEdit === city.id"
-              :options="states.data"
+              :options="states"
               :selected-item="city.state"
               select-by="code"
               @input="selectState"
@@ -63,7 +64,7 @@
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
-              :options="states.data"
+              :options="states"
               select-by="code"
               @input="selectState"
             />
@@ -120,7 +121,6 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import { pageSize, paginationMixin } from '~/mixins/paginationMixin'
 export default {
   name: 'HQCityContent',
   components: {
@@ -134,20 +134,10 @@ export default {
     CustomTableAddIcon,
     LoadingBar,
   },
-  mixins: [
-    submitMessagesMixin,
-    formMixin,
-    mutationMixin,
-    tableActionsMixin,
-    paginationMixin,
-  ],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
   apollo: {
     cities: {
       query: Cities,
-      variables: {
-        first: pageSize,
-        page: 1,
-      },
     },
     states: {
       query: States,
@@ -164,31 +154,22 @@ export default {
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.cities.data = await this.fetchData()
+      this.cities = await this.fetchData()
     },
   },
   async destroyed() {
-    this.cities.data = await this.fetchData()
-  },
-  async mounted() {
-    await this.fetchMore('cities')
+    this.cities = await this.fetchData()
   },
   methods: {
     async fetchData() {
       const {
-        data: {
-          cities: { data },
-        },
+        data: { cities },
       } = await this.$apollo.query({
         query: Cities,
         fetchPolicy: 'no-cache',
-        variables: {
-          first: pageSize,
-          page: 1,
-        },
       })
 
-      return data
+      return cities
     },
     selectState(state) {
       this.cityNew.state = state
@@ -238,7 +219,7 @@ export default {
       )
     },
     async cancelCityEdit() {
-      this.cities.data = await this.fetchData()
+      this.cities = await this.fetchData()
       this.cancelEdit()
     },
   },

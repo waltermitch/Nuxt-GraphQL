@@ -1,7 +1,8 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable class="table-full" :w-table="1100">
+      <LoadingBar v-if="$apollo.loading" />
+      <CustomTable v-else class="table-full" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>State</span>
@@ -200,24 +201,22 @@ export default {
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.states.data = await this.fetchData()
+      this.states = await this.fetchData()
     },
   },
   async destroyed() {
-    this.states.data = await this.fetchData()
+    this.states = await this.fetchData()
   },
   methods: {
     async fetchData() {
       const {
-        data: {
-          states: { data },
-        },
+        data: { states },
       } = await this.$apollo.query({
         query: States,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return states
     },
     confirmEdit(state) {
       const editedState = {
@@ -257,7 +256,7 @@ export default {
       )
     },
     async cancelStateEdit() {
-      this.states.data = await this.fetchData()
+      this.states = await this.fetchData()
       this.cancelEdit()
     },
   },

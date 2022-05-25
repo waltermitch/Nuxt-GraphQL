@@ -1,27 +1,26 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
-      <CustomTable :w-table="520">
+      <LoadingBar v-if="$apollo.loading" />
+      <CustomTable v-else :w-table="520">
         <template #header>
           <div class="table-row">
             <span> Code </span>
 
             <span> Name </span>
-
-            <span>Tax </span>
           </div>
         </template>
 
         <template v-if="districts" #content>
           <CustomTableRow
-            v-for="district in districts.data"
+            v-for="district in districts"
             :key="district.id"
             class="table-row"
           >
             <CustomInput
               v-if="isEdit === district.id"
               v-model="district.code"
-              rules="required|alpha"
+              rules="required"
               do-not-show-error-message
             />
             <span v-else>{{ district.code }}</span>
@@ -29,18 +28,10 @@
             <CustomInput
               v-if="isEdit === district.id"
               v-model="district.name"
-              rules="required|alpha"
+              rules="required"
               do-not-show-error-message
             />
             <span v-else>{{ district.name }}</span>
-
-            <CustomInput
-              v-if="isEdit === district.id"
-              v-model.number="district.tax"
-              rules="required|double"
-              do-not-show-error-message
-            />
-            <span v-else>{{ addPercentSign(district.tax) }}</span>
 
             <CustomTableIconsColumn
               :is-edit-active="isEdit === district.id"
@@ -64,12 +55,6 @@
             <CustomInput
               v-model="districtNew.name"
               rules="required"
-              do-not-show-error-message
-            />
-
-            <CustomInput
-              v-model.number="districtNew.tax"
-              rules="required|double"
               do-not-show-error-message
             />
           </CustomTableRow>
@@ -125,30 +110,27 @@ export default {
       districtNew: {
         code: '',
         name: '',
-        tax: '',
       },
     }
   },
   watch: {
     async isEdit(oldVal, newVal) {
-      this.districts.data = await this.fetchData()
+      this.districts = await this.fetchData()
     },
   },
   async destroyed() {
-    this.districts.data = await this.fetchData()
+    this.districts = await this.fetchData()
   },
   methods: {
     async fetchData() {
       const {
-        data: {
-          districts: { data },
-        },
+        data: { districts },
       } = await this.$apollo.query({
         query: Districts,
         fetchPolicy: 'no-cache',
       })
 
-      return data
+      return districts
     },
     addDistrict() {
       this.mutationAction(
@@ -157,7 +139,6 @@ export default {
           districtInput: {
             name: this.districtNew.name,
             code: this.districtNew.code,
-            tax: this.districtNew.tax,
           },
         },
         Districts,
@@ -170,7 +151,6 @@ export default {
         id: district.id,
         code: district.code,
         name: district.name,
-        tax: district.tax,
       }
 
       this.mutationAction(
@@ -179,8 +159,8 @@ export default {
           districtInput: editedDistrict,
         },
         Districts,
-        'Add district success',
-        'Add district error'
+        'Edit district success',
+        'Edit district error'
       )
     },
     confirmDelete(id) {
@@ -188,12 +168,12 @@ export default {
         DeleteDistrict,
         { id },
         Districts,
-        'Delete state success',
-        'Delete state error'
+        'Delete district success',
+        'Delete district error'
       )
     },
     async cancelDistrictEdit() {
-      this.districts.data = await this.fetchData()
+      this.districts = await this.fetchData()
       this.cancelEdit()
     },
   },
@@ -206,10 +186,10 @@ export default {
   align-items: center;
   column-gap: 30px;
   @media screen and (min-width: $md) {
-    grid-template-columns: 100px 200px 100px auto;
+    grid-template-columns: 100px 200px auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 100px 120px 120px auto;
+    grid-template-columns: 100px 120px auto;
   }
 }
 

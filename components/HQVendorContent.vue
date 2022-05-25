@@ -1,6 +1,7 @@
 <template>
   <PageContentWrapper>
     <ValidationObserver ref="form">
+      <LoadingBar v-if="$apollo.loading" />
       <CustomTable :w-table="520">
         <template #header>
           <div class="table-row">
@@ -14,7 +15,7 @@
 
         <template v-if="vendors" #content>
           <CustomTableRow
-            v-for="vendor in vendors.data"
+            v-for="vendor in vendors"
             :key="vendor.id"
             class="table-row"
           >
@@ -36,7 +37,7 @@
 
             <CustomSelect
               v-if="isEdit === vendor.id"
-              :options="terms.data"
+              :options="terms"
               :selected-item="vendor.term"
               select-by="dueDays"
               @input="selectTerm"
@@ -48,7 +49,7 @@
               :is-delete-active="isDelete === vendor.id"
               @edit="edit(vendor.id)"
               @delete="deleteItem(vendor.id)"
-              @cancel="cancelEdit"
+              @cancel="cancelVendorEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(vendor)"
               @confirm-delete="confirmDelete(vendor.id)"
@@ -69,7 +70,7 @@
             />
 
             <CustomSelect
-              :options="terms.data"
+              :options="terms"
               select-by="dueDays"
               @input="selectTerm"
             />
@@ -134,7 +135,25 @@ export default {
       },
     }
   },
+  watch: {
+    async isEdit(oldVal, newVal) {
+      this.vendors = await this.fetchData()
+    },
+  },
+  async destroyed() {
+    this.vendors = await this.fetchData()
+  },
   methods: {
+    async fetchData() {
+      const {
+        data: { vendors },
+      } = await this.$apollo.query({
+        query: Vendors,
+        fetchPolicy: 'no-cache',
+      })
+
+      return vendors
+    },
     selectTerm(term) {
       this.vendorNew.term = term
     },
@@ -181,6 +200,9 @@ export default {
         'Add vendor success',
         'Add vendor error'
       )
+    },
+    async cancelVendorEdit() {
+      this.vendors = await this.fetchData()
     },
   },
 }

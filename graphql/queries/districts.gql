@@ -2,8 +2,6 @@
 
 query Districts {
   districts {
-    data {
-      ...DistrictFragment
-    }
+    ...DistrictFragment
   }
 }
