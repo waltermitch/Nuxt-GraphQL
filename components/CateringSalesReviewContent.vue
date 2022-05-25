@@ -1,13 +1,6 @@
 <template>
   <PageContentWrapper>
-    <InputWithTitle>
-      <template #title> Period End Date </template>
-
-      <template #input>
-        <CustomSelect :options="mockedList" @input="selectPeriodEndDate" />
-      </template>
-    </InputWithTitle>
-
+    <LoadingBar v-if="$apollo.loading" />
     <div class="table">
       <CustomTable :w-table="500">
         <template #header>
@@ -23,7 +16,7 @@
 
         <template v-if="cateringOrders" #content>
           <CustomTableRow
-            v-for="cateringOrder in cateringOrders.data"
+            v-for="cateringOrder in cateringOrders"
             :key="cateringOrder.id"
             class="table-row table-content-row"
           >
@@ -46,8 +39,6 @@
 </template>
 
 <script>
-import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomTable from './CustomTable.vue'
 import CateringOrders from '~/graphql/queries/cateringOrders'
@@ -57,34 +48,16 @@ import DeleteCateringOrder from '~/graphql/mutations/cateringOrder/deleteCaterin
 import { formatDateFromAPI, formatDateAndTimeFromAPI } from '~/helpers/helpers'
 export default {
   name: 'CateringSalesReviewContent',
-  components: { InputWithTitle, CustomSelect, CustomTable, CustomTableRow },
+  components: { CustomTable, CustomTableRow },
   apollo: {
     cateringOrders: {
       query: CateringOrders,
     },
   },
   mixins: [tableActionsMixin, mutationMixin],
-  data() {
-    return {
-      periodEndDate: null,
-      mockedList: [
-        {
-          id: 1,
-          name: '22/02/2022',
-        },
-        {
-          id: 2,
-          name: '22/04/2022',
-        },
-      ],
-    }
-  },
   methods: {
     formatDateFromAPI,
     formatDateAndTimeFromAPI,
-    selectPeriodEndDate(item) {
-      this.periodEndDate = item
-    },
     editCateringOrder(cateringOrder) {
       this.$store.commit('cateringSales/SET_CATERING_ORDER', {
         ...cateringOrder,
