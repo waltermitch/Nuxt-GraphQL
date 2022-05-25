@@ -86,16 +86,7 @@
                 />
                 <span v-else>{{ glAccount.glTypeCode.description }}</span>
 
-                <CustomInput
-                  v-if="editGlAccountId === glAccount.id && glAccount.paren"
-                  v-model="glAccount.parent.id"
-                  rules="required"
-                  do-not-show-error-message
-                />
-                <span v-else-if="glAccount.parent">{{
-                  glAccount.parent.id
-                }}</span>
-                <span v-else>-</span>
+                <span>-</span>
                 <DefaultButton
                   @event="
                     unit.glAccounts &&
@@ -333,56 +324,6 @@ export default {
       selectedGlSubAccount: {
         id: null,
       },
-      unitRecords: [
-        {
-          id: 0,
-          glAccounts: [
-            {
-              id: 1,
-              value: '4200',
-              name: '4200',
-            },
-            {
-              id: 2,
-              value: '4300',
-              name: '4300',
-            },
-          ],
-          subAccounts: [
-            {
-              id: 1,
-              value: '001',
-              name: '001',
-            },
-          ],
-          name: 'Sales - Cafeteria Manual',
-          type: 'sales',
-        },
-        {
-          id: 1,
-          glAccounts: [
-            {
-              id: 1,
-              value: '5000',
-              name: '5000',
-            },
-            {
-              id: 2,
-              value: '5300',
-              name: '5300',
-            },
-          ],
-          subAccounts: [
-            {
-              id: 1,
-              value: '002',
-              name: '002',
-            },
-          ],
-          name: 'Food costs - Cafeteria',
-          type: 'expense',
-        },
-      ],
       isReload: false,
       isHideTypeCodes: false,
       glTypeCodesCopy: [],
@@ -469,11 +410,11 @@ export default {
             return {
               ...obj,
               name: event.name,
-              glTypeCode: {
-                ...obj.glTypeCode,
-                id: glSubAccount.glTypeCode.id,
-                description: glSubAccount.glTypeCode.description,
-              },
+              // glTypeCode: {
+              //   ...obj.glTypeCode,
+              //   // id: glSubAccount.glTypeCode.id,
+              //   description: glSubAccount.glTypeCode.description,
+              // },
             }
           }
 
