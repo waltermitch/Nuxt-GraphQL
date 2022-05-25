@@ -2,8 +2,6 @@
 
 query Employees {
   employees {
-    data {
-      ...EmployeeFragment
-    }
+    ...EmployeeFragment
   }
 }

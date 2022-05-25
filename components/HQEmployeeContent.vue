@@ -1,6 +1,7 @@
 <template>
   <PageContentWrapper>
-    <ValidationObserver ref="form" v-slot="{ invalid }">
+    <LoadingBar v-if="$apollo.loading" />
+    <ValidationObserver v-else ref="form" v-slot="{ invalid }">
       <InputRow class="input-row-mob">
         <InputWithTitle>
           <template #title> Employee Selector</template>
@@ -8,7 +9,7 @@
           <template #input>
             <CustomSelect
               v-if="employees"
-              :options="employees.data"
+              :options="employees"
               select-by="id"
               :disabled="isAddNewEmployee"
               @input="selectEmployee"
@@ -77,7 +78,7 @@
             <CustomSelect
               v-if="units"
               multi-select
-              :options="units.data"
+              :options="units"
               do-not-preselect
               @input="selectEmployeeUnit"
             />
@@ -91,7 +92,7 @@
             <CustomSelect
               v-if="units"
               multi-select
-              :options="units.data"
+              :options="units"
               do-not-preselect
               @input="selectEditUnits"
             />

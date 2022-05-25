@@ -2,11 +2,9 @@
 
 query Units {
   units {
-    data {
-      ...UnitFragment
-      employees {
-        id
-      }
+    ...UnitFragment
+    employees {
+      id
     }
   }
 }

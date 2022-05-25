@@ -7,7 +7,7 @@
         <template #input>
           <CustomSelect
             v-if="units"
-            :options="units.data"
+            :options="units"
             select-by="name"
             select-by-second="code"
             @input="selectUnit"
@@ -37,7 +37,7 @@
 
       <template #content>
         <CustomTableRow
-          v-for="employee in employees.data"
+          v-for="employee in employees"
           :key="employee.id"
           class="table-row"
         >
@@ -116,6 +116,8 @@ export default {
         'Add employee to unit success',
         'Add employee to unit error'
       )
+
+      this.$apollo.queries.employees.refetch()
     },
   },
 }
