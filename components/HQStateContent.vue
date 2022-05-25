@@ -20,7 +20,7 @@
 
         <template v-if="states" #content>
           <CustomTableRow
-            v-for="state in states.data"
+            v-for="state in states"
             :key="state.id"
             class="table-row"
           >
@@ -39,7 +39,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else>{{ addPercentSign(state.salesTaxCafeteria) }}</span>
+            <span v-else>{{ state.salesTaxCafeteria }}</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -48,7 +48,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else> {{ addPercentSign(state.salesTaxVending) }}</span>
+            <span v-else> {{ state.salesTaxVending }}</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -58,7 +58,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ addPercentSign(state.salesTaxRestaurant) }}
+              {{ state.salesTaxRestaurant }}
             </span>
 
             <CustomInput
@@ -69,7 +69,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ addPercentSign(state.salesTaxStore) }}
+              {{ state.salesTaxStore }}
             </span>
 
             <CustomInput
@@ -80,7 +80,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ addPercentSign(state.grossReceiptsTax) }}
+              {{ state.grossReceiptsTax }}
             </span>
 
             <CustomTableIconsColumn
@@ -281,7 +281,7 @@ export default {
   }
 }
 
-.table-full{
+.table-full {
   @media screen and (min-width: $lg) and (max-width: $xxl) {
     width: calc(100vw - 280px);
   }

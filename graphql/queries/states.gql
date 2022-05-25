@@ -2,8 +2,6 @@
 
 query States {
   states {
-    data {
-      ...StateFragment
-    }
+    ...StateFragment
   }
 }
