@@ -1,0 +1,4 @@
+mutation CloseWeek {
+  closeWeek
+}
+

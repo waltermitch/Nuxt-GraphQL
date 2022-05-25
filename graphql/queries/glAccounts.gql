@@ -2,7 +2,6 @@
 
 query GlAccounts {
   glAccounts {
-    data {
       ...GlAccountFragment
       parent {
         id
@@ -12,6 +11,5 @@ query GlAccounts {
         id
         name
       }
-    }
   }
 }

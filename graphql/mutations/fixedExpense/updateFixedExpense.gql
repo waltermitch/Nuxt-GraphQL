@@ -1,0 +1,5 @@
+mutation updateFixedExpense($fixedExpenseInput: updateFixedExpense!) {
+  updateFixedExpense(fixedExpenseInput: $fixedExpenseInput) {
+    id
+  }
+}
