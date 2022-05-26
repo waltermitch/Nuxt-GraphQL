@@ -93,8 +93,8 @@
 
       <template #input>
         <span>{{ leftToDistribute }}$</span>
-      </template> </InputWithTitle
-    >purchases
+      </template>
+    </InputWithTitle>
 
     <div class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="purchaseOrderAction">
@@ -125,6 +125,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { formatDate } from '~/helpers/helpers'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import Me from '~/graphql/queries/me.query.gql'
+import { meMixin } from '~/mixins/meMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import Purchases from '~/graphql/queries/purchases.gql'
 import InventoryCategories from '~/graphql/queries/inventoryCategories.gql'
@@ -138,7 +139,13 @@ export default {
     ValidationObserver,
     CustomTableAddIcon,
   },
-  mixins: [formMixin, tableActionsMixin, mutationMixin, purchaseOrderMixin],
+  mixins: [
+    formMixin,
+    tableActionsMixin,
+    mutationMixin,
+    purchaseOrderMixin,
+    meMixin,
+  ],
   apollo: {
     glAccounts: {
       query: GlAccounts,
@@ -261,6 +268,7 @@ export default {
           PurchaseInput: {
             number: this.getInvoiceNumber,
             date: this.formatDate(this.getPurchaseDate),
+            periodEnd: this.periodEndDate,
             vendor: {
               connect: this.getVendor.id,
             },
@@ -302,6 +310,7 @@ export default {
             id: this.getId,
             number: this.getInvoiceNumber,
             date: this.formatDate(this.getPurchaseDate),
+            periodEnd: this.periodEndDate,
             vendor: {
               connect: this.getVendor.id,
             },

@@ -6,6 +6,7 @@ fragment PurchaseFragment on Purchase {
   id
   number
   date
+  periodEnd
   vendor {
     ...VendorFragment
   }

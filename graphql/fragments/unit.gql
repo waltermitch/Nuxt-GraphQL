@@ -18,6 +18,10 @@ fragment UnitFragment on Unit {
   sysco
   isActive
   isVending
+  activePeriod {
+    id
+    periodEnd
+  }
   users {
     ...UserFragment
   }

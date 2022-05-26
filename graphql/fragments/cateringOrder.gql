@@ -20,6 +20,7 @@ fragment CateringOrderFragment on CateringOrder {
   billToAddress
   isCashOrder
   chargeNumber
+  periodEnd
   createdAt
   updatedAt
 }

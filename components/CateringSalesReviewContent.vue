@@ -16,7 +16,7 @@
 
         <template v-if="cateringOrders" #content>
           <CustomTableRow
-            v-for="cateringOrder in cateringOrders"
+            v-for="cateringOrder in currentPeriodData"
             :key="cateringOrder.id"
             class="table-row table-content-row"
           >
@@ -46,6 +46,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import DeleteCateringOrder from '~/graphql/mutations/cateringOrder/deleteCateringOrder'
 import { formatDateFromAPI, formatDateAndTimeFromAPI } from '~/helpers/helpers'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'CateringSalesReviewContent',
   components: { CustomTable, CustomTableRow },
@@ -54,7 +55,14 @@ export default {
       query: CateringOrders,
     },
   },
-  mixins: [tableActionsMixin, mutationMixin],
+  mixins: [tableActionsMixin, mutationMixin, meMixin],
+  computed: {
+    currentPeriodData() {
+      return this.cateringOrders.filter(
+        (cateringOrder) => cateringOrder.periodEnd === this.periodEndDate
+      )
+    },
+  },
   methods: {
     formatDateFromAPI,
     formatDateAndTimeFromAPI,

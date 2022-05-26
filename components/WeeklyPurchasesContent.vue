@@ -20,7 +20,7 @@
 
         <template v-if="purchases" #content>
           <CustomTableRow
-            v-for="purchase in purchases"
+            v-for="purchase in currentPeriodData"
             :key="purchase.id"
             class="table-row table-content-row"
           >
@@ -64,6 +64,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import DeletePurchase from '~/graphql/mutations/purchaseOrder/deletePurchase'
+import { meMixin } from '~/mixins/meMixin'
 
 export default {
   name: 'WeeklyPurchasesContent',
@@ -77,7 +78,14 @@ export default {
       query: Purchases,
     },
   },
-  mixins: [tableActionsMixin, mutationMixin],
+  mixins: [tableActionsMixin, mutationMixin, meMixin],
+  computed: {
+    currentPeriodData() {
+      return this.purchases.filter(
+        (purchase) => purchase.periodEnd === this.periodEndDate
+      )
+    },
+  },
   methods: {
     formatDateFromAPI,
     editPurchaseOrder(purchase) {

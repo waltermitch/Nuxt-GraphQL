@@ -66,10 +66,11 @@ import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import { formatDate, formatDateAndTime } from '~/helpers/helpers'
 import { CATERING_ORDER } from '~/constants/cateringOrder'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'CateringSalesShipAndBillTo',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin, mutationMixin, cateringSalesMixin],
+  mixins: [formMixin, mutationMixin, cateringSalesMixin, meMixin],
   data() {
     return {}
   },
@@ -117,9 +118,13 @@ export default {
           cateringOrderInput: {
             description: this.getDescription,
             deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
+            periodEnd: this.periodEndDate,
             headCount: Number(this.getHeadCount),
             items: {
-              create: this.getItems.map((item) => item),
+              create: this.getItemsWithoutId.map((item) => {
+                const { tempId, ...rest } = item
+                return rest
+              }),
             },
             phoneNumber: this.getPhoneNumber,
             orderBy: this.getOrderBy,
@@ -149,6 +154,7 @@ export default {
             id: this.getId,
             description: this.getDescription,
             deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
+            periodEnd: this.periodEndDate,
             headCount: Number(this.getHeadCount),
             items: {
               delete: this.getDeleteItemIDs,
