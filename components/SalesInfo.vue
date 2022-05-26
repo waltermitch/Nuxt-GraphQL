@@ -106,7 +106,7 @@
 
         <template #input>
           <CustomInput
-            v-model="overringTax"
+            v-model="overringVoidTax"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -262,9 +262,9 @@ export default {
         return this.$store.commit('closeRegister/SET_NET_VOUCHER', value)
       },
     },
-    overringTax: {
+    overringVoidTax: {
       get() {
-        return this.getOverringTax
+        return this.getOverringVoidTax
       },
       set(value) {
         return this.$store.commit('closeRegister/SET_OVERRING_TAX', value)

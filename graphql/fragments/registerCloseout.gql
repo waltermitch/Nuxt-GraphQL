@@ -21,14 +21,14 @@ fragment RegisterCloseoutFragment on RegisterCloseout {
   netCharge
   taxFromTheTape
   netVoucher
-  overringTax
+  overringVoidTax
   netCash
   chargeTax
   voucherTax
   cashTax
-  totalPettyCache
-  actualCacheDeposit
-  calculatedCacheDeposit
+  totalPettyCash
+  actualCashDeposit
+  calculatedCashDeposit
   overShort
   customerCountBreakfast
   netSalesBreakfast

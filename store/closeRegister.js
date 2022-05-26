@@ -62,7 +62,7 @@ export const mutations = {
     state.closeRegister.netVoucher = payload
   },
   SET_OVERRING_TAX(state, payload) {
-    state.closeRegister.overringTax = payload
+    state.closeRegister.overringVoidTax = payload
   },
   SET_NET_CASH(state, payload) {
     state.closeRegister.netCash = payload
@@ -77,13 +77,13 @@ export const mutations = {
     state.closeRegister.cashTax = payload
   },
   SET_TOTAL_PETTY_CACHE(state, payload) {
-    state.closeRegister.totalPettyCache = payload
+    state.closeRegister.totalPettyCash = payload
   },
   SET_ACTUAL_CACHE_DEPOSIT(state, payload) {
-    state.closeRegister.actualCacheDeposit = payload
+    state.closeRegister.actualCashDeposit = payload
   },
   SET_CALCULATED_CACHE_DEPOSIT(state, payload) {
-    state.closeRegister.calculatedCacheDeposit = payload
+    state.closeRegister.calculatedCashDeposit = payload
   },
   SET_OVER_SHORT(state, payload) {
     state.closeRegister.overShort = payload
@@ -133,15 +133,15 @@ export const getters = {
   getNetCharge: (state) => state.closeRegister.netCharge,
   getTaxFromTheTape: (state) => state.closeRegister.taxFromTheTape,
   getNetVoucher: (state) => state.closeRegister.netVoucher,
-  getOverringTax: (state) => state.closeRegister.overringTax,
+  getOverringVoidTax: (state) => state.closeRegister.overringVoidTax,
   getNetCash: (state) => state.closeRegister.netCash,
   getChargeTax: (state) => state.closeRegister.chargeTax,
   getVoucherTax: (state) => state.closeRegister.voucherTax,
   getCashTax: (state) => state.closeRegister.cashTax,
-  getTotalPettyCache: (state) => state.closeRegister.totalPettyCache,
-  getActualCacheDeposit: (state) => state.closeRegister.actualCacheDeposit,
-  getCalculatedCacheDeposit: (state) =>
-    state.closeRegister.calculatedCacheDeposit,
+  getTotalPettyCash: (state) => state.closeRegister.totalPettyCash,
+  getActualCashDeposit: (state) => state.closeRegister.actualCashDeposit,
+  getCalculatedCashDeposit: (state) =>
+    state.closeRegister.calculatedCashDeposit,
   getOverShort: (state) => state.closeRegister.overShort,
   getCustomerCountBreakfast: (state) =>
     state.closeRegister.customerCountBreakfast,

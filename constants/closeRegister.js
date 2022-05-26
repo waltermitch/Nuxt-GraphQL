@@ -33,17 +33,17 @@ export const CLOSE_REGISTER = {
   netCharge: '',
   taxFromTheTape: '',
   netVoucher: '',
-  overringTax: '',
+  overringVoidTax: '',
   // TODO PECZIS Calculations
   netCash: '0',
   chargeTax: '',
   voucherTax: '',
   // TODO PECZIS Calculations
   cashTax: '0',
-  totalPettyCache: '',
-  actualCacheDeposit: '',
+  totalPettyCash: '',
+  actualCashDeposit: '',
   // TODO PECZIS Calculations
-  calculatedCacheDeposit: '0',
+  calculatedCashDeposit: '0',
   // TODO PECZIS Calculations
   overShort: '0',
   customerCountBreakfast: '',

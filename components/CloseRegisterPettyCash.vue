@@ -168,16 +168,11 @@ export default {
         return Number(prev) + Number(current.amount)
       }, 0)
 
-      // if (typeof this.totalPettyCash === 'number') {
-      //   return this.totalPettyCash - totalAmount
-      // } else {
-      //   return 0
-      // }
       return this.totalPettyCash - totalAmount
     },
     totalPettyCash: {
       get() {
-        return this.getTotalPettyCache
+        return this.getTotalPettyCash
       },
       set(value) {
         this.$store.commit('closeRegister/SET_TOTAL_PETTY_CACHE', value)

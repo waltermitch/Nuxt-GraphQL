@@ -194,7 +194,7 @@ export default {
   computed: {
     actualCashDeposit: {
       get() {
-        return this.getActualCacheDeposit
+        return this.getActualCashDeposit
       },
       set(value) {
         this.$store.commit('closeRegister/SET_ACTUAL_CACHE_DEPOSIT', value)
@@ -202,7 +202,7 @@ export default {
     },
     calculatedCashDeposit: {
       get() {
-        return this.getCalculatedCacheDeposit
+        return this.getCalculatedCashDeposit
       },
       set(value) {
         this.$store.commit('closeRegister/SET_CALCULATED_CACHE_DEPOSIT', value)
@@ -296,14 +296,14 @@ export default {
             netCharge: this.getNetCharge,
             taxFromTheTape: this.getTaxFromTheTape,
             netVoucher: this.getNetVoucher,
-            overringTax: this.getOverringTax,
+            overringVoidTax: this.getOverringVoidTax,
             netCash: this.getNetCash,
             chargeTax: this.getChargeTax,
             voucherTax: this.getVoucherTax,
             cashTax: this.getCashTax,
-            totalPettyCache: this.getTotalPettyCache,
-            actualCacheDeposit: this.getActualCacheDeposit,
-            calculatedCacheDeposit: this.getCalculatedCacheDeposit,
+            totalPettyCash: this.getTotalPettyCash,
+            actualCashDeposit: this.getActualCashDeposit,
+            calculatedCashDeposit: this.getCalculatedCashDeposit,
             overShort: this.getOverShort,
             customerCountBreakfast: this.getCustomerCountBreakfast,
             netSalesBreakfast: this.getNetSalesBreakfast,
@@ -349,14 +349,14 @@ export default {
             netCharge: this.getNetCharge,
             taxFromTheTape: this.getTaxFromTheTape,
             netVoucher: this.getNetVoucher,
-            overringTax: this.getOverringTax,
+            overringVoidTax: this.getOverringVoidTax,
             netCash: this.getNetCash,
             chargeTax: this.getChargeTax,
             voucherTax: this.getVoucherTax,
             cashTax: this.getCashTax,
-            totalPettyCache: this.getTotalPettyCache,
-            actualCacheDeposit: this.getActualCacheDeposit,
-            calculatedCacheDeposit: this.getCalculatedCacheDeposit,
+            totalPettyCash: this.getTotalPettyCash,
+            actualCashDeposit: this.getActualCashDeposit,
+            calculatedCashDeposit: this.getCalculatedCashDeposit,
             overShort: this.getOverShort,
             customerCountBreakfast: this.getCustomerCountBreakfast,
             netSalesBreakfast: this.getNetSalesBreakfast,
