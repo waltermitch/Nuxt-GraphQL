@@ -2,37 +2,53 @@
   <div>
     <ValidationObserver ref="form">
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle max-width="unset">
           <template #title>Ship To Name</template>
 
           <template #input>
-            <CustomInput v-model="shipToName" rules="required" />
+            <CustomTextarea
+              v-model="shipToName"
+              rules="required"
+              name="shipToName"
+            />
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle max-width="unset">
           <template #title>Bill To Name</template>
 
           <template #input>
-            <CustomInput v-model="billToName" rules="required" />
+            <CustomTextarea
+              v-model="billToName"
+              rules="required"
+              name="billToName"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle max-width="unset">
           <template #title>Ship To Address</template>
 
           <template #input>
-            <CustomInput v-model="shipToAddress" rules="required" />
+            <CustomTextarea
+              v-model="shipToAddress"
+              rules="required"
+              name="shipToAddress"
+            />
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle max-width="unset">
           <template #title>Bill To Address</template>
 
           <template #input>
-            <CustomInput v-model="billToAddress" rules="required" />
+            <CustomTextarea
+              v-model="billToAddress"
+              rules="required"
+              name="billToAddress"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -60,7 +76,7 @@ import CreateCateringOrder from '../graphql/mutations/cateringOrder/createCateri
 import UpdateCateringOrder from '../graphql/mutations/cateringOrder/updateCateringOrder.gql'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
-import CustomInput from './CustomInput.vue'
+import CustomTextarea from './CustomTextarea.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
@@ -69,7 +85,12 @@ import { CATERING_ORDER } from '~/constants/cateringOrder'
 import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'CateringSalesShipAndBillTo',
-  components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
+  components: {
+    InputRow,
+    InputWithTitle,
+    CustomTextarea,
+    ValidationObserver,
+  },
   mixins: [formMixin, mutationMixin, cateringSalesMixin, meMixin],
   data() {
     return {}

@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver ref="form">
+  <ValidationObserver ref="form" v-slot="{ invalid }">
     <CustomTable>
       <template #header>
         <div class="table-row">
@@ -25,6 +25,7 @@
             :value="item.quantity"
             do-not-show-error-message
             rules="required|numeric"
+            type="number"
             @input="(e) => updateItems(item, Number(e), 'quantity')"
           />
 
@@ -34,7 +35,7 @@
             :value="item.menuItem"
             do-not-show-error-message
             rules="required"
-            @input="(e) => updateItems(item, e, 'menuItem')"
+            @input="(e) => updateItems(item, Number(e), 'menuItem')"
           />
 
           <span v-if="!getIsEdit">{{ item.price }}$</span>
@@ -44,6 +45,7 @@
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
+            type="number"
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
 
@@ -54,6 +56,7 @@
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
+            type="number"
             @input="(e) => updateItems(item, Number(e), 'ext')"
           />
 
@@ -67,18 +70,20 @@
         <CustomTableRow v-if="isAdd" class="table-row">
           <CustomInput
             v-model.number="newItem.quantity"
+            type="number"
             do-not-show-error-message
             rules="required|numeric"
           />
 
           <CustomInput
-            v-model="newItem.menuItem"
+            v-model.number="newItem.menuItem"
             do-not-show-error-message
             rules="required"
           />
 
           <CustomInput
             v-model.number="newItem.price"
+            type="number"
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
@@ -86,6 +91,7 @@
 
           <CustomInput
             v-model.number="newItem.ext"
+            type="number"
             rules="required|currency"
             do-not-show-error-message
             placeholder="$0.00"
@@ -105,14 +111,15 @@
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Price</span>
 
-          <span class="table-footer-item">$0.00</span>
+          <span class="table-footer-item">${{ totalPrice }}</span>
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Tax</span>
 
           <CustomInput
-            v-model="tax"
+            v-model.number="tax"
+            type="number"
             placeholder="$0.00"
             do-not-show-error-message
             rules="required|currency"
@@ -122,13 +129,17 @@
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Total</span>
 
-          <span class="table-footer-item">$0.00</span>
+          <span class="table-footer-item">${{ totalPriceWithTax }}</span>
         </CustomTableRow>
       </template>
     </CustomTable>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="nextTab">
+      <DefaultButton
+        button-color-gamma="red"
+        :disabled="invalid"
+        @event="nextTab"
+      >
         Continue
       </DefaultButton>
 
@@ -165,7 +176,6 @@ export default {
   mixins: [formMixin, tableActionsMixin, cateringSalesMixin, tabsViewMixin],
   data() {
     return {
-      items: [],
       newItem: {
         quantity: '',
         menuItem: '',
@@ -177,6 +187,20 @@ export default {
   computed: {
     combinedItemsArray() {
       return [...this.getItems]
+    },
+    totalPrice() {
+      return this.getItems.reduce((prev, current) => {
+        return (
+          Number(prev) +
+          Number(
+            Number(current.quantity) *
+              (Number(current.price) + Number(current.ext))
+          )
+        )
+      }, 0)
+    },
+    totalPriceWithTax() {
+      return Number(this.totalPrice) + Number(this.getTax)
     },
     tax: {
       get() {

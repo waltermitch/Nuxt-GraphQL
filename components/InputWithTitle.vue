@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="{ maxWidth }">
     <h5 class="title" :style="{ marginBottom }">
       <slot name="title"></slot>
     </h5>
@@ -15,6 +15,10 @@ export default {
     marginBottom: {
       type: String,
       default: '4px',
+    },
+    maxWidth: {
+      type: String,
+      default: '240px',
     },
   },
 }
