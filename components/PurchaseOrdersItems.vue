@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ValidationObserver ref="form" v-slot="{ invalid }">
     <CustomTable>
       <template #header>
         <div class="table-row">
@@ -12,76 +12,80 @@
       </template>
 
       <template #content>
-        <ValidationObserver ref="form">
-          <CustomTableRow
-            v-for="item in combinedItemsArray"
-            :key="item.id"
-            class="table-row"
-          >
-            <CustomInput
-              :value="item.amount"
-              rules="required|numeric"
-              do-not-show-error-message
-              @input="(e) => updateItems(item, Number(e), 'amount')"
-            />
+        <CustomTableRow
+          v-for="item in combinedItemsArray"
+          :key="item.id"
+          class="table-row"
+        >
+          <CustomInput
+            :value="item.amount"
+            rules="required|currency"
+            placeholder="$0.00"
+            type="number"
+            do-not-show-error-message
+            @input="(e) => updateItems(item, Number(e), 'amount')"
+          />
 
-            <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
-            <CustomSelect
-              v-else-if="inventoryCategories"
-              :options="inventoryCategories"
-              select-by="name"
-              :selected-item="item.inventoryCategory"
-              @input="selectInventoryCategory(item, $event)"
-            />
+          <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
+          <CustomSelect
+            v-else-if="inventoryCategories"
+            :options="inventoryCategories"
+            select-by="name"
+            :selected-item="item.inventoryCategory"
+            @input="selectInventoryCategory(item, $event)"
+          />
 
-            <span v-if="!getIsEdit">{{ item.glAccount.name }}</span>
-            <CustomSelect
-              v-else-if="glAccounts"
-              :options="glAccounts"
-              select-by="name"
-              :selected-item="item.glAccount"
-              @input="selectGlAccount(item, $event)"
-            />
+          <span v-if="!getIsEdit">{{ item.glAccount.name }}</span>
+          <CustomSelect
+            v-else-if="glAccounts"
+            :options="glAccounts"
+            select-by="name"
+            :selected-item="item.glAccount"
+            @input="selectGlAccount(item, $event)"
+          />
 
-            <img
-              src="~assets/images/icons/home/delete.svg"
-              class="icon icon--delete"
-              @click="deleteItem(item.id)"
-            />
-          </CustomTableRow>
+          <img
+            src="~assets/images/icons/home/delete.svg"
+            class="icon icon--delete"
+            @click="deleteItem(item.id)"
+          />
+        </CustomTableRow>
 
-          <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput
-              v-model.number="newItem.amount"
-              do-not-show-error-message
-              rules="required|numeric"
-            />
+        <CustomTableRow v-if="isAdd" class="table-row">
+          <CustomInput
+            v-model.number="newItem.amount"
+            rules="required|currency"
+            placeholder="$0.00"
+            type="number"
+            do-not-show-error-message
+          />
 
-            <CustomSelect
-              v-if="inventoryCategories"
-              :options="inventoryCategories"
-              select-by="name"
-              do-not-preselect
-              @input="selectNewItemInventoryCategory"
-            />
+          <CustomSelect
+            v-if="inventoryCategories"
+            :options="inventoryCategories"
+            select-by="name"
+            do-not-preselect
+            @input="selectNewItemInventoryCategory"
+          />
 
-            <CustomSelect
-              v-if="glAccounts && !isSelectedGlAccount"
-              :options="glAccounts"
-              select-by="name"
-              @input="selectNewItemGlAccount"
-            />
+          <CustomSelect
+            v-if="glAccounts && !isSelectedGlAccount"
+            :options="glAccounts"
+            select-by="name"
+            @input="selectNewItemGlAccount"
+          />
 
-            <span v-if="isSelectedGlAccount">{{ selectedGlAccount.name }}</span>
-          </CustomTableRow>
-        </ValidationObserver>
+          <span v-if="isSelectedGlAccount">{{ selectedGlAccount.name }}</span>
+        </CustomTableRow>
 
         <CustomTableRow v-if="leftToDistribute > 0" class="table-row add-row">
           <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
         </CustomTableRow>
 
         <div v-if="isAdd" class="buttons-area add-item-buttons">
-          <DefaultButton @event="addItem"> Add Item </DefaultButton>
+          <DefaultButton :disabled="invalid" @event="addItem">
+            Add Item
+          </DefaultButton>
 
           <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
         </div>
@@ -97,7 +101,11 @@
     </InputWithTitle>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="purchaseOrderAction">
+      <DefaultButton
+        button-color-gamma="red"
+        :disabled="invalid"
+        @event="purchaseOrderAction"
+      >
         {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
       </DefaultButton>
 
@@ -108,7 +116,7 @@
         Cancel
       </DefaultButton>
     </div>
-  </div>
+  </ValidationObserver>
 </template>
 
 <script>
@@ -411,5 +419,10 @@ export default {
 
 .left {
   margin-top: 20px;
+}
+
+.add-item-buttons {
+  margin-left: 25px;
+  margin-bottom: 30px;
 }
 </style>
