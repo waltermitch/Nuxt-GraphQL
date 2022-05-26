@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle max-width="unset">
           <template #title>Ship To Name</template>
@@ -52,20 +52,24 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <div class="buttons-area">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="cateringOrderAction"
+        >
+          {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
+        </DefaultButton>
+
+        <DefaultButton
+          button-color-gamma="white"
+          @event="getIsEdit ? cancelEdit() : cancelCreate()"
+        >
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
-
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="cateringOrderAction">
-        {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
-      </DefaultButton>
-
-      <DefaultButton
-        button-color-gamma="white"
-        @event="getIsEdit ? cancelEdit() : cancelCreate()"
-      >
-        Cancel
-      </DefaultButton>
-    </div>
   </div>
 </template>
 

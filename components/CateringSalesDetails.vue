@@ -1,12 +1,12 @@
 <template>
   <div class="content">
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
           <template #title>Order Number</template>
 
           <template #input>
-            <CustomInput v-model="getId" rules="required" disabled />
+            <CustomInput v-model="getId" disabled />
           </template>
         </InputWithTitle>
 
@@ -118,20 +118,24 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <div class="buttons-area">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="nextTab"
+        >
+          Continue
+        </DefaultButton>
+
+        <DefaultButton
+          button-color-gamma="white"
+          @event="getIsEdit ? cancelEdit() : cancelCreate()"
+        >
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
-
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="nextTab">
-        Continue
-      </DefaultButton>
-
-      <DefaultButton
-        button-color-gamma="white"
-        @event="getIsEdit ? cancelEdit() : cancelCreate()"
-      >
-        Cancel
-      </DefaultButton>
-    </div>
   </div>
 </template>
 
