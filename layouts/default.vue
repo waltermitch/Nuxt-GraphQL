@@ -9,18 +9,19 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import TheHeader from '@/components/TheHeader'
 import SideBarMob from '@/components/SideBarMob'
 export default {
   name: 'DefaultLayout',
   components: {
-    TheHeader, SideBarMob
+    TheHeader,
+    SideBarMob,
   },
-  middleware: 'isAuth',
-  data(){
+  middleware: ['isAuth', 'checkIfSelectedUnit'],
+  data() {
     return {
-      isShow: false
+      isShow: false,
     }
   },
   computed: {
@@ -29,11 +30,11 @@ export default {
     }),
   },
   watch: {
-    '$route' () {
-      if(window.innerWidth < 1024){
+    $route() {
+      if (window.innerWidth < 1024) {
         this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
       }
-    }
+    },
   },
   mounted() {
     this.setRole('user')
@@ -43,7 +44,6 @@ export default {
       setRole: 'auth/setRole',
     }),
   },
-
 }
 </script>
 
