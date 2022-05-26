@@ -1,12 +1,16 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <div class="input-row">
         <InputWithTitle>
           <template #title> Total Petty Cash </template>
 
           <template #input>
-            <CustomInput v-model="totalPettyCash" rules="required|currency" />
+            <CustomInput
+              v-model="totalPettyCash"
+              type="number"
+              rules="required|currency"
+            />
           </template>
         </InputWithTitle>
       </div>
@@ -43,12 +47,11 @@
 
             <CustomInput
               :value="item.amount"
-              placeholder="$0.00"
               do-not-show-error-message
-              :rules="{
-                between: [1, `${leftToDistribute + Number(item.amount)}`],
-              }"
-              @input="(e) => updateItems(item, Number(e), 'amount')"
+              placeholder="$0.00"
+              rules="required|currency"
+              type="number"
+              @input="(e) => updateItems(item, e, 'amount')"
             />
             <img
               src="~assets/images/icons/home/delete.svg"
@@ -69,9 +72,8 @@
               v-model="newItem.amount"
               placeholder="$0.00"
               do-not-show-error-message
-              :rules="{
-                between: [1, `${leftToDistribute + Number(newItem.amount)}`],
-              }"
+              type="number"
+              rules="required|currency"
             />
           </CustomTableRow>
 
@@ -98,7 +100,11 @@
       </CustomTable>
 
       <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="nextTab">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="leftToDistribute < 0 || invalid"
+          @event="nextTab"
+        >
           Continue
         </DefaultButton>
 
@@ -125,6 +131,7 @@ import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 export default {
   name: 'ClosRegisterPettyCash',
   components: {
@@ -135,7 +142,13 @@ export default {
     CustomInput,
     InputWithTitle,
   },
-  mixins: [formMixin, tableActionsMixin, closeRegisterMixin, tabsViewMixin],
+  mixins: [
+    formMixin,
+    tableActionsMixin,
+    closeRegisterMixin,
+    tabsViewMixin,
+    submitMessagesMixin,
+  ],
   apollo: {
     glAccounts: {
       query: GlAccounts,
@@ -155,6 +168,11 @@ export default {
         return Number(prev) + Number(current.amount)
       }, 0)
 
+      // if (typeof this.totalPettyCash === 'number') {
+      //   return this.totalPettyCash - totalAmount
+      // } else {
+      //   return 0
+      // }
       return this.totalPettyCash - totalAmount
     },
     totalPettyCash: {
@@ -167,8 +185,9 @@ export default {
     },
   },
   methods: {
-    addItem() {
-      const formValidated = this.$refs.form && this.$refs.form.validate()
+    async addItem() {
+      const formValidated =
+        this.$refs.form && (await this.$refs.form.validate())
 
       if (formValidated) {
         if (this.newItem.amount) {
@@ -186,6 +205,8 @@ export default {
           amount: '',
           glAccount: '',
         }
+      } else {
+        this.showSubmitMessage('Form validation failed', 'error')
       }
     },
     deleteRow(item) {
@@ -264,5 +285,9 @@ export default {
 
 .buttons-area {
   margin-top: 25px;
+}
+
+.add-item-buttons {
+  padding-left: 20px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <ValidationObserver ref="form" v-slot="{ invalid }" class="content">
     <InputRow>
       <InputWithTitle>
         <template #title>New Non-Resettable</template>
@@ -9,6 +9,7 @@
             v-model="nonResetable"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -40,6 +41,7 @@
           <CustomInput
             v-model="netOV"
             rules="currency|required"
+            type="number"
             placeholder="$0.00"
           />
         </template>
@@ -64,6 +66,7 @@
             v-model="netCharge"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -78,6 +81,7 @@
             v-model="taxFromTheTape"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -90,6 +94,7 @@
             v-model="netVoucher"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -104,6 +109,7 @@
             v-model="overringTax"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -127,6 +133,7 @@
             v-model="chargeTax"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -141,6 +148,7 @@
             v-model="voucherTax"
             rules="currency|required"
             placeholder="$0.00"
+            type="number"
           />
         </template>
       </InputWithTitle>
@@ -158,7 +166,11 @@
     </InputRow>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="nextTab">
+      <DefaultButton
+        button-color-gamma="red"
+        :disabled="invalid"
+        @event="nextTab"
+      >
         Continue
       </DefaultButton>
 
@@ -169,17 +181,18 @@
         Cancel
       </DefaultButton>
     </div>
-  </div>
+  </ValidationObserver>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 export default {
   name: 'SalesInfo',
-  components: { InputRow, CustomInput },
+  components: { ValidationObserver, InputRow, CustomInput },
   mixins: [closeRegisterMixin, tabsViewMixin],
   computed: {
     nonResetable: {

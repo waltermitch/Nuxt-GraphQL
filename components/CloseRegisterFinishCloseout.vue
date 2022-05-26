@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ValidationObserver ref="form">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
           <template #title>Actual Cash Deposit</template>
@@ -10,6 +10,7 @@
               v-model="actualCashDeposit"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -46,6 +47,7 @@
               v-model="customerCountBreakfast"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -58,6 +60,7 @@
               v-model="netSalesBreakfast"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -72,6 +75,7 @@
               v-model="customerCountLunch"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -84,6 +88,7 @@
               v-model="netSalesLunch"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -98,6 +103,7 @@
               v-model="customerCountDinner"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -110,6 +116,7 @@
               v-model="netSalesDinner"
               placeholder="$0.00"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -140,20 +147,24 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <div class="buttons-area">
+        <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="closeRegisterOrderAction"
+        >
+          {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
+        </DefaultButton>
+
+        <DefaultButton
+          button-color-gamma="white"
+          @event="getIsEdit ? cancelEdit() : cancelCreate()"
+        >
+          Cancel
+        </DefaultButton>
+      </div>
     </ValidationObserver>
-
-    <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="closeRegisterOrderAction">
-        {{ `${!getIsEdit ? 'Save' : 'Edit'}` }}
-      </DefaultButton>
-
-      <DefaultButton
-        button-color-gamma="white"
-        @event="getIsEdit ? cancelEdit() : cancelCreate()"
-      >
-        Cancel
-      </DefaultButton>
-    </div>
   </div>
 </template>
 
