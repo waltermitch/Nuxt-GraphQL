@@ -3,7 +3,7 @@
     <PageSubHeaderContent />
 
     <PageContentWrapper>
-      <ValidationObserver ref="form">
+      <ValidationObserver ref="form" v-slot="{ invalid }">
         <InputRow class="input-row-mob">
           <InputWithTitle>
             <template #title>Expense Date</template>
@@ -72,9 +72,10 @@
 
             <template #input>
               <CustomInput
-                v-model="amount"
+                v-model.number="amount"
                 placeholder="$0.00"
-                rules="required|double|currency"
+                rules="required|currency"
+                type="number"
               />
             </template>
           </InputWithTitle>
@@ -93,20 +94,24 @@
             </template>
           </InputWithTitle>
         </InputRow>
+
+        <div class="buttons-area">
+          <DefaultButton
+            button-color-gamma="red"
+            :disabled="invalid"
+            @event="expenseAction"
+          >
+            Accept
+          </DefaultButton>
+
+          <DefaultButton
+            button-color-gamma="white"
+            @event="getIsEdit ? cancelEdit() : cancelCreate()"
+          >
+            Cancel
+          </DefaultButton>
+        </div>
       </ValidationObserver>
-
-      <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="expenseAction">
-          Accept
-        </DefaultButton>
-
-        <DefaultButton
-          button-color-gamma="white"
-          @event="getIsEdit ? cancelEdit() : cancelCreate()"
-        >
-          Cancel
-        </DefaultButton>
-      </div>
     </PageContentWrapper>
   </div>
 </template>
@@ -259,7 +264,7 @@ export default {
             expenseType: {
               connect: this.expenseType.id,
             },
-            amount: this.amount,
+            amount: String(this.amount),
           },
         },
         Expenses,
