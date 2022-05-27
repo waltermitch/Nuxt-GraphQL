@@ -296,4 +296,10 @@ export const HQ_ACCOUNTING = [
     pageUrl: '/hq-accounting/vendor',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
+  {
+    id: 6,
+    caption: 'Users',
+    pageUrl: '/hq-accounting/users',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
 ]
