@@ -5,7 +5,6 @@ export const state = () => ({
     lastName: '',
     email: '',
     unit: '',
-    password: '',
     isAdmin: false,
     isActive: false,
   },
@@ -35,9 +34,6 @@ export const mutations = {
   },
   SET_UPDATE_USER_UNIT(state, payload){
     state.updateUser.unit = payload
-  },
-  SET_UPDATE_USER_PASSWORD(state, payload){
-    state.updateUser.password = payload
   },
   SET_UPDATE_USER_IS_ADMIN(state, payload){
     state.updateUser.isAdmin = payload

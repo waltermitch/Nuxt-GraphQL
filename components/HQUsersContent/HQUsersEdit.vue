@@ -107,6 +107,11 @@ export default {
       query: Units,
     },
   },
+  data(){
+    return{
+      password: ''
+    }
+  },
   computed: {
     firstName: {
       get() {
@@ -138,14 +143,6 @@ export default {
       },
       set(value) {
         this.$store.commit('users/SET_UPDATE_USER_UNIT', value)
-      },
-    },
-    password: {
-      get() {
-        return this.getUpdateUser.password
-      },
-      set(value) {
-        this.$store.commit('users/SET_UPDATE_USER_PASSWORD', value)
       },
     },
     isAdmin: {
@@ -187,21 +184,26 @@ export default {
       }
     },
     addUser() {
+
+      const obj = {
+        id: this.getUpdateUser.id,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        isAdmin: this.isAdmin,
+        isActive: this.isActive,
+        units: {
+          sync: this.unit.map((unit) => unit.id)
+        },
+      }
+
+      const objPass = {password: this.password};
+      const objEdit = this.password.length > 0 ? {...obj, ...objPass} : obj
+
       this.mutationAction(
         UpdateUser,
         {
-          userInput: {
-            id: this.getUpdateUser.id,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            email: this.email,
-            //    password: this.password,
-            isAdmin: this.isAdmin,
-            isActive: this.isActive,
-            units: {
-              sync: this.unit.map((unit) => unit.id)
-            },
-          },
+          userInput: objEdit,
         },
         User,
         'Add user success',
