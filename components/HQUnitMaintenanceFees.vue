@@ -18,7 +18,8 @@
 
           <template #input>
             <CustomInput
-              v-model="managementAmount"
+              v-model.number="managementAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -32,7 +33,8 @@
 
           <template #input>
             <CustomInput
-              v-model="managementPercent"
+              v-model.number="managementPercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -57,7 +59,8 @@
 
           <template #input>
             <CustomInput
-              v-model="administrativeAmount"
+              v-model.number="administrativeAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -71,7 +74,8 @@
 
           <template #input>
             <CustomInput
-              v-model="administrativePercent"
+              v-model.number="administrativePercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -93,7 +97,8 @@
 
           <template #input>
             <CustomInput
-              v-model="supportAmount"
+              v-model.number="supportAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -107,7 +112,8 @@
 
           <template #input>
             <CustomInput
-              v-model="supportPercent"
+              v-model.number="supportPercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -121,7 +127,8 @@
 
           <template #input>
             <CustomInput
-              v-model="benefitsPercent"
+              v-model.number="benefitsPercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -144,7 +151,8 @@
 
           <template #input>
             <CustomInput
-              v-model="commissionPercent"
+              v-model.number="commissionPercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -203,6 +211,7 @@ import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { UNIT } from '~/constants/unit'
 export default {
   name: 'HQUnitMaintenanceFees',
   components: {
@@ -249,7 +258,7 @@ export default {
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR',
-          Number(value)
+          value
         )
       },
     },
@@ -260,7 +269,7 @@ export default {
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT',
-          Number(value)
+          value
         )
       },
     },
@@ -274,7 +283,7 @@ export default {
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR',
-          Number(value)
+          value
         )
       },
     },
@@ -285,7 +294,7 @@ export default {
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT',
-          Number(value)
+          value
         )
       },
     },
@@ -294,10 +303,7 @@ export default {
         return this.unit.supportAmount
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
       },
     },
     supportFeeType() {
@@ -310,7 +316,7 @@ export default {
       set(value) {
         this.$store.commit(
           'unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT',
-          Number(value)
+          value
         )
       },
     },
@@ -319,10 +325,7 @@ export default {
         return this.unit.benefitsPercent
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_BENEFITS_PERCENT',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
       },
     },
     regTax() {
@@ -333,10 +336,7 @@ export default {
         return this.unit.commissionPercent
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_COMMISSION_PERCENT',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
       },
     },
     isKronos() {
@@ -405,6 +405,8 @@ export default {
       )
       if (res) {
         this.hideAddUnit()
+        this.setUnitID(null)
+        this.$store.dispatch('unitMaintenance/setUnit', UNIT)
       }
     },
     async updateUnit() {
@@ -444,6 +446,8 @@ export default {
         )
         if (res) {
           this.hideAddUnit()
+          this.setUnitID(null)
+          this.$store.dispatch('unitMaintenance/setUnit', UNIT)
         }
       }
     },

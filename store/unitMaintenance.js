@@ -130,7 +130,10 @@ export const mutations = {
     state.unit.sysco = payload
   },
   SET_UNIT_USERS(state, payload) {
-    state.unit.users = [payload]
+    state.unit = {
+      ...state.unit,
+      users: [payload],
+    }
   },
   SET_UNIT_PAYROLL_TAX(state, payload) {
     state.unit.payrollTaxPercent = payload

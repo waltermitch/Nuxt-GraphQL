@@ -7,7 +7,8 @@
 
           <template #input>
             <CustomInput
-              v-model="payrollTaxPercent"
+              v-model.number="payrollTaxPercent"
+              type="number"
               rules="required"
               placeholder="0%"
             />
@@ -19,7 +20,8 @@
 
           <template #input>
             <CustomInput
-              v-model="benefitsAmount"
+              v-model.number="benefitsAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -33,7 +35,8 @@
 
           <template #input>
             <CustomInput
-              v-model="vendingIncome"
+              v-model.number="vendingIncome"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -45,7 +48,8 @@
 
           <template #input>
             <CustomInput
-              v-model="commissionAmount"
+              v-model.number="commissionAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -59,7 +63,8 @@
 
           <template #input>
             <CustomInput
-              v-model="vacationAmount"
+              v-model.number="vacationAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -85,7 +90,8 @@
 
           <template #input>
             <CustomInput
-              v-model="businessInsuranceAmount"
+              v-model.number="businessInsuranceAmount"
+              type="number"
               rules="required|currency"
               placeholder="$0.00"
             />
@@ -147,10 +153,7 @@ export default {
         return this.unit.payrollTaxPercent
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_PAYROLL_TAX',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_PAYROLL_TAX', value)
       },
     },
     benefitsAmount: {
@@ -158,10 +161,7 @@ export default {
         return this.unit.benefitsAmount
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_BENEFIT_DOLLARS',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFIT_DOLLARS', value)
       },
     },
     vendingIncome: {
@@ -169,10 +169,7 @@ export default {
         return this.unit.vendingIncome
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_VENDING_INCOME',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_VENDING_INCOME', value)
       },
     },
     commissionAmount: {
@@ -180,10 +177,7 @@ export default {
         return this.unit.commissionAmount
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_COMMISSION_DOLLARS',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_DOLLARS', value)
       },
     },
     vacationAmount: {
@@ -191,10 +185,7 @@ export default {
         return this.unit.vacationAmount
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_VACATION_DOLLARS',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_VACATION_DOLLARS', value)
       },
     },
     isVending() {
@@ -208,10 +199,7 @@ export default {
         return this.unit.businessInsuranceAmount
       },
       set(value) {
-        this.$store.commit(
-          'unitMaintenance/SET_UNIT_BUSINESS_INSURANCE',
-          Number(value)
-        )
+        this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', value)
       },
     },
   },

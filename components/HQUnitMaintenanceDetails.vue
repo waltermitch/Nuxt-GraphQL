@@ -78,7 +78,11 @@
           <template #title> Population </template>
 
           <template #input>
-            <CustomInput v-model="population" rules="required" />
+            <CustomInput
+              v-model.number="population"
+              rules="required"
+              type="number"
+            />
           </template>
         </InputWithTitle>
 
@@ -130,7 +134,7 @@
           <template #input>
             <CustomSelect
               v-if="users"
-              :options="users.filter((user) => !user.isAdmin)"
+              :options="usersIsNotAdmin"
               select-by="email"
               @input="selectUser"
             />
@@ -225,6 +229,9 @@ export default {
     },
   },
   computed: {
+    usersIsNotAdmin() {
+      return this.users.filter((user) => !user.isAdmin)
+    },
     code: {
       get() {
         return this.unit.code
@@ -278,7 +285,7 @@ export default {
         return this.unit.population
       },
       set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_POPULATION', Number(value))
+        this.$store.commit('unitMaintenance/SET_UNIT_POPULATION', value)
       },
     },
     state: {
@@ -337,33 +344,22 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_SYSCO', value)
       },
     },
-    usersData: {
-      get() {
-        return this.unit.users
-      },
-      set(value) {
-        this.$store.commit('unitMaintenance/SET_UNIT_USERS', value)
-      },
-    },
   },
   methods: {
     selectDistrict(district) {
-      console.log('district')
       this.district = district
     },
     selectCounty(county) {
-      console.log('county')
       this.county = county
     },
     selectState(state) {
       this.state = state
     },
     selectCity(city) {
-      console.log('city')
       this.city = city
     },
     selectUser(user) {
-      this.usersData = user
+      this.$store.commit('unitMaintenance/SET_UNIT_USERS', user)
     },
   },
 }
