@@ -9,7 +9,8 @@
             <CustomSelect
               v-if="units"
               :options="units"
-              select-by="code"
+              select-by="name"
+              select-by-second="code"
               @input="selectUnit"
             />
           </template>

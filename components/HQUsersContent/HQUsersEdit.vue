@@ -74,6 +74,7 @@
       <div class="input-col">
         <multiselect v-if="units && !isAdmin" v-model="unit" :options="units" :multiple="true" :close-on-select="false"
                      :clear-on-select="false"
+                     :custom-label="nameWithId"
                      :preserve-search="true" placeholder="Pick some" label="name" track-by="name"
                      :preselect-first="false">
         </multiselect>
@@ -169,6 +170,9 @@ export default {
     ...mapActions({
       setShowAddUser: 'users/setShowAddUser',
     }),
+    nameWithId ({ name, id }) {
+      return `${id} — ${name}`
+    },
     setIsAdmin(isCheck) {
       if (isCheck) {
         isCheck.isAdmin = !isCheck.isAdmin
