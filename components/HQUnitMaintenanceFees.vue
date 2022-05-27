@@ -416,6 +416,7 @@ export default {
           unitType,
           glAccounts,
           vendors,
+          activePeriod,
           ...unitInput
         } = this.unit
         const res = await this.mutationAction(
