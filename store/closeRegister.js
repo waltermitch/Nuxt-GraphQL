@@ -1,3 +1,4 @@
+// import { debounce } from 'lodash'
 import { CLOSE_REGISTER } from '~/constants/closeRegister'
 import RegisterCloseoutCalculation from '~/graphql/mutations/registerCloseout/registerCloseoutCalculation'
 
@@ -143,54 +144,60 @@ export const mutations = {
 }
 
 export const actions = {
-  async calculate({ getters, commit }, data) {
-    const fields = {
-      nonResetable: getters.getNonResetable,
-      NetOV: getters.getNetOV,
-      netCharge: getters.getNetCharge,
-      taxFromTheTape: getters.getTaxFromTheTape,
-      netVoucher: getters.getNetVoucher,
-      overringVoidTax: getters.getOverringVoidTax,
-      chargeTax: getters.getChargeTax,
-      voucherTax: getters.getVoucherTax,
-      totalPettyCash: getters.getTotalPettyCash,
-      actualCashDeposit: getters.getActualCashDeposit,
-      customerCountBreakfast: getters.getCustomerCountBreakfast,
-      netSalesBreakfast: getters.getNetSalesBreakfast,
-      customerCountLunch: getters.getCustomerCountLunch,
-      netSalesLunch: getters.getNetSalesLunch,
-      customerCountDinner: getters.getCustomerCountDinner,
-      netSalesDinner: getters.getNetSalesDinner,
+  calculate({ getters, commit }, data) {
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
     }
-
-    const {
-      data: { registerCloseoutCalculation },
-    } = await this.app.apolloProvider.defaultClient.mutate({
-      mutation: RegisterCloseoutCalculation,
-      variables: {
-        registerCloseoutCalculationInput: {
-          unitId: data.unitId,
-          periodId: data.periodId,
-          fields,
-        },
-      },
-    })
-
-    const fieldsResponse = registerCloseoutCalculation.fields
-    const statistics = registerCloseoutCalculation.statistics
-
-    for (const [key, value] of Object.entries({
-      ...fieldsResponse,
-      ...statistics,
-    })) {
-      if (key !== '__typename') {
-        const transformedKey = key
-          .split(/(?=[A-Z])/)
-          .join('_')
-          .toUpperCase()
-        await commit(`SET_${transformedKey}`, value)
+    this.timer = setTimeout(async () => {
+      const fields = {
+        nonResetable: getters.getNonResetable,
+        NetOV: getters.getNetOV,
+        netCharge: getters.getNetCharge,
+        taxFromTheTape: getters.getTaxFromTheTape,
+        netVoucher: getters.getNetVoucher,
+        overringVoidTax: getters.getOverringVoidTax,
+        chargeTax: getters.getChargeTax,
+        voucherTax: getters.getVoucherTax,
+        totalPettyCash: getters.getTotalPettyCash,
+        actualCashDeposit: getters.getActualCashDeposit,
+        customerCountBreakfast: getters.getCustomerCountBreakfast,
+        netSalesBreakfast: getters.getNetSalesBreakfast,
+        customerCountLunch: getters.getCustomerCountLunch,
+        netSalesLunch: getters.getNetSalesLunch,
+        customerCountDinner: getters.getCustomerCountDinner,
+        netSalesDinner: getters.getNetSalesDinner,
       }
-    }
+
+      const {
+        data: { registerCloseoutCalculation },
+      } = await this.app.apolloProvider.defaultClient.mutate({
+        mutation: RegisterCloseoutCalculation,
+        variables: {
+          registerCloseoutCalculationInput: {
+            unitId: data.unitId,
+            periodId: data.periodId,
+            fields,
+          },
+        },
+      })
+
+      const fieldsResponse = registerCloseoutCalculation.fields
+      const statistics = registerCloseoutCalculation.statistics
+
+      for (const [key, value] of Object.entries({
+        ...fieldsResponse,
+        ...statistics,
+      })) {
+        if (key !== '__typename') {
+          const transformedKey = key
+            .split(/(?=[A-Z])/)
+            .join('_')
+            .toUpperCase()
+          await commit(`SET_${transformedKey}`, value)
+        }
+      }
+    }, 1000)
   },
   async setNonResetable({ dispatch, commit }, data) {
     await commit('SET_NON_RESETABLE', data.value)
