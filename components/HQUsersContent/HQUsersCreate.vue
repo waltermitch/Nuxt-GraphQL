@@ -76,6 +76,7 @@
                      :close-on-select="false"
                      :clear-on-select="false"
                      :show-labels="false"
+                     :custom-label="nameWithId"
                      :preserve-search="true" placeholder="Pick some" label="name" track-by="name"
                      :preselect-first="false">
         </multiselect>
@@ -99,13 +100,14 @@ import Units from '../../graphql/queries/units.gql'
 import CustomInput from '../CustomInput.vue'
 import CustomRadioButton from '../CustomRadioButton.vue'
 import InputWithTitle from '../InputWithTitle.vue'
+import DefaultButton from '../DefaultButton'
 import {mutationMixin} from '~/mixins/mutationMixin'
 
 
 export default {
   name: "HQUsersCreate",
   components: {
-    CustomInput, CustomRadioButton, InputWithTitle, Multiselect, PageContentWrapper
+    CustomInput, CustomRadioButton, InputWithTitle, Multiselect, PageContentWrapper, DefaultButton
   },
   mixins: [mutationMixin],
   apollo: {
@@ -128,6 +130,9 @@ export default {
     ...mapActions({
       setShowAddUser: 'users/setShowAddUser',
     }),
+    nameWithId ({ name, id }) {
+      return `${id} — ${name}`
+    },
     setIsAdmin(isCheck) {
       if (isCheck) {
         isCheck.isAdmin = !isCheck.isAdmin

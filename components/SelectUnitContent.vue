@@ -5,10 +5,12 @@
         <template #title>Select Unit</template>
 
         <template #input>
+
           <CustomSelect
             v-if="me"
             :options="me.units"
             select-by="name"
+            select-by-second="id"
             :selected-item="selectedUnit"
             :error="selectError"
             @input="selectUnit"
