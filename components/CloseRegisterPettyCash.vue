@@ -7,7 +7,7 @@
 
           <template #input>
             <CustomInput
-              v-model="totalPettyCash"
+              v-model.number="totalPettyCash"
               type="number"
               rules="required|currency"
             />
@@ -132,6 +132,7 @@ import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'ClosRegisterPettyCash',
   components: {
@@ -148,6 +149,7 @@ export default {
     closeRegisterMixin,
     tabsViewMixin,
     submitMessagesMixin,
+    meMixin,
   ],
   apollo: {
     glAccounts: {
@@ -175,7 +177,10 @@ export default {
         return this.getTotalPettyCash
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_TOTAL_PETTY_CACHE', value)
+        this.$store.dispatch('closeRegister/setTotalPettyCash', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
   },

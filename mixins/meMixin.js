@@ -12,5 +12,12 @@ export const meMixin = {
     periodEndDate() {
       return this.selectedUnit && this.selectedUnit.activePeriod.periodEnd
     },
+    calculationVariables() {
+      return {
+        unitId: this.selectedUnit && Number(this.selectedUnit.id),
+        periodId:
+          this.selectedUnit && Number(this.selectedUnit.activePeriod.id),
+      }
+    },
   },
 }

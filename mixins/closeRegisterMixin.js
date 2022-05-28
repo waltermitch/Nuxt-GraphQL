@@ -38,6 +38,13 @@ export const closeRegisterMixin = {
       getIsEdit: 'closeRegister/getIsEdit',
       getDeleteItemIDs: 'closeRegister/getDeleteItemIDs',
       getItemsWithoutId: 'closeRegister/getItemsWithoutId',
+      getTotalNetSale: 'closeRegister/getTotalNetSale',
+      getTotalDailyDeposit: 'closeRegister/getTotalDailyDeposit',
+      getPettyCash: 'closeRegister/getPettyCash',
+      getCharge: 'closeRegister/getCharge',
+      getCashTotal: 'closeRegister/getCashTotal',
+      getCalcedDeposit: 'closeRegister/getCalcedDeposit',
+      getActualDeposit: 'closeRegister/getActualDeposit',
     }),
   },
   methods: {

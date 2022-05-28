@@ -89,13 +89,13 @@
             <div class="total-row">
               <h5 class="total-caption">Total Net Sales</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getTotalNetSale }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">- Charge</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getCharge }}</span>
             </div>
           </div>
 
@@ -105,19 +105,19 @@
             <div class="total-row">
               <h5 class="total-caption">Cash Total</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getCashTotal }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">+ Cash Tax</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getCashTax }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">- Petty Cash</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getPettyCash }}</span>
             </div>
           </div>
 
@@ -127,13 +127,13 @@
             <div class="total-row">
               <h5 class="total-caption">Calced Deposit</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getCalcedDeposit }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">Actual Deposit</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getActualDeposit }}</span>
             </div>
           </div>
 
@@ -143,7 +143,7 @@
             <div class="total-row">
               <h5 class="total-caption">Over/Short</h5>
 
-              <span class="total-amount">$0.00</span>
+              <span class="total-amount">${{ getOverShort }}</span>
             </div>
           </div>
         </div>

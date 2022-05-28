@@ -7,7 +7,7 @@
 
           <template #input>
             <CustomInput
-              v-model="actualCashDeposit"
+              v-model.number="actualCashDeposit"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -44,7 +44,7 @@
 
           <template #input>
             <CustomInput
-              v-model="customerCountBreakfast"
+              v-model.number="customerCountBreakfast"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -57,7 +57,7 @@
 
           <template #input>
             <CustomInput
-              v-model="netSalesBreakfast"
+              v-model.number="netSalesBreakfast"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -72,7 +72,7 @@
 
           <template #input>
             <CustomInput
-              v-model="customerCountLunch"
+              v-model.number="customerCountLunch"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -85,7 +85,7 @@
 
           <template #input>
             <CustomInput
-              v-model="netSalesLunch"
+              v-model.number="netSalesLunch"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -100,7 +100,7 @@
 
           <template #input>
             <CustomInput
-              v-model="customerCountDinner"
+              v-model.number="customerCountDinner"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -113,7 +113,7 @@
 
           <template #input>
             <CustomInput
-              v-model="netSalesDinner"
+              v-model.number="netSalesDinner"
               placeholder="$0.00"
               rules="required|currency"
               type="number"
@@ -182,10 +182,11 @@ import RegisterCloseouts from '~/graphql/queries/registerCloseouts'
 import { formatDateForCloseRegisterAPI } from '~/helpers/helpers'
 import { CLOSE_REGISTER } from '~/constants/closeRegister'
 import Me from '~/graphql/queries/me.query.gql'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'CloseRegisterFinishCloseout',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin, closeRegisterMixin, mutationMixin],
+  mixins: [formMixin, closeRegisterMixin, mutationMixin, meMixin],
   apollo: {
     me: {
       query: Me,
@@ -197,7 +198,10 @@ export default {
         return this.getActualCashDeposit
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_ACTUAL_CACHE_DEPOSIT', value)
+        this.$store.dispatch('closeRegister/setActualCashDeposit', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     calculatedCashDeposit: {
@@ -205,7 +209,7 @@ export default {
         return this.getCalculatedCashDeposit
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_CALCULATED_CACHE_DEPOSIT', value)
+        this.$store.commit('closeRegister/SET_CALCULATED_CASH_DEPOSIT', value)
       },
     },
     overShort: {
@@ -221,7 +225,10 @@ export default {
         return this.getCustomerCountBreakfast
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_BREAKFAST', value)
+        this.$store.dispatch('closeRegister/setCustomerCountBreakfast', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     customerCountLunch: {
@@ -229,7 +236,10 @@ export default {
         return this.getCustomerCountLunch
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_LUNCH', value)
+        this.$store.dispatch('closeRegister/setCustomerCountLunch', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netSalesBreakfast: {
@@ -237,7 +247,10 @@ export default {
         return this.getNetSalesBreakfast
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_NET_SALES_BREAKFAST', value)
+        this.$store.dispatch('closeRegister/setNetSalesBreakfast', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netSalesLunch: {
@@ -245,7 +258,10 @@ export default {
         return this.getNetSalesLunch
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_NET_SALES_LUNCH', value)
+        this.$store.dispatch('closeRegister/setNetSalesLunch', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     customerCountDinner: {
@@ -253,7 +269,10 @@ export default {
         return this.getCustomerCountDinner
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_CUSTOMER_COUNT_DINNER', value)
+        this.$store.dispatch('closeRegister/setCustomerCountDinner', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netSalesDinner: {
@@ -261,7 +280,10 @@ export default {
         return this.getNetSalesDinner
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_NET_SALES_DINNER', value)
+        this.$store.dispatch('closeRegister/setNetSalesDinner', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     customerCountTotals: {
@@ -277,7 +299,7 @@ export default {
         return this.getNetSalesTotals
       },
       set(value) {
-        this.$store.commit('closeRegister/SET_NET_SALES_TOTALS', value)
+        this.$store.commit('closeRegister/SET_NET_SALES_TOTAL', value)
       },
     },
   },
@@ -288,31 +310,31 @@ export default {
         CreateRegisterCloseout,
         {
           registerCloseoutInput: {
-            nonResetable: this.getNonResetable,
-            netTotal: this.getNetTotal,
-            lastNonResetable: this.getLastNonResetable,
-            netOV: this.getNetOV,
-            totalToDistribute: this.getTotalToDistribute,
-            netCharge: this.getNetCharge,
-            taxFromTheTape: this.getTaxFromTheTape,
-            netVoucher: this.getNetVoucher,
-            overringVoidTax: this.getOverringVoidTax,
-            netCash: this.getNetCash,
-            chargeTax: this.getChargeTax,
-            voucherTax: this.getVoucherTax,
-            cashTax: this.getCashTax,
-            totalPettyCash: this.getTotalPettyCash,
-            actualCashDeposit: this.getActualCashDeposit,
-            calculatedCashDeposit: this.getCalculatedCashDeposit,
-            overShort: this.getOverShort,
-            customerCountBreakfast: this.getCustomerCountBreakfast,
-            netSalesBreakfast: this.getNetSalesBreakfast,
-            customerCountLunch: this.getCustomerCountLunch,
-            netSalesLunch: this.getNetSalesLunch,
-            customerCountDinner: this.getCustomerCountDinner,
-            netSalesDinner: this.getNetSalesDinner,
-            customerCountTotals: this.getCustomerCountTotals,
-            netSalesTotals: this.getNetSalesTotals,
+            nonResetable: String(this.getNonResetable),
+            netTotal: String(this.getNetTotal),
+            lastNonResetable: String(this.getLastNonResetable),
+            netOV: String(this.getNetOV),
+            totalToDistribute: String(this.getTotalToDistribute),
+            netCharge: String(this.getNetCharge),
+            taxFromTheTape: String(this.getTaxFromTheTape),
+            netVoucher: String(this.getNetVoucher),
+            overringVoidTax: String(this.getOverringVoidTax),
+            netCash: String(this.getNetCash),
+            chargeTax: String(this.getChargeTax),
+            voucherTax: String(this.getVoucherTax),
+            cashTax: String(this.getCashTax),
+            totalPettyCash: String(this.getTotalPettyCash),
+            actualCashDeposit: String(this.getActualCashDeposit),
+            calculatedCashDeposit: String(this.getCalculatedCashDeposit),
+            overShort: String(this.getOverShort),
+            customerCountBreakfast: String(this.getCustomerCountBreakfast),
+            netSalesBreakfast: String(this.getNetSalesBreakfast),
+            customerCountLunch: String(this.getCustomerCountLunch),
+            netSalesLunch: String(this.getNetSalesLunch),
+            customerCountDinner: String(this.getCustomerCountDinner),
+            netSalesDinner: String(this.getNetSalesDinner),
+            customerCountTotals: String(this.getCustomerCountTotals),
+            netSalesTotals: String(this.getNetSalesTotals),
             closeDate: this.formatDateForCloseRegisterAPI(new Date()),
             periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
             items: {
@@ -341,31 +363,31 @@ export default {
         {
           registerCloseoutInput: {
             id: this.getId,
-            nonResetable: this.getNonResetable,
-            netTotal: this.getNetTotal,
-            lastNonResetable: this.getLastNonResetable,
-            netOV: this.getNetOV,
-            totalToDistribute: this.getTotalToDistribute,
-            netCharge: this.getNetCharge,
-            taxFromTheTape: this.getTaxFromTheTape,
-            netVoucher: this.getNetVoucher,
-            overringVoidTax: this.getOverringVoidTax,
-            netCash: this.getNetCash,
-            chargeTax: this.getChargeTax,
-            voucherTax: this.getVoucherTax,
-            cashTax: this.getCashTax,
-            totalPettyCash: this.getTotalPettyCash,
-            actualCashDeposit: this.getActualCashDeposit,
-            calculatedCashDeposit: this.getCalculatedCashDeposit,
-            overShort: this.getOverShort,
-            customerCountBreakfast: this.getCustomerCountBreakfast,
-            netSalesBreakfast: this.getNetSalesBreakfast,
-            customerCountLunch: this.getCustomerCountLunch,
-            netSalesLunch: this.getNetSalesLunch,
-            customerCountDinner: this.getCustomerCountDinner,
-            netSalesDinner: this.getNetSalesDinner,
-            customerCountTotals: this.getCustomerCountTotals,
-            netSalesTotals: this.getNetSalesTotals,
+            nonResetable: String(this.getNonResetable),
+            netTotal: String(this.getNetTotal),
+            lastNonResetable: String(this.getLastNonResetable),
+            netOV: String(this.getNetOV),
+            totalToDistribute: String(this.getTotalToDistribute),
+            netCharge: String(this.getNetCharge),
+            taxFromTheTape: String(this.getTaxFromTheTape),
+            netVoucher: String(this.getNetVoucher),
+            overringVoidTax: String(this.getOverringVoidTax),
+            netCash: String(this.getNetCash),
+            chargeTax: String(this.getChargeTax),
+            voucherTax: String(this.getVoucherTax),
+            cashTax: String(this.getCashTax),
+            totalPettyCash: String(this.getTotalPettyCash),
+            actualCashDeposit: String(this.getActualCashDeposit),
+            calculatedCashDeposit: String(this.getCalculatedCashDeposit),
+            overShort: String(this.getOverShort),
+            customerCountBreakfast: String(this.getCustomerCountBreakfast),
+            netSalesBreakfast: String(this.getNetSalesBreakfast),
+            customerCountLunch: String(this.getCustomerCountLunch),
+            netSalesLunch: String(this.getNetSalesLunch),
+            customerCountDinner: String(this.getCustomerCountDinner),
+            netSalesDinner: String(this.getNetSalesDinner),
+            customerCountTotals: String(this.getCustomerCountTotals),
+            netSalesTotals: String(this.getNetSalesTotals),
             closeDate: this.formatDateForCloseRegisterAPI(new Date()),
             periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
             items: {

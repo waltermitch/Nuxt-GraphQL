@@ -6,7 +6,7 @@
 
         <template #input>
           <CustomInput
-            v-model="nonResetable"
+            v-model.number="nonResetable"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -39,7 +39,7 @@
 
         <template #input>
           <CustomInput
-            v-model="netOV"
+            v-model.number="netOV"
             rules="currency|required"
             type="number"
             placeholder="$0.00"
@@ -63,7 +63,7 @@
 
         <template #input>
           <CustomInput
-            v-model="netCharge"
+            v-model.number="netCharge"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -78,7 +78,7 @@
 
         <template #input>
           <CustomInput
-            v-model="taxFromTheTape"
+            v-model.number="taxFromTheTape"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -91,7 +91,7 @@
 
         <template #input>
           <CustomInput
-            v-model="netVoucher"
+            v-model.number="netVoucher"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -106,7 +106,7 @@
 
         <template #input>
           <CustomInput
-            v-model="overringVoidTax"
+            v-model.number="overringVoidTax"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -130,7 +130,7 @@
 
         <template #input>
           <CustomInput
-            v-model="chargeTax"
+            v-model.number="chargeTax"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -145,7 +145,7 @@
 
         <template #input>
           <CustomInput
-            v-model="voucherTax"
+            v-model.number="voucherTax"
             rules="currency|required"
             placeholder="$0.00"
             type="number"
@@ -190,17 +190,21 @@ import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'SalesInfo',
   components: { ValidationObserver, InputRow, CustomInput },
-  mixins: [closeRegisterMixin, tabsViewMixin],
+  mixins: [closeRegisterMixin, tabsViewMixin, meMixin],
   computed: {
     nonResetable: {
       get() {
         return this.getNonResetable
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NON_RESETABLE', value)
+        this.$store.dispatch('closeRegister/setNonResetable', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netTotal: {
@@ -208,7 +212,7 @@ export default {
         return this.getNetTotal
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NET_TOTAL', value)
+        this.$store.commit('closeRegister/SET_NET_TOTAL', value)
       },
     },
     lastNonResetable: {
@@ -216,7 +220,7 @@ export default {
         return this.getLastNonResetable
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_LAST_NON_RESETABLE', value)
+        this.$store.commit('closeRegister/SET_LAST_NON_RESETTABLE', value)
       },
     },
     netOV: {
@@ -224,7 +228,10 @@ export default {
         return this.getNetOV
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NET_OV', value)
+        this.$store.dispatch('closeRegister/setNetOV', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     totalToDistribute: {
@@ -232,10 +239,7 @@ export default {
         return this.getTotalToDistribute
       },
       set(value) {
-        return this.$store.commit(
-          'closeRegister/SET_TOTAL_TO_DISTRIBUTE',
-          value
-        )
+        this.$store.commit('closeRegister/SET_TOTAL_TO_DISTRIBUTE', value)
       },
     },
     netCharge: {
@@ -243,7 +247,10 @@ export default {
         return this.getNetCharge
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NET_CHARGE', value)
+        this.$store.dispatch('closeRegister/setNetCharge', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     taxFromTheTape: {
@@ -251,7 +258,10 @@ export default {
         return this.getTaxFromTheTape
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_TAX_FROM_THE_TAPE', value)
+        this.$store.dispatch('closeRegister/setTaxFromTheTape', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netVoucher: {
@@ -259,7 +269,10 @@ export default {
         return this.getNetVoucher
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NET_VOUCHER', value)
+        this.$store.dispatch('closeRegister/setNetVoucher', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     overringVoidTax: {
@@ -267,7 +280,10 @@ export default {
         return this.getOverringVoidTax
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_OVERRING_TAX', value)
+        this.$store.dispatch('closeRegister/setOverringTax', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     netCash: {
@@ -275,7 +291,7 @@ export default {
         return this.getNetCash
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_NET_CASH', value)
+        this.$store.commit('closeRegister/SET_NET_CASH', value)
       },
     },
     chargeTax: {
@@ -283,7 +299,10 @@ export default {
         return this.getChargeTax
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_CHARGE_TAX', value)
+        this.$store.dispatch('closeRegister/setChargeTax', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     voucherTax: {
@@ -291,7 +310,10 @@ export default {
         return this.getVoucherTax
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_VOUCHER_TAX', value)
+        this.$store.dispatch('closeRegister/setVoucherTax', {
+          ...this.calculationVariables,
+          value,
+        })
       },
     },
     cashTax: {
@@ -299,7 +321,7 @@ export default {
         return this.getCashTax
       },
       set(value) {
-        return this.$store.commit('closeRegister/SET_CASH_TAX', value)
+        this.$store.commit('closeRegister/SET_CASH_TAX', value)
       },
     },
   },
