@@ -1,16 +1,30 @@
 <template>
   <PageContentWrapper>
     <div class="input">
-      <InputWithTitle>
-        <template #title>Period End Date</template>
+      <InputRow class="input">
+        <InputWithTitle v-if="periods">
+          <template #title>Period End Date</template>
 
-        <template #input>
-          <CustomSelect :options="mockedData" @input="selectPeriodEndDate" />
-        </template>
-      </InputWithTitle>
+          <template #input>
+            <CustomSelect
+              :options="formattedPeriods"
+              select-by="periodEnd"
+              @input="selectPeriodEndDate"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title>Export type</template>
+
+          <template #input>
+            <CustomSelect :options="exportTypes" @input="selectExportType" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
     </div>
 
-    <CustomTable :w-table="500">
+    <CustomTable v-if="units" :w-table="500">
       <template #header>
         <div class="table-row">
           <CustomRadioButton
@@ -18,21 +32,21 @@
             @set-is-active="setSelectAllUnits()"
           />
 
-          <span> Select </span>
+          <span> Unit id </span>
 
           <span> Unit </span>
         </div>
       </template>
 
       <template #content>
-        <CustomTableRow v-for="item in items" :key="item.id" class="table-row">
+        <CustomTableRow v-for="item in units" :key="item.id" class="table-row">
           <CustomRadioButton
             :is-active="item.selected"
             @set-is-active="selectItem(item)"
           />
 
           <span>
-            {{ item.unit }}
+            {{ item.id }}
           </span>
 
           <span>
@@ -43,7 +57,11 @@
     </CustomTable>
 
     <div class="buttons-area">
-      <DefaultButton button-color-gamma="red" @event="exportPurchases">
+      <DefaultButton
+        button-color-gamma="red"
+        :disabled="!selectedUnits.length"
+        @event="exportPurchases"
+      >
         export purchases
       </DefaultButton>
     </div>
@@ -57,6 +75,14 @@ import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
+import InputRow from './InputRow.vue'
+import Units from '~/graphql/queries/units.gql'
+import Periods from '~/graphql/queries/periods.gql'
+import ExportData from '~/graphql/mutations/reports/exportData.gql'
+import { formatDateFromAPI } from '~/helpers/helpers'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import { EXPORT_TYPES } from '~/constants/exportTypes'
+export { EXPORT_TYPES } from '~/constants/exportTypes'
 export default {
   name: 'HQExportPurchases',
   components: {
@@ -66,45 +92,58 @@ export default {
     CustomTable,
     CustomTableRow,
     CustomRadioButton,
+    InputRow,
   },
+  apollo: {
+    units: {
+      query: Units,
+    },
+    periods: {
+      query: Periods,
+      variables: {
+        hasUnits: true,
+      },
+    },
+  },
+  mixins: [mutationMixin],
   data() {
     return {
       periodEndDate: '',
       selectAllUnits: false,
-      mockedData: [
-        {
-          id: 1,
-          value: '4/22/2022',
-          name: '4/22/2022',
-        },
-      ],
-      items: [
-        {
-          id: 1,
-          unit: 107,
-          name: 'Finnegan',
-        },
-        {
-          id: 2,
-          unit: 109,
-          name: "David's Bridal, Inc.",
-        },
-      ],
+      exportType: '',
+      exportTypes: EXPORT_TYPES,
     }
   },
+  computed: {
+    selectedUnits() {
+      return this.units.filter((unit) => unit.selected)
+    },
+    formattedPeriods() {
+      return this.periods.map((period) => {
+        return {
+          ...period,
+          periodEnd: this.formatDateFromAPI(period.periodEnd),
+        }
+      })
+    },
+  },
   watch: {
-    items() {
-      if (this.items.every((item) => item.selected)) {
+    units() {
+      if (this.units.every((item) => item.selected)) {
         this.selectAllUnits = true
       }
     },
   },
   methods: {
+    formatDateFromAPI,
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
+    selectExportType(exportType) {
+      this.exportType = exportType
+    },
     setSelectAllUnits() {
-      this.items = this.items.map((item) => {
+      this.units = this.units.map((item) => {
         return {
           ...item,
           selected: !this.selectAllUnits,
@@ -114,7 +153,7 @@ export default {
     },
     selectItem(unit) {
       this.selectAllUnits = false
-      this.items = this.items.map((item) => {
+      this.units = this.units.map((item) => {
         if (unit.id === item.id) {
           return {
             ...item,
@@ -125,8 +164,25 @@ export default {
         return item
       })
     },
-    exportPurchases() {
-      return null
+    async exportPurchases() {
+      const {
+        data: { exportData },
+      } = await this.mutationAction(
+        ExportData,
+        {
+          input: {
+            period: this.periodEndDate.id,
+            units: this.selectedUnits.map((unit) => unit.id),
+            type: this.exportType.value,
+          },
+        },
+        Units,
+        'Export data success'
+      )
+
+      window.open(exportData)
+
+      console.log(exportData, 'res')
     },
   },
 }
@@ -147,6 +203,11 @@ export default {
 
 .input {
   margin-bottom: 30px;
+
+  @media screen and(max-width: $sm) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .buttons-area {

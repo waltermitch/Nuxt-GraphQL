@@ -175,15 +175,9 @@ export const HQ_MAINTENANCE_TABS = [
   },
   {
     id: 3,
-    caption: 'Export Purchases',
+    caption: 'Export Data',
     pageUrl: '/hq-maintenance/export-purchases',
     iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
-  },
-  {
-    id: 4,
-    caption: 'Export Catering',
-    pageUrl: '/hq-maintenance/export-catering',
-    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
 ]
 
