@@ -39,10 +39,10 @@
               v-if="isEdit === vendor.id"
               :options="terms"
               :selected-item="vendor.term"
-              select-by="dueDays"
+              select-by="name"
               @input="selectTerm"
             />
-            <span v-else>{{ vendor.term.dueDays }}</span>
+            <span v-else>{{ vendor.term.name }}</span>
 
             <CustomTableIconsColumn
               :is-edit-active="isEdit === vendor.id"
@@ -71,7 +71,7 @@
 
             <CustomSelect
               :options="terms"
-              select-by="dueDays"
+              select-by="name"
               @input="selectTerm"
             />
           </CustomTableRow>
