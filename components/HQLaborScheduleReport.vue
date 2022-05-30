@@ -2,27 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow class="input-row-mob">
-        <CustomTable class="table-compact">
-          <template #header>
-            <span> Period End date </span>
-          </template>
-
-          <template #content>
-            <CustomTableContent>
-              <CustomTableRow
-                v-for="period in periodEndDates"
-                :key="period.id"
-                :is-active="period.id === periodEndDate.id"
-                selectable
-                @event="selectPeriodEndDate(period)"
-              >
-                {{ period.name }}
-              </CustomTableRow>
-            </CustomTableContent>
-          </template>
-        </CustomTable>
-
-        <InputWithTitle>
+        <InputWithTitle v-if="districts">
           <template #title>Select District</template>
 
           <template #input>
@@ -31,44 +11,73 @@
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable :w-table="550">
-        <template #header>
-          <div class="table-row">
-            <span>Select</span>
+      <CustomTablesArea>
+        <CustomTable v-if="units" class="table-reports">
+          <template #header>
+            <div class="table-row">
+              <span>Select</span>
 
-            <span>Unit</span>
+              <span>Unit</span>
 
-            <span>Unit Name</span>
-          </div>
-        </template>
+              <span>Unit Name</span>
+            </div>
+          </template>
 
-        <template #content>
-          <CustomTableContent>
-            <CustomTableRow
-              v-for="unit in units"
-              :key="unit.id"
-              class="table-row"
-            >
-              <CustomRadioButton
-                :is-active="unit.selected"
-                @set-is-active="selectUnit(unit)"
-              />
+          <template #content>
+            <CustomTableContent>
+              <CustomTableRow
+                v-for="unit in units"
+                :key="unit.id"
+                class="table-row"
+              >
+                <CustomRadioButton
+                  :is-active="unit.selected"
+                  @set-is-active="selectUnit(unit)"
+                />
 
-              <span>{{ unit.unitId }}</span>
+                <span>{{ unit.code }}</span>
 
-              <span>{{ unit.name }}</span>
+                <span>{{ unit.name }}</span>
+              </CustomTableRow>
+            </CustomTableContent>
+
+            <CustomTableRow class="table-row footer-row">
+              <DefaultButton @event="selectAllUnits">
+                Select All
+              </DefaultButton>
+
+              <DefaultButton @event="selectNone"> Select None </DefaultButton>
+
+              <DefaultButton
+                :disabled="!selectedUnits.length || !periodEndDate.id"
+                @event="openReport"
+              >
+                Open Report
+              </DefaultButton>
             </CustomTableRow>
-          </CustomTableContent>
+          </template>
+        </CustomTable>
 
-          <CustomTableRow class="table-row footer-row">
-            <DefaultButton @event="selectAllUnits"> Select All </DefaultButton>
+        <CustomTable v-if="periods" class="table-reports">
+          <template #header>
+            <span> Period End date </span>
+          </template>
 
-            <DefaultButton @event="selectNone"> Select None </DefaultButton>
-
-            <DefaultButton @event="openReport"> Open Report </DefaultButton>
-          </CustomTableRow>
-        </template>
-      </CustomTable>
+          <template #content>
+            <CustomTableContent>
+              <CustomTableRow
+                v-for="period in periods"
+                :key="period.id"
+                :is-active="period.id === periodEndDate.id"
+                selectable
+                @event="selectPeriodEndDate(period)"
+              >
+                {{ formatDateFromAPI(period.periodEnd) }}
+              </CustomTableRow>
+            </CustomTableContent>
+          </template>
+        </CustomTable>
+      </CustomTablesArea>
     </ValidationObserver>
   </PageContentWrapper>
 </template>
@@ -83,6 +92,13 @@ import CustomTableContent from './CustomTableContent.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
+import CustomTablesArea from './CustomTablesArea.vue'
+import Districts from '~/graphql/queries/districts.gql'
+import Periods from '~/graphql/queries/periods.gql'
+import Units from '~/graphql/queries/units.gql'
+import MultiUnitLabor from '~/graphql/mutations/reports/multiUnitLabor.gql'
+import { formatDateFromAPI } from '~/helpers/helpers'
+import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQLaborScheduleReport',
   components: {
@@ -95,42 +111,27 @@ export default {
     InputRow,
     InputWithTitle,
     CustomSelect,
+    CustomTablesArea,
+  },
+  mixins: [mutationMixin],
+  apollo: {
+    districts: {
+      query: Districts,
+    },
+    periods: {
+      query: Periods,
+      variables: {
+        hasUnits: true,
+      },
+    },
+    units: {
+      query: Units,
+    },
   },
   data() {
     return {
       district: '',
-      districts: [
-        {
-          id: 0,
-          code: 11,
-          name: 'District',
-        },
-      ],
       periodEndDate: '',
-      periodEndDates: [
-        {
-          id: 0,
-          name: '12/28/19',
-          value: '12/28/19',
-        },
-        {
-          id: 1,
-          name: '01/04/20',
-          value: '01/04/20',
-        },
-      ],
-      units: [
-        {
-          id: 0,
-          unitId: 101,
-          name: 'Unit Name 1',
-        },
-        {
-          id: 1,
-          unitId: 102,
-          name: 'Unit Name 2',
-        },
-      ],
     }
   },
   computed: {
@@ -139,6 +140,7 @@ export default {
     },
   },
   methods: {
+    formatDateFromAPI,
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
@@ -169,8 +171,20 @@ export default {
         selected: false,
       }))
     },
-    openReport() {
-      console.log(this.selectedUnits, this.periodEndDate)
+    async openReport() {
+      console.log(this.selectedUnits, 'selected units')
+      await this.mutationAction(
+        MultiUnitLabor,
+        {
+          input: {
+            period: this.periodEndDate.id,
+            units: this.selectedUnits.map((unit) => unit.id),
+            district: this.district.id,
+          },
+        },
+        Units,
+        'Open Report success'
+      )
     },
   },
 }
@@ -184,20 +198,45 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 50px 100px 300px;
   column-gap: 20px;
+
+  @media screen and(min-width: $sm) {
+    grid-template-columns: 50px 100px 300px;
+  }
+  @media screen and(max-width: $sm) {
+    grid-template-columns: 50px 110px 110px;
+  }
 }
 
 .footer-row {
   grid-template-columns: repeat(3, 150px);
+
+  @media screen and(max-width: $sm) {
+    grid-template-columns: repeat(2, 150px);
+    button {
+      margin-bottom: 20px;
+    }
+  }
 }
 
-.input-row-mob{
+.input-row-mob {
   @media screen and (max-width: $md) {
     display: block;
-    >div{
+    > div {
       width: 100%;
-      margin-bottom: 20px ;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.table-reports {
+  @media screen and(max-width: $xl) {
+    width: 100% !important;
+    &:last-child {
+      margin-bottom: 20px;
+    }
+    &:first-child {
+      margin-right: 0 !important;
     }
   }
 }
