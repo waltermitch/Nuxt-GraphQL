@@ -40,6 +40,7 @@
               v-model="item.amount"
               rules="required|double|currency"
               do-not-show-error-message
+              type="number"
               placeholder="$0.00"
             />
 
@@ -82,6 +83,7 @@
               v-model="newItem.amount"
               rules="required|double|currency"
               do-not-show-error-message
+              type="number"
               placeholder="$0.00"
             />
 

@@ -35,8 +35,9 @@
               <span class="table-text"> ${{ item.inventoryAmount }} </span>
 
               <CustomInput
-                v-model="item.newAmount"
+                v-model.number="item.newAmount"
                 rules="currency"
+                type="number"
                 placeholder="$0.00"
                 do-not-show-error-message
               />

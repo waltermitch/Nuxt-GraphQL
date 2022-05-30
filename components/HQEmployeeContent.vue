@@ -126,6 +126,7 @@
             <CustomInput
               v-model.number="employee.salaryBase"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -137,6 +138,7 @@
             <CustomInput
               v-model.number="employee.salaryOvertime"
               rules="required|currency"
+              type="number"
             />
           </template>
         </InputWithTitle>

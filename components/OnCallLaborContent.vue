@@ -10,7 +10,8 @@
 
             <template #input>
               <CustomInput
-                v-model="amount"
+                v-model.number="amount"
+                type="number"
                 placeholder="$0.00"
                 rules="required|currency"
               />
