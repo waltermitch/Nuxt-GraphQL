@@ -111,7 +111,7 @@
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Price</span>
 
-          <span class="table-footer-item">${{ totalPrice }}</span>
+          <span class="table-footer-item">${{ totalPrice.toFixed(2) }}</span>
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
@@ -200,7 +200,7 @@ export default {
       }, 0)
     },
     totalPriceWithTax() {
-      return Number(this.totalPrice) + Number(this.getTax)
+      return (Number(this.totalPrice) + Number(this.getTax)).toFixed(2)
     },
     tax: {
       get() {
