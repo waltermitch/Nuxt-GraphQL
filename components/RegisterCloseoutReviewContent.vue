@@ -84,7 +84,7 @@ export default {
       this.periodEndDate = item
     },
     editRegisterCloseoutOrder(closeRegister) {
-      this.$store.commit('closeRegister/SET_CLOSE_REGISTER', {
+      this.$store.dispatch('closeRegister/setCloseRegister', {
         ...closeRegister,
       })
       this.$store.commit('closeRegister/SET_IS_EDIT', true)

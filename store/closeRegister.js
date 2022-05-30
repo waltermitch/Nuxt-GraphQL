@@ -120,25 +120,43 @@ export const mutations = {
     state.closeRegister.periodEnd = payload
   },
   SET_TOTAL_NET_SALES(state, payload) {
-    state.closeRegister.totalNetSales = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      totalNetSales: payload,
+    }
   },
   SET_TOTAL_DAILY_DEPOSIT(state, payload) {
     state.closeRegister.totalDailyDeposit = payload
   },
   SET_PETTY_CASH(state, payload) {
-    state.closeRegister.pettyCash = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      pettyCash: payload,
+    }
   },
   SET_CHARGE(state, payload) {
-    state.closeRegister.charge = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      charge: payload,
+    }
   },
   SET_CASH_TOTAL(state, payload) {
-    state.closeRegister.cashTotal = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      cashTotal: payload,
+    }
   },
   SET_CALCED_DEPOSIT(state, payload) {
-    state.closeRegister.calcedDeposit = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      calcedDeposit: payload,
+    }
   },
   SET_ACTUAL_DEPOSIT(state, payload) {
-    state.closeRegister.actualDeposit = payload
+    state.closeRegister = {
+      ...state.closeRegister,
+      actualDeposit: payload,
+    }
   },
 }
 
@@ -262,6 +280,13 @@ export const actions = {
     await commit('SET_NET_SALES_DINNER', data.value)
     dispatch('calculate', data)
   },
+  async setCloseRegister({ dispatch, commit }, data) {
+    await commit('SET_CLOSE_REGISTER', data)
+    dispatch('calculate', {
+      unitId: +data.unit.id,
+      periodId: +data.unit.activePeriod.id,
+    })
+  },
 }
 
 export const getters = {
@@ -269,33 +294,39 @@ export const getters = {
   getRegister: (state) => state.closeRegister.register,
   getItems: (state) => state.closeRegister.items,
   getUnit: (state) => state.closeRegister.unit,
-  getNonResetable: (state) => state.closeRegister.nonResetable,
-  getNetTotal: (state) => state.closeRegister.netTotal,
-  getLastNonResetable: (state) => state.closeRegister.lastNonResetable,
-  getNetOV: (state) => state.closeRegister.netOV,
-  getTotalToDistribute: (state) => state.closeRegister.totalToDistribute,
-  getNetCharge: (state) => state.closeRegister.netCharge,
-  getTaxFromTheTape: (state) => state.closeRegister.taxFromTheTape,
-  getNetVoucher: (state) => state.closeRegister.netVoucher,
-  getOverringVoidTax: (state) => state.closeRegister.overringVoidTax,
-  getNetCash: (state) => state.closeRegister.netCash,
-  getChargeTax: (state) => state.closeRegister.chargeTax,
-  getVoucherTax: (state) => state.closeRegister.voucherTax,
-  getCashTax: (state) => state.closeRegister.cashTax,
-  getTotalPettyCash: (state) => state.closeRegister.totalPettyCash,
-  getActualCashDeposit: (state) => state.closeRegister.actualCashDeposit,
+  getNonResetable: (state) => Number(state.closeRegister.nonResetable),
+  getNetTotal: (state) => Number(state.closeRegister.netTotal),
+  getLastNonResetable: (state) => Number(state.closeRegister.lastNonResetable),
+  getNetOV: (state) => Number(state.closeRegister.netOV),
+  getTotalToDistribute: (state) =>
+    Number(state.closeRegister.totalToDistribute),
+  getNetCharge: (state) => Number(state.closeRegister.netCharge),
+  getTaxFromTheTape: (state) => Number(state.closeRegister.taxFromTheTape),
+  getNetVoucher: (state) => Number(state.closeRegister.netVoucher),
+  getOverringVoidTax: (state) => Number(state.closeRegister.overringVoidTax),
+  getNetCash: (state) => Number(state.closeRegister.netCash),
+  getChargeTax: (state) => Number(state.closeRegister.chargeTax),
+  getVoucherTax: (state) => Number(state.closeRegister.voucherTax),
+  getCashTax: (state) => Number(state.closeRegister.cashTax),
+  getTotalPettyCash: (state) => Number(state.closeRegister.totalPettyCash),
+  getActualCashDeposit: (state) =>
+    Number(state.closeRegister.actualCashDeposit),
   getCalculatedCashDeposit: (state) =>
-    state.closeRegister.calculatedCashDeposit,
-  getOverShort: (state) => state.closeRegister.overShort,
+    Number(state.closeRegister.calculatedCashDeposit),
+  getOverShort: (state) => Number(state.closeRegister.overShort),
   getCustomerCountBreakfast: (state) =>
-    state.closeRegister.customerCountBreakfast,
-  getNetSalesBreakfast: (state) => state.closeRegister.netSalesBreakfast,
-  getCustomerCountLunch: (state) => state.closeRegister.customerCountLunch,
-  getNetSalesLunch: (state) => state.closeRegister.netSalesLunch,
-  getCustomerCountDinner: (state) => state.closeRegister.customerCountDinner,
-  getNetSalesDinner: (state) => state.closeRegister.netSalesDinner,
-  getCustomerCountTotals: (state) => state.closeRegister.customerCountTotals,
-  getNetSalesTotals: (state) => state.closeRegister.netSalesTotals,
+    Number(state.closeRegister.customerCountBreakfast),
+  getNetSalesBreakfast: (state) =>
+    Number(state.closeRegister.netSalesBreakfast),
+  getCustomerCountLunch: (state) =>
+    Number(state.closeRegister.customerCountLunch),
+  getNetSalesLunch: (state) => Number(state.closeRegister.netSalesLunch),
+  getCustomerCountDinner: (state) =>
+    Number(state.closeRegister.customerCountDinner),
+  getNetSalesDinner: (state) => Number(state.closeRegister.netSalesDinner),
+  getCustomerCountTotals: (state) =>
+    Number(state.closeRegister.customerCountTotals),
+  getNetSalesTotals: (state) => Number(state.closeRegister.netSalesTotals),
   getCloseDate: (state) => state.closeRegister.closeDate,
   getPeriodEnd: (state) => state.closeRegister.periodEnd,
   getIsEdit: (state) => state.isEdit,
@@ -303,7 +334,8 @@ export const getters = {
   getItemsWithoutId: (state) =>
     state.closeRegister.items.filter((item) => !item.id),
   getTotalNetSale: (state) => state.closeRegister.totalNetSales,
-  getTotalDailyDeposit: (state) => state.closeRegister.totalDailyDeposit,
+  getTotalDailyDeposit: (state) =>
+    Number(state.closeRegister.totalDailyDeposit),
   getPettyCash: (state) => state.closeRegister.pettyCash,
   getCharge: (state) => state.closeRegister.charge,
   getCashTotal: (state) => state.closeRegister.cashTotal,
