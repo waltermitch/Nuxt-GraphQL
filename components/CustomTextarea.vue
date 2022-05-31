@@ -51,10 +51,11 @@ export default {
 .textarea {
   background: #fff;
   border: 1px solid $gainsboro;
+  padding: 10px 8px;
   border-radius: 3px;
   resize: none;
   @media screen and (max-width: $lg) {
-   width: 100% !important;
+    width: 100% !important;
   }
 }
 
