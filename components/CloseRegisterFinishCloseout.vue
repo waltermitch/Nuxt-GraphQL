@@ -336,7 +336,6 @@ export default {
             customerCountTotals: String(this.getCustomerCountTotals),
             netSalesTotals: String(this.getNetSalesTotals),
             closeDate: this.formatDateForCloseRegisterAPI(new Date()),
-            periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
             items: {
               create: this.getItems.map((item) => {
                 return {
@@ -388,8 +387,7 @@ export default {
             netSalesDinner: String(this.getNetSalesDinner),
             customerCountTotals: String(this.getCustomerCountTotals),
             netSalesTotals: String(this.getNetSalesTotals),
-            closeDate: this.formatDateForCloseRegisterAPI(new Date()),
-            periodEnd: this.me.selectedUnit.activePeriod.periodEnd,
+            closeDate: this.getCloseDate,
             items: {
               delete: this.getDeleteItemIDs,
               update: this.getItems

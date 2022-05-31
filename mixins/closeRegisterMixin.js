@@ -34,7 +34,6 @@ export const closeRegisterMixin = {
       getCustomerCountTotals: 'closeRegister/getCustomerCountTotals',
       getNetSalesTotals: 'closeRegister/getNetSalesTotals',
       getCloseDate: 'closeRegister/getCloseDate',
-      getPeriodEnd: 'closeRegister/getPeriodEnd',
       getIsEdit: 'closeRegister/getIsEdit',
       getDeleteItemIDs: 'closeRegister/getDeleteItemIDs',
       getItemsWithoutId: 'closeRegister/getItemsWithoutId',

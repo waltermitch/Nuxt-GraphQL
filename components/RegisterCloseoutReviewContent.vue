@@ -23,7 +23,7 @@
           >
             <span>{{ registerCloseout.id }}</span>
 
-            <span>{{ registerCloseout.createdAt }}</span>
+            <span>{{ formatDateFromAPI(registerCloseout.closeDate) }}</span>
 
             <span v-if="registerCloseout.unit">{{
               registerCloseout.unit.id
@@ -74,15 +74,13 @@ export default {
   computed: {
     currentPeriodData() {
       return this.registerCloseouts.filter(
-        (registerCloseout) => registerCloseout.periodEnd === this.periodEndDate
+        (registerCloseout) =>
+          registerCloseout.unit.activePeriod.periodEnd === this.periodEndDate
       )
     },
   },
   methods: {
     formatDateFromAPI,
-    selectPeriodEndDate(item) {
-      this.periodEndDate = item
-    },
     editRegisterCloseoutOrder(closeRegister) {
       this.$store.dispatch('closeRegister/setCloseRegister', {
         ...closeRegister,
@@ -113,10 +111,10 @@ export default {
   align-items: center;
   column-gap: 20px;
   @media screen and (min-width: $lg) {
-    grid-template-columns: 8% 42% 20% 10% 10%;
+    grid-template-columns: 8% 32% 20% 10% 1fr;
   }
   @media screen and (max-width: $lg) {
-    grid-template-columns: 80px 220px 120px 120px 90px 68px;
+    grid-template-columns: 80px 220px 120px 120px 90px 1fr;
   }
 }
 

@@ -116,9 +116,6 @@ export const mutations = {
   SET_CLOSE_DATE(state, payload) {
     state.closeRegister.closeDate = payload
   },
-  SET_PERIOD_END(state, payload) {
-    state.closeRegister.periodEnd = payload
-  },
   SET_TOTAL_NET_SALES(state, payload) {
     state.closeRegister = {
       ...state.closeRegister,
@@ -328,7 +325,6 @@ export const getters = {
     Number(state.closeRegister.customerCountTotals),
   getNetSalesTotals: (state) => Number(state.closeRegister.netSalesTotals),
   getCloseDate: (state) => state.closeRegister.closeDate,
-  getPeriodEnd: (state) => state.closeRegister.periodEnd,
   getIsEdit: (state) => state.isEdit,
   getDeleteItemIDs: (state) => state.deleteItemIDs,
   getItemsWithoutId: (state) =>

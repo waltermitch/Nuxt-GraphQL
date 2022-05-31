@@ -57,7 +57,6 @@ export const CLOSE_REGISTER = {
 
   netSalesTotals: 0,
   closeDate: '',
-  periodEnd: '',
   totalNetSales: 0,
   totalDailyDeposit: 0,
   pettyCash: 0,

@@ -9,10 +9,8 @@
 
       <PageSubheaderItem>
         <template #title>{{
-          getIsEdit
-            ? formatDateFromAPI(getPeriodEnd)
-            : me.selectedUnit.activePeriod &&
-              formatDateFromAPI(me.selectedUnit.activePeriod.periodEnd)
+          me.selectedUnit.activePeriod &&
+          formatDateFromAPI(me.selectedUnit.activePeriod.periodEnd)
         }}</template>
 
         <template #subtitle>Period End</template>
@@ -41,7 +39,11 @@
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>{{ formatDateForCloseRegister(new Date()) }}</template>
+        <template #title>{{
+          getIsEdit
+            ? formatDateFromAPI(getCloseDate)
+            : formatDateForCloseRegister(new Date())
+        }}</template>
 
         <template #subtitle>Close Date</template>
       </PageSubheaderItem>
@@ -83,7 +85,6 @@
 
           <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
         </div>
-        <!-- TODO PECZIS  calculations-->
         <div class="total">
           <div class="total-section">
             <div class="total-row">
