@@ -82,7 +82,6 @@ import ExportData from '~/graphql/mutations/reports/exportData.gql'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { EXPORT_TYPES } from '~/constants/exportTypes'
-export { EXPORT_TYPES } from '~/constants/exportTypes'
 export default {
   name: 'HQExportPurchases',
   components: {
@@ -181,8 +180,6 @@ export default {
       )
 
       window.open(exportData)
-
-      console.log(exportData, 'res')
     },
   },
 }
