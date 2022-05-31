@@ -47,11 +47,18 @@ export const closeRegisterMixin = {
     }),
   },
   methods: {
+    resetForm() {
+      this.$refs.form.reset()
+    },
     cancelEdit() {
       this.$router.push('/review/register-closeout')
+      this.resetForm()
     },
     cancelCreate() {
-      this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+      this.$store.commit('closeRegister/SET_CLOSE_REGISTER', {
+        ...CLOSE_REGISTER,
+      })
+      this.resetForm()
     },
   },
 }

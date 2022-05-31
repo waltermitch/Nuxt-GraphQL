@@ -4,21 +4,21 @@
 
     <LoadingBar v-if="$apollo.loading" />
     <PageContentWrapper>
-      <CustomTable class="table-full" :w-table="780">
-        <template #header>
-          <div class="table-row">
-            <span>Category</span>
+      <ValidationObserver ref="form" v-slot="{ invalid }">
+        <CustomTable class="table-full" :w-table="780">
+          <template #header>
+            <div class="table-row">
+              <span>Category</span>
 
-            <span>Name</span>
+              <span>Name</span>
 
-            <span>Previous Amount</span>
+              <span>Previous Amount</span>
 
-            <span>Current Amount</span>
-          </div>
-        </template>
+              <span>Current Amount</span>
+            </div>
+          </template>
 
-        <template v-if="inventoryCategories" #content>
-          <ValidationObserver ref="form">
+          <template v-if="inventoryCategories" #content>
             <CustomTableRow
               v-for="item in inventoryCategories"
               :key="item.id"
@@ -52,19 +52,27 @@
 
               <span class="table-text">${{ totalCurrentValue }}</span>
             </CustomTableRow>
-          </ValidationObserver>
-        </template>
-      </CustomTable>
+          </template>
+        </CustomTable>
 
-      <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="updateInventories">
-          Save
-        </DefaultButton>
+        <div class="buttons-area">
+          <DefaultButton
+            button-color-gamma="red"
+            :disabled="everyIsEmpty || invalid"
+            @event="updateInventories"
+          >
+            Save
+          </DefaultButton>
 
-        <DefaultButton button-color-gamma="white" @event="cancelUpdate"
-          >Cancel</DefaultButton
-        >
-      </div>
+          <DefaultButton
+            button-color-gamma="white"
+            :disabled="everyIsEmpty"
+            @event="cancelUpdate"
+          >
+            Cancel
+          </DefaultButton>
+        </div>
+      </ValidationObserver>
     </PageContentWrapper>
   </div>
 </template>
@@ -104,6 +112,14 @@ export default {
       return this.inventoryCategories.reduce((prev, current) => {
         return Number(prev) + Number(current.inventoryAmount.current)
       }, 0)
+    },
+    everyIsEmpty() {
+      return (
+        this.inventoryCategories &&
+        this.inventoryCategories.every(
+          (category) => !category.inventoryAmount.current
+        )
+      )
     },
   },
   methods: {

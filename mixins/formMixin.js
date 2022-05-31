@@ -13,9 +13,11 @@ export const formMixin = {
       window.scrollTo(0, 0)
     },
     cancelEvent() {
-      this.$refs.form.reset()
-      this.clearState()
-      this.setShowMessage(false)
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+        this.clearState()
+        this.setShowMessage(false)
+      }
     },
     saveEvent() {
       this.$refs.form.validate().then((result) => {

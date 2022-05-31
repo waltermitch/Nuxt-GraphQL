@@ -3,7 +3,7 @@
     <PageSubHeaderContent />
 
     <PageContentWrapper>
-      <ValidationObserver ref="form" v-slot="{ invalid }">
+      <ValidationObserver ref="form" v-slot="{ invalid, pristine }">
         <InputRow class="input-row-mob">
           <InputWithTitle>
             <template #title>Expense Date</template>
@@ -106,6 +106,7 @@
 
           <DefaultButton
             button-color-gamma="white"
+            :disabled="pristine && !getIsEdit"
             @event="getIsEdit ? cancelEdit() : cancelCreate()"
           >
             Cancel
@@ -311,10 +312,12 @@ export default {
       this.glAccount = account
     },
     cancelEdit() {
+      this.cancelEvent()
       this.$router.push('/review/weekly-expenses')
     },
     cancelCreate() {
-      this.$store.commit('expense/SET_EXPENSE', EXPENSE)
+      this.cancelEvent()
+      this.$store.commit('expense/SET_EXPENSE', { ...EXPENSE })
     },
   },
 }

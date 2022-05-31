@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver ref="form" v-slot="{ invalid }" class="content">
+  <ValidationObserver ref="form" v-slot="{ invalid, pristine }" class="content">
     <InputRow>
       <InputWithTitle>
         <template #title>New Non-Resettable</template>
@@ -176,6 +176,7 @@
 
       <DefaultButton
         button-color-gamma="white"
+        :disabled="pristine && !getIsEdit"
         @event="getIsEdit ? cancelEdit() : cancelCreate()"
       >
         Cancel

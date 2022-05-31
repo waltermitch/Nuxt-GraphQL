@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ValidationObserver ref="form" v-slot="{ invalid }">
+    <ValidationObserver ref="form" v-slot="{ invalid, pristine }">
       <InputRow>
         <InputWithTitle max-width="unset">
           <template #title>Ship To Name</template>
@@ -64,6 +64,7 @@
 
         <DefaultButton
           button-color-gamma="white"
+          :disabled="pristine && !getIsEdit"
           @event="getIsEdit ? cancelEdit() : cancelCreate()"
         >
           Cancel

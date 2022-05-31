@@ -16,11 +16,18 @@ export const purchaseOrderMixin = {
     }),
   },
   methods: {
+    resetForm() {
+      this.$refs.form.reset()
+    },
     cancelEdit() {
       this.$router.push('/review/weekly-purchases')
+      this.resetForm()
     },
     cancelCreate() {
-      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
+      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', {
+        ...PURCHASE_ORDER,
+      })
+      this.resetForm()
     },
   },
 }

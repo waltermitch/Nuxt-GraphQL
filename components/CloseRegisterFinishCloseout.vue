@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ValidationObserver ref="form" v-slot="{ invalid }">
+    <ValidationObserver ref="form" v-slot="{ invalid, pristine }">
       <InputRow>
         <InputWithTitle>
           <template #title>Actual Cash Deposit</template>
@@ -159,6 +159,7 @@
 
         <DefaultButton
           button-color-gamma="white"
+          :disabled="pristine && !getIsEdit"
           @event="getIsEdit ? cancelEdit() : cancelCreate()"
         >
           Cancel

@@ -26,11 +26,19 @@ export const cateringSalesMixin = {
     }),
   },
   methods: {
+    resetForm() {
+      this.$refs.form.reset()
+    },
     cancelEdit() {
       this.$router.push('/review/catering-sales')
+      this.resetForm()
     },
     cancelCreate() {
-      this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
+      Object.assign(this.$data, this.$options.data.apply(this))
+      this.$store.commit('cateringSales/SET_CATERING_ORDER', {
+        ...CATERING_ORDER,
+      })
+      this.resetForm()
     },
   },
 }

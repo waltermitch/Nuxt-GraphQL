@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver ref="form" v-slot="{ invalid }">
+  <ValidationObserver ref="form" v-slot="{ invalid, pristine }">
     <CustomTable>
       <template #header>
         <div class="table-row">
@@ -87,7 +87,9 @@
             Add Item
           </DefaultButton>
 
-          <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
+          <DefaultButton :disabled="pristine" @event="cancelAdd">
+            Cancel
+          </DefaultButton>
         </div>
       </template>
     </CustomTable>
@@ -111,6 +113,7 @@
 
       <DefaultButton
         button-color-gamma="white"
+        :disabled="getIsEdit ? isEmptyAmounts : pristine"
         @event="getIsEdit ? cancelEdit() : cancelCreate()"
       >
         Cancel
@@ -179,7 +182,9 @@ export default {
     combinedItemsArray() {
       return [...this.getItems]
     },
-
+    isEmptyAmounts() {
+      return this.getItems.every((item) => !item.amount)
+    },
     leftToDistribute() {
       const totalAmount = this.getItems.reduce((prev, current) => {
         return Number(prev) + Number(current.amount)

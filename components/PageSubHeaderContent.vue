@@ -8,7 +8,8 @@
 
     <PageSubheaderItem>
       <template #title>{{
-        selectedUnit && formatDateFromAPI(selectedUnit.activePeriod.periodEnd)
+        selectedUnit.activePeriod &&
+        formatDateFromAPI(selectedUnit.activePeriod.periodEnd)
       }}</template>
 
       <template #subtitle>Period End</template>

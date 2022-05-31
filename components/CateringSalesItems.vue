@@ -122,7 +122,7 @@
             type="number"
             placeholder="$0.00"
             do-not-show-error-message
-            rules="required|currency"
+            rules="currency"
           />
         </CustomTableRow>
 
@@ -137,7 +137,7 @@
     <div class="buttons-area">
       <DefaultButton
         button-color-gamma="red"
-        :disabled="invalid"
+        :disabled="invalid || !tax"
         @event="nextTab"
       >
         Continue
@@ -145,6 +145,7 @@
 
       <DefaultButton
         button-color-gamma="white"
+        :disabled="!tax"
         @event="getIsEdit ? cancelEdit() : cancelCreate()"
         >Cancel</DefaultButton
       >
