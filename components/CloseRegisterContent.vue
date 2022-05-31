@@ -2,7 +2,7 @@
   <div>
     <PageSubheader>
       <PageSubheaderItem>
-        <template v-if="me" #title>{{ me.selectedUnit.id }}</template>
+        <template v-if="me" #title>{{ me.selectedUnit.code }}</template>
 
         <template #subtitle>Unit Number</template>
       </PageSubheaderItem>
