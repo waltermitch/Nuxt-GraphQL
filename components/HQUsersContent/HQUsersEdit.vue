@@ -1,14 +1,12 @@
 <template>
   <PageContentWrapper>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col">
         <InputWithTitle>
           <template #title> First Name</template>
 
           <template #input>
-            <CustomInput
-              v-model="firstName"
-            />
+            <CustomInput v-model="firstName" />
           </template>
         </InputWithTitle>
       </div>
@@ -17,22 +15,18 @@
           <template #title> Last Name</template>
 
           <template #input>
-            <CustomInput
-              v-model="lastName"
-            />
+            <CustomInput v-model="lastName" />
           </template>
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col">
         <InputWithTitle>
           <template #title> Email</template>
 
           <template #input>
-            <CustomInput
-              v-model="email"
-            />
+            <CustomInput v-model="email" />
           </template>
         </InputWithTitle>
       </div>
@@ -41,14 +35,12 @@
           <template #title> Password</template>
 
           <template #input>
-            <CustomInput
-              v-model="password"
-            />
+            <CustomInput v-model="password" />
           </template>
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col mb-20">
         <InputWithTitle class="mb-20">
           <template #title> Is Admin</template>
@@ -70,13 +62,22 @@
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20" v-if="!isAdmin">
+    <div class="input-row input-row--offset mb-20" v-if="!isAdmin">
       <div class="input-col">
-        <multiselect v-if="units && !isAdmin" v-model="unit" :options="units" :multiple="true" :close-on-select="false"
-                     :clear-on-select="false"
-                     :custom-label="nameWithId"
-                     :preserve-search="true" placeholder="Pick some" label="name" track-by="name"
-                     :preselect-first="false">
+        <multiselect
+          v-if="units && !isAdmin"
+          v-model="unit"
+          :options="units"
+          :multiple="true"
+          :close-on-select="false"
+          :clear-on-select="false"
+          :custom-label="nameWithId"
+          :preserve-search="true"
+          placeholder="Pick some"
+          label="name"
+          track-by="name"
+          :preselect-first="false"
+        >
         </multiselect>
       </div>
     </div>
@@ -84,23 +85,25 @@
     <div class="buttons-area">
       <DefaultButton @event="addUser"> Edit User</DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelEdit"> Cancel</DefaultButton>
+      <DefaultButton button-color-gamma="white" @event="cancelEdit">
+        Cancel</DefaultButton
+      >
     </div>
   </PageContentWrapper>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import Units from '../../graphql/queries/units.gql'
-import UpdateUser from "~/graphql/mutations/users/updateUsers.gql";
-import User from "~/graphql/queries/users.gql";
-import {mutationMixin} from '~/mixins/mutationMixin'
+import UpdateUser from '~/graphql/mutations/users/updateUsers.gql'
+import User from '~/graphql/queries/users.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
-  name: "HQUsersContent",
+  name: 'HQUsersContent',
   components: {
-    Multiselect
+    Multiselect,
   },
   mixins: [mutationMixin],
   apollo: {
@@ -108,9 +111,9 @@ export default {
       query: Units,
     },
   },
-  data(){
-    return{
-      password: ''
+  data() {
+    return {
+      password: '',
     }
   },
   computed: {
@@ -164,13 +167,13 @@ export default {
     },
     ...mapGetters({
       getUpdateUser: 'users/getUpdateUser',
-    })
+    }),
   },
   methods: {
     ...mapActions({
       setShowAddUser: 'users/setShowAddUser',
     }),
-    nameWithId ({ name, id }) {
+    nameWithId({ name, id }) {
       return `${id} — ${name}`
     },
     setIsAdmin(isCheck) {
@@ -188,7 +191,6 @@ export default {
       }
     },
     addUser() {
-
       const obj = {
         id: this.getUpdateUser.id,
         firstName: this.firstName,
@@ -197,12 +199,12 @@ export default {
         isAdmin: this.isAdmin,
         isActive: this.isActive,
         units: {
-          sync: this.unit.map((unit) => unit.id)
+          sync: this.unit.map((unit) => unit.id),
         },
       }
 
-      const objPass = {password: this.password};
-      const objEdit = this.password.length > 0 ? {...obj, ...objPass} : obj
+      const objPass = { password: this.password }
+      const objEdit = this.password.length > 0 ? { ...obj, ...objPass } : obj
 
       this.mutationAction(
         UpdateUser,
@@ -213,7 +215,7 @@ export default {
         'Add user success',
         'Add user error'
       ).then((data) => {
-        if (data.data.updateUser.status === "UPDATED") {
+        if (data.data.updateUser.status === 'UPDATED') {
           setTimeout(() => {
             this.setShowAddUser('HQUsers')
           }, 2000)
@@ -222,11 +224,9 @@ export default {
     },
     cancelEdit() {
       this.setShowAddUser('HQUsers')
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

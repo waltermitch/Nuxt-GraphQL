@@ -1,14 +1,12 @@
 <template>
   <PageContentWrapper>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col">
         <InputWithTitle>
           <template #title> First Name</template>
 
           <template #input>
-            <CustomInput
-              v-model="firstName"
-            />
+            <CustomInput v-model="firstName" />
           </template>
         </InputWithTitle>
       </div>
@@ -17,22 +15,18 @@
           <template #title> Last Name</template>
 
           <template #input>
-            <CustomInput
-              v-model="lastName"
-            />
+            <CustomInput v-model="lastName" />
           </template>
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col">
         <InputWithTitle>
           <template #title> Email</template>
 
           <template #input>
-            <CustomInput
-              v-model="email"
-            />
+            <CustomInput v-model="email" />
           </template>
         </InputWithTitle>
       </div>
@@ -41,14 +35,12 @@
           <template #title> Password</template>
 
           <template #input>
-            <CustomInput
-              v-model="password"
-            />
+            <CustomInput v-model="password" />
           </template>
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col">
         <InputWithTitle class="mb-20">
           <template #title> Is Admin</template>
@@ -70,28 +62,38 @@
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row mb-20">
+    <div class="input-row input-row--offset mb-20">
       <div class="input-col multiselects">
-        <multiselect v-if="units && !isAdmin" v-model="unit" :options="units" :multiple="true"
-                     :close-on-select="false"
-                     :clear-on-select="false"
-                     :show-labels="false"
-                     :custom-label="nameWithId"
-                     :preserve-search="true" placeholder="Pick some" label="name" track-by="name"
-                     :preselect-first="false">
+        <multiselect
+          v-if="units && !isAdmin"
+          v-model="unit"
+          :options="units"
+          :multiple="true"
+          :close-on-select="false"
+          :clear-on-select="false"
+          :show-labels="false"
+          :custom-label="nameWithId"
+          :preserve-search="true"
+          placeholder="Pick some"
+          label="name"
+          track-by="name"
+          :preselect-first="false"
+        >
         </multiselect>
       </div>
     </div>
     <div class="buttons-area">
       <DefaultButton @event="addUser"> Add User</DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelAdd"> Cancel</DefaultButton>
+      <DefaultButton button-color-gamma="white" @event="cancelAdd">
+        Cancel</DefaultButton
+      >
     </div>
   </PageContentWrapper>
 </template>
 
 <script>
-import {mapActions} from "vuex"
+import { mapActions } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import CreateUser from '../../graphql/mutations/users/createUsers.gql'
@@ -101,13 +103,17 @@ import CustomInput from '../CustomInput.vue'
 import CustomRadioButton from '../CustomRadioButton.vue'
 import InputWithTitle from '../InputWithTitle.vue'
 import DefaultButton from '../DefaultButton'
-import {mutationMixin} from '~/mixins/mutationMixin'
-
+import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
-  name: "HQUsersCreate",
+  name: 'HQUsersCreate',
   components: {
-    CustomInput, CustomRadioButton, InputWithTitle, Multiselect, PageContentWrapper, DefaultButton
+    CustomInput,
+    CustomRadioButton,
+    InputWithTitle,
+    Multiselect,
+    PageContentWrapper,
+    DefaultButton,
   },
   mixins: [mutationMixin],
   apollo: {
@@ -130,7 +136,7 @@ export default {
     ...mapActions({
       setShowAddUser: 'users/setShowAddUser',
     }),
-    nameWithId ({ name, id }) {
+    nameWithId({ name, id }) {
       return `${id} — ${name}`
     },
     setIsAdmin(isCheck) {
@@ -156,7 +162,7 @@ export default {
             lastName: this.lastName,
             email: this.email,
             units: {
-              sync: this.unit.map((unit) => unit.id)
+              sync: this.unit.map((unit) => unit.id),
             },
             password: this.password,
             isAdmin: this.isAdmin,
@@ -167,7 +173,7 @@ export default {
         'Add user success',
         'Add user error'
       ).then((data) => {
-        if (data.data.createUser.status === "CREATED") {
+        if (data.data.createUser.status === 'CREATED') {
           setTimeout(() => {
             this.setShowAddUser('HQUsers')
           }, 2000)
@@ -176,14 +182,14 @@ export default {
     },
     cancelAdd() {
       this.setShowAddUser('HQUsers')
-    }
-  }
+    },
+  },
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="scss">
 .input {
-  &-row {
+  &-row--offset {
     display: flex;
     margin: 0 -15px;
   }
@@ -210,34 +216,34 @@ export default {
   background: #fff;
 }
 
-.multiselect__option--highlight,.multiselect__option--highlight:after{
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
   color: #fff;
   background-color: #b01d22;
 }
-.multiselect__option--selected.multiselect__option--highlight{
+.multiselect__option--selected.multiselect__option--highlight {
   background: rgba(#b01d22, 0.6);
 }
 
-.multiselect__tag{
+.multiselect__tag {
   background-color: #b01d22;
 }
 
-.multiselect__tag-icon:focus, .multiselect__tag-icon:hover{
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
   background-color: #b01d22;
 }
 
-.multiselect__tag-icon:after{
+.multiselect__tag-icon:after {
   color: #fff;
 }
 
-.multiselect__select:before{
-  border:none;
+.multiselect__select:before {
+  border: none;
   width: 24px;
   height: 24px;
   background: url(assets/images/icons/chevron-down.svg);
   display: block;
   top: 0;
 }
-
 </style>
-
