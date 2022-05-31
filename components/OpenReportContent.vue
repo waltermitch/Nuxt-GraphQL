@@ -12,9 +12,10 @@
       <InputWithTitle>
         <template #title> Period End Date </template>
 
-        <template #input>
+        <template v-if="formattedPeriods" #input>
           <CustomSelect
-            :options="periodEndDates"
+            :options="formattedPeriods"
+            select-by="periodEnd"
             @input="selectPeriodEndDate"
           />
         </template>
@@ -32,6 +33,11 @@ import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import DefaultButton from './DefaultButton.vue'
+import { meMixin } from '~/mixins/meMixin'
+import { formatDateFromAPI } from '~/helpers/helpers'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import Units from '~/graphql/queries/units.gql'
+import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
 export default {
   name: 'OpenReportContent',
   components: {
@@ -41,34 +47,50 @@ export default {
     CustomSelect,
     DefaultButton,
   },
+  mixins: [meMixin, mutationMixin],
   data() {
     return {
       reportType: '',
       reportTypes: locationReportTypes,
-      periodEndDate: '',
-      periodEndDates: [
-        {
-          id: 0,
-          name: '12/28/19',
-          value: '12/28/19',
-        },
-        {
-          id: 1,
-          name: '01/04/20',
-          value: '01/04/20',
-        },
-      ],
+      periodEnd: '',
     }
   },
+  computed: {
+    formattedPeriods() {
+      return this.periods.map((period) => {
+        return {
+          ...period,
+          periodEnd: this.formatDateFromAPI(period.periodEnd),
+        }
+      })
+    },
+  },
   methods: {
+    formatDateFromAPI,
     selectReportType(item) {
       this.reportType = item
     },
     selectPeriodEndDate(item) {
-      this.periodEndDate = item
+      this.periodEnd = item
     },
-    openReport() {
-      console.log(this.periodEndDate, this.reportType)
+    async openReport() {
+      const {
+        data: { operatingReport },
+      } = await this.mutationAction(
+        OperatingReport,
+        {
+          input: {
+            period: this.periodEnd.id,
+            unit: this.selectedUnit.id,
+            type: this.reportType.type,
+            typePeriod: this.reportType.typePeriod,
+          },
+        },
+        Units,
+        'Open Report Success'
+      )
+
+      window.open(operatingReport)
     },
   },
 }

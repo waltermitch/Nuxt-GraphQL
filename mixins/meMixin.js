@@ -19,5 +19,8 @@ export const meMixin = {
           this.selectedUnit && Number(this.selectedUnit.activePeriod.id),
       }
     },
+    periods() {
+      return this.selectedUnit && this.selectedUnit.periods
+    },
   },
 }
