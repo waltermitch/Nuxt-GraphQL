@@ -137,13 +137,12 @@ export default {
     formatDate,
     formatDateAndTime,
     async CreateCateringOrder() {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreateCateringOrder,
         {
           cateringOrderInput: {
             description: this.getDescription,
             deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
-            periodEnd: this.periodEndDate,
             headCount: Number(this.getHeadCount),
             items: {
               create: this.getItemsWithoutId.map((item) => {
@@ -169,7 +168,9 @@ export default {
         'Add catering order success',
         'Add catering order error'
       )
-      this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
+      if (res) {
+        this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
+      }
     },
     async UpdateCateringOrder() {
       await this.mutationAction(
@@ -179,7 +180,6 @@ export default {
             id: this.getId,
             description: this.getDescription,
             deliveryDate: this.formatDateAndTime(this.getDeliveryDate),
-            periodEnd: this.periodEndDate,
             headCount: Number(this.getHeadCount),
             items: {
               delete: this.getDeleteItemIDs,

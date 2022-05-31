@@ -306,7 +306,7 @@ export default {
   methods: {
     formatDateForCloseRegisterAPI,
     async CreateCloseRegister() {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreateRegisterCloseout,
         {
           registerCloseoutInput: {
@@ -353,11 +353,13 @@ export default {
         'Close Register success',
         'Close Register error'
       )
-      this.$router.push('/home/close-register')
-      // this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+      if (res) {
+        this.$router.push('/home/close-register')
+        this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+      }
     },
     async UpdateCloseRegister() {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         UpdateRegisterCloseout,
         {
           registerCloseoutInput: {
@@ -412,9 +414,11 @@ export default {
         'Close Register success',
         'Close Register error'
       )
-      this.$router.push('/review/register-closeout')
-      this.$store.commit('closeRegister/SET_IS_EDIT', false)
-      this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+      if (res) {
+        this.$router.push('/review/register-closeout')
+        this.$store.commit('closeRegister/SET_IS_EDIT', false)
+        this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+      }
     },
     closeRegisterOrderAction() {
       this.getIsEdit ? this.UpdateCloseRegister() : this.CreateCloseRegister()
