@@ -144,7 +144,7 @@ export const locationReportTypes = [
     id: 5,
     value: 'weeklyCateringStatistics',
     name: 'Weekly Catering Statistics',
-    type: 'CATERING',
+    type: 'CATERING_STATISTICS',
     typePeriod: 'WEEKLY',
   },
   {
