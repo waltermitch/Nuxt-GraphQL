@@ -20,7 +20,7 @@
         <template v-if="inventoryCategories" #content>
           <ValidationObserver ref="form">
             <CustomTableRow
-              v-for="item in inventoriesCopy"
+              v-for="item in inventoryCategories"
               :key="item.id"
               class="table-row"
             >
@@ -32,10 +32,12 @@
                 {{ item.name }}
               </span>
 
-              <span class="table-text"> ${{ item.inventoryAmount }} </span>
+              <span class="table-text">
+                ${{ item.inventoryAmount.previous }}
+              </span>
 
               <CustomInput
-                v-model.number="item.newAmount"
+                v-model.number="item.inventoryAmount.current"
                 rules="currency"
                 type="number"
                 placeholder="$0.00"
@@ -92,25 +94,17 @@ export default {
     },
   },
   mixins: [formMixin, mutationMixin],
-  data() {
-    return {
-      inventoriesCopy: [],
-    }
-  },
   computed: {
     totalPreviousAmount() {
-      return this.inventoriesCopy.reduce((prev, current) => {
-        return Number(prev) + Number(current.inventoryAmount)
+      return this.inventoryCategories.reduce((prev, current) => {
+        return Number(prev) + Number(current.inventoryAmount.previous)
       }, 0)
     },
     totalCurrentValue() {
-      return this.inventoriesCopy.reduce((prev, current) => {
-        return Number(prev) + Number(current.newAmount)
+      return this.inventoryCategories.reduce((prev, current) => {
+        return Number(prev) + Number(current.inventoryAmount.current)
       }, 0)
     },
-  },
-  async mounted() {
-    await this.fetchData()
   },
   methods: {
     async fetchData() {
@@ -121,10 +115,7 @@ export default {
         fetchPolicy: 'no-cache',
       })
 
-      this.inventoriesCopy = inventoryCategories.map((item) => ({
-        ...item,
-        newAmount: '',
-      }))
+      this.inventoryCategories = inventoryCategories
     },
     async updateInventories() {
       const {
@@ -132,10 +123,10 @@ export default {
       } = await this.mutationAction(
         UpdateInventories,
         {
-          inventoriesInput: this.inventoriesCopy.map((item) => {
+          inventoriesInput: this.inventoryCategories.map((item) => {
             return {
               id: item.id,
-              amount: Number(item.newAmount) || Number(item.inventoryAmount),
+              amount: Number(item.inventoryAmount.current),
             }
           }),
         },
@@ -144,10 +135,7 @@ export default {
         'Update Inventory Categories error'
       )
 
-      this.inventoriesCopy = updateInventories.map((item) => ({
-        ...item,
-        newAmount: '',
-      }))
+      this.inventoryCategories = updateInventories
     },
     async cancelUpdate() {
       await this.fetchData()
