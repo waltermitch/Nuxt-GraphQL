@@ -172,8 +172,9 @@ export default {
       }))
     },
     async openReport() {
-      console.log(this.selectedUnits, 'selected units')
-      await this.mutationAction(
+      const {
+        data: { multiUnitLabor },
+      } = await this.mutationAction(
         MultiUnitLabor,
         {
           input: {
@@ -185,6 +186,8 @@ export default {
         Units,
         'Open Report success'
       )
+
+      window.open(multiUnitLabor)
     },
   },
 }
