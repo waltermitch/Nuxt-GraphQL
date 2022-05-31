@@ -28,7 +28,7 @@
             </div>
           </template>
 
-          <template #content>
+          <template v-if="units" #content>
             <CustomTableContent>
               <CustomTableRow
                 v-for="unit in units"
@@ -53,16 +53,16 @@
             </div>
           </template>
 
-          <template #content>
+          <template v-if="periods" #content>
             <CustomTableContent>
               <CustomTableRow
-                v-for="period in periodEndDates"
+                v-for="period in periods"
                 :key="period.id"
                 :is-active="period.id === periodEndDate.id"
                 selectable
                 @event="selectPeriodEndDate(period)"
               >
-                <span>{{ period.name }}</span>
+                <span>{{ period.periodEnd }}</span>
               </CustomTableRow>
             </CustomTableContent>
           </template>
@@ -80,6 +80,10 @@ import InputRow from './InputRow.vue'
 import CustomTableContent from './CustomTableContent.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
+import Units from '~/graphql/queries/units.gql'
+import Periods from '~/graphql/queries/periods.gql'
+import { mutationMixin } from '~/mixins/mutationMixin'
+import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
 export default {
   name: 'HQWeeklyOperatingReports',
   components: {
@@ -90,36 +94,24 @@ export default {
     CustomTableRow,
     DefaultButton,
   },
+  apollo: {
+    units: {
+      query: Units,
+    },
+    periods: {
+      query: Periods,
+      variables: {
+        hasUnits: true,
+      },
+    },
+  },
+  mixins: [mutationMixin],
   data() {
     return {
       reportType: '',
       reportTypes: WeeklyReportsTypes,
       selectedUnit: '',
-      units: [
-        {
-          id: 0,
-          unitId: 101,
-          name: 'Unit Name 1',
-        },
-        {
-          id: 1,
-          unitId: 102,
-          name: 'Unit Name 2',
-        },
-      ],
       periodEndDate: '',
-      periodEndDates: [
-        {
-          id: 0,
-          name: '12/28/19',
-          value: '12/28/19',
-        },
-        {
-          id: 1,
-          name: '01/04/20',
-          value: '01/04/20',
-        },
-      ],
     }
   },
   methods: {
@@ -132,8 +124,24 @@ export default {
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
-    openReport() {
-      console.log(this.selectedUnit, this.periodEndDate, this.reportType)
+    async openReport() {
+      const {
+        data: { operatingReport },
+      } = await this.mutationAction(
+        OperatingReport,
+        {
+          input: {
+            period: this.periodEndDate.id,
+            unit: this.selectedUnit.id,
+            type: this.reportType.type,
+            typePeriod: this.reportType.typePeriod,
+          },
+        },
+        Units,
+        'Open Report Success'
+      )
+
+      window.open(operatingReport)
     },
   },
 }
@@ -151,13 +159,13 @@ export default {
     grid-template-columns: 60px 120px;
   }
 }
-.table-operating{
+.table-operating {
   @media screen and(max-width: $xl) {
     width: 100% !important;
-    &:last-child{
+    &:last-child {
       margin-bottom: 20px;
     }
-    &:first-child{
+    &:first-child {
       margin-right: 0 !important;
     }
   }
