@@ -47,7 +47,7 @@
           <img
             src="~assets/images/icons/home/delete.svg"
             class="icon icon--delete"
-            @click="deleteItem(item.id)"
+            @click="deleteItem(item)"
           />
         </CustomTableRow>
 
@@ -240,13 +240,17 @@ export default {
         }
       }
     },
-    deleteItem(id) {
-      if (this.getIsEdit && id) {
-        this.$store.commit('purchaseOrders/SET_DELETE_ITEM_IDS', id)
+    deleteItem(item) {
+      if (this.getIsEdit && item.id) {
+        this.$store.commit('purchaseOrders/SET_DELETE_ITEM_IDS', item.id)
       }
       this.$store.commit(
         'purchaseOrders/SET_ITEMS',
-        this.getItems.filter((item) => item.id !== id)
+        this.getItems.filter((vuexItem) =>
+          item.id
+            ? Number(vuexItem.id) !== Number(item.id)
+            : Number(vuexItem.tempId) !== Number(item.tempId)
+        )
       )
     },
     selectGlAccount(item, glAccount) {
