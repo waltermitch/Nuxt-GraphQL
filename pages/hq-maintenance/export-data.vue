@@ -5,9 +5,9 @@
     </template>
 
     <template #header>
-      <PageSubtitle> Maintenance / Export Purchases </PageSubtitle>
+      <PageSubtitle> Maintenance / Export Data </PageSubtitle>
 
-      <PageTitle> Export Purchases </PageTitle>
+      <PageTitle> Export Data </PageTitle>
     </template>
 
     <template #content>
@@ -25,7 +25,7 @@ import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
 import HQExportPurchases from '~/components/HQExportPurchases.vue'
 export default {
-  name: 'HqMaintenanceExportPurchases',
+  name: 'HqMaintenanceExportData',
   components: {
     BasePageLayout,
     SideBar,
@@ -37,7 +37,7 @@ export default {
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
-  }
+  },
 }
 </script>
 

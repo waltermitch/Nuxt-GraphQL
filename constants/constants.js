@@ -176,7 +176,7 @@ export const HQ_MAINTENANCE_TABS = [
   {
     id: 3,
     caption: 'Export Data',
-    pageUrl: '/hq-maintenance/export-purchases',
+    pageUrl: '/hq-maintenance/export-data',
     iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
   },
 ]
