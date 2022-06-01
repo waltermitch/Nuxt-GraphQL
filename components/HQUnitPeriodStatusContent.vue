@@ -51,7 +51,11 @@
             {{ period.periodEnd }}
           </span>
 
-          <CustomRadioButton :is-active="!period.pivot.isClosed" disabled />
+          <CustomRadioButton
+            v-if="period.pivot"
+            :is-active="!period.pivot.isClosed"
+            disabled
+          />
         </CustomTableRow>
       </template>
     </CustomTable>
