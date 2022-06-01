@@ -2,6 +2,7 @@
 #import './vendor.gql'
 #import './glAccount.gql'
 #import './expenseType.gql'
+#import '../fragments/period.gql'
 
 fragment ExpenseFragment on Expense {
   id
@@ -12,7 +13,9 @@ fragment ExpenseFragment on Expense {
   vendor {
     ...VendorFragment
   }
-  periodEnd
+  period {
+    ...PeriodFragment
+  }
   expenseDate
   glAccount {
     ...GlAccountFragment

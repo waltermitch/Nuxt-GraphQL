@@ -1,6 +1,7 @@
 #import './register.gql'
 #import './registerCloseoutItem.gql'
 #import './unit.gql'
+#import '../fragments/period.gql'
 
 fragment RegisterCloseoutFragment on RegisterCloseout {
   id
@@ -39,6 +40,9 @@ fragment RegisterCloseoutFragment on RegisterCloseout {
   customerCountTotals
   netSalesTotals
   closeDate
+  period {
+    ...PeriodFragment
+  }
   updatedAt
   createdAt
 }

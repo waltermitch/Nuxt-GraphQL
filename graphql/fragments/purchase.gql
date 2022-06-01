@@ -1,12 +1,15 @@
 #import './unit.gql'
 #import './purchaseCharge.gql'
 #import './vendor.gql'
+#import '../fragments/period.gql'
 
 fragment PurchaseFragment on Purchase {
   id
   number
   date
-  periodEnd
+  period {
+    ...PeriodFragment
+  }
   vendor {
     ...VendorFragment
   }

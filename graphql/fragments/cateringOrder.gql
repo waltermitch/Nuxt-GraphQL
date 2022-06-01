@@ -1,4 +1,5 @@
 #import '../fragments/cateringOrderItem.gql'
+#import '../fragments/period.gql'
 
 fragment CateringOrderFragment on CateringOrder {
   id
@@ -20,7 +21,9 @@ fragment CateringOrderFragment on CateringOrder {
   billToAddress
   isCashOrder
   chargeNumber
-  periodEnd
+  period {
+    ...PeriodFragment
+  }
   createdAt
   updatedAt
 }

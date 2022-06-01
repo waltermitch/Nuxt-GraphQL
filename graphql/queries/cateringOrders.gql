@@ -1,7 +1,7 @@
 #import '../fragments/cateringOrder.gql'
 
-query CateringOrders {
-  cateringOrders {
+query CateringOrders($activePeriod: Boolean!) {
+  cateringOrders(activePeriod: $activePeriod) {
     ...CateringOrderFragment
   }
 }
