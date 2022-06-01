@@ -68,6 +68,9 @@ export default {
   apollo: {
     registerCloseouts: {
       query: RegisterCloseouts,
+      variables: {
+        activePeriod: true,
+      },
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
@@ -94,7 +97,10 @@ export default {
         { id },
         RegisterCloseouts,
         'Delete Register Closeout success',
-        'Delete Register Closeout error'
+        'Delete Register Closeout error',
+        {
+          activePeriod: true,
+        }
       )
     },
   },

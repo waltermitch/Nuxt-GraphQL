@@ -9,7 +9,8 @@ export const mutationMixin = {
       variablesObject,
       queryToRefetch,
       successMessage,
-      errorMessage
+      errorMessage,
+      variables
     ) {
       const formValidated =
         this.$refs.form && (await this.$refs.form.validate())
@@ -19,7 +20,7 @@ export const mutationMixin = {
           const res = await this.$apollo.mutate({
             mutation,
             variables: variablesObject,
-            refetchQueries: [{ query: queryToRefetch }],
+            refetchQueries: [{ query: queryToRefetch, variables }],
           })
           this.clearState()
           this.showSubmitMessage(successMessage, 'success')

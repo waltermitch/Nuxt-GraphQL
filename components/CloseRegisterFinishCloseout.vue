@@ -352,7 +352,10 @@ export default {
         },
         RegisterCloseouts,
         'Close Register success',
-        'Close Register error'
+        'Close Register error',
+        {
+          activePeriod: true,
+        }
       )
       if (res) {
         this.$router.push('/home/close-register')
@@ -413,7 +416,10 @@ export default {
         },
         RegisterCloseouts,
         'Close Register success',
-        'Close Register error'
+        'Close Register error',
+        {
+          activePeriod: true,
+        }
       )
       if (res) {
         this.$router.push('/review/register-closeout')
