@@ -1,11 +1,35 @@
 <template>
   <PageContentWrapper>
-    <CustomTable :w-table="520">
+    <div class="header">
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Unit </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="units"
+              :options="units"
+              select-by="name"
+              select-by-second="code"
+              @input="selectUnit"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Name </template>
+
+          <template #input>
+            <CustomInput v-model="unit.name" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+    </div>
+
+    <CustomTable v-if="unit.periods" :w-table="520">
       <template #header>
         <div class="table-row">
-          <span>Unit</span>
-
-          <span>Name</span>
+          <span>Period ID</span>
 
           <span>PeriodEnd</span>
 
@@ -15,23 +39,19 @@
 
       <template #content>
         <CustomTableRow
-          v-for="status in unitPeriodStatus"
-          :key="status.id"
+          v-for="period in unit.periods"
+          :key="period.id"
           class="table-row"
         >
           <span>
-            {{ status.unit }}
+            {{ period.id }}
           </span>
 
           <span>
-            {{ status.name }}
+            {{ period.periodEnd }}
           </span>
 
-          <span>
-            {{ status.periodEnd }}
-          </span>
-
-          <CustomRadioButton :is-active="status.open" />
+          <CustomRadioButton :is-active="!period.pivot.isClosed" disabled />
         </CustomTableRow>
       </template>
     </CustomTable>
@@ -39,20 +59,23 @@
 </template>
 
 <script>
+import Units from '../graphql/queries/units.gql'
 export default {
   name: 'HQUnitPeriodStatusContent',
+  apollo: {
+    units: {
+      query: Units,
+    },
+  },
   data() {
     return {
-      unitPeriodStatus: [
-        {
-          id: 0,
-          unit: 277,
-          name: 'Suez USA',
-          periodEnd: '1/4/2020 11:59:00 PM',
-          open: true,
-        },
-      ],
+      unit: '',
     }
+  },
+  methods: {
+    selectUnit(item) {
+      this.unit = item
+    },
   },
 }
 </script>
