@@ -285,7 +285,6 @@ export default {
           PurchaseInput: {
             number: this.getInvoiceNumber,
             date: this.formatDate(this.getPurchaseDate),
-            periodEnd: this.periodEndDate,
             vendor: {
               connect: this.getVendor.id,
             },
@@ -315,7 +314,10 @@ export default {
         },
         Purchases,
         'Add purchase order success',
-        'Add purchase order error'
+        'Add purchase order error',
+        {
+          activePeriod: true,
+        }
       )
       this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
     },
@@ -327,7 +329,6 @@ export default {
             id: this.getId,
             number: this.getInvoiceNumber,
             date: this.formatDate(this.getPurchaseDate),
-            periodEnd: this.periodEndDate,
             vendor: {
               connect: this.getVendor.id,
             },
@@ -382,7 +383,10 @@ export default {
         },
         Purchases,
         'Edit purchase order success',
-        'Edit purchase order error'
+        'Edit purchase order error',
+        {
+          activePeriod: true,
+        }
       )
       this.$router.push('/review/weekly-purchases')
     },

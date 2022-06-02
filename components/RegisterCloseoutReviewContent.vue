@@ -17,7 +17,7 @@
 
         <template v-if="registerCloseouts" #content>
           <CustomTableRow
-            v-for="registerCloseout in currentPeriodData"
+            v-for="registerCloseout in registerCloseouts"
             :key="registerCloseout.id"
             class="table-row table-content-row"
           >
@@ -74,14 +74,6 @@ export default {
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
-  computed: {
-    currentPeriodData() {
-      return this.registerCloseouts.filter(
-        (registerCloseout) =>
-          registerCloseout.unit.activePeriod.periodEnd === this.periodEndDate
-      )
-    },
-  },
   methods: {
     formatDateFromAPI,
     editRegisterCloseoutOrder(closeRegister) {

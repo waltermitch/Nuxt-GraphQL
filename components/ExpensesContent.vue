@@ -257,7 +257,6 @@ export default {
                 connect: this.vendor.id,
               },
             }),
-            periodEnd: this.selectedUnit.activePeriod.periodEnd,
             expenseDate: this.formatDate(this.expensesDate),
             glAccount: {
               connect: this.glAccount.id,
@@ -270,7 +269,10 @@ export default {
         },
         Expenses,
         'Add Expense success',
-        'Add Expense error'
+        'Add Expense error',
+        {
+          activePeriod: true,
+        }
       )
 
       this.cancelCreate()
@@ -288,7 +290,6 @@ export default {
                 connect: this.vendor.id,
               },
             }),
-            periodEnd: this.selectedUnit.activePeriod.periodEnd,
             expenseDate: this.formatDate(this.expensesDate),
             glAccount: {
               connect: this.glAccount.id,
@@ -301,7 +302,10 @@ export default {
         },
         Expenses,
         'Update Expense success',
-        'Update Expense error'
+        'Update Expense error',
+        {
+          activePeriod: true,
+        }
       )
       this.$router.push('/review/weekly-expenses')
     },

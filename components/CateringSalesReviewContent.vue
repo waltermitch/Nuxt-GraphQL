@@ -16,7 +16,7 @@
 
         <template v-if="cateringOrders" #content>
           <CustomTableRow
-            v-for="cateringOrder in currentPeriodData"
+            v-for="cateringOrder in cateringOrders"
             :key="cateringOrder.id"
             class="table-row table-content-row"
           >
@@ -53,16 +53,12 @@ export default {
   apollo: {
     cateringOrders: {
       query: CateringOrders,
+      variables: {
+        activePeriod: true,
+      },
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
-  computed: {
-    currentPeriodData() {
-      return this.cateringOrders.filter(
-        (cateringOrder) => cateringOrder.periodEnd === this.periodEndDate
-      )
-    },
-  },
   methods: {
     formatDateFromAPI,
     formatDateAndTimeFromAPI,
@@ -81,7 +77,10 @@ export default {
         { id },
         CateringOrders,
         'Delete catering order success',
-        'Delete catering order error'
+        'Delete catering order error',
+        {
+          activePeriod: true,
+        }
       )
     },
   },

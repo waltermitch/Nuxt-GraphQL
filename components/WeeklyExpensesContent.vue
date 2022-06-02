@@ -20,7 +20,7 @@
 
         <template v-if="expenses" #content>
           <CustomTableRow
-            v-for="expense in currentPeriodData"
+            v-for="expense in expenses"
             :key="expense.id"
             class="table-row table-content-row"
           >
@@ -64,16 +64,12 @@ export default {
   apollo: {
     expenses: {
       query: Expenses,
+      variables: {
+        activePeriod: true,
+      },
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
-  computed: {
-    currentPeriodData() {
-      return this.expenses.filter(
-        (expense) => expense.periodEnd === this.periodEndDate
-      )
-    },
-  },
   methods: {
     formatDateFromAPI,
     selectPeriodEndDate(item) {
@@ -93,7 +89,10 @@ export default {
         { id },
         Expenses,
         'Delete expense success',
-        'Delete expense error'
+        'Delete expense error',
+        {
+          activePeriod: true,
+        }
       )
     },
   },

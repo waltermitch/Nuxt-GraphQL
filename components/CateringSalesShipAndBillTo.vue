@@ -167,7 +167,10 @@ export default {
         },
         CateringOrders,
         'Add catering order success',
-        'Add catering order error'
+        'Add catering order error',
+        {
+          activePeriod: true,
+        }
       )
       if (res) {
         this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
@@ -212,7 +215,10 @@ export default {
         },
         CateringOrders,
         'Edit catering order success',
-        'Edit catering order error'
+        'Edit catering order error',
+        {
+          activePeriod: true,
+        }
       )
       this.$router.push('/review/catering-sales')
     },

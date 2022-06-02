@@ -20,7 +20,7 @@
 
         <template v-if="purchases" #content>
           <CustomTableRow
-            v-for="purchase in currentPeriodData"
+            v-for="purchase in purchases"
             :key="purchase.id"
             class="table-row table-content-row"
           >
@@ -76,16 +76,12 @@ export default {
   apollo: {
     purchases: {
       query: Purchases,
+      variables: {
+        activePeriod: true,
+      },
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
-  computed: {
-    currentPeriodData() {
-      return this.purchases.filter(
-        (purchase) => purchase.periodEnd === this.periodEndDate
-      )
-    },
-  },
   methods: {
     formatDateFromAPI,
     editPurchaseOrder(purchase) {
@@ -103,7 +99,10 @@ export default {
         { id },
         Purchases,
         'Delete purchase success',
-        'Delete purchase error'
+        'Delete purchase error',
+        {
+          activePeriod: true,
+        }
       )
     },
   },
@@ -113,8 +112,6 @@ export default {
 <style lang="scss" scoped>
 .table {
   margin-top: 30px;
-  &-purchases {
-  }
 }
 
 .table-row {
