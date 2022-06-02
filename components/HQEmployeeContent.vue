@@ -215,8 +215,6 @@
           <div class="table-row">
             <span>Unit</span>
 
-            <span>Active</span>
-
             <span>Unit Name</span>
           </div>
         </template>
@@ -227,11 +225,9 @@
             :key="unit.id"
             class="table-row"
           >
-            {{ unit.code }}
+            <span>{{ unit.code }}</span>
 
-            <CustomRadioButton :is-is-active="unit.isActive" />
-
-            {{ unit.name }}
+            <span>{{ unit.name }}</span>
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -438,10 +434,10 @@ export default {
   display: grid;
   align-items: center;
   @media screen and (min-width: $md) {
-    grid-template-columns: 100px 100px 300px;
+    grid-template-columns: 100px 300px;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 100px 100px 120px;
+    grid-template-columns: 100px 120px;
   }
 }
 </style>
