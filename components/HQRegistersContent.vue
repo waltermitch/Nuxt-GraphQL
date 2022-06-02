@@ -16,7 +16,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle v-if="unit">
           <template #title> Name </template>
 
           <template #input>

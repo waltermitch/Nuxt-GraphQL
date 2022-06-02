@@ -16,7 +16,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle v-if="unit">
           <template #title> Name </template>
 
           <template #input>
@@ -26,7 +26,7 @@
       </InputRow>
     </div>
 
-    <CustomTable v-if="unit.periods" :w-table="520">
+    <CustomTable v-if="unit && unit.periods" :w-table="520">
       <template #header>
         <div class="table-row">
           <span>Period ID</span>

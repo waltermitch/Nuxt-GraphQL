@@ -15,7 +15,7 @@
         </template>
       </InputWithTitle>
 
-      <InputWithTitle>
+      <InputWithTitle v-if="unit">
         <template #title> Name </template>
 
         <template #input>
@@ -76,7 +76,7 @@
       </CustomTable>
 
       <CustomTable
-        v-if="unit.vendors"
+        v-if="unit && unit.vendors"
         class="table table--right"
         :w-table="350"
       >

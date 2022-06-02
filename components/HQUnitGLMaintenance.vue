@@ -16,7 +16,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle v-if="unit">
           <template #title> Name </template>
 
           <template #input>
@@ -89,6 +89,7 @@
 
                 <span>-</span>
                 <DefaultButton
+                  v-if="unit"
                   @event="
                     unit.glAccounts &&
                     (selectedGlSubAccount.idToCheck

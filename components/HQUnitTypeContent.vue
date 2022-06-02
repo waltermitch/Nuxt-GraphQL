@@ -18,7 +18,7 @@
             </template>
           </InputWithTitle>
 
-          <InputWithTitle>
+          <InputWithTitle v-if="unit">
             <template #title> Name</template>
 
             <template #input>
@@ -27,7 +27,7 @@
           </InputWithTitle>
         </InputRow>
 
-        <InputRow v-if="unit.unitType" class="input-row">
+        <InputRow v-if="unit" class="input-row">
           <InputWithTitle>
             <template #title> Unit Type ID</template>
 
