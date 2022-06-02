@@ -10,6 +10,6 @@ export default async function ({ app, redirect, route }) {
   if (route.name !== 'home-select-unit' && !me.selectedUnit && !me.isAdmin) {
     redirect('/home/select-unit')
   } else if (me.isAdmin) {
-    redirect('/hq-maintenance/units-reporting')
+    redirect('/hq-maintenance/export-data')
   }
 }

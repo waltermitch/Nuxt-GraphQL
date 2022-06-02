@@ -8,7 +8,7 @@ export default {
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
-    redirectTo: '/hq-maintenance/units-reporting',
+    redirectTo: '/hq-maintenance/export-data',
   },
 }
 </script>
