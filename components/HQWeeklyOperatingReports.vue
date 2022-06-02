@@ -62,7 +62,7 @@
                 selectable
                 @event="selectPeriodEndDate(period)"
               >
-                <span>{{ period.periodEnd }}</span>
+                <span>{{ formatDateFromAPI(period.periodEnd) }}</span>
               </CustomTableRow>
             </CustomTableContent>
           </template>
@@ -84,6 +84,7 @@ import Units from '~/graphql/queries/units.gql'
 import Periods from '~/graphql/queries/periods.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
+import { formatDateFromAPI } from '~/helpers/helpers'
 export default {
   name: 'HQWeeklyOperatingReports',
   components: {
@@ -115,6 +116,7 @@ export default {
     }
   },
   methods: {
+    formatDateFromAPI,
     selectReportType(item) {
       this.reportType = item
     },
