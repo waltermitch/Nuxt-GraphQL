@@ -69,6 +69,7 @@ export default {
   apollo: {
     units: {
       query: Units,
+      fetchPolicy: 'no-cache',
     },
   },
   data() {
