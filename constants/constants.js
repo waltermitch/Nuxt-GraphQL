@@ -161,18 +161,18 @@ export const REPORTS_NAV_TABS = [
 ]
 
 export const HQ_MAINTENANCE_TABS = [
-  {
-    id: 1,
-    caption: 'Units Reporting',
-    pageUrl: '/hq-maintenance/units-reporting',
-    iconSrc: require('assets/images/icons/header/home.svg'),
-  },
-  {
-    id: 2,
-    caption: 'Send Unit Update',
-    pageUrl: '/hq-maintenance/send-unit-update',
-    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
-  },
+  // {
+  //   id: 1,
+  //   caption: 'Units Reporting',
+  //   pageUrl: '/hq-maintenance/units-reporting',
+  //   iconSrc: require('assets/images/icons/header/home.svg'),
+  // },
+  // {
+  //   id: 2,
+  //   caption: 'Send Unit Update',
+  //   pageUrl: '/hq-maintenance/send-unit-update',
+  //   iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  // },
   {
     id: 3,
     caption: 'Export Data',
