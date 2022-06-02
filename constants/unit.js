@@ -58,5 +58,4 @@ export const UNIT = {
   // regTax: '',
   commissionPercent: '',
   isKronos: false,
-  startPeriod: '',
 }

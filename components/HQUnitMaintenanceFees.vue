@@ -172,16 +172,6 @@
         </InputWithTitle>
       </InputRow>
 
-      <InputRow>
-        <InputWithTitle>
-          <template #title> Start Period </template>
-
-          <template #input>
-            <CustomSelect :options="datesList" @input="selectStartPeriod" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
-
       <div class="buttons-area">
         <DefaultButton
           button-color-gamma="red"
@@ -236,13 +226,6 @@ export default {
           id: 2,
           value: 'DolarsPerWeek',
           name: 'DolarsPerWeek',
-        },
-      ],
-      datesList: [
-        {
-          id: 1,
-          value: '2021-05-23',
-          name: '2021-05-23',
         },
       ],
     }
@@ -342,9 +325,6 @@ export default {
     isKronos() {
       return this.unit.isKronos
     },
-    startPeriod() {
-      return this.unit.startPeriod.value
-    },
   },
   methods: {
     selectManagementFeeType(managementFeeType) {
@@ -370,12 +350,6 @@ export default {
     },
     setIsKronos() {
       this.$store.commit('unitMaintenance/SET_UNIT_KRONOS', !this.unit.isKronos)
-    },
-    selectStartPeriod(startPeriod) {
-      this.$store.commit(
-        'unitMaintenance/SET_UNIT_START_PERIOD',
-        startPeriod.value
-      )
     },
     async addUnit() {
       // eslint-disable-next-line no-unused-vars

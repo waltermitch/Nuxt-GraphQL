@@ -50,7 +50,6 @@ fragment UnitFragment on Unit {
   periods {
     ...PeriodFragment
   }
-  startPeriod
   payrollPassword
   managementPercent
   managementAmount

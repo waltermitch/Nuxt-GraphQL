@@ -61,7 +61,6 @@ export const state = () => ({
     // regTax: '',
     commissionPercent: '',
     isKronos: false,
-    startPeriod: '',
   },
 })
 
@@ -206,12 +205,6 @@ export const mutations = {
   },
   SET_UNIT_KRONOS(state, payload) {
     state.unit.isKronos = payload
-  },
-  SET_UNIT_START_PERIOD(state, payload) {
-    state.unit = {
-      ...state.unit,
-      startPeriod: payload,
-    }
   },
 }
 

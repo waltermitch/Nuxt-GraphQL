@@ -3,7 +3,7 @@
     <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
-          <template #title> Unit </template>
+          <template #title> Unit ID </template>
 
           <template #input>
             <CustomInput v-model="code" rules="required" />
