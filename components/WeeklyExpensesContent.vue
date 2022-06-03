@@ -1,5 +1,19 @@
 <template>
   <PageContentWrapper>
+    <InputRow>
+      <InputWithTitle>
+        <template #title>Expense Type</template>
+
+        <template v-if="expenseTypes" #input>
+          <CustomSelect
+            :options="expenseTypes"
+            select-by="type"
+            :selected-item="expenseType"
+            @input="setExpensesType"
+          />
+        </template>
+      </InputWithTitle>
+    </InputRow>
     <LoadingBar v-if="$apollo.loading" />
 
     <div v-else class="table">
@@ -20,7 +34,7 @@
 
         <template v-if="expenses" #content>
           <CustomTableRow
-            v-for="expense in expenses"
+            v-for="expense in expensesFilteredByExpenseType"
             :key="expense.id"
             class="table-row table-content-row"
           >
@@ -52,15 +66,18 @@
 <script>
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
+import InputRow from './InputRow.vue'
+import InputWithTitle from './InputWithTitle.vue'
 import Expenses from '~/graphql/queries/expenses.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import DeleteExpense from '~/graphql/mutations/expense/deleteExpense.gql'
 import { meMixin } from '~/mixins/meMixin'
+import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
 export default {
   name: 'WeeklyExpensesContent',
-  components: { CustomTable, CustomTableRow },
+  components: { CustomTable, CustomTableRow, InputRow, InputWithTitle },
   apollo: {
     expenses: {
       query: Expenses,
@@ -68,10 +85,28 @@ export default {
         activePeriod: true,
       },
     },
+    expenseTypes: {
+      query: ExpenseTypes,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  data() {
+    return {
+      expenseType: '',
+    }
+  },
+  computed: {
+    expensesFilteredByExpenseType() {
+      return this.expenses.filter(
+        (expense) => expense.expenseType.type === this.expenseType.type
+      )
+    },
+  },
   methods: {
     formatDateFromAPI,
+    setExpensesType(expenseType) {
+      this.expenseType = expenseType
+    },
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
