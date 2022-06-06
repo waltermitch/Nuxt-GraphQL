@@ -9,7 +9,7 @@
       }"
       @click="disabled ? null : toggleSelect()"
     >
-      <span v-if="disabled"></span>
+      <span v-if="disabled">{{ selected && selected[selectBy] }}</span>
       <span v-else-if="multiSelect">
         {{ selectedOptions }}
       </span>

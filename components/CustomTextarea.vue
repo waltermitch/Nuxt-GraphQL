@@ -6,6 +6,7 @@
       class="textarea"
       :class="classes"
       :style="{ width, height }"
+      :disabled="disabled"
       @input="setValue($event.target.value)"
     ></textarea>
     <span class="error">{{ errors[0] }}</span>
@@ -38,6 +39,10 @@ export default {
       type: String,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     setValue(textareaValue) {
@@ -56,6 +61,11 @@ export default {
   resize: none;
   @media screen and (max-width: $lg) {
     width: 100% !important;
+  }
+
+  &:disabled {
+    background: transparent;
+    cursor: not-allowed;
   }
 }
 

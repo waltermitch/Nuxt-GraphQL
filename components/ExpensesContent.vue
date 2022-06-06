@@ -13,6 +13,7 @@
                 v-model="expensesDate"
                 placeholder="mm/dd/yyyy"
                 rules="required|date"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
             </template>
           </InputWithTitle>
@@ -25,6 +26,7 @@
                 :options="expenseTypes"
                 select-by="type"
                 :selected-item="expenseType"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @input="setExpensesType"
               />
             </template>
@@ -40,26 +42,28 @@
                 :options="glAccounts"
                 :error="selectError"
                 :selected-item="glAccount"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @input="selectGlAccount"
               />
             </template>
           </InputWithTitle>
 
-          <InputWithTitle class="radio-buttons-row">
+          <InputWithTitle
+            v-if="
+              vendors &&
+              expenseType &&
+              (expenseType.type === 'Accrual' ||
+                expenseType.type === 'ReAccrual')
+            "
+            class="radio-buttons-row"
+          >
             <template #title>Vendor</template>
 
-            <template
-              v-if="
-                vendors &&
-                expenseType &&
-                (expenseType.type === 'Accrual' ||
-                  expenseType.type === 'ReAccrual')
-              "
-              #input
-            >
+            <template #input>
               <CustomSelect
                 :options="vendors"
                 :selected-item="vendor"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @input="setVendor"
               />
             </template>
@@ -76,6 +80,7 @@
                 placeholder="$0.00"
                 rules="required|currency"
                 type="number"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
             </template>
           </InputWithTitle>
@@ -90,6 +95,7 @@
                 v-model="comments"
                 name="comments"
                 rules="required"
+                :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
             </template>
           </InputWithTitle>
@@ -105,9 +111,22 @@
           </DefaultButton>
 
           <DefaultButton
+            v-if="getIsEdit && expenseType.type === 'ReAccrual'"
+            @event="ReAccrual"
+          >
+            Re-Accrue
+          </DefaultButton>
+
+          <DefaultButton
             button-color-gamma="white"
             :disabled="pristine && !getIsEdit"
-            @event="getIsEdit ? cancelEdit() : cancelCreate()"
+            @event="
+              getIsEdit && expenseType.type === 'ReAccrual'
+                ? cancelReAccrual()
+                : getIsEdit
+                ? cancelEdit()
+                : cancelCreate()
+            "
           >
             Cancel
           </DefaultButton>
@@ -139,6 +158,7 @@ import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { formatDate } from '~/helpers/helpers'
 import CreateExpense from '~/graphql/mutations/expense/createExpense.gql'
 import UpdateExpense from '~/graphql/mutations/expense/updateExpense.gql'
+import reAccrual from '~/graphql/mutations/expense/reAccrual.gql'
 export default {
   name: 'ExpensesContent',
   components: {
@@ -309,6 +329,23 @@ export default {
       )
       this.$router.push('/review/weekly-expenses')
     },
+    async ReAccrual() {
+      const res = await this.mutationAction(
+        reAccrual,
+        {
+          id: this.getId,
+        },
+        Expenses,
+        'ReAccrual success',
+        'ReAccrual error',
+        {
+          activePeriod: true,
+        }
+      )
+      if (res) {
+        this.$router.push('/home/reaccruals')
+      }
+    },
     expenseAction() {
       this.getIsEdit ? this.UpdateExpense() : this.CreateExpense()
     },
@@ -322,6 +359,10 @@ export default {
     cancelCreate() {
       this.cancelEvent()
       this.$store.commit('expense/SET_EXPENSE', { ...EXPENSE })
+    },
+    cancelReAccrual() {
+      this.$store.commit('expense/SET_EXPENSE', { ...EXPENSE })
+      this.$router.push('/home/reaccruals')
     },
   },
 }
@@ -381,6 +422,10 @@ export default {
   margin-top: 30px;
 
   button:first-child {
+    margin-right: 11px;
+  }
+
+  button:nth-child(2) {
     margin-right: 11px;
   }
 }

@@ -95,12 +95,12 @@ export const HOME_NAV_TABS = [
     pageUrl: '/home/on-call-labor',
     iconSrc: require('assets/images/icons/home/on-call.svg'),
   },
-  {
-    id: 8,
-    caption: 'Accruals',
-    pageUrl: '/home/accruals',
-    iconSrc: require('assets/images/icons/home/chart-line.svg'),
-  },
+  // {
+  //   id: 8,
+  //   caption: 'Accruals',
+  //   pageUrl: '/home/accruals',
+  //   iconSrc: require('assets/images/icons/home/chart-line.svg'),
+  // },
   {
     id: 9,
     caption: 'ReAccruals',
