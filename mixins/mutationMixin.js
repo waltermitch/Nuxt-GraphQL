@@ -22,7 +22,6 @@ export const mutationMixin = {
             variables: variablesObject,
             refetchQueries: [{ query: queryToRefetch, variables }],
           })
-          console.log('success')
           this.clearState()
           this.showSubmitMessage(successMessage, 'success')
 
