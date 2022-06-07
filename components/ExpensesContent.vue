@@ -266,7 +266,7 @@ export default {
         this.selectError = true
       }
 
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreateExpense,
         {
           expenseInput: {
@@ -294,8 +294,9 @@ export default {
           activePeriod: true,
         }
       )
-
-      this.cancelCreate()
+      if (res) {
+        this.cancelCreate()
+      }
     },
     async UpdateExpense() {
       await this.mutationAction(
