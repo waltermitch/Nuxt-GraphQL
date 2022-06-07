@@ -36,7 +36,7 @@ import DefaultButton from './DefaultButton.vue'
 import { meMixin } from '~/mixins/meMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import Units from '~/graphql/queries/units.gql'
+import Me from '~/graphql/queries/me.query.gql'
 import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
 export default {
   name: 'OpenReportContent',
@@ -86,7 +86,7 @@ export default {
             typePeriod: this.reportType.typePeriod,
           },
         },
-        Units,
+        Me,
         'Open Report Success'
       )
 
