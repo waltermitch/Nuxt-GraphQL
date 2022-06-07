@@ -59,7 +59,7 @@
     <div class="buttons-area">
       <DefaultButton
         button-color-gamma="red"
-        :disabled="!selectedUnits.length"
+        :disabled="selectedUnits && !selectedUnits.length"
         @event="exportPurchases"
       >
         export purchases
@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     selectedUnits() {
-      return this.units.filter((unit) => unit.selected)
+      return this.units && this.units.filter((unit) => unit.selected)
     },
     formattedPeriods() {
       return this.periods.map((period) => {
