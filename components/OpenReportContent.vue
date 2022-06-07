@@ -87,7 +87,10 @@ export default {
           },
         },
         Me,
-        'Open Report Success'
+        'Open Report Success',
+        null,
+        null,
+        true
       )
 
       window.open(operatingReport)

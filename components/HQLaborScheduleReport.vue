@@ -184,7 +184,10 @@ export default {
           },
         },
         Units,
-        'Open Report success'
+        'Open Report success',
+        null,
+        null,
+        true
       )
 
       window.open(multiUnitLabor)

@@ -176,10 +176,15 @@ export default {
           },
         },
         Units,
-        'Export data success'
+        'Export data success',
+        null,
+        null,
+        true
       )
 
-      window.open(exportData)
+      if (exportData) {
+        window.open(exportData)
+      }
     },
   },
 }

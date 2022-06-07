@@ -10,7 +10,8 @@ export const mutationMixin = {
       queryToRefetch,
       successMessage,
       errorMessage,
-      variables
+      variables,
+      doNotClearState
     ) {
       const formValidated =
         this.$refs.form && (await this.$refs.form.validate())
@@ -22,7 +23,9 @@ export const mutationMixin = {
             variables: variablesObject,
             refetchQueries: [{ query: queryToRefetch, variables }],
           })
-          this.clearState()
+          if (!doNotClearState) {
+            this.clearState()
+          }
           this.showSubmitMessage(successMessage, 'success')
 
           return res

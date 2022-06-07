@@ -142,7 +142,10 @@ export default {
           },
         },
         Units,
-        'Open Report Success'
+        'Open Report Success',
+        null,
+        null,
+        true
       )
 
       window.open(operatingReport)
