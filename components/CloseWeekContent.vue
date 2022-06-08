@@ -4,7 +4,7 @@
 
     <AlertBar>
       <template #icon>
-        <img src="~assets/images/icons/info.svg" alt=""/>
+        <img src="~assets/images/icons/info.svg" alt="" />
       </template>
 
       <template #title> Please note</template>
@@ -62,16 +62,22 @@
 import AlertBar from './AlertBar.vue'
 import CustomCheckbox from './CustomCheckbox.vue'
 import DefaultButton from './DefaultButton.vue'
-import CloseWeek from "~/graphql/mutations/closeWeek/closeWeek.gql"
+import CloseWeek from '~/graphql/mutations/closeWeek/closeWeek.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 
 export default {
   name: 'CloseWeekContent',
-  components: {AlertBar, CustomCheckbox, DefaultButton},
-  mixins: [mutationMixin],
+  components: { AlertBar, CustomCheckbox, DefaultButton },
+  mixins: [mutationMixin, submitMessagesMixin],
   data() {
     return {
-      checkbox: ['emailChecked', 'payrollHoursChecked', 'inventoryChecked', 'reaccrualsChecked'],
+      checkbox: [
+        'emailChecked',
+        'payrollHoursChecked',
+        'inventoryChecked',
+        'reaccrualsChecked',
+      ],
       emailChecked: {
         id: 1,
         name: 'emailChecked',
@@ -111,16 +117,21 @@ export default {
         checked: !checkboxValue.checked,
       }
     },
-    exitEvent(){
-      for(const name of this.checkbox){
+    exitEvent() {
+      for (const name of this.checkbox) {
         this[name].checked = false
       }
     },
     async closeEvent() {
-      await this.$apollo.mutate({
+      const res = await this.$apollo.mutate({
         mutation: CloseWeek,
       })
-     this.exitEvent()
+
+      if (res) {
+        this.exitEvent()
+        this.showSubmitMessage('Close week success', 'success')
+        this.$router.push('/home/select-unit')
+      }
     },
   },
 }
