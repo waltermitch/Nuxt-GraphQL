@@ -31,7 +31,6 @@ export default {
   destroyed() {
     this.hideAddUnit()
     this.setUnitID(null)
-    console.log('destroyed')
   },
 }
 </script>
