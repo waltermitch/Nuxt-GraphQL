@@ -33,7 +33,7 @@
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>$0.00</template>
+        <template #title>${{ getTotalDailyDeposit }}</template>
 
         <template #subtitle>Total Daily Deposit</template>
       </PageSubheaderItem>

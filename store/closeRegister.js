@@ -189,6 +189,7 @@ export const actions = {
         mutation: RegisterCloseoutCalculation,
         variables: {
           registerCloseoutCalculationInput: {
+            registerId: getters.getRegister.id,
             unitId: data.unitId,
             periodId: data.periodId,
             fields,
