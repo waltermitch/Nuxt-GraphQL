@@ -9,75 +9,63 @@
             <CustomSelect :options="districts" @input="selectDistrict" />
           </template>
         </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> Period </template>
+
+          <template #input>
+            <CustomSelect
+              :options="periods"
+              select-by="periodEnd"
+              @input="selectPeriodEndDate"
+            />
+          </template>
+        </InputWithTitle>
       </InputRow>
 
-      <CustomTablesArea>
-        <CustomTable v-if="units" class="table-reports">
-          <template #header>
-            <div class="table-row">
-              <span>Select</span>
+      <CustomTable v-if="units" class="table-reports">
+        <template #header>
+          <div class="table-row">
+            <span>Select</span>
 
-              <span>Unit</span>
+            <span>Unit</span>
 
-              <span>Unit Name</span>
-            </div>
-          </template>
+            <span>Unit Name</span>
+          </div>
+        </template>
 
-          <template #content>
-            <CustomTableContent>
-              <CustomTableRow
-                v-for="unit in units"
-                :key="unit.id"
-                class="table-row"
-              >
-                <CustomRadioButton
-                  :is-active="unit.selected"
-                  @set-is-active="selectUnit(unit)"
-                />
+        <template #content>
+          <CustomTableContent>
+            <CustomTableRow
+              v-for="unit in units"
+              :key="unit.id"
+              class="table-row"
+            >
+              <CustomRadioButton
+                :is-active="unit.selected"
+                @set-is-active="selectUnit(unit)"
+              />
 
-                <span>{{ unit.code }}</span>
+              <span>{{ unit.code }}</span>
 
-                <span>{{ unit.name }}</span>
-              </CustomTableRow>
-            </CustomTableContent>
-
-            <CustomTableRow class="table-row footer-row">
-              <DefaultButton @event="selectAllUnits">
-                Select All
-              </DefaultButton>
-
-              <DefaultButton @event="selectNone"> Select None </DefaultButton>
-
-              <DefaultButton
-                :disabled="!selectedUnits.length || !periodEndDate.id"
-                @event="openReport"
-              >
-                Open Report
-              </DefaultButton>
+              <span>{{ unit.name }}</span>
             </CustomTableRow>
-          </template>
-        </CustomTable>
+          </CustomTableContent>
 
-        <CustomTable v-if="periods" class="table-reports">
-          <template #header>
-            <span> Period End date </span>
-          </template>
+          <CustomTableRow class="table-row footer-row">
+            <DefaultButton @event="selectAllUnits"> Select All </DefaultButton>
 
-          <template #content>
-            <CustomTableContent>
-              <CustomTableRow
-                v-for="period in periods"
-                :key="period.id"
-                :is-active="period.id === periodEndDate.id"
-                selectable
-                @event="selectPeriodEndDate(period)"
-              >
-                {{ formatDateFromAPI(period.periodEnd) }}
-              </CustomTableRow>
-            </CustomTableContent>
-          </template>
-        </CustomTable>
-      </CustomTablesArea>
+            <DefaultButton @event="selectNone"> Select None </DefaultButton>
+
+            <DefaultButton
+              :disabled="!selectedUnits.length || !periodEndDate.id"
+              @event="openReport"
+            >
+              Open Report
+            </DefaultButton>
+          </CustomTableRow>
+        </template>
+      </CustomTable>
     </ValidationObserver>
   </PageContentWrapper>
 </template>
@@ -92,7 +80,6 @@ import CustomTableContent from './CustomTableContent.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
-import CustomTablesArea from './CustomTablesArea.vue'
 import Districts from '~/graphql/queries/districts.gql'
 import Periods from '~/graphql/queries/periods.gql'
 import Units from '~/graphql/queries/units.gql'
@@ -111,7 +98,6 @@ export default {
     InputRow,
     InputWithTitle,
     CustomSelect,
-    CustomTablesArea,
   },
   mixins: [mutationMixin],
   apollo: {
@@ -236,6 +222,7 @@ export default {
 }
 
 .table-reports {
+  margin-top: 25px;
   @media screen and(max-width: $xl) {
     width: 100% !important;
     &:last-child {

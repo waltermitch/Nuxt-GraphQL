@@ -10,64 +10,49 @@
           </template>
         </InputWithTitle>
 
-        <DefaultButton
-          :disabled="!reportType || !selectedUnit || !periodEndDate"
-          @event="openReport"
-        >
-          Open Report
-        </DefaultButton>
+        <InputWithTitle>
+          <template #title> Period </template>
+
+          <template #input>
+            <CustomSelect
+              :options="periods"
+              select-by="periodEnd"
+              @input="selectPeriodEndDate"
+            />
+          </template>
+        </InputWithTitle>
       </InputRow>
 
-      <CustomTablesArea>
-        <CustomTable class="table-operating">
-          <template #header>
-            <div class="table-row">
-              <span>Unit Id</span>
+      <InputRow>
+        <InputWithTitle v-if="selectedUnit">
+          <template #title> Name </template>
 
-              <span>Unit Name</span>
-            </div>
+          <template #input>
+            <CustomInput v-model="selectedUnit.name" readonly disabled />
           </template>
+        </InputWithTitle>
 
-          <template v-if="units" #content>
-            <CustomTableContent>
-              <CustomTableRow
-                v-for="unit in units"
-                :key="unit.id"
-                class="table-row"
-                :is-active="unit.id === selectedUnit.id"
-                selectable
-                @event="selectUnit(unit)"
-              >
-                <span>{{ unit.id }}</span>
+        <InputWithTitle>
+          <template #title> Unit </template>
 
-                <span>{{ unit.name }}</span>
-              </CustomTableRow>
-            </CustomTableContent>
+          <template #input>
+            <CustomSelect
+              v-if="units"
+              :options="units"
+              select-by="name"
+              select-by-second="code"
+              @input="selectUnit"
+            />
           </template>
-        </CustomTable>
+        </InputWithTitle>
+      </InputRow>
 
-        <CustomTable class="table-operating">
-          <template #header>
-            <div>
-              <span>Period End date</span>
-            </div>
-          </template>
-
-          <template v-if="periods" #content>
-            <CustomTableContent>
-              <CustomTableRow
-                v-for="period in periods"
-                :key="period.id"
-                :is-active="period.id === periodEndDate.id"
-                selectable
-                @event="selectPeriodEndDate(period)"
-              >
-                <span>{{ formatDateFromAPI(period.periodEnd) }}</span>
-              </CustomTableRow>
-            </CustomTableContent>
-          </template>
-        </CustomTable>
-      </CustomTablesArea>
+      <DefaultButton
+        :disabled="!reportType || !selectedUnit || !periodEndDate"
+        @event="openReport"
+      >
+        Open Report
+      </DefaultButton>
     </ValidationObserver>
   </PageContentWrapper>
 </template>
@@ -77,8 +62,6 @@ import { ValidationObserver } from 'vee-validate'
 import { WeeklyReportsTypes } from '../constants/reportTypes'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
-import CustomTableContent from './CustomTableContent.vue'
-import CustomTableRow from './CustomTableRow.vue'
 import DefaultButton from './DefaultButton.vue'
 import Units from '~/graphql/queries/units.gql'
 import Periods from '~/graphql/queries/periods.gql'
@@ -91,8 +74,6 @@ export default {
     PageContentWrapper,
     ValidationObserver,
     InputRow,
-    CustomTableContent,
-    CustomTableRow,
     DefaultButton,
   },
   apollo: {
@@ -114,6 +95,16 @@ export default {
       selectedUnit: '',
       periodEndDate: '',
     }
+  },
+  computed: {
+    formattedPeriods() {
+      return this.periods.map((period) => {
+        return {
+          ...period,
+          periodEnd: this.formatDateFromAPI(period.periodEnd),
+        }
+      })
+    },
   },
   methods: {
     formatDateFromAPI,
@@ -165,6 +156,8 @@ export default {
   }
 }
 .table-operating {
+  margin-top: 25px;
+
   @media screen and(max-width: $xl) {
     width: 100% !important;
     &:last-child {
