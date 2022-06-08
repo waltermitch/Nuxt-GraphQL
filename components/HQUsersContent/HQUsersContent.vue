@@ -5,21 +5,33 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: "HQUsersContent",
+  name: 'HQUsersContent',
   computed: {
     ...mapGetters({
       isShowAddUser: 'users/getShowAddUser',
     }),
   },
-  methods:{
-
+  destroyed() {
+    this.setUpdateUser({
+      firstName: '',
+      lastName: '',
+      email: '',
+      unit: '',
+      isAdmin: false,
+      isActive: false,
+    })
+    this.setShowAddUser('HQUsers')
+  },
+  methods: {
+    ...mapActions({
+      setUpdateUser: 'users/setUpdateUser',
+      setShowAddUser: 'users/setShowAddUser',
+    }),
   },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import TabsView from './TabsView.vue'
 import HQUnitMaintenanceDetails from './HQUnitMaintenanceDetails.vue'
@@ -16,6 +17,7 @@ export default {
     PageContentWrapper,
     TabsView,
   },
+  mixins: [unitMaintenanceMixin],
   data() {
     return {
       tabsHeaders: ['Details', 'Financials', 'Fees'],
@@ -25,6 +27,11 @@ export default {
         HQUnitMaintenanceFees,
       ],
     }
+  },
+  destroyed() {
+    this.hideAddUnit()
+    this.setUnitID(null)
+    console.log('destroyed')
   },
 }
 </script>
