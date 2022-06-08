@@ -86,7 +86,6 @@ export const unitMaintenanceMixin = {
         // regTax: '',
         commissionPercent: '',
         isKronos: false,
-        startPeriod: '',
       })
     },
   },
