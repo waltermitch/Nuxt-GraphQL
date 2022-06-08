@@ -48,7 +48,7 @@
           </span>
 
           <span>
-            {{ period.periodEnd }}
+            {{ formatDateFromAPI(period.periodEnd) }}
           </span>
 
           <CustomRadioButton
@@ -64,6 +64,7 @@
 
 <script>
 import Units from '../graphql/queries/units.gql'
+import { formatDateFromAPI } from '~/helpers/helpers'
 export default {
   name: 'HQUnitPeriodStatusContent',
   apollo: {
@@ -78,6 +79,7 @@ export default {
     }
   },
   methods: {
+    formatDateFromAPI,
     selectUnit(item) {
       this.unit = item
     },
