@@ -19,7 +19,7 @@
         <template #title> Name </template>
 
         <template #input>
-          <CustomInput v-model="unit.name" readonly />
+          <CustomInput v-model="unit.name" readonly disabled />
         </template>
       </InputWithTitle>
     </InputRow>
