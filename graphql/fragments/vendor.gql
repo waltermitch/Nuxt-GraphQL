@@ -6,7 +6,7 @@ fragment VendorFragment on Vendor {
   name
   createdAt
   updatedAt
-  term {
+  terms {
     ...TermFragment
   }
 }

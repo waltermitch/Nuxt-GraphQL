@@ -53,8 +53,8 @@
               {{ vendor.name }}
             </span>
 
-            <span>
-              {{ vendor.term.name }}
+            <span v-if="vendor.terms">
+              {{ vendor.terms.map((vendor) => vendor.name).join(', ') }}
             </span>
 
             <DefaultButton
@@ -104,8 +104,8 @@
               {{ vendor.name }}
             </span>
 
-            <span>
-              {{ vendor.term.name }}
+            <span v-if="vendor.terms">
+              {{ vendor.terms.map((vendor) => vendor.name).join(', ') }}
             </span>
           </CustomTableRow>
         </template>
