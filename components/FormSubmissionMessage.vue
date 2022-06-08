@@ -49,6 +49,7 @@ export default {
   }
 
   &--error {
+    color: #fff;
     background: $firebrick;
   }
 }
