@@ -2,33 +2,25 @@
   <div>
     <ValidationObserver ref="form" v-slot="{ invalid, pristine }">
       <InputRow>
-        <InputWithTitle max-width="unset">
+        <InputWithTitle max-width="500px">
           <template #title>Ship To Name</template>
 
           <template #input>
-            <CustomTextarea
-              v-model="shipToName"
-              rules="required"
-              name="shipToName"
-            />
+            <CustomInput v-model="shipToName" rules="required" />
           </template>
         </InputWithTitle>
 
-        <InputWithTitle max-width="unset">
+        <InputWithTitle max-width="500px">
           <template #title>Bill To Name</template>
 
           <template #input>
-            <CustomTextarea
-              v-model="billToName"
-              rules="required"
-              name="billToName"
-            />
+            <CustomInput v-model="billToName" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
 
       <InputRow>
-        <InputWithTitle max-width="unset">
+        <InputWithTitle max-width="500px">
           <template #title>Ship To Address</template>
 
           <template #input>
@@ -40,7 +32,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle max-width="unset">
+        <InputWithTitle max-width="500px">
           <template #title>Bill To Address</template>
 
           <template #input>
@@ -81,6 +73,7 @@ import CreateCateringOrder from '../graphql/mutations/cateringOrder/createCateri
 import UpdateCateringOrder from '../graphql/mutations/cateringOrder/updateCateringOrder.gql'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
+import CustomInput from './CustomInput.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
@@ -95,6 +88,7 @@ export default {
     InputWithTitle,
     CustomTextarea,
     ValidationObserver,
+    CustomInput,
   },
   mixins: [formMixin, mutationMixin, cateringSalesMixin, meMixin],
   data() {
