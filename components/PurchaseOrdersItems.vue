@@ -113,7 +113,7 @@
 
       <DefaultButton
         button-color-gamma="white"
-        :disabled="getIsEdit ? isEmptyAmounts : pristine"
+        :disabled="getIsEdit ? isEmptyAmounts : pristine && !leftToDistribute"
         @event="getIsEdit ? cancelEdit() : cancelCreate()"
       >
         Cancel

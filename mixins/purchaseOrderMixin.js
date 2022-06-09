@@ -13,21 +13,24 @@ export const purchaseOrderMixin = {
       getItems: 'purchaseOrders/getItems',
       getDeleteItemIDs: 'purchaseOrders/getDeleteItemIDs',
       getItemsWithoutId: 'purchaseOrders/getItemsWithoutId',
+      getActiveTab: 'tabsView/getActiveTab',
     }),
   },
   methods: {
-    resetForm() {
-      this.$refs.form.reset()
+    async resetForm() {
+      await this.$refs.form.reset()
     },
     cancelEdit() {
       this.$router.push('/review/weekly-purchases')
       this.resetForm()
+      this.$store.commit('tabsView/SET_ALLOW_SWITCH', true)
     },
     cancelCreate() {
       this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', {
         ...PURCHASE_ORDER,
       })
       this.resetForm()
+      this.$store.commit('tabsView/SET_ALLOW_SWITCH', true)
     },
   },
 }

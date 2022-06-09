@@ -144,11 +144,23 @@ export default {
     },
     purchaseTotal: {
       get() {
+        if (!this.getPurchaseTotal && this.getActiveTab !== 1) {
+          this.$store.commit('tabsView/SET_ALLOW_SWITCH', false)
+        }
         return this.getPurchaseTotal
       },
       set(value) {
         this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', value)
       },
+    },
+  },
+  watch: {
+    purchaseTotal() {
+      if (this.purchaseTotal) {
+        this.$store.commit('tabsView/SET_ALLOW_SWITCH', true)
+      } else if (this.getActiveTab !== 1) {
+        this.$store.commit('tabsView/SET_ALLOW_SWITCH', false)
+      }
     },
   },
   mounted() {
@@ -160,6 +172,9 @@ export default {
         }, 0))
       )
     }
+  },
+  destroyed() {
+    this.$store.commit('tabsView/SET_ALLOW_SWITCH', true)
   },
   methods: {
     selectVendor(vendor) {

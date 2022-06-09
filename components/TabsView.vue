@@ -8,8 +8,11 @@
           class="item"
           :class="{
             active: activeTab === index,
+            'item--not-allowed': !allowSwitch,
           }"
-          @click="$store.commit('tabsView/SET_ACTIVE_TAB', index)"
+          @click="
+            allowSwitch ? $store.commit('tabsView/SET_ACTIVE_TAB', index) : null
+          "
         >
           {{ tabHeader }}
         </li>
@@ -43,6 +46,7 @@ export default {
   computed: {
     ...mapGetters({
       activeTab: 'tabsView/getActiveTab',
+      allowSwitch: 'tabsView/getAllowSwitch',
     }),
   },
 }
@@ -77,6 +81,10 @@ export default {
     margin-bottom: -2px;
     color: $firebrick;
     border-bottom: 2px solid $firebrick;
+  }
+
+  &--not-allowed {
+    cursor: not-allowed;
   }
 }
 
