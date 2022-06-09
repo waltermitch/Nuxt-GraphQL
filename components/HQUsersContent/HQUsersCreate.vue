@@ -161,9 +161,11 @@ export default {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
-            units: {
-              sync: this.unit.map((unit) => unit.id),
-            },
+            ...(!this.isAdmin && {
+              units: {
+                sync: this.unit.map((unit) => unit.id),
+              },
+            }),
             password: this.password,
             isAdmin: this.isAdmin,
             isActive: this.isActive,

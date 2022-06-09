@@ -198,9 +198,11 @@ export default {
         email: this.email,
         isAdmin: this.isAdmin,
         isActive: this.isActive,
-        units: {
-          sync: this.unit.map((unit) => unit.id),
-        },
+        ...(!this.isAdmin && {
+          units: {
+            sync: this.unit.map((unit) => unit.id),
+          },
+        }),
       }
 
       const objPass = { password: this.password }
