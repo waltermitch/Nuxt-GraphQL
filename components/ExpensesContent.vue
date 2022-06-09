@@ -111,22 +111,9 @@
           </DefaultButton>
 
           <DefaultButton
-            v-if="getIsEdit && expenseType.type === 'ReAccrual'"
-            @event="ReAccrual"
-          >
-            Re-Accrue
-          </DefaultButton>
-
-          <DefaultButton
             button-color-gamma="white"
             :disabled="pristine && !getIsEdit"
-            @event="
-              getIsEdit && expenseType.type === 'ReAccrual'
-                ? cancelReAccrual()
-                : getIsEdit
-                ? cancelEdit()
-                : cancelCreate()
-            "
+            @event="getIsEdit ? cancelEdit() : cancelCreate()"
           >
             Cancel
           </DefaultButton>
@@ -158,7 +145,6 @@ import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { formatDate } from '~/helpers/helpers'
 import CreateExpense from '~/graphql/mutations/expense/createExpense.gql'
 import UpdateExpense from '~/graphql/mutations/expense/updateExpense.gql'
-import reAccrual from '~/graphql/mutations/expense/reAccrual.gql'
 export default {
   name: 'ExpensesContent',
   components: {
@@ -329,23 +315,6 @@ export default {
         }
       )
       this.$router.push('/review/weekly-expenses')
-    },
-    async ReAccrual() {
-      const res = await this.mutationAction(
-        reAccrual,
-        {
-          id: this.getId,
-        },
-        Expenses,
-        'ReAccrual success',
-        'ReAccrual error',
-        {
-          activePeriod: true,
-        }
-      )
-      if (res) {
-        this.$router.push('/home/reaccruals')
-      }
     },
     expenseAction() {
       this.getIsEdit ? this.UpdateExpense() : this.CreateExpense()

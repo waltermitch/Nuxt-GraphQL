@@ -37,14 +37,9 @@
 
             <span> {{ reAccrual.comments }} </span>
 
-            <CustomTableIconsColumn
-              :is-edit-active="isEdit === reAccrual.id"
-              :is-delete-active="isDelete === reAccrual.id"
-              @edit="editExpense(reAccrual)"
-              @delete="deleteItem(reAccrual.id)"
-              @cancel-delete="cancelDelete"
-              @confirm-delete="confirmDelete(reAccrual.id)"
-            />
+            <DefaultButton @event="ReAccrual(reAccrual.id)">
+              Re-Accrue
+            </DefaultButton>
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -62,6 +57,7 @@ import DeleteExpense from '~/graphql/mutations/expense/deleteExpense.gql'
 import { meMixin } from '~/mixins/meMixin'
 import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
 import ReAccruals from '~/graphql/queries/reAccruals.gql'
+import reAccrual from '~/graphql/mutations/expense/reAccrual.gql'
 export default {
   name: 'ReAccrualsContent',
   components: { CustomTable, CustomTableRow },
@@ -82,17 +78,6 @@ export default {
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
-    editExpense(reAccrual) {
-      this.$store.commit('expense/SET_EXPENSE', {
-        ...reAccrual,
-        expenseDate: this.formatDateFromAPI(reAccrual.expenseDate),
-        expenseType: {
-          type: 'ReAccrual',
-        },
-      })
-      this.$store.commit('expense/SET_IS_EDIT', true)
-      this.$router.push('/home/expenses')
-    },
     confirmDelete(id) {
       this.mutationAction(
         DeleteExpense,
@@ -104,6 +89,23 @@ export default {
           activePeriod: true,
         }
       )
+    },
+    async ReAccrual(id) {
+      const res = await this.mutationAction(
+        reAccrual,
+        {
+          id,
+        },
+        ReAccruals,
+        'ReAccrual success',
+        'ReAccrual error',
+        {
+          activePeriod: true,
+        }
+      )
+      if (res) {
+        this.$router.push('/home/reaccruals')
+      }
     },
   },
 }
@@ -118,16 +120,16 @@ export default {
   display: grid;
   align-items: center;
   @media screen and (min-width: $xl) {
-    grid-template-columns: 5% 15% 15% 12% repeat(2, 18%) 5%;
+    grid-template-columns: 5% 10% 12% 12% 15% 18% 1fr;
   }
   @media screen and (min-width: $lg) and (max-width: $xl) {
-    grid-template-columns: 5% 15% 10% 12% repeat(2, 18%) 5%;
+    grid-template-columns: 5% 10% 8% 12% 15% 18% 1fr;
   }
   @media screen and (min-width: $md) and (max-width: $lg) {
-    grid-template-columns: 5% 15% 10% 12% repeat(2, 18%) 5%;
+    grid-template-columns: 5% 10% 8% 12% 15% 18% 1fr;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 80px 120px 120px 120px 90px 68px 60px;
+    grid-template-columns: 80px 120px 120px 120px 90px 68px 1fr;
     column-gap: 10px;
   }
   column-gap: 20px;
