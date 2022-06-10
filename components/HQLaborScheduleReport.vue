@@ -10,7 +10,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle v-if="periods">
           <template #title> Period </template>
 
           <template #input>
