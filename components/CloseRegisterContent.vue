@@ -60,7 +60,7 @@
 
               <template v-if="registers" #input>
                 <CustomSelect
-                  :options="registers"
+                  :options="unitRegisters"
                   select-by="id"
                   :disabled="getIsEdit"
                   :selected-item="register"
@@ -74,7 +74,7 @@
 
               <template v-if="registers" #input>
                 <CustomSelect
-                  :options="registers"
+                  :options="unitRegisters"
                   :disabled="getIsEdit"
                   :selected-item="register"
                   @input="selectRegister"
@@ -203,6 +203,16 @@ export default {
       tabs: [SalesInfo, ClosRegisterPettyCash, CloseRegisterFinishCloseout],
       register: '',
     }
+  },
+  computed: {
+    unitRegisters() {
+      return (
+        this.registers &&
+        this.registers.filter(
+          (register) => register.unit.id === this.me.selectedUnit.id
+        )
+      )
+    },
   },
   destroyed() {
     this.$store.commit('closeRegister/SET_IS_EDIT', false)
