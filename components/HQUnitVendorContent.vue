@@ -5,13 +5,16 @@
         <template #title> Unit </template>
 
         <template #input>
-          <CustomSelect
+          <multiselect
             v-if="units"
+            v-model="unit"
             :options="units"
-            select-by="name"
-            select-by-second="code"
-            @input="selectUnit"
-          />
+            :custom-label="nameWithId"
+            placeholder="Select one"
+            track-by="name"
+            :preselect-first="false"
+            :show-labels="false"
+          ></multiselect>
         </template>
       </InputWithTitle>
 
@@ -123,6 +126,7 @@ import DefaultButton from './DefaultButton.vue'
 import CustomTablesArea from './CustomTablesArea.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { multiselectMixin } from '~/mixins/multiselectMixin'
 export default {
   name: 'HQUnitVendorContent',
   components: { PageContentWrapper, DefaultButton, CustomTablesArea },
@@ -134,21 +138,19 @@ export default {
       query: Units,
     },
   },
-  mixins: [mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
   data() {
     return {
       unit: '',
     }
   },
   methods: {
-    selectUnit(item) {
-      this.unit = item
-    },
     async addVendorToUnit(vendor) {
-      const unit = this.unit
       const { id } = this.unit
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
@@ -166,13 +168,16 @@ export default {
         'Add vendor to unit error'
       )
 
-      this.unit = unit
+      if (updateUnit) {
+        this.unit = updateUnit
+      }
     },
     async removeVendorFromUnit(vendor) {
-      const unit = this.unit
       const { id } = this.unit
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
@@ -187,7 +192,9 @@ export default {
         'Remove vendor from unit error'
       )
 
-      this.unit = unit
+      if (updateUnit) {
+        this.unit = updateUnit
+      }
     },
   },
 }

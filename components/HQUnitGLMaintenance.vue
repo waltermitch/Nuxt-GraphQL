@@ -406,9 +406,7 @@ export default {
         },
         Units,
         'Add Gl account to unit success',
-        'Add Gl account to unit error',
-        null,
-        null
+        'Add Gl account to unit error'
       )
 
       if (updateUnit) {
@@ -433,9 +431,7 @@ export default {
         },
         Units,
         'Remove Gl account from unit success',
-        'Remove Gl account from unit error',
-        false,
-        true
+        'Remove Gl account from unit error'
       )
 
       if (updateUnit) {
