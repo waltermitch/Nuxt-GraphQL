@@ -8,13 +8,16 @@
             <template #title> Unit</template>
 
             <template #input>
-              <CustomSelect
+              <multiselect
                 v-if="units"
+                v-model="unit"
                 :options="units"
-                select-by="name"
-                select-by-second="code"
-                @input="selectUnit"
-              />
+                :custom-label="nameWithId"
+                placeholder="Select one"
+                track-by="name"
+                :preselect-first="false"
+                :show-labels="false"
+              ></multiselect>
             </template>
           </InputWithTitle>
 
@@ -145,6 +148,7 @@ import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { multiselectMixin } from '~/mixins/multiselectMixin'
 
 export default {
   name: 'HQUnitTypeContent',
@@ -156,7 +160,7 @@ export default {
     CustomInput,
     CustomTableAddIcon,
   },
-  mixins: [mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
   apollo: {
     units: {
       query: Units,
@@ -248,10 +252,11 @@ export default {
       this.unitTypesCopy = [...(await this.fetchData())]
     },
     async addUnitTypeToUnit(unitType) {
-      const unit = this.unit
       const { id } = this.unit
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
@@ -263,18 +268,21 @@ export default {
         },
         Units,
         'Add Unit Type to unit success',
-        'Add Unit Type to unit error'
+        'Add Unit Type to unit error',
+        null,
+        null
       )
 
-      this.unitTypesCopy = [...(await this.fetchData())]
-
-      this.unit = unit
+      if (updateUnit) {
+        this.unit = updateUnit
+      }
     },
     async removeUnitTypeFromUnit() {
-      const unit = this.unit
       const { id } = this.unit
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
@@ -289,9 +297,9 @@ export default {
         'Remove Unit Type from unit error'
       )
 
-      this.unitTypesCopy = [...(await this.fetchData())]
-
-      this.unit = unit
+      if (updateUnit) {
+        this.unit = updateUnit
+      }
     },
     async cancelUnitTypeEdit() {
       this.unitTypes = await this.fetchData()
@@ -301,6 +309,67 @@ export default {
 }
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss">
+.input {
+  &-row--offset {
+    display: flex;
+    margin: 0 -15px;
+  }
+
+  &-col {
+    min-width: 240px;
+    padding: 0 15px;
+  }
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.multiselect__tags {
+  border: 1px solid gainsboro;
+  border-radius: 3px;
+}
+
+.multiselect__option {
+  padding: 10px 16px 10px 8px;
+  color: #000;
+  font-size: 14px;
+  background: #fff;
+}
+
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
+  color: #fff;
+  background-color: #b01d22;
+}
+.multiselect__option--selected.multiselect__option--highlight {
+  background: rgba(#b01d22, 0.6);
+}
+
+.multiselect__tag {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:after {
+  color: #fff;
+}
+
+.multiselect__select:before {
+  border: none;
+  width: 24px;
+  height: 24px;
+  background: url(assets/images/icons/chevron-down.svg);
+  display: block;
+  top: 0;
+}
+</style>
 <style lang="scss" scoped>
 .header {
   display: flex;
