@@ -7,7 +7,7 @@
       @click="isEditActive ? $emit('confirm-edit') : $emit('confirm-delete')"
     />
     <img
-      v-else
+      v-else-if="showEdit"
       class="icon"
       src="~assets/images/icons/review/edit.svg"
       @click="$emit('edit')"
@@ -39,6 +39,10 @@ export default {
     isDeleteActive: {
       type: Boolean,
       default: false,
+    },
+    showEdit: {
+      type: Boolean,
+      default: true,
     },
   },
 }
