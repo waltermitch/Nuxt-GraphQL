@@ -6,13 +6,16 @@
           <template #title> Unit </template>
 
           <template #input>
-            <CustomSelect
+            <multiselect
               v-if="units"
+              v-model="unit"
               :options="units"
-              select-by="name"
-              select-by-second="code"
-              @input="selectUnit"
-            />
+              :custom-label="nameWithId"
+              placeholder="Select one"
+              track-by="name"
+              :preselect-first="false"
+              :show-labels="false"
+            ></multiselect>
           </template>
         </InputWithTitle>
 
@@ -26,7 +29,7 @@
       </InputRow>
 
       <LoadingBar v-if="$apollo.loading" />
-      <CustomTable v-else class="table-register" :w-table="1100">
+      <CustomTable v-else-if="unit" class="table-register" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>ID</span>
@@ -217,6 +220,7 @@ import CustomRadioButton from './CustomRadioButton.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { multiselectMixin } from '~/mixins/multiselectMixin'
 export default {
   name: 'HQRegistersContent',
   components: {
@@ -230,7 +234,7 @@ export default {
     CustomRadioButton,
     CustomTableAddIcon,
   },
-  mixins: [mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
   apollo: {
     units: {
       query: Units,
@@ -284,9 +288,6 @@ export default {
 
       return registers
     },
-    selectUnit(unit) {
-      this.unit = unit
-    },
     selectRegisterType(type) {
       this.registerType = type
     },
@@ -306,7 +307,6 @@ export default {
     },
     async addRegister() {
       const unit = this.unit
-
       await this.mutationAction(
         CreateRegister,
         {
@@ -322,15 +322,16 @@ export default {
         },
         Registers,
         'Add register success',
-        'Add register error'
+        'Add register error',
+        null,
+        null
       )
 
       this.unit = unit
     },
     async confirmEdit(register) {
-      const { __typename, createdAt, updatedAt, ...registerInput } = register
-
       const unit = this.unit
+      const { __typename, createdAt, updatedAt, ...registerInput } = register
 
       await this.mutationAction(
         UpdateRegister,
@@ -347,7 +348,9 @@ export default {
         },
         Registers,
         'Edit register success',
-        'Edit register error'
+        'Edit register error',
+        null,
+        null
       )
 
       this.unit = unit
