@@ -1,18 +1,23 @@
 <template>
-  <PageContentWrapper>
+  <LoadingBar v-if="$apollo.loading" />
+  <PageContentWrapper v-else>
     <div class="header">
       <InputRow>
         <InputWithTitle>
           <template #title> Unit </template>
 
           <template #input>
-            <CustomSelect
+            <multiselect
               v-if="units"
+              v-model="unit"
               :options="units"
-              select-by="name"
-              select-by-second="code"
-              @input="selectUnit"
-            />
+              :custom-label="nameWithId"
+              placeholder="Select one"
+              track-by="name"
+              :preselect-first="false"
+              :show-labels="false"
+              :disabled="isAttachGlAccounts"
+            ></multiselect>
           </template>
         </InputWithTitle>
 
@@ -24,26 +29,78 @@
           </template>
         </InputWithTitle>
       </InputRow>
+
+      <InputRow v-if="isAttachGlAccounts">
+        <InputWithTitle>
+          <template #title> GL Account </template>
+
+          <template #input>
+            <multiselect
+              v-if="glAccounts"
+              v-model="glAccount"
+              :options="glAccounts"
+              :custom-label="nameWithId"
+              placeholder="Select one"
+              track-by="name"
+              :preselect-first="false"
+              :show-labels="false"
+            ></multiselect>
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle v-if="glAccount && glAccount.child">
+          <template #title> GL Sub Account </template>
+
+          <template #input>
+            <multiselect
+              v-if="glAccount && !glAccount.parent"
+              v-model="glSubAccount"
+              :options="glAccount.child"
+              :custom-label="nameWithId"
+              placeholder="Select one"
+              track-by="name"
+              :preselect-first="false"
+              :show-labels="false"
+            ></multiselect>
+          </template>
+        </InputWithTitle>
+      </InputRow>
     </div>
 
-    <LoadingBar v-if="$apollo.loading" />
-    <ValidationObserver v-else ref="form">
+    <DefaultButton
+      @event="isAttachGlAccounts ? addGlToUnit() : showAttachGlAccounts()"
+    >
+      Attach new GL account
+    </DefaultButton>
+    <DefaultButton v-if="isAttachGlAccounts" @event="cancelAttach">
+      Cancel
+    </DefaultButton>
+
+    <ValidationObserver v-if="!isAttachGlAccounts" ref="form">
       <div>
         <div class="gl-table">
-          <h2 class="table-header">Gls</h2>
+          <h2
+            v-if="unit.glAccounts && unit.glAccounts.length"
+            class="table-header"
+          >
+            Gl Accounts
+          </h2>
+          <h2 v-else class="table-header">Please, attach new GL Account</h2>
 
-          <CustomTable class="table table-gls" :w-table="1000">
+          <CustomTable
+            v-if="unit.glAccounts && unit.glAccounts.length"
+            class="table table-gls"
+            :w-table="1000"
+          >
             <template #header>
               <div class="table-row">
-                <span>GL</span>
+                <span>ID</span>
 
-                <span>Sub</span>
+                <span>GL account ID - GL account Name</span>
 
-                <span>Name</span>
+                <span>GL sub account ID - GL sub account Name</span>
 
                 <span> Type </span>
-
-                <span>GL ID</span>
 
                 <span>Action</span>
               </div>
@@ -51,115 +108,38 @@
 
             <template v-if="glAccounts" #content>
               <CustomTableRow
-                v-for="glAccount in glAccounts.filter(
-                  (account) => account.parent === null
-                )"
-                :key="glAccount.id"
+                v-for="glAcc in unit.glAccounts"
+                :key="glAcc.id"
                 class="table-row"
               >
-                <span v-if="selectedGlSubAccount.idToCheck === glAccount.id">{{
-                  glAccountCopy.id
+                <span>{{ glAcc.id }}</span>
+
+                <span>{{ `${glAcc.id} - ${glAcc.name}` }}</span>
+
+                <div v-if="glAcc.child">
+                  <span
+                    v-for="glSubaccount in glAcc.child"
+                    :key="glSubaccount.id"
+                    style="display: inline-block"
+                  >
+                    {{ `${glSubaccount.id} - ${glSubaccount.name}` }}
+                  </span>
+                </div>
+
+                <span>{{
+                  glAcc.glTypeCode && glAcc.glTypeCode.description
                 }}</span>
-                <span v-else>{{ glAccount.id }}</span>
-
-                <CustomSelect
-                  v-if="glAccount.child.length"
-                  :options="glAccount.child"
-                  select-by="id"
-                  do-not-preselect
-                  @input="selectSubAccountUnit(glAccount, $event)"
-                />
-                <span v-else>-</span>
-
-                <CustomInput
-                  v-if="editGlAccountId === glAccount.id"
-                  v-model="glAccount.name"
-                  rules="required"
-                  do-not-show-error-message
-                />
-                <span v-else>{{ glAccount.name }}</span>
-
-                <CustomSelect
-                  v-if="glTypeCodes && editGlAccountId === glAccount.id"
-                  select-by="description"
-                  :options="glTypeCodes"
-                  @input="selectTypeCode"
-                />
-                <span v-else>{{ glAccount.glTypeCode.description }}</span>
-
-                <span>-</span>
-                <DefaultButton
-                  v-if="unit"
-                  @event="
-                    unit.glAccounts &&
-                    (selectedGlSubAccount.idToCheck
-                      ? unit.glAccounts.find(
-                          (account) =>
-                            account.id === selectedGlSubAccount.idToCheck
-                        ) && selectedGlSubAccount.id === glAccount.id
-                      : unit.glAccounts.find(
-                          (account) => account.id === glAccount.id
-                        ))
-                      ? removeGlFromUnit(glAccount)
-                      : addGlToUnit(glAccount)
-                  "
-                >
-                  {{
-                    unit.glAccounts &&
-                    (selectedGlSubAccount.idToCheck
-                      ? unit.glAccounts.find(
-                          (acc) => acc.id === selectedGlSubAccount.idToCheck
-                        ) && selectedGlSubAccount.id === glAccount.id
-                      : unit.glAccounts.find((acc) => acc.id === glAccount.id))
-                      ? 'Remove Gl From Unit'
-                      : 'Add Gl to Unit'
-                  }}
-                </DefaultButton>
 
                 <CustomTableIconsColumn
-                  :is-edit-active="editGlAccountId === glAccount.id"
-                  :is-delete-active="isDelete === glAccount.id"
-                  @edit="editGlAccount(glAccount.id)"
-                  @delete="deleteItem(glAccount.id)"
-                  @cancel="cancelGlAccountsEdit"
+                  :is-delete-active="isDelete === `${glAcc.id}-GL`"
+                  :show-edit="false"
+                  @delete="deleteItem(`${glAcc.id}-GL`)"
                   @cancel-delete="cancelDelete"
-                  @confirm-edit="confirmEdit(glAccount)"
-                  @confirm-delete="confirmDelete(glAccount.id)"
+                  @confirm-delete="removeGlFromUnit(glAcc)"
                 />
-              </CustomTableRow>
-
-              <CustomTableRow v-if="isAdd" class="table-row">
-                <span>-</span>
-
-                <span>-</span>
-
-                <CustomInput
-                  v-model="glAccountNew.name"
-                  rules="required"
-                  do-not-show-error-message
-                />
-
-                <CustomSelect
-                  v-if="glTypeCodes"
-                  select-by="description"
-                  :options="glTypeCodes"
-                  @input="selectTypeCode"
-                />
-
-                <CustomInput v-model="glAccountNew.parent.id" />
-              </CustomTableRow>
-
-              <CustomTableRow class="table-row add-row">
-                <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
               </CustomTableRow>
             </template>
           </CustomTable>
-
-          <div v-if="isAdd" class="buttons-area">
-            <DefaultButton @event="addGl"> Add Gl Account </DefaultButton>
-
-            <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
-          </div>
         </div>
 
         <div>
@@ -255,6 +235,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
+import Multiselect from 'vue-multiselect'
 import Units from '../graphql/queries/units.gql'
 import GlAccounts from '../graphql/queries/glAccounts.gql'
 import GlTypeCodes from '../graphql/queries/glTypeCodes.gql'
@@ -262,17 +243,14 @@ import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
 import CreateGlTypeCode from '../graphql/mutations/glTypeCode/createGlTypeCode.gql'
 import UpdateGlTypeCode from '../graphql/mutations/glTypeCode/updateGlTypeCode.gql'
 import DeleteGlTypeCode from '../graphql/mutations/glTypeCode/deleteGlTypeCode.gql'
-import CreateGlAccount from '../graphql/mutations/glAccount/createGlAccount.gql'
-import DeleteGlAccount from '../graphql/mutations/glAccount/deleteGlAccount.gql'
-import UpdateGlAccount from '../graphql/mutations/glAccount/updateGlAccount.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import DefaultButton from './DefaultButton.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 export default {
@@ -282,11 +260,12 @@ export default {
     PageContentWrapper,
     InputWithTitle,
     InputRow,
-    CustomSelect,
     CustomInput,
     CustomTable,
     CustomTableRow,
     CustomTableAddIcon,
+    DefaultButton,
+    Multiselect,
   },
   apollo: {
     units: {
@@ -304,57 +283,34 @@ export default {
     return {
       unit: '',
       isAddGlTypeCode: false,
-      glAccountNew: {
-        name: '',
-        glTypeCode: '',
-        parent: {
-          id: '',
-        },
-      },
       glTypeCodeNew: {
         code: '',
         description: '',
       },
-      glAccountCopy: {
-        id: '',
-        name: '',
-      },
-      glAccountsCopy: [],
-      subGlAccount: {
-        id: '',
-      },
-      selectedGlSubAccount: {
-        id: null,
-      },
-      isReload: false,
       isHideTypeCodes: false,
-      glTypeCodesCopy: [],
       editGlTypeCodeId: '',
-      editGlAccountId: '',
+      glAccount: '',
+      glSubAccount: '',
+      isAttachGlAccounts: false,
     }
   },
   watch: {
-    async editGlTypeCodeId(oldVal, newVal) {
-      this.glAccounts = await this.fetchGlAccountsData()
-    },
-    async editGlAccountId(oldVal, newVal) {
-      this.glTypeCodes = await this.fetchData()
+    glAccount() {
+      this.glSubAccount = ''
     },
   },
   async destroyed() {
-    this.glAccounts = await this.fetchGlAccountsData()
     this.glTypeCodes = await this.fetchData()
   },
   methods: {
-    async fetchGlAccountsData() {
-      const {
-        data: { glAccounts },
-      } = await this.$apollo.query({
-        query: GlAccounts,
-        fetchPolicy: 'no-cache',
-      })
-
-      return glAccounts
+    nameWithId({ name, id }) {
+      return `${id} — ${name}`
+    },
+    showAttachGlAccounts() {
+      this.isAttachGlAccounts = true
+    },
+    cancelAttach() {
+      this.isAttachGlAccounts = false
     },
     async fetchData() {
       const {
@@ -376,127 +332,6 @@ export default {
     },
     selectUnit(item) {
       this.unit = item
-    },
-    selectTypeCode(item) {
-      if (this.selectedGlSubAccount.id) {
-        this.selectedGlSubAccount.glTypeCode = item
-      }
-
-      this.glAccountNew.typeCode = item
-    },
-    selectSubAccountUnit(item, event) {
-      if (!this.glAccountCopy.name) {
-        this.glAccountCopy = { ...item }
-        this.glAccountsCopy = [...this.glAccounts]
-      }
-      const glSubAccount = this.glAccounts.find(
-        (account) => account.id === event.id
-      )
-
-      if (this.selectedGlSubAccount.idToCheck === glSubAccount.id) {
-        this.glAccounts = this.glAccountsCopy
-        this.glAccountCopy = {
-          id: '',
-          name: '',
-        }
-        this.selectedGlSubAccount = {
-          id: null,
-        }
-      } else {
-        this.selectedGlSubAccount = {
-          ...this.glAccountCopy,
-          idToCheck: event.id,
-        }
-        this.glAccounts = this.glAccountsCopy.map((obj) => {
-          if (obj.id === item.id) {
-            return {
-              ...obj,
-              name: event.name,
-              // glTypeCode: {
-              //   ...obj.glTypeCode,
-              //   // id: glSubAccount.glTypeCode.id,
-              //   description: glSubAccount.glTypeCode.description,
-              // },
-            }
-          }
-
-          return obj
-        })
-      }
-
-      this.isReload = true
-    },
-    async addGl() {
-      const unit = this.unit
-      await this.mutationAction(
-        CreateGlAccount,
-        {
-          GlAccountInput: {
-            name: this.glAccountNew.name,
-            glTypeCode: {
-              connect: this.glAccountNew.typeCode.id,
-            },
-            ...(this.glAccountNew.parent.id && {
-              parent: {
-                connect: this.glAccountNew.parent.id,
-              },
-            }),
-          },
-        },
-        GlAccounts,
-        'Add Gl Account success',
-        'Add Gl Account error'
-      )
-      this.unit = unit
-    },
-    async confirmEdit(glAccount) {
-      const reload = this.isReload
-      const unit = this.unit
-      const editedGlAccount = {
-        id: this.selectedGlSubAccount.idToCheck
-          ? this.selectedGlSubAccount.idToCheck
-          : glAccount.id,
-        name: glAccount.name,
-        glTypeCode: {
-          connect: this.selectedGlSubAccount.idToCheck
-            ? this.selectedGlSubAccount.glTypeCode.id
-            : this.glAccountNew.typeCode.id,
-        },
-      }
-
-      await this.mutationAction(
-        UpdateGlAccount,
-        {
-          GlAccountInput: editedGlAccount,
-        },
-        GlAccounts,
-        'Edit Gl Account success',
-        'Edit Gl Account error'
-      )
-      this.unit = unit
-      if (reload) {
-        window.location.reload()
-      }
-    },
-    async confirmDelete(id) {
-      const unit = this.unit
-      const reload = this.isReload
-
-      await this.mutationAction(
-        DeleteGlAccount,
-        {
-          id: this.selectedGlSubAccount.idToCheck
-            ? this.selectedGlSubAccount.idToCheck
-            : id,
-        },
-        GlAccounts,
-        'Delete Gl Account success',
-        'Delete Gl Account error'
-      )
-      this.unit = unit
-      if (reload) {
-        window.location.reload()
-      }
     },
     async createGlTypeCode() {
       const unit = this.unit
@@ -545,71 +380,70 @@ export default {
       )
       this.unit = unit
     },
-    async addGlToUnit(glAccount) {
-      const unit = this.unit
+    async addGlToUnit() {
       const { id } = this.unit
-      const reload = this.isReload
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
             id,
             glAccounts: {
-              sync: [
-                ...this.unit.glAccounts.map((glAccount) => glAccount.id),
-                this.selectedGlSubAccount.idToCheck
-                  ? this.selectedGlSubAccount.idToCheck
-                  : glAccount.id,
-              ],
+              sync: this.glSubAccount
+                ? [
+                    ...this.unit.glAccounts.map((glAccount) => glAccount.id),
+                    this.glAccount.id,
+                    this.glSubAccount.id,
+                  ]
+                : [
+                    ...this.unit.glAccounts.map((glAccount) => glAccount.id),
+                    this.glAccount.id,
+                  ],
             },
           },
         },
         Units,
         'Add Gl account to unit success',
-        'Add Gl account to unit error'
+        'Add Gl account to unit error',
+        null,
+        null
       )
-      this.unit = unit
-      if (reload) {
-        window.location.reload()
+
+      if (updateUnit) {
+        this.unit = updateUnit
+        this.cancelAttach()
       }
     },
     async removeGlFromUnit(glAccount) {
-      const unit = this.unit
       const { id } = this.unit
-      const reload = this.isReload
 
-      await this.mutationAction(
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
             id,
             glAccounts: {
-              disconnect: this.selectedGlSubAccount.idToCheck
-                ? this.selectedGlSubAccount.idToCheck
-                : glAccount.id,
+              disconnect: glAccount.id,
             },
           },
         },
         Units,
         'Remove Gl account from unit success',
-        'Remove Gl account from unit error'
+        'Remove Gl account from unit error',
+        false,
+        true
       )
-      this.unit = unit
-      if (reload) {
-        window.location.reload()
+
+      if (updateUnit) {
+        this.unit = updateUnit
       }
     },
     editGlTypeCode(id) {
       this.editGlTypeCodeId = id
-    },
-    editGlAccount(id) {
-      this.editGlAccountId = id
-    },
-    async cancelGlAccountsEdit() {
-      this.glAccounts = await this.fetchGlAccountsData()
-      this.isHide = false
-      this.editGlAccountId = null
     },
     async cancelGlTypeCodesCopyEdit() {
       this.glTypeCodes = await this.fetchData()
@@ -619,17 +453,77 @@ export default {
   },
 }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss">
+.input {
+  &-row--offset {
+    display: flex;
+    margin: 0 -15px;
+  }
 
+  &-col {
+    min-width: 240px;
+    padding: 0 15px;
+  }
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.multiselect__tags {
+  border: 1px solid gainsboro;
+  border-radius: 3px;
+}
+
+.multiselect__option {
+  padding: 10px 16px 10px 8px;
+  color: #000;
+  font-size: 14px;
+  background: #fff;
+}
+
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
+  color: #fff;
+  background-color: #b01d22;
+}
+.multiselect__option--selected.multiselect__option--highlight {
+  background: rgba(#b01d22, 0.6);
+}
+
+.multiselect__tag {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:after {
+  color: #fff;
+}
+
+.multiselect__select:before {
+  border: none;
+  width: 24px;
+  height: 24px;
+  background: url(assets/images/icons/chevron-down.svg);
+  display: block;
+  top: 0;
+}
+</style>
 <style lang="scss" scoped>
 .table-row {
   display: grid;
-  align-items: center;
+  align-items: flex-start;
   column-gap: 30px;
   @media screen and (min-width: $md) {
-    grid-template-columns: repeat(2, 80px) 200px 100px 80px 150px auto;
+    grid-template-columns: 5% repeat(2, 25%) 20% auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: repeat(2, 80px) 165px 110px 80px 130px auto;
+    grid-template-columns: 80px 165px 165px 150px auto;
   }
   &--gl-type {
     grid-template-columns: 80px 100px 100px auto;
@@ -647,7 +541,7 @@ export default {
 }
 
 .gl-table {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .table-header {

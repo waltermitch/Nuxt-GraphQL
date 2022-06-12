@@ -46,6 +46,14 @@ fragment UnitFragment on Unit {
   }
   glAccounts {
     ...GlAccountFragment
+    parent {
+      id
+      name
+    }
+    child {
+      id
+      name
+    }
   }
   periods {
     ...PeriodFragment

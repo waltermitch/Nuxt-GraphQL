@@ -3,5 +3,8 @@
 query Unit($id: ID!) {
   unit(id: $id) {
     ...UnitFragment
+    employees {
+      id
+    }
   }
 }

@@ -1,5 +1,10 @@
+#import '../../fragments/unit.gql'
+
 mutation UpdateUnit($unitInput: UpdateUnitInput!) {
   updateUnit(unitInput: $unitInput) {
-    id
+    ...UnitFragment
+    employees {
+      id
+    }
   }
 }
