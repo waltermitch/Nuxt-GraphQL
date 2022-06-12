@@ -38,9 +38,13 @@
           <span>{{ unit.name }}</span>
 
           <span v-if="unit.periods">{{
-            unit.periods.find((period) => period.pivot.isClosed) &&
+            unit.periods.find(
+              (period) => period.pivot && period.pivot.isClosed
+            ) &&
             formatDateFromAPI(
-              unit.periods.find((period) => period.pivot.isClosed).periodEnd
+              unit.periods.find(
+                (period) => period.pivot && period.pivot.isClosed
+              ).periodEnd
             )
           }}</span>
         </CustomTableRow>
