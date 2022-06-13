@@ -3,42 +3,44 @@
     <div class="tables-wrapper">
       <table class="tables">
         <thead class="tables__thead">
-        <tr>
-          <th width="50">ID</th>
-          <th>First Name</th>
-          <th>Lats Name</th>
-          <th>Email</th>
-          <th class="tables__col-5">Units</th>
-          <th class="text-center">Is Admin</th>
-          <th class="text-center">Is Active</th>
-          <th></th>
-        </tr>
+          <tr>
+            <th width="50">ID</th>
+            <th>First Name</th>
+            <th>Lats Name</th>
+            <th>Email</th>
+            <th class="tables__col-5">Units</th>
+            <th class="text-center">Is Admin</th>
+            <th class="text-center">Is Active</th>
+            <th></th>
+          </tr>
         </thead>
         <tbody class="tables__body">
-
-        <tr v-for="(user, i) in users" :key="i">
-          <td width="50">{{ user.id }}</td>
-          <td class="nowrap">{{ user.firstName }}</td>
-          <td class="nowrap">{{ user.lastName }}</td>
-          <td>{{ user.email }}</td>
-          <td class="tables__col-5">
-            <span v-for="(unit, index) in user.units" :key="index">
-              {{ unit.name }},
-            </span>
-          </td>
-          <td class="text-center"><span v-if="user.isAdmin">+</span><span v-else>-</span></td>
-          <td class="text-center"><span v-if="user.isActive">+</span><span v-else>-</span></td>
-          <td>
-
-            <CustomTableIconsColumn
-              :is-delete-active="isDelete === user.id"
-              @edit="editUnit(user)"
-              @delete="deleteItem(user.id)"
-              @cancel-delete="cancelDelete"
-              @confirm-delete="confirmDelete(user.id)"
-            />
-          </td>
-        </tr>
+          <tr v-for="(user, i) in users" :key="i">
+            <td width="50">{{ user.id }}</td>
+            <td class="nowrap">{{ user.firstName }}</td>
+            <td class="nowrap">{{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td class="tables__col-5">
+              <span>
+                {{ user.units.map((unit) => unit.name).join(', ') }}
+              </span>
+            </td>
+            <td class="text-center">
+              <span v-if="user.isAdmin">+</span><span v-else>-</span>
+            </td>
+            <td class="text-center">
+              <span v-if="user.isActive">+</span><span v-else>-</span>
+            </td>
+            <td>
+              <CustomTableIconsColumn
+                :is-delete-active="isDelete === user.id"
+                @edit="editUnit(user)"
+                @delete="deleteItem(user.id)"
+                @cancel-delete="cancelDelete"
+                @confirm-delete="confirmDelete(user.id)"
+              />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -46,18 +48,19 @@
 </template>
 
 <script>
-import {mapActions} from "vuex"
+import { mapActions } from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import Users from '../../graphql/queries/users.gql'
 import CustomTableIconsColumn from '../CustomTableIconsColumn'
-import DeleteUser from "~/graphql/mutations/users/deleteUser.gql"
-import {tableActionsMixin} from '~/mixins/tableActionsMixin'
-import {mutationMixin} from '~/mixins/mutationMixin'
+import DeleteUser from '~/graphql/mutations/users/deleteUser.gql'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
-  name: "HQUsers",
+  name: 'HQUsers',
   components: {
-    CustomTableIconsColumn, PageContentWrapper
+    CustomTableIconsColumn,
+    PageContentWrapper,
   },
   mixins: [tableActionsMixin, mutationMixin],
   apollo: {
@@ -71,19 +74,19 @@ export default {
       setShowAddUser: 'users/setShowAddUser',
     }),
     editUnit(user) {
-      this.setUpdateUser(user);
+      this.setUpdateUser(user)
       this.setShowAddUser('HQUsersEdit')
     },
     confirmDelete(id) {
       this.mutationAction(
         DeleteUser,
-        {id},
+        { id },
         Users,
         'Delete user success',
         'Delete user error'
       )
     },
-  }
+  },
 }
 </script>
 
@@ -117,7 +120,7 @@ export default {
 
   &__body {
     tr {
-      &:not(:last-child){
+      &:not(:last-child) {
         td {
           border-bottom: 1px solid #e4e1e1;
         }
@@ -150,6 +153,4 @@ export default {
     }
   }
 }
-
-
 </style>
