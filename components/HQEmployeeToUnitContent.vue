@@ -1,17 +1,20 @@
 <template>
-  <PageContentWrapper>
+  <PageContentWrapper v-if="!getAddEmployee && !getEditEmployee">
     <InputRow>
       <InputWithTitle>
         <template #title> Unit </template>
 
         <template #input>
-          <CustomSelect
+          <multiselect
             v-if="units"
+            v-model="unit"
             :options="units"
-            select-by="name"
-            select-by-second="code"
-            @input="selectUnit"
-          />
+            :custom-label="nameWithId"
+            placeholder="Select one"
+            track-by="name"
+            :preselect-first="false"
+            :show-labels="false"
+          ></multiselect>
         </template>
       </InputWithTitle>
 
@@ -22,6 +25,10 @@
           <CustomInput v-model="unit.name" readonly disabled />
         </template>
       </InputWithTitle>
+
+      <DefaultButton style="margin-left: 15px" @event="setAddEmployee"
+        >Add employee</DefaultButton
+      >
     </InputRow>
 
     <CustomTable v-if="employees" class="table" :w-table="470">
@@ -52,6 +59,7 @@
             "
             @set-is-active="setIsEmployeeActive(employee)"
           />
+          <span v-else></span>
 
           <span>
             {{ employee.firstName }}
@@ -60,22 +68,40 @@
           <span>
             {{ employee.lastName }}
           </span>
+
+          <CustomTableIconsColumn
+            :is-delete-active="isDelete === employee.id"
+            @edit="editEmployee(employee)"
+            @delete="deleteItem(employee.id)"
+            @cancel-delete="cancelDelete"
+            @confirm-delete="deleteEmployee(employee.id)"
+          />
         </CustomTableRow>
       </template>
     </CustomTable>
   </PageContentWrapper>
+  <HQEmployeeContent v-else />
 </template>
 
 <script>
 import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
+import DeleteEmployee from '../graphql/mutations/employee/deleteEmployee.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
+import HQEmployeeContent from './HQEmployeeContent'
+import CustomTableIconsColumn from './CustomTableIconsColumn'
 import UpdateUnit from '~/graphql/mutations/unit/updateUnit.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { multiselectMixin } from '~/mixins/multiselectMixin'
+import { employeeMixin } from '~/mixins/employeeMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+
 export default {
   name: 'HQEmployeeToUnitContent',
   components: {
     PageContentWrapper,
+    HQEmployeeContent,
+    CustomTableIconsColumn,
   },
   apollo: {
     employees: {
@@ -85,18 +111,24 @@ export default {
       query: Units,
     },
   },
-  mixins: [mutationMixin],
+  mixins: [mutationMixin, multiselectMixin, tableActionsMixin, employeeMixin],
   data() {
     return {
       unit: '',
     }
   },
   methods: {
-    selectUnit(item) {
-      this.unit = item
+    setAddEmployee() {
+      this.$store.commit('employee/SET_ADD_EMPLOYEE', true)
     },
-    setIsEmployeeActive(employee) {
-      this.mutationAction(
+    editEmployee(employee) {
+      this.$store.commit('employee/SET_EDIT_EMPLOYEE', true)
+      this.$store.commit('employee/SET_EMPLOYEE', employee)
+    },
+    async setIsEmployeeActive(employee) {
+      const {
+        data: { updateUnit },
+      } = await this.mutationAction(
         UpdateUnit,
         {
           unitInput: {
@@ -112,26 +144,103 @@ export default {
             },
           },
         },
-        Units,
+        Employees,
         'Add employee to unit success',
         'Add employee to unit error'
       )
 
-      this.$apollo.queries.employees.refetch()
+      if (updateUnit) {
+        this.unit = updateUnit
+      }
+    },
+    async deleteEmployee(id) {
+      const unit = this.unit
+      const res = await this.mutationAction(
+        DeleteEmployee,
+        { id },
+        Employees,
+        'Delete employee success',
+        'Delete employee error'
+      )
+
+      if (res) {
+        this.unit = unit
+      }
     },
   },
 }
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style lang="scss">
+.input {
+  &-row--offset {
+    display: flex;
+    margin: 0 -15px;
+  }
+
+  &-col {
+    min-width: 240px;
+    padding: 0 15px;
+  }
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.multiselect__tags {
+  border: 1px solid gainsboro;
+  border-radius: 3px;
+}
+
+.multiselect__option {
+  padding: 10px 16px 10px 8px;
+  color: #000;
+  font-size: 14px;
+  background: #fff;
+}
+
+.multiselect__option--highlight,
+.multiselect__option--highlight:after {
+  color: #fff;
+  background-color: #b01d22;
+}
+.multiselect__option--selected.multiselect__option--highlight {
+  background: rgba(#b01d22, 0.6);
+}
+
+.multiselect__tag {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background-color: #b01d22;
+}
+
+.multiselect__tag-icon:after {
+  color: #fff;
+}
+
+.multiselect__select:before {
+  border: none;
+  width: 24px;
+  height: 24px;
+  background: url(assets/images/icons/chevron-down.svg);
+  display: block;
+  top: 0;
+}
+</style>
 <style lang="scss" scoped>
 .table-row {
   display: grid;
   align-items: center;
   @media screen and (min-width: $md) {
-    grid-template-columns: 150px 80px repeat(2, 200px);
+    grid-template-columns: 150px 80px repeat(2, 200px) auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 120px 80px repeat(2, 120px);
+    grid-template-columns: 120px 80px repeat(2, 120px) auto;
   }
 }
 

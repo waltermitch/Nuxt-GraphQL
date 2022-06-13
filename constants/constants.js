@@ -213,15 +213,9 @@ export const HQ_UNITS_TABS = [
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
-    id: 6,
+    id: 7,
     caption: 'Employee',
     pageUrl: '/hq-unit-setup/employee',
-    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
-  },
-  {
-    id: 7,
-    caption: 'Employee To Unit',
-    pageUrl: '/hq-unit-setup/employee-to-unit',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {

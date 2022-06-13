@@ -1,5 +1,7 @@
+#import '../../fragments/employee.gql'
+
 mutation UpdateEmployee($employeeInput: UpdateEmployeeInput!) {
   updateEmployee(employeeInput: $employeeInput) {
-    id
+    ...EmployeeFragment
   }
 }

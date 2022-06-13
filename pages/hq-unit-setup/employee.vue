@@ -11,7 +11,7 @@
     </template>
 
     <template #content>
-      <HQEmployeeContent />
+      <HQEmployeeToUnitContent />
     </template>
   </BasePageLayout>
 </template>
@@ -23,21 +23,21 @@ import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
-import HQEmployeeContent from '~/components/HQEmployeeContent.vue'
+import HQEmployeeToUnitContent from '~/components/HQEmployeeToUnitContent.vue'
 export default {
-  name: 'HQEmployeePage',
+  name: 'EmployeeToUnitPage',
   components: {
     BasePageLayout,
     SideBar,
     PageSubtitle,
     PageTitle,
-    HQEmployeeContent,
+    HQEmployeeToUnitContent,
   },
   mixins: [sideBarNavTabsMixin(HQ_UNITS_TABS)],
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
-  }
+  },
 }
 </script>
 

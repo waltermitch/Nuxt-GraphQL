@@ -1,103 +1,29 @@
 <template>
   <PageContentWrapper>
     <LoadingBar v-if="$apollo.loading" />
-    <ValidationObserver v-else ref="form" v-slot="{ invalid }">
+    <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow class="input-row-mob">
-        <InputWithTitle>
-          <template #title> Employee Selector</template>
-
-          <template #input>
-            <CustomSelect
-              v-if="employees"
-              :options="employees"
-              select-by="id"
-              :disabled="isAddNewEmployee"
-              @input="selectEmployee"
-            />
-          </template>
-        </InputWithTitle>
-
         <div class="buttons-area">
           <DefaultButton
+            v-if="getAddEmployee"
             button-color-gamma="white"
-            :disabled="isEditNewEmployee || isAddNewEmployee"
+            :disabled="invalid"
             @event="addNewEmployee"
           >
             Add new employee
           </DefaultButton>
 
           <DefaultButton
+            v-if="getEditEmployee"
             button-color-gamma="white"
-            :disabled="isEditNewEmployee || isAddNewEmployee"
+            :disabled="invalid"
             @event="editEmployee"
           >
             Edit employee
           </DefaultButton>
 
-          <DefaultButton
-            v-if="isEditNewEmployee || isAddNewEmployee"
-            button-color-gamma="white"
-            :disabled="!isAddNewEmployee && !isEditNewEmployee"
-            @event="cancelAdd"
-          >
-            {{ isEditNewEmployee ? 'Cancel Edit' : 'Cancel Add' }}
-          </DefaultButton>
-
-          <DefaultButton
-            v-if="isEditNewEmployee || isAddNewEmployee"
-            button-color-gamma="white"
-            :disabled="invalid"
-            @event="accept"
-          >
-            Accept
-          </DefaultButton>
-
-          <DefaultButton
-            button-color-gamma="white"
-            :disabled="isEditNewEmployee || isAddNewEmployee"
-            @event="deleteEmployee"
-          >
-            Delete employee
-          </DefaultButton>
+          <DefaultButton @event="cancelEmployeeAction"> Cancel </DefaultButton>
         </div>
-      </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
-          <template #title> Employee ID</template>
-
-          <template #input>
-            <CustomInput v-model="employee.id" :disabled="isAddNewEmployee" />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle v-if="isAddNewEmployee">
-          <template #title> Employee Unit</template>
-
-          <template #input>
-            <CustomSelect
-              v-if="units"
-              multi-select
-              :options="units"
-              do-not-preselect
-              @input="selectEmployeeUnit"
-            />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle v-if="isEditNewEmployee">
-          <template #title> Employee Unit</template>
-
-          <template #input>
-            <CustomSelect
-              v-if="units"
-              multi-select
-              :options="units"
-              do-not-preselect
-              @input="selectEditUnits"
-            />
-          </template>
-        </InputWithTitle>
       </InputRow>
 
       <InputRow>
@@ -105,7 +31,7 @@
           <template #title> Employee First Name</template>
 
           <template #input>
-            <CustomInput v-model="employee.firstName" rules="required" />
+            <CustomInput v-model="firstName" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -113,7 +39,7 @@
           <template #title> Employee Last Name</template>
 
           <template #input>
-            <CustomInput v-model="employee.lastName" rules="required" />
+            <CustomInput v-model="lastName" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -124,7 +50,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="employee.salaryBase"
+              v-model.number="salaryBase"
               rules="required|currency"
               type="number"
             />
@@ -136,7 +62,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="employee.salaryOvertime"
+              v-model.number="salaryOvertime"
               rules="required|currency"
               type="number"
             />
@@ -149,7 +75,7 @@
           <template #title> State Tax Code</template>
 
           <template #input>
-            <CustomInput v-model="employee.stateTaxCode" rules="required" />
+            <CustomInput v-model="stateTaxCode" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -157,7 +83,7 @@
           <template #title>Local Tax Code</template>
 
           <template #input>
-            <CustomInput v-model="employee.localTaxCode" rules="required" />
+            <CustomInput v-model="localTaxCode" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -168,7 +94,7 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="employee.isHourly"
+              :is-active="isHourly"
               @set-is-active="setEmployeeHourly"
             />
           </template>
@@ -179,7 +105,7 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="employee.isExempt"
+              :is-active="isExempt"
               @set-is-active="setEmployeeExempt"
             />
           </template>
@@ -192,7 +118,7 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="employee.isProdEligible"
+              :is-active="isProdEligible"
               @set-is-active="setEmployeeProdEligible"
             />
           </template>
@@ -203,14 +129,14 @@
 
           <template #input>
             <CustomRadioButton
-              :is-active="employee.isActive"
+              :is-active="isActive"
               @set-is-active="setEmployeeActive"
             />
           </template>
         </InputWithTitle>
       </InputRow>
 
-      <CustomTable v-if="!isAddNewEmployee" class="table" :w-table="500">
+      <CustomTable v-if="!getAddEmployee" class="table" :w-table="500">
         <template #header>
           <div class="table-row">
             <span>Unit</span>
@@ -221,13 +147,21 @@
 
         <template #content>
           <CustomTableRow
-            v-for="unit in employee.units"
+            v-for="unit in units"
             :key="unit.id"
             class="table-row"
           >
             <span>{{ unit.code }}</span>
 
             <span>{{ unit.name }}</span>
+
+            <CustomTableIconsColumn
+              :is-delete-active="isDelete === unit.id"
+              :show-edit="false"
+              @delete="deleteItem(unit.id)"
+              @cancel-delete="cancelDelete"
+              @confirm-delete="removeEmployeeFromUnit(unit.id)"
+            />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -241,12 +175,13 @@ import Employees from '../graphql/queries/employees.gql'
 import Units from '../graphql/queries/units.gql'
 import CreateEmployee from '../graphql/mutations/employee/createEmployee.gql'
 import UpdateEmployee from '../graphql/mutations/employee/updateEmployee.gql'
-import DeleteEmployee from '../graphql/mutations/employee/deleteEmployee.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
-import CustomSelect from './CustomSelect.vue'
+import DefaultButton from './DefaultButton.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { employeeMixin } from '~/mixins/employeeMixin'
+import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 
 export default {
   name: 'HQEmployeeContent',
@@ -255,9 +190,9 @@ export default {
     PageContentWrapper,
     InputRow,
     InputWithTitle,
-    CustomSelect,
+    DefaultButton,
   },
-  mixins: [mutationMixin],
+  mixins: [mutationMixin, employeeMixin, tableActionsMixin],
   apollo: {
     employees: {
       query: Employees,
@@ -266,135 +201,193 @@ export default {
       query: Units,
     },
   },
-  data() {
-    return {
-      employee: {
-        ...this.initialStateEmployee(),
+  computed: {
+    id: {
+      get() {
+        return this.getEmployee.id
       },
-      isAddNewEmployee: false,
-      isEditNewEmployee: false,
-      editUnits: [],
-    }
+      set(value) {
+        this.$store.commit('employee/SET_ID', value)
+      },
+    },
+    firstName: {
+      get() {
+        return this.getEmployee.firstName
+      },
+      set(value) {
+        this.$store.commit('employee/SET_FIRST_NAME', value)
+      },
+    },
+    lastName: {
+      get() {
+        return this.getEmployee.lastName
+      },
+      set(value) {
+        this.$store.commit('employee/SET_LAST_NAME', value)
+      },
+    },
+    salaryBase: {
+      get() {
+        return this.getEmployee.salaryBase
+      },
+      set(value) {
+        this.$store.commit('employee/SET_SALARY_BASE', value)
+      },
+    },
+    salaryOvertime: {
+      get() {
+        return this.getEmployee.salaryOvertime
+      },
+      set(value) {
+        this.$store.commit('employee/SET_SALARY_OVERTIME', value)
+      },
+    },
+    stateTaxCode: {
+      get() {
+        return this.getEmployee.stateTaxCode
+      },
+      set(value) {
+        this.$store.commit('employee/SET_STATE_TAX_CODE', value)
+      },
+    },
+    isHourly: {
+      get() {
+        return this.getEmployee.isHourly
+      },
+      set(value) {
+        this.$store.commit('employee/SET_IS_HOURLY', value)
+      },
+    },
+    isExempt: {
+      get() {
+        return this.getEmployee.isExempt
+      },
+      set(value) {
+        this.$store.commit('employee/SET_IS_EXEMPT', value)
+      },
+    },
+    isProdEligible: {
+      get() {
+        return this.getEmployee.isProdEligible
+      },
+      set(value) {
+        this.$store.commit('employee/SET_IS_PROD_ELIGIBLE', value)
+      },
+    },
+    isActive: {
+      get() {
+        return this.getEmployee.isActive
+      },
+      set(value) {
+        this.$store.commit('employee/SET_IS_ACTIVE', value)
+      },
+    },
+    localTaxCode: {
+      get() {
+        return this.getEmployee.localTaxCode
+      },
+      set(value) {
+        this.$store.commit('employee/SET_LOCAL_TAX_CODE', value)
+      },
+    },
+    units: {
+      get() {
+        return this.getEmployee.units
+      },
+      set(value) {
+        this.$store.commit('employee/SET_UNITS', value)
+      },
+    },
+  },
+  destroyed() {
+    this.clearAction()
   },
   methods: {
-    initialStateEmployee() {
-      return {
-        id: '',
-        firstName: '',
-        lastName: '',
-        salaryBase: '',
-        salaryOvertime: '',
-        stateTaxCode: '',
-        isHourly: false,
-        isExempt: false,
-        isProdEligible: false,
-        isActive: false,
-        localTaxCode: '',
-        units: [],
-      }
-    },
-    selectEmployee(item) {
-      if (item) {
-        this.employee = item
-      }
+    cancelEmployeeAction() {
+      this.getAddEmployee
+        ? this.$store.commit('employee/SET_ADD_EMPLOYEE', false)
+        : this.$store.commit('employee/SET_EDIT_EMPLOYEE', false)
     },
     async addNewEmployee() {
-      await this.$apollo.query({
-        query: Units,
-      })
-      this.isAddNewEmployee = true
-      this.employee = this.initialStateEmployee()
+      const { id, ...employeeInput } = this.getEmployee
+      const res = await this.mutationAction(
+        CreateEmployee,
+        {
+          employeeInput,
+        },
+        Employees,
+        'Add employee success',
+        'Add employee error'
+      )
+
+      if (res) {
+        this.clearAction()
+      }
     },
-    editEmployee() {
-      this.isEditNewEmployee = true
-    },
-    async accept() {
-      const employee = this.employee
+    async editEmployee() {
       const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
-        this.employee
+        this.getEmployee
 
-      this.isAddNewEmployee
-        ? await this.mutationAction(
-            CreateEmployee,
-            {
-              employeeInput: {
-                ...employeeInput,
-                units: {
-                  sync: units.map((unit) => unit.id),
-                },
-              },
+      const res = await this.mutationAction(
+        UpdateEmployee,
+        {
+          employeeInput: {
+            id,
+            units: {
+              sync: this.units.map((unit) => unit.id),
             },
-            Employees,
-            'Add employee success',
-            'Add employee error'
-          )
-        : await this.mutationAction(
-            UpdateEmployee,
-            {
-              employeeInput: {
-                id,
-                units: {
-                  sync: this.editUnits
-                    .map((item) => item.id)
-                    .filter(
-                      (value, index, unitsArray) =>
-                        unitsArray.indexOf(value) === index
-                    ),
-                },
-                ...employeeInput,
-              },
-            },
-            Employees,
-            'Update employee success',
-            'Update employee error'
-          )
+            ...employeeInput,
+          },
+        },
+        Employees,
+        'Update employee success',
+        'Update employee error'
+      )
 
-      this.employee = employee
+      if (res) {
+        this.clearAction()
+      }
     },
-    cancelAdd() {
-      const employee = this.employee
+    async removeEmployeeFromUnit(unitId) {
+      const { id, units, __typename, updatedAt, createdAt, ...employeeInput } =
+        this.getEmployee
 
-      if (this.isAddNewEmployee) {
-        window.location.reload(true)
-      }
+      const {
+        data: { updateEmployee },
+      } = await this.mutationAction(
+        UpdateEmployee,
+        {
+          employeeInput: {
+            id,
+            units: {
+              disconnect: [unitId],
+            },
+            ...employeeInput,
+          },
+        },
+        Employees,
+        'Update employee success',
+        'Update employee error'
+      )
 
-      this.employee = {
-        ...employee,
-        units: employee.units.filter(
-          (employee, index, array) =>
-            array.map((x) => x.id).indexOf(employee.id) === index
-        ),
+      if (updateEmployee) {
+        this.$store.commit('employee/SET_EMPLOYEE', updateEmployee)
       }
-      this.isAddNewEmployee
-        ? (this.isAddNewEmployee = false)
-        : (this.isEditNewEmployee = false)
     },
     setEmployeeHourly() {
-      this.employee.isHourly = !this.employee.isHourly
+      this.isHourly = !this.getEmployee.isHourly
     },
     setEmployeeExempt() {
-      this.employee.isExempt = !this.employee.isExempt
+      this.isExempt = !this.getEmployee.isExempt
     },
     setEmployeeProdEligible() {
-      this.employee.isProdEligible = !this.employee.isProdEligible
+      this.isProdEligible = !this.getEmployee.isProdEligible
     },
     setEmployeeActive() {
-      this.employee.isActive = !this.employee.isActive
+      this.isActive = !this.getEmployee.isActive
     },
     selectEmployeeUnit(unit) {
-      this.employee.units = [...this.employee.units, unit]
-    },
-    selectEditUnits(unit) {
-      this.editUnits = [...this.editUnits, unit]
-    },
-    deleteEmployee() {
-      this.mutationAction(
-        DeleteEmployee,
-        { id: this.employee.id },
-        Employees,
-        'Delete employee success',
-        'Delete employee error'
-      )
+      this.units = [...this.getEmployee.units, unit]
     },
   },
 }
@@ -434,10 +427,10 @@ export default {
   display: grid;
   align-items: center;
   @media screen and (min-width: $md) {
-    grid-template-columns: 100px 300px;
+    grid-template-columns: 100px 300px auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 100px 120px;
+    grid-template-columns: 100px 120px auto;
   }
 }
 </style>
