@@ -174,6 +174,7 @@ import { CLOSE_REGISTER } from '~/constants/closeRegister'
 import Registers from '~/graphql/queries/registers.gql'
 import Me from '~/graphql/queries/me.query.gql'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
+import { meMixin } from '~/mixins/meMixin'
 export default {
   name: 'CloseRegisterContent',
   components: {
@@ -188,7 +189,7 @@ export default {
     FinishCloseout,
     PageContentWrapper,
   },
-  mixins: [closeRegisterMixin],
+  mixins: [closeRegisterMixin, meMixin],
   apollo: {
     registers: {
       query: Registers,
@@ -213,6 +214,12 @@ export default {
         )
       )
     },
+  },
+  mounted() {
+    this.$store.dispatch('closeRegister/calculate', {
+      unitId: +this.selectedUnit.id,
+      periodId: +this.selectedUnit.activePeriod.id,
+    })
   },
   destroyed() {
     this.$store.commit('closeRegister/SET_IS_EDIT', false)
