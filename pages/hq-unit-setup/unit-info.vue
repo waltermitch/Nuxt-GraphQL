@@ -10,7 +10,7 @@
       <div class="title-area">
         <PageTitle> Unit Maintenance </PageTitle>
 
-        <DefaultButton button-color-gamma="red" @event="showAddUnit">
+        <DefaultButton button-color-gamma="red" @event="addUnit">
           + Add unit
         </DefaultButton>
       </div>
@@ -31,6 +31,7 @@ import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
 import DefaultButton from '~/components/DefaultButton.vue'
+import { UNIT } from '~/constants/unit'
 export default {
   name: 'UnitInfoPage',
   components: {
@@ -44,7 +45,13 @@ export default {
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
-  }
+  },
+  methods: {
+    addUnit() {
+      this.$store.dispatch('unitMaintenance/setUnit', { ...UNIT })
+      this.showAddUnit()
+    },
+  },
 }
 </script>
 

@@ -1,4 +1,5 @@
 import { mapActions, mapGetters } from 'vuex'
+import { UNIT } from '~/constants/unit'
 export const unitMaintenanceMixin = {
   computed: {
     ...mapGetters({
@@ -20,73 +21,14 @@ export const unitMaintenanceMixin = {
       this.setShowAddUnit('HQUnitMaintenance')
     },
     hideAddUnit() {
+      this.$store.dispatch('unitMaintenance/setUnit', { ...UNIT })
       this.setShowAddUnit('HQUnitsTableContent')
     },
     cancel() {
       this.cancelEvent()
       this.hideAddUnit()
       this.setUnitID(null)
-      this.setUnit({
-        code: '',
-        address: '',
-        name: '',
-        city: {
-          id: '',
-          name: '',
-          tax: '',
-          createdAt: '',
-          updatedAt: '',
-          state: {
-            id: '',
-            code: '',
-          },
-        },
-        district: '',
-        county: '',
-        population: '',
-        state: {
-          id: '',
-          code: '',
-          salesTaxCafeteria: '',
-          salesTaxVending: '',
-          salesTaxRestaurant: '',
-          salesTaxStore: '',
-          grossReceiptsTax: '',
-          createdAt: '',
-          updatedAt: '',
-          cities: [],
-          counties: [],
-        },
-        managerFirstName: '',
-        zip: '',
-        managerLastName: '',
-        payrollPassword: '',
-        emailAccount: '',
-        users: [],
-        sysco: '',
-        payrollTaxPercent: '',
-        benefitsAmount: '',
-        vendingIncome: '',
-        commissionAmount: '',
-        vacationAmount: '',
-        isVending: false,
-        isActive: false,
-        businessInsuranceAmount: '',
-        managementFeeType: '',
-        managementAmount: '',
-        managementPercent: '',
-        administrativeFeeType: '',
-        administrativeAmount: '',
-        administrativePercent: '',
-        supportAmount: '',
-        supportFeeType: '',
-        supportPercent: '',
-        benefitsPercent: '',
-        //  TODO Need more information on reg tax field
-        // regTax: '',
-        commissionPercent: '',
-        isKronos: false,
-      })
+      this.setUnit({ ...UNIT })
     },
   },
 }

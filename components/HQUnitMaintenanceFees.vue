@@ -380,7 +380,7 @@ export default {
       if (res) {
         this.hideAddUnit()
         this.setUnitID(null)
-        this.$store.dispatch('unitMaintenance/setUnit', UNIT)
+        this.$store.dispatch('unitMaintenance/setUnit', { ...UNIT })
       }
     },
     async updateUnit() {
