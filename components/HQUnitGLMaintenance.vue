@@ -68,6 +68,7 @@
     </div>
 
     <DefaultButton
+      :disabled="!unit"
       @event="isAttachGlAccounts ? addGlToUnit() : showAttachGlAccounts()"
     >
       Attach new GL account

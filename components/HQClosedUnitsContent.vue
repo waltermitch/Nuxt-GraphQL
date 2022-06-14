@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <InputRow>
       <InputWithTitle>
-        <template #title> Unit </template>
+        <template #title> District </template>
 
         <template #input>
           <CustomSelect
