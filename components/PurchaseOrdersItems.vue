@@ -41,6 +41,8 @@
             :options="glAccounts"
             select-by="name"
             :selected-item="item.glAccount"
+            local-temp
+            do-not-preselect
             @input="selectGlAccount(item, $event)"
           />
 
@@ -72,6 +74,7 @@
             v-if="glAccounts && !isSelectedGlAccount"
             :options="glAccounts"
             select-by="name"
+            local-temp
             @input="selectNewItemGlAccount"
           />
 

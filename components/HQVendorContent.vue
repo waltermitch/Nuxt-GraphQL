@@ -35,23 +35,15 @@
             />
             <span v-else>{{ vendor.name }}</span>
 
-            <div v-if="isEdit === vendor.id" class="multiselects">
-              <Multiselect
-                v-if="terms"
-                v-model="vendor.terms"
-                :options="terms"
-                :multiple="true"
-                :close-on-select="false"
-                :clear-on-select="false"
-                :show-labels="false"
-                :preserve-search="true"
-                placeholder="Pick some"
-                label="name"
-                track-by="name"
-                :preselect-first="false"
-              >
-              </Multiselect>
-            </div>
+            <CustomSelect
+              v-if="isEdit === vendor.id"
+              :options="terms"
+              :selected-items="vendor.terms"
+              do-not-preselect
+              select-by="name"
+              multi-select
+              @input="selectTerms($event, vendor)"
+            />
             <span v-else-if="vendor.terms">{{
               vendor.terms.map((vendor) => vendor.name).join(', ')
             }}</span>
@@ -81,23 +73,13 @@
               do-not-show-error-message
             />
 
-            <div class="multiselects">
-              <Multiselect
-                v-if="terms"
-                v-model="vendorNew.terms"
-                :options="terms"
-                :multiple="true"
-                :close-on-select="false"
-                :clear-on-select="false"
-                :show-labels="false"
-                :preserve-search="true"
-                placeholder="Pick some"
-                label="name"
-                track-by="name"
-                :preselect-first="false"
-              >
-              </Multiselect>
-            </div>
+            <CustomSelect
+              :options="terms"
+              select-by="name"
+              multi-select
+              do-not-preselect
+              @input="selectTerm"
+            />
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
@@ -117,7 +99,6 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Multiselect from 'vue-multiselect'
 import Vendors from '../graphql/queries/vendors.gql'
 import Terms from '../graphql/queries/terms.gql'
 import CreateVendor from '../graphql/mutations/vendor/createVendor.gql'
@@ -139,7 +120,7 @@ export default {
     CustomInput,
     CustomTableRow,
     CustomTableAddIcon,
-    Multiselect,
+    // Multiselect,
   },
   mixins: [mutationMixin, tableActionsMixin],
   apollo: {
@@ -155,7 +136,7 @@ export default {
       vendorNew: {
         code: '',
         name: '',
-        terms: null,
+        terms: [],
       },
       vendorTerms: '',
     }
@@ -179,8 +160,21 @@ export default {
 
       return vendors
     },
-    selectTerm(term) {
-      this.vendorNew.term = term
+    selectTerm(option) {
+      if (this.vendorNew.terms.find((vendor) => vendor.id === option.id)) {
+        this.vendorNew.terms = this.vendorNew.terms.filter(
+          (item) => item.id !== option.id
+        )
+      } else {
+        this.vendorNew.terms.push(option)
+      }
+    },
+    selectTerms(option, vendor) {
+      if (vendor.terms.find((itm) => itm.id === option.id)) {
+        vendor.terms = vendor.terms.filter((item) => item.id !== option.id)
+      } else {
+        vendor.terms.push(option)
+      }
     },
     addVendor() {
       this.mutationAction(

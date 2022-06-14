@@ -1,14 +1,18 @@
 <template>
-  <div class="custom-select" :tabindex="tabindex" @blur="open = false">
+  <div class="custom-select" :tabindex="tabindex">
     <div
       class="selected"
       :class="{
         'selected--opened': open,
         'selected--error': error,
+        'selected--above': isAbove,
         disabled: disabled,
       }"
       @click="disabled ? null : toggleSelect()"
     >
+      <span v-if="doNotPreselect && !selected && !selectedOptions"
+        >Select some</span
+      >
       <span v-if="disabled">{{ selected && selected[selectBy] }}</span>
       <span v-else-if="multiSelect">
         {{ selectedOptions }}
@@ -35,6 +39,7 @@
       class="options"
       :class="{
         'options--opened': open,
+        'options--above': isAbove,
       }"
     >
       <div
@@ -87,11 +92,19 @@ export default {
       type: [Object, String],
       default: null,
     },
+    selectedItems: {
+      type: Array,
+      default: null,
+    },
     multiSelect: {
       type: Boolean,
       default: false,
     },
     doNotPreselect: {
+      type: Boolean,
+      default: false,
+    },
+    localTemp: {
       type: Boolean,
       default: false,
     },
@@ -105,13 +118,23 @@ export default {
         : this.options.length > 0
         ? this.options[0]
         : null,
-      selectedList: [],
+      selectedList: this.selectedItems ? this.selectedItems : [],
       open: false,
+      isAbove: false,
+      parentIsTable: false,
     }
   },
   computed: {
     selectedOptions() {
       return this.selectedList.map((item) => item[this.selectBy]).join(', ')
+    },
+    tempId: {
+      get() {
+        return this.$store.getters['customSelect/getTempId']
+      },
+      set(value) {
+        this.$store.commit('customSelect/SET_TEMP_ID', value)
+      },
     },
   },
   watch: {
@@ -128,12 +151,66 @@ export default {
       deep: true,
     },
   },
+  beforeMount() {
+    document.addEventListener('click', this.detectClickOutside)
+  },
   mounted() {
     if (!this.doNotPreselect) {
       this.$emit('input', this.selected)
     }
+
+    if (this.localTemp) {
+      this.tmpId = 'tmp'
+    }
+
+    this.adjustPosition()
+  },
+  destroyed() {
+    document.removeEventListener('click', this.detectClickOutside)
+    this.open = false
   },
   methods: {
+    adjustPosition() {
+      if (typeof window === 'undefined') return
+
+      const parentElement = this.$el.parentElement
+      const parentElementIsTable = parentElement.className.includes('table-row')
+      const spaceAbove = this.$el.getBoundingClientRect().top
+      const spaceBelow =
+        window.innerHeight - this.$el.getBoundingClientRect().bottom
+      const hasEnoughSpaceBelow = spaceBelow > 300
+
+      if (!hasEnoughSpaceBelow && spaceAbove) {
+        this.isAbove = true
+      } else {
+        this.isAbove = false
+      }
+
+      if (parentElementIsTable) {
+        this.parentIsTable = true
+        const rect = this.$el.getBoundingClientRect()
+        const scrollToTop = document.documentElement.scrollTop
+        const options = this.$el.querySelector('.options')
+        const temp = this.localTemp
+          ? document.getElementById('temp')
+          : document.getElementById(this.tempId)
+
+        if (temp) {
+          this.tempId = Math.random().toFixed(2)
+          temp.remove()
+        }
+
+        options.style.top = this.isAbove
+          ? `${rect.top + scrollToTop - 300}px`
+          : `${rect.top + 40 + scrollToTop}px`
+        options.style.left = `${rect.left}px`
+        options.style.width = `${rect.width}px`
+        this.localTemp
+          ? options.setAttribute('id', 'temp')
+          : options.setAttribute('id', this.tempId)
+        document.body.appendChild(options)
+      }
+    },
     toggleSelect() {
       if (this.options.length) {
         this.open = !this.open
@@ -167,6 +244,11 @@ export default {
       }
       this.open = false
     },
+    detectClickOutside(event) {
+      if (!(this.$el === event.target || this.$el.contains(event.target))) {
+        this.open = false
+      }
+    },
   },
 }
 </script>
@@ -197,6 +279,10 @@ export default {
     border-color: $firebrick;
   }
 
+  &--above {
+    border-radius: 0px 0px 3px 3px;
+  }
+
   &:active {
     border-color: $firebrick;
   }
@@ -218,7 +304,8 @@ export default {
   left: 0;
   right: 0;
   z-index: 1;
-  max-height: 500px;
+  max-height: 300px;
+  width: 100%;
   color: #fff;
   border-radius: 0px 0px 3px 3px;
   border-right: 1px solid gainsboro;
@@ -226,7 +313,15 @@ export default {
   border-bottom: 1px solid gainsboro;
   overflow: auto;
 
+  &--above {
+    bottom: 100%;
+    border-top: 1px solid gainsboro;
+    border-bottom: none;
+    border-radius: 3px 3px 0px 0px;
+  }
+
   &--opened {
+    height: fit-content;
     border-color: $firebrick;
   }
 }
@@ -235,6 +330,7 @@ export default {
   padding: 10px 16px 10px 8px;
   color: #000;
   background: #fff;
+  z-index: 2;
   cursor: pointer;
 
   &:hover {
