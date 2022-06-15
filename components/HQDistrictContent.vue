@@ -19,7 +19,7 @@
           >
             <CustomInput
               v-if="isEdit === district.id"
-              v-model="district.code"
+              v-model="districtEdit.code"
               rules="required"
               do-not-show-error-message
             />
@@ -27,7 +27,7 @@
 
             <CustomInput
               v-if="isEdit === district.id"
-              v-model="district.name"
+              v-model="districtEdit.name"
               rules="required"
               do-not-show-error-message
             />
@@ -36,7 +36,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === district.id"
               :is-delete-active="isDelete === district.id"
-              @edit="edit(district.id)"
+              @edit="editDistrict(district)"
               @delete="deleteItem(district.id)"
               @cancel="cancelDistrictEdit"
               @cancel-delete="cancelDelete"
@@ -111,26 +111,13 @@ export default {
         code: '',
         name: '',
       },
+      districtEdit: {},
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.districts = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.districts = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { districts },
-      } = await this.$apollo.query({
-        query: Districts,
-        fetchPolicy: 'no-cache',
-      })
-
-      return districts
+    editDistrict(district) {
+      this.districtEdit = Object.assign({}, district)
+      this.edit(district.id)
     },
     addDistrict() {
       this.mutationAction(
@@ -149,8 +136,8 @@ export default {
     confirmEdit(district) {
       const editedDistrict = {
         id: district.id,
-        code: district.code,
-        name: district.name,
+        code: this.districtEdit.code,
+        name: this.districtEdit.name,
       }
 
       this.mutationAction(
@@ -172,8 +159,7 @@ export default {
         'Delete district error'
       )
     },
-    async cancelDistrictEdit() {
-      this.districts = await this.fetchData()
+    cancelDistrictEdit() {
       this.cancelEdit()
     },
   },
