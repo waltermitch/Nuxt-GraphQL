@@ -21,7 +21,7 @@
           >
             <CustomInput
               v-if="isEdit === vendor.id"
-              v-model="vendor.code"
+              v-model="vendorEdit.code"
               rules="required"
               do-not-show-error-message
             />
@@ -29,7 +29,7 @@
 
             <CustomInput
               v-if="isEdit === vendor.id"
-              v-model="vendor.name"
+              v-model="vendorEdit.name"
               rules="required"
               do-not-show-error-message
             />
@@ -51,7 +51,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === vendor.id"
               :is-delete-active="isDelete === vendor.id"
-              @edit="edit(vendor.id)"
+              @edit="editVendor(vendor)"
               @delete="deleteItem(vendor.id)"
               @cancel="cancelVendorEdit"
               @cancel-delete="cancelDelete"
@@ -120,7 +120,6 @@ export default {
     CustomInput,
     CustomTableRow,
     CustomTableAddIcon,
-    // Multiselect,
   },
   mixins: [mutationMixin, tableActionsMixin],
   apollo: {
@@ -139,26 +138,22 @@ export default {
         terms: [],
       },
       vendorTerms: '',
+      vendorEdit: {
+        terms: [],
+      },
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.vendors = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.vendors = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { vendors },
-      } = await this.$apollo.query({
-        query: Vendors,
-        fetchPolicy: 'no-cache',
-      })
-
-      return vendors
+    editVendor(vendor) {
+      this.vendorEdit = Object.assign(
+        {},
+        {
+          code: vendor.code,
+          name: vendor.name,
+          terms: [...vendor.terms],
+        }
+      )
+      this.edit(vendor.id)
     },
     selectTerm(option) {
       if (this.vendorNew.terms.find((vendor) => vendor.id === option.id)) {
@@ -170,10 +165,12 @@ export default {
       }
     },
     selectTerms(option, vendor) {
-      if (vendor.terms.find((itm) => itm.id === option.id)) {
-        vendor.terms = vendor.terms.filter((item) => item.id !== option.id)
+      if (this.vendorEdit.terms.find((itm) => itm.id === option.id)) {
+        this.vendorEdit.terms = [
+          ...this.vendorEdit.terms.filter((item) => item.id !== option.id),
+        ]
       } else {
-        vendor.terms.push(option)
+        this.vendorEdit.terms.push(option)
       }
     },
     addVendor() {
@@ -196,10 +193,10 @@ export default {
     confirmEdit(vendor) {
       const editedVendor = {
         id: vendor.id,
-        code: vendor.code,
-        name: vendor.name,
+        code: this.vendorEdit.code,
+        name: this.vendorEdit.name,
         terms: {
-          sync: vendor.terms.map((term) => term.id),
+          sync: this.vendorEdit.terms.map((term) => term.id),
         },
       }
 
@@ -220,9 +217,8 @@ export default {
         'Add vendor error'
       )
     },
-    async cancelVendorEdit() {
+    cancelVendorEdit() {
       this.cancelEdit()
-      this.vendors = await this.fetchData()
     },
   },
 }
