@@ -74,7 +74,7 @@
 
             <CustomInput
               v-if="isEdit === unitType.id"
-              v-model="unitType.name"
+              v-model="unitTypeEdit.name"
               rules="required"
               do-not-show-error-message
             />
@@ -99,7 +99,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === unitType.id"
               :is-delete-active="isDelete === unitType.id"
-              @edit="edit(unitType.id)"
+              @edit="editUnitType(unitType)"
               @delete="deleteItem(unitType.id)"
               @cancel="cancelUnitTypeEdit"
               @cancel-delete="cancelDelete"
@@ -175,30 +175,13 @@ export default {
       unitTypeNew: {
         name: '',
       },
-      unitTypesCopy: [],
+      unitTypeEdit: {},
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.unitTypes = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.unitTypes = await this.fetchData()
-  },
-  async mounted() {
-    this.unitTypesCopy = [...(await this.fetchData())]
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { unitTypes },
-      } = await this.$apollo.query({
-        query: UnitTypes,
-        fetchPolicy: 'no-cache',
-      })
-
-      return unitTypes
+    editUnitType(unitType) {
+      this.unitTypeEdit = Object.assign({}, unitType)
+      this.edit(unitType.id)
     },
     selectUnit(item) {
       this.unit = item
@@ -216,14 +199,13 @@ export default {
         'Add unitType success',
         'Add unitType error'
       )
-      this.unitTypesCopy = [...(await this.fetchData())]
       this.unit = unit
     },
     async confirmEdit(unitType) {
       const unit = this.unit
       const editedUnitType = {
         id: unitType.id,
-        name: unitType.name,
+        name: this.unitTypeEdit.name,
       }
 
       await this.mutationAction(
@@ -236,7 +218,6 @@ export default {
         'Add unitType error'
       )
       this.unit = unit
-      this.unitTypesCopy = [...(await this.fetchData())]
     },
     async confirmDelete(id) {
       const unit = this.unit
@@ -249,7 +230,6 @@ export default {
         'Delete unitType error'
       )
       this.unit = unit
-      this.unitTypesCopy = [...(await this.fetchData())]
     },
     async addUnitTypeToUnit(unitType) {
       const { id } = this.unit
