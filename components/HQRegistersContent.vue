@@ -58,7 +58,7 @@
           >
             <CustomInput
               v-if="isEdit === register.id"
-              v-model="register.code"
+              v-model="registerEdit.code"
               rules="required"
               do-not-show-error-message
             />
@@ -68,7 +68,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model="register.name"
+              v-model="registerEdit.name"
               rules="required"
               do-not-show-error-message
             />
@@ -87,7 +87,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="register.bank"
+              v-model.number="registerEdit.bank"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -96,7 +96,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="register.nonResetable"
+              v-model.number="registerEdit.nonResetable"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -105,7 +105,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="register.commission"
+              v-model.number="registerEdit.commission"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -113,12 +113,26 @@
             <span v-else> {{ register.commission }}% </span>
 
             <CustomRadioButton
+              v-if="isEdit === register.id"
+              :is-active="registerEdit.isActive"
+              :disabled="isEdit !== register.id"
+              @set-is-active="setIsActiveEdit(register)"
+            />
+            <CustomRadioButton
+              v-else
               :is-active="register.isActive"
               :disabled="isEdit !== register.id"
               @set-is-active="setIsActive(register)"
             />
 
             <CustomRadioButton
+              v-if="isEdit === register.id"
+              :is-active="registerEdit.resetNonResetable"
+              :disabled="isEdit !== register.id"
+              @set-is-active="setResetNonResetableEdit(register)"
+            />
+            <CustomRadioButton
+              v-else
               :is-active="register.resetNonResetable"
               :disabled="isEdit !== register.id"
               @set-is-active="setResetNonResetable(register)"
@@ -127,11 +141,11 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === register.id"
               :is-delete-active="isDelete === register.id"
-              @edit="edit(register.id)"
+              @edit="editRegister(register)"
               @delete="deleteItem(register.id)"
               @cancel="cancelRegisterEdit"
               @cancel-delete="cancelDelete"
-              @confirm-edit="confirmEdit(register)"
+              @confirm-edit="confirmEdit(registerEdit)"
               @confirm-delete="confirmDelete(register.id)"
             />
           </CustomTableRow>
@@ -260,6 +274,7 @@ export default {
         isActive: false,
         resetNonResetable: false,
       },
+      registerEdit: {},
     }
   },
   computed: {
@@ -269,27 +284,16 @@ export default {
       )
     },
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.registers = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.registers = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { registers },
-      } = await this.$apollo.query({
-        query: Registers,
-        fetchPolicy: 'no-cache',
-      })
-
-      return registers
+    editRegister(register) {
+      this.registerEdit = Object.assign({}, register)
+      this.edit(register.id)
     },
     selectRegisterType(type) {
       this.registerType = type
+    },
+    setIsActiveEdit() {
+      this.registerEdit.isActive = !this.registerEdit.isActive
     },
     setIsActive(register) {
       if (register) {
@@ -297,6 +301,9 @@ export default {
       } else {
         this.registerNew.isActive = !this.registerNew.isActive
       }
+    },
+    setResetNonResetableEdit() {
+      this.registerEdit.resetNonResetable = !this.registerEdit.resetNonResetable
     },
     setResetNonResetable(register) {
       if (register) {
@@ -371,8 +378,7 @@ export default {
       this.isAdd = false
       this.isHide = false
     },
-    async cancelRegisterEdit() {
-      this.registers = await this.fetchData()
+    cancelRegisterEdit() {
       this.cancelEdit()
     },
   },
