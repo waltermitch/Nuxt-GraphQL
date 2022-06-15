@@ -27,7 +27,7 @@
           >
             <CustomInput
               v-if="isEdit === state.id"
-              v-model="state.code"
+              v-model="stateEdit.code"
               rules="required|alpha"
               do-not-show-error-message
             />
@@ -35,7 +35,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="state.salesTaxCafeteria"
+              v-model.number="stateEdit.salesTaxCafeteria"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -44,7 +44,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="state.salesTaxVending"
+              v-model.number="stateEdit.salesTaxVending"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -53,7 +53,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="state.salesTaxRestaurant"
+              v-model.number="stateEdit.salesTaxRestaurant"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -64,7 +64,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="state.salesTaxStore"
+              v-model.number="stateEdit.salesTaxStore"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -75,7 +75,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="state.grossReceiptsTax"
+              v-model.number="stateEdit.grossReceiptsTax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -87,7 +87,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === state.id"
               :is-delete-active="isDelete === state.id"
-              @edit="edit(state.id)"
+              @edit="editState(state)"
               @delete="deleteItem(state.id)"
               @cancel="cancelStateEdit"
               @cancel-delete="cancelDelete"
@@ -197,36 +197,23 @@ export default {
         salesTaxStore: '',
         grossReceiptsTax: '',
       },
+      stateEdit: {},
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.states = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.states = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { states },
-      } = await this.$apollo.query({
-        query: States,
-        fetchPolicy: 'no-cache',
-      })
-
-      return states
+    editState(state) {
+      this.stateEdit = Object.assign({}, state)
+      this.edit(state.id)
     },
     confirmEdit(state) {
       const editedState = {
         id: state.id,
-        code: state.code,
-        salesTaxCafeteria: state.salesTaxCafeteria,
-        salesTaxVending: state.salesTaxVending,
-        salesTaxRestaurant: state.salesTaxRestaurant,
-        salesTaxStore: state.salesTaxStore,
-        grossReceiptsTax: state.grossReceiptsTax,
+        code: this.stateEdit.code,
+        salesTaxCafeteria: this.stateEdit.salesTaxCafeteria,
+        salesTaxVending: this.stateEdit.salesTaxVending,
+        salesTaxRestaurant: this.stateEdit.salesTaxRestaurant,
+        salesTaxStore: this.stateEdit.salesTaxStore,
+        grossReceiptsTax: this.stateEdit.grossReceiptsTax,
       }
 
       this.mutationAction(
@@ -255,8 +242,7 @@ export default {
         'Add state error'
       )
     },
-    async cancelStateEdit() {
-      this.states = await this.fetchData()
+    cancelStateEdit() {
       this.cancelEdit()
     },
   },
