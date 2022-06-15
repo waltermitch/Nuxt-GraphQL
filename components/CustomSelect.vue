@@ -118,7 +118,7 @@ export default {
         : this.options.length > 0
         ? this.options[0]
         : null,
-      selectedList: this.selectedItems ? this.selectedItems : [],
+      selectedList: this.selectedItems ? [...this.selectedItems] : [],
       open: false,
       isAbove: false,
       parentIsTable: false,
