@@ -33,7 +33,7 @@
 
             <CustomInput
               v-if="isEdit === county.id"
-              v-model="county.name"
+              v-model="countyNew.name"
               rules="required"
               do-not-show-error-message
             />
@@ -43,7 +43,7 @@
 
             <CustomInput
               v-if="isEdit === county.id"
-              v-model.number="county.tax"
+              v-model.number="countyNew.tax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -55,7 +55,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === county.id"
               :is-delete-active="isDelete === county.id"
-              @edit="edit(county.id)"
+              @edit="isAdd ? null : editCounty(county)"
               @delete="deleteItem(county.id)"
               @cancel="cancelCountyEdit"
               @cancel-delete="cancelDelete"
@@ -86,7 +86,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addCountyRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -140,27 +140,21 @@ export default {
       },
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.counties = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.counties = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { counties },
-      } = await this.$apollo.query({
-        query: Counties,
-        fetchPolicy: 'no-cache',
-      })
-
-      return counties
+    editCounty(county) {
+      this.countyNew = Object.assign({}, county)
+      this.edit(county.id)
     },
     selectState(state) {
       this.countyNew.state = state
+    },
+    addCountyRow() {
+      this.countyNew = {
+        state: null,
+        name: '',
+        tax: '',
+      }
+      this.addRow()
     },
     addCounty() {
       this.mutationAction(
@@ -182,11 +176,11 @@ export default {
     confirmEdit(county) {
       const editedCounty = {
         id: county.id,
-        name: county.name,
+        name: this.countyNew.name,
         state: {
           connect: this.countyNew.state.id,
         },
-        tax: county.tax,
+        tax: this.countyNew.tax,
       }
 
       this.mutationAction(
@@ -206,8 +200,7 @@ export default {
         'Delete unit error'
       )
     },
-    async cancelCountyEdit() {
-      this.counties = await this.fetchData()
+    cancelCountyEdit() {
       this.cancelEdit()
     },
   },
