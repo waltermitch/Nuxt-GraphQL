@@ -40,7 +40,7 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 10;
+  z-index: 1;
   padding: 10px 15px;
   animation: message 2s ease-in-out;
 
