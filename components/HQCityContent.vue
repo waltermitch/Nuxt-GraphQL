@@ -43,6 +43,7 @@
             <CustomInput
               v-if="isEdit === city.id"
               v-model="cityEdit.tax"
+              type="number"
               do-not-show-error-message
             />
             <span v-else>
@@ -76,6 +77,7 @@
 
             <CustomInput
               v-model="cityNew.tax"
+              type="number"
               rules="required|double"
               do-not-show-error-message
             />
