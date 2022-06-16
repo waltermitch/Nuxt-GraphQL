@@ -43,7 +43,7 @@
 
             <CustomInput
               v-if="isEdit === county.id"
-              v-model.number="countyNew.tax"
+              v-model="countyNew.tax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -78,7 +78,7 @@
             />
 
             <CustomInput
-              v-model.number="countyNew.tax"
+              v-model="countyNew.tax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -165,7 +165,7 @@ export default {
             state: {
               connect: Number(this.countyNew.state.id),
             },
-            tax: this.countyNew.tax,
+            tax: +this.countyNew.tax,
           },
         },
         Counties,
@@ -180,7 +180,7 @@ export default {
         state: {
           connect: this.countyNew.state.id,
         },
-        tax: this.countyNew.tax,
+        tax: +this.countyNew.tax,
       }
 
       this.mutationAction(
