@@ -87,7 +87,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="registerEdit.bank"
+              v-model="registerEdit.bank"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -96,7 +96,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="registerEdit.nonResetable"
+              v-model="registerEdit.nonResetable"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -105,7 +105,7 @@
 
             <CustomInput
               v-if="isEdit === register.id"
-              v-model.number="registerEdit.commission"
+              v-model="registerEdit.commission"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -170,21 +170,21 @@
             />
 
             <CustomInput
-              v-model.number="registerNew.bank"
+              v-model="registerNew.bank"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="registerNew.nonResetable"
+              v-model="registerNew.nonResetable"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="registerNew.commission"
+              v-model="registerNew.commission"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -322,6 +322,9 @@ export default {
               connect: Number(this.unit.id),
             },
             ...this.registerNew,
+            bank: +this.registerNew.bank,
+            nonResetable: +this.registerNew.nonResetable,
+            commission: +this.registerNew.commission,
             registerType: {
               connect: Number(this.registerType.id),
             },
@@ -345,6 +348,9 @@ export default {
         {
           registerInput: {
             ...registerInput,
+            bank: +register.bank,
+            nonResetable: +register.nonResetable,
+            commission: +register.commission,
             registerType: {
               connect: Number(this.registerType.id),
             },
