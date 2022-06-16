@@ -18,7 +18,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="managementAmount"
+              v-model="managementAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -33,7 +33,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="managementPercent"
+              v-model="managementPercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -59,7 +59,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="administrativeAmount"
+              v-model="administrativeAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -74,7 +74,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="administrativePercent"
+              v-model="administrativePercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -97,7 +97,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="supportAmount"
+              v-model="supportAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -112,7 +112,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="supportPercent"
+              v-model="supportPercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -127,7 +127,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="benefitsPercent"
+              v-model="benefitsPercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -151,7 +151,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="commissionPercent"
+              v-model="commissionPercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -359,6 +359,20 @@ export default {
         {
           unitInput: {
             ...unitInput,
+            payrollTaxPercent: +this.unit.payrollTaxPercent,
+            benefitsAmount: +this.unit.benefitsAmount,
+            vendingIncome: +this.unit.vendingIncome,
+            commissionAmount: +this.unit.commissionAmount,
+            vacationAmount: +this.unit.vacationAmount,
+            businessInsuranceAmount: +this.unit.businessInsuranceAmount,
+            managementAmount: +this.unit.managementAmount,
+            managementPercent: +this.unit.managementPercent,
+            administrativeAmount: +this.unit.administrativeAmount,
+            administrativePercent: +this.unit.administrativePercent,
+            supportAmount: +this.unit.supportAmount,
+            supportPercent: +this.unit.supportPercent,
+            benefitsPercent: +this.unit.benefitsPercent,
+            commissionPercent: +this.unit.commissionPercent,
             district: {
               connect: Number(this.unit.district.id),
             },
@@ -402,6 +416,20 @@ export default {
           {
             unitInput: {
               ...unitInput,
+              payrollTaxPercent: +this.unit.payrollTaxPercent,
+              benefitsAmount: +this.unit.benefitsAmount,
+              vendingIncome: +this.unit.vendingIncome,
+              commissionAmount: +this.unit.commissionAmount,
+              vacationAmount: +this.unit.vacationAmount,
+              businessInsuranceAmount: +this.unit.businessInsuranceAmount,
+              managementAmount: +this.unit.managementAmount,
+              managementPercent: +this.unit.managementPercent,
+              administrativeAmount: +this.unit.administrativeAmount,
+              administrativePercent: +this.unit.administrativePercent,
+              supportAmount: +this.unit.supportAmount,
+              supportPercent: +this.unit.supportPercent,
+              benefitsPercent: +this.unit.benefitsPercent,
+              commissionPercent: +this.unit.commissionPercent,
               district: {
                 connect: Number(this.unit.district.id),
               },
