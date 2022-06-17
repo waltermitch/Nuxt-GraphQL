@@ -52,7 +52,9 @@
     </PageSubheader>
 
     <PageContentWrapper>
-      <h2 v-if="!unitRegisters.length">Please, add register to the unit</h2>
+      <h2 v-if="unitRegisters && !unitRegisters.length">
+        Please, add register to the unit
+      </h2>
       <div v-else class="content">
         <div class="inputs-block">
           <h2 class="title">Select Register To Close</h2>
