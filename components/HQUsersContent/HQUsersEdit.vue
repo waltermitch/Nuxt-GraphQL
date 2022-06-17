@@ -240,6 +240,7 @@ export default {
   }
 
   &-col {
+    max-width: 480px;
     min-width: 240px;
     padding: 0 15px;
   }
