@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'brok-and-company-frontend',
+    title: 'Brock & Company',
     htmlAttrs: {
       lang: 'en',
     },
@@ -45,7 +45,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'https://brock-api.staging.insanelab.com/graphql',
+        httpEndpoint: process.env.BACKEND_API,
       },
     },
   },

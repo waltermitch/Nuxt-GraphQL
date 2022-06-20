@@ -1,4 +1,4 @@
-# brok-and-company-frontend
+# brock-and-company-frontend
 
 ## Build Setup
 
