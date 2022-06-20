@@ -20,7 +20,7 @@ export default {
   div.table:first-child {
     @media screen and (min-width: $md) {
       width: 75%;
-      margin-right: 60px;
+      margin-right: 20px;
     }
     @media screen and (max-width: $md) {
       width: 100%;

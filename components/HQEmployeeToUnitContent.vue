@@ -25,10 +25,10 @@
           <CustomInput v-model="unit.name" readonly disabled />
         </template>
       </InputWithTitle>
-
-      <DefaultButton style="margin-left: 15px" @event="setAddEmployee"
-        >Add employee</DefaultButton
-      >
+      <div class="input-inner">
+        <DefaultButton style="margin-left: 15px" @event="setAddEmployee"
+          >+ Add employee</DefaultButton>
+      </div>
     </InputRow>
 
     <CustomTable v-if="employees" class="table" :w-table="470">
@@ -38,7 +38,7 @@
 
           <span> Active </span>
 
-          <span class="merged-column">Employee Name</span>
+          <span>Employee Name</span>
         </div>
       </template>
 
@@ -185,6 +185,10 @@ export default {
   }
 }
 
+.input-row {
+  align-items: flex-end;
+}
+
 .mb-20 {
   margin-bottom: 20px;
 }
@@ -236,11 +240,22 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 150px 80px repeat(2, 200px) auto;
   }
   @media screen and (max-width: $md) {
     grid-template-columns: 120px 80px repeat(2, 120px) auto;
+  }
+}
+
+.row {
+  padding: 6px 10px;
+
+  span {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
   }
 }
 

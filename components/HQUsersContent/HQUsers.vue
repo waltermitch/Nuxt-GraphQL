@@ -111,7 +111,7 @@ export default {
       font-size: 14px;
       font-weight: 600;
       line-height: 13px;
-      padding: 22px 20px 25px;
+      padding: 19.5px 10px;
       border-bottom: 1px solid #efefef;
       white-space: nowrap;
       text-align: left;
@@ -122,14 +122,15 @@ export default {
     tr {
       &:not(:last-child) {
         td {
-          border-bottom: 1px solid #e4e1e1;
+          border-bottom: 1px solid #efefef;
         }
       }
     }
 
     td {
-      padding: 10px 20px 10px;
+      padding: 16.5px 10px;
       background: #fff;
+      font-size: 14px;
     }
   }
 

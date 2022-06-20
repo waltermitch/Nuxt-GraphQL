@@ -119,6 +119,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 12px 0;
   @media screen and (min-width: $xl) {
     grid-template-columns: 5% 10% 12% 12% 15% 18% 1fr;
   }
@@ -133,6 +134,10 @@ export default {
     column-gap: 10px;
   }
   column-gap: 20px;
+}
+
+.row {
+  padding: 16.5px 10px;
 }
 
 .table-content-row {

@@ -67,7 +67,7 @@
     </ValidationObserver>
 
     <div v-if="isAdd" class="buttons-area">
-      <DefaultButton @event="addDistrict"> Add District </DefaultButton>
+      <DefaultButton @event="addDistrict">+ Add District </DefaultButton>
 
       <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
     </div>
@@ -185,12 +185,17 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 30px;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 100px 200px auto;
   }
   @media screen and (max-width: $md) {
     grid-template-columns: 100px 120px auto;
   }
+}
+
+.row {
+  padding: 16.5px 10px;
 }
 
 .icon {

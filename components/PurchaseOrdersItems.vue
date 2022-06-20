@@ -87,7 +87,7 @@
 
         <div v-if="isAdd" class="buttons-area add-item-buttons">
           <DefaultButton :disabled="invalid" @event="addItem">
-            Add Item
+           + Add Item
           </DefaultButton>
 
           <DefaultButton :disabled="pristine" @event="cancelAdd">
@@ -404,7 +404,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-  grid-template-columns: 206px 345px 192px 1fr;
+  grid-template-columns: 206px 345px 300px 50px;
   column-gap: 20px;
 }
 

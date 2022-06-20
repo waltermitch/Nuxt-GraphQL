@@ -153,7 +153,7 @@ export default {
   justify-content: space-between;
   max-width: $xxl;
   margin: 0 auto;
-  padding: 8px 40px 10px;
+  padding: 10px 40px 10px;
 }
 
 .profile {
@@ -171,12 +171,12 @@ export default {
 .logout {
   position: absolute;
   right: 0;
-  bottom: -110px;
+  bottom: -63px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
-  width: 150px;
+  height: 53px;
+  width: 120px;
   background: #ffffff;
   box-shadow: 2px 2px 4px rgba(196, 197, 221, 0.25),
     -2px -2px 4px rgba(196, 197, 221, 0.25);

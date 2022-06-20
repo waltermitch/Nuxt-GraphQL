@@ -91,11 +91,21 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 30px;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 80px 300px 250px;
   }
   @media screen and (max-width: $md) {
     grid-template-columns: 60px 250px 200px;
+  }
+}
+.row {
+  padding: 12px 10px;
+
+  span {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

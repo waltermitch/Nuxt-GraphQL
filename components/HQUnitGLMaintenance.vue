@@ -223,7 +223,7 @@
 
           <div v-if="isAddGlTypeCode" class="buttons-area">
             <DefaultButton @event="createGlTypeCode">
-              Add Unit Type
+             + Add Unit Type
             </DefaultButton>
 
             <DefaultButton @event="cancelAddGlTypeCode"> Cancel </DefaultButton>
@@ -516,6 +516,7 @@ export default {
   display: grid;
   align-items: flex-start;
   column-gap: 30px;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 5% repeat(2, 25%) 20% auto;
   }
@@ -523,7 +524,25 @@ export default {
     grid-template-columns: 80px 165px 165px 150px auto;
   }
   &--gl-type {
-    grid-template-columns: 80px 100px 100px auto;
+    grid-template-columns: 5% repeat(2, 25%) auto;
+  }
+}
+
+.row {
+  padding: 6px 10px;
+  align-items: center;
+
+  span {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  div {
+    span {
+      min-height: auto;
+      padding-bottom: 10px;
+    }
   }
 }
 

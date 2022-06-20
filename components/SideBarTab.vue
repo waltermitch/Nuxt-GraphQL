@@ -51,7 +51,7 @@ export default {
   align-items: center;
   width: 100%;
   max-width: 208px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 3px;
   transition: $transition;
 

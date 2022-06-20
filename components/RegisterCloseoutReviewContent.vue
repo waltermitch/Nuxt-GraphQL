@@ -108,12 +108,17 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
+  padding: 12px 0;
   @media screen and (min-width: $lg) {
     grid-template-columns: 8% 32% 20% 10% 1fr;
   }
   @media screen and (max-width: $lg) {
     grid-template-columns: 80px 220px 120px 120px 90px 1fr;
   }
+}
+
+.row {
+  padding: 5px 10px;
 }
 
 .table-full {
@@ -123,7 +128,7 @@ export default {
 }
 
 .table-content-row {
-  height: 60px;
+  min-height: 53px;
 }
 
 .icon {

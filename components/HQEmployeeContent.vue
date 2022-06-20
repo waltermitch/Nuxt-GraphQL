@@ -10,7 +10,7 @@
             :disabled="invalid"
             @event="addNewEmployee"
           >
-            Add new employee
+           + Add new employee
           </DefaultButton>
 
           <DefaultButton

@@ -86,7 +86,7 @@
           </CustomTableRow>
 
           <div v-if="isAdd" class="buttons-area add-item-buttons">
-            <DefaultButton @event="addItem"> Add Item </DefaultButton>
+            <DefaultButton @event="addItem">+ Add Item </DefaultButton>
 
             <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
           </div>

@@ -117,7 +117,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
-
+  padding: 12px 0;
   @media screen and (min-width: $lg) {
     grid-template-columns: 8% 37% 15% 10% 10% 10%;
   }
@@ -137,7 +137,8 @@ export default {
 }
 
 .table-content-row {
-  height: 60px;
+  height: 53px;
+  padding: 5px 10px;
 }
 
 .icon {
