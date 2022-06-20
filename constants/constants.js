@@ -290,4 +290,10 @@ export const HQ_ACCOUNTING = [
     pageUrl: '/hq-accounting/users',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
+  {
+    id: 7,
+    caption: 'Periods',
+    pageUrl: '/hq-accounting/periods',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
 ]
