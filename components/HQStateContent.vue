@@ -35,7 +35,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="stateEdit.salesTaxCafeteria"
+              v-model="stateEdit.salesTaxCafeteria"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -44,7 +44,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="stateEdit.salesTaxVending"
+              v-model="stateEdit.salesTaxVending"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -53,7 +53,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="stateEdit.salesTaxRestaurant"
+              v-model="stateEdit.salesTaxRestaurant"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -64,7 +64,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="stateEdit.salesTaxStore"
+              v-model="stateEdit.salesTaxStore"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -75,7 +75,7 @@
 
             <CustomInput
               v-if="isEdit === state.id"
-              v-model.number="stateEdit.grossReceiptsTax"
+              v-model="stateEdit.grossReceiptsTax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -104,35 +104,35 @@
             />
 
             <CustomInput
-              v-model.number="stateNew.salesTaxCafeteria"
+              v-model="stateNew.salesTaxCafeteria"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="stateNew.salesTaxVending"
+              v-model="stateNew.salesTaxVending"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="stateNew.salesTaxRestaurant"
+              v-model="stateNew.salesTaxRestaurant"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="stateNew.salesTaxStore"
+              v-model="stateNew.salesTaxStore"
               type="number"
               rules="required|double"
               do-not-show-error-message
             />
 
             <CustomInput
-              v-model.number="stateNew.grossReceiptsTax"
+              v-model="stateNew.grossReceiptsTax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -209,11 +209,11 @@ export default {
       const editedState = {
         id: state.id,
         code: this.stateEdit.code,
-        salesTaxCafeteria: this.stateEdit.salesTaxCafeteria,
-        salesTaxVending: this.stateEdit.salesTaxVending,
-        salesTaxRestaurant: this.stateEdit.salesTaxRestaurant,
-        salesTaxStore: this.stateEdit.salesTaxStore,
-        grossReceiptsTax: this.stateEdit.grossReceiptsTax,
+        salesTaxCafeteria: +this.stateEdit.salesTaxCafeteria,
+        salesTaxVending: +this.stateEdit.salesTaxVending,
+        salesTaxRestaurant: +this.stateEdit.salesTaxRestaurant,
+        salesTaxStore: +this.stateEdit.salesTaxStore,
+        grossReceiptsTax: +this.stateEdit.grossReceiptsTax,
       }
 
       this.mutationAction(
@@ -236,7 +236,16 @@ export default {
     addState() {
       this.mutationAction(
         CreateState,
-        { stateInput: this.stateNew },
+        {
+          stateInput: {
+            code: this.stateNew.code,
+            salesTaxCafeteria: +this.stateNew.salesTaxCafeteria,
+            salesTaxVending: +this.stateNew.salesTaxVending,
+            salesTaxRestaurant: +this.stateNew.salesTaxRestaurant,
+            salesTaxStore: +this.stateNew.salesTaxStore,
+            grossReceiptsTax: +this.stateNew.grossReceiptsTax,
+          },
+        },
         States,
         'Add state success',
         'Add state error'

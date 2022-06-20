@@ -21,6 +21,13 @@
             class="table-row"
           >
             <CustomRadioButton
+              v-if="isEdit === item.id"
+              :is-active="itemEdit.monthly"
+              :disabled="isEdit !== item.id"
+              @set-is-active="setIsMonthlyEdit(item)"
+            />
+            <CustomRadioButton
+              v-else
               :is-active="item.monthly"
               :disabled="isEdit !== item.id"
               @set-is-active="setIsMonthly(item)"
@@ -31,13 +38,13 @@
               :options="glAccounts"
               select-by="name"
               :selected-item="item.glAccount"
-              @input="selectGlAccount"
+              @input="selectGlAccountEdit"
             />
             <span v-else>{{ item.glAccount.name }}</span>
 
             <CustomInput
               v-if="isEdit === item.id"
-              v-model="item.amount"
+              v-model="itemEdit.amount"
               rules="required|double|currency"
               do-not-show-error-message
               type="number"
@@ -48,7 +55,7 @@
 
             <CustomInput
               v-if="isEdit === item.id"
-              v-model="item.comments"
+              v-model="itemEdit.comments"
               rules="required"
               do-not-show-error-message
             />
@@ -57,7 +64,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === item.id"
               :is-delete-active="isDelete === item.id"
-              @edit="edit(item.id)"
+              @edit="editItem(item)"
               @delete="deleteItem(item.id)"
               @cancel="cancelExpensesEdit"
               @cancel-delete="cancelDelete"
@@ -159,9 +166,17 @@ export default {
         glAccount: '',
         amount: '',
       },
+      itemEdit: {},
     }
   },
   methods: {
+    editItem(item) {
+      this.itemEdit = Object.assign({}, item)
+      this.edit(item.id)
+    },
+    selectGlAccountEdit(glAccount) {
+      this.itemEdit.glAccount = glAccount
+    },
     selectGlAccount(glAccount) {
       this.newItem.glAccount = glAccount
     },
@@ -183,6 +198,9 @@ export default {
         'Add fixed expense error'
       )
     },
+    setIsMonthlyEdit() {
+      this.itemEdit.monthly = !this.itemEdit.monthly
+    },
     setIsMonthly(fixedExpenses) {
       if (fixedExpenses) {
         fixedExpenses.monthly = !fixedExpenses.monthly
@@ -202,12 +220,12 @@ export default {
     confirmEdit(expense) {
       const editedFixedExpense = {
         id: expense.id,
-        comments: expense.comments,
+        comments: this.itemEdit.comments,
         glAccount: {
-          connect: expense.glAccount.id,
+          connect: this.itemEdit.glAccount.id,
         },
-        amount: expense.amount,
-        monthly: expense.monthly,
+        amount: this.itemEdit.amount,
+        monthly: this.itemEdit.monthly,
       }
 
       this.mutationAction(
@@ -222,18 +240,7 @@ export default {
       this.isAdd = false
       this.isHide = false
     },
-    async fetchData() {
-      const {
-        data: { fixedExpenses },
-      } = await this.$apollo.query({
-        query: FixedExpense,
-        fetchPolicy: 'no-cache',
-      })
-
-      return fixedExpenses
-    },
-    async cancelExpensesEdit() {
-      this.fixedExpenses = await this.fetchData()
+    cancelExpensesEdit() {
       this.cancelEdit()
     },
   },

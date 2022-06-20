@@ -24,7 +24,7 @@
               :options="states"
               :selected-item="city.state"
               select-by="code"
-              @input="selectState"
+              @input="selectStateEdit"
             />
             <span v-else>
               {{ city.state && city.state.code }}
@@ -32,7 +32,7 @@
 
             <CustomInput
               v-if="isEdit === city.id"
-              v-model="city.name"
+              v-model="cityEdit.name"
               rules="required"
               do-not-show-error-message
             />
@@ -42,8 +42,8 @@
 
             <CustomInput
               v-if="isEdit === city.id"
-              v-model.number="city.tax"
-              rules="required|double"
+              v-model="cityEdit.tax"
+              type="number"
               do-not-show-error-message
             />
             <span v-else>
@@ -53,7 +53,7 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === city.id"
               :is-delete-active="isDelete === city.id"
-              @edit="edit(city.id)"
+              @edit="editCity(city)"
               @delete="deleteItem(city.id)"
               @cancel="cancelCityEdit"
               @cancel-delete="cancelDelete"
@@ -76,7 +76,7 @@
             />
 
             <CustomInput
-              v-model.number="cityNew.tax"
+              v-model="cityNew.tax"
               type="number"
               rules="required|double"
               do-not-show-error-message
@@ -150,26 +150,16 @@ export default {
         state: null,
         tax: '',
       },
+      cityEdit: {},
     }
   },
-  watch: {
-    async isEdit(oldVal, newVal) {
-      this.cities = await this.fetchData()
-    },
-  },
-  async destroyed() {
-    this.cities = await this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const {
-        data: { cities },
-      } = await this.$apollo.query({
-        query: Cities,
-        fetchPolicy: 'no-cache',
-      })
-
-      return cities
+    editCity(city) {
+      this.cityEdit = Object.assign({}, city)
+      this.edit(city.id)
+    },
+    selectStateEdit(state) {
+      this.cityEdit.state = state
     },
     selectState(state) {
       this.cityNew.state = state
@@ -183,7 +173,7 @@ export default {
             state: {
               connect: Number(this.cityNew.state.id),
             },
-            tax: this.cityNew.tax,
+            tax: +this.cityNew.tax,
           },
         },
         Cities,
@@ -194,11 +184,11 @@ export default {
     confirmEdit(city) {
       const editedCity = {
         id: city.id,
-        name: city.name,
+        name: this.cityEdit.name,
         state: {
-          connect: this.cityNew.state.id,
+          connect: this.cityEdit.state.id,
         },
-        tax: city.tax,
+        tax: +this.cityEdit.tax,
       }
 
       this.mutationAction(
@@ -218,8 +208,7 @@ export default {
         'Delete state error'
       )
     },
-    async cancelCityEdit() {
-      this.cities = await this.fetchData()
+    cancelCityEdit() {
       this.cancelEdit()
     },
   },

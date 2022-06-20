@@ -7,7 +7,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="payrollTaxPercent"
+              v-model="payrollTaxPercent"
               type="number"
               rules="required"
               placeholder="0%"
@@ -20,7 +20,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="benefitsAmount"
+              v-model="benefitsAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -35,7 +35,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="vendingIncome"
+              v-model="vendingIncome"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -48,7 +48,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="commissionAmount"
+              v-model="commissionAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -63,7 +63,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="vacationAmount"
+              v-model="vacationAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"
@@ -90,7 +90,7 @@
 
           <template #input>
             <CustomInput
-              v-model.number="businessInsuranceAmount"
+              v-model="businessInsuranceAmount"
               type="number"
               rules="required|currency"
               placeholder="$0.00"

@@ -167,7 +167,7 @@
 
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
-                  v-model="glTypeCode.code"
+                  v-model="glTypeCodeEdit.code"
                   rules="required"
                   do-not-show-error-message
                 />
@@ -175,7 +175,7 @@
 
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
-                  v-model="glTypeCode.description"
+                  v-model="glTypeCodeEdit.description"
                   rules="required"
                   do-not-show-error-message
                 />
@@ -184,7 +184,7 @@
                 <CustomTableIconsColumn
                   :is-edit-active="editGlTypeCodeId === glTypeCode.id"
                   :is-delete-active="isDelete === glTypeCode.id"
-                  @edit="editGlTypeCode(glTypeCode.id)"
+                  @edit="editGlTypeCode(glTypeCode)"
                   @delete="deleteItem(glTypeCode.id)"
                   @cancel="cancelGlTypeCodesCopyEdit"
                   @cancel-delete="cancelDelete"
@@ -293,15 +293,13 @@ export default {
       glAccount: '',
       glSubAccount: '',
       isAttachGlAccounts: false,
+      glTypeCodeEdit: false,
     }
   },
   watch: {
     glAccount() {
       this.glSubAccount = ''
     },
-  },
-  async destroyed() {
-    this.glTypeCodes = await this.fetchData()
   },
   methods: {
     nameWithId({ name, id }) {
@@ -312,16 +310,6 @@ export default {
     },
     cancelAttach() {
       this.isAttachGlAccounts = false
-    },
-    async fetchData() {
-      const {
-        data: { glTypeCodes },
-      } = await this.$apollo.query({
-        query: GlTypeCodes,
-        fetchPolicy: 'no-cache',
-      })
-
-      return glTypeCodes
     },
     addGlTypeRow() {
       this.isAddGlTypeCode = true
@@ -354,8 +342,8 @@ export default {
       const unit = this.unit
       const editedUnitType = {
         id: GlType.id,
-        code: GlType.code,
-        description: GlType.description,
+        code: this.glTypeCodeEdit.code,
+        description: this.glTypeCodeEdit.description,
       }
 
       await this.mutationAction(
@@ -439,11 +427,11 @@ export default {
         this.unit = updateUnit
       }
     },
-    editGlTypeCode(id) {
-      this.editGlTypeCodeId = id
+    editGlTypeCode(glTypeCode) {
+      this.glTypeCodeEdit = Object.assign({}, glTypeCode)
+      this.editGlTypeCodeId = glTypeCode.id
     },
-    async cancelGlTypeCodesCopyEdit() {
-      this.glTypeCodes = await this.fetchData()
+    cancelGlTypeCodesCopyEdit() {
       this.isHide = false
       this.editGlTypeCodeId = null
     },

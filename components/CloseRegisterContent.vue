@@ -2,7 +2,9 @@
   <div>
     <PageSubheader>
       <PageSubheaderItem>
-        <template v-if="me" #title>{{ me.selectedUnit.id }}</template>
+        <template v-if="me" #title>{{
+          me.selectedUnit && me.selectedUnit.id
+        }}</template>
 
         <template #subtitle>Unit Number</template>
       </PageSubheaderItem>
@@ -50,7 +52,10 @@
     </PageSubheader>
 
     <PageContentWrapper>
-      <div class="content">
+      <h2 v-if="unitRegisters && !unitRegisters.length">
+        Please, add register to the unit
+      </h2>
+      <div v-else class="content">
         <div class="inputs-block">
           <h2 class="title">Select Register To Close</h2>
 
@@ -229,7 +234,7 @@ export default {
     formatDateForCloseRegister,
     formatDateFromAPI,
     selectRegister(register) {
-      if (!this.getIsEdit) {
+      if (!this.getIsEdit && register) {
         this.register = register
         this.$store.commit('closeRegister/SET_REGISTER', register)
       }
