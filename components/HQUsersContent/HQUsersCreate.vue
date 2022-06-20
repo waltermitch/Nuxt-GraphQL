@@ -83,7 +83,7 @@
       </div>
     </div>
     <div class="buttons-area">
-      <DefaultButton @event="addUser"> Add User</DefaultButton>
+      <DefaultButton @event="addUser">+ Add User</DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelAdd">
         Cancel</DefaultButton

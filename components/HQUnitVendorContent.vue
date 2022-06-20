@@ -270,9 +270,10 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 12px 0;
 
   @media screen and (min-width: $lg) {
-    grid-template-columns: 80px repeat(2, 100px) 220px;
+    grid-template-columns: 70px 100px 180px 220px;
   }
   @media screen and (max-width: $lg) {
     grid-template-columns: 80px repeat(2, 26%) auto;
@@ -281,7 +282,7 @@ export default {
 
   &--unit {
     @media screen and (min-width: $lg) {
-      grid-template-columns: 80px repeat(2, 100px);
+      grid-template-columns: 80px 100px calc(100% - 240px);
     }
     @media screen and (max-width: $lg) {
       grid-template-columns: 80px repeat(2, 26%);
@@ -289,10 +290,20 @@ export default {
   }
 }
 
+.row {
+  padding: 6px 10px;
+
+  span {
+    min-height: 41px;
+    display: flex;
+    align-items: center;
+  }
+}
+
 .table {
   &--right {
     @media screen and (min-width: $xl) {
-      width: 50% !important;
+      width: 42% !important;
     }
     @media screen and (max-width: $xl) {
       width: 100% !important;
@@ -300,7 +311,7 @@ export default {
   }
   &--left {
     @media screen and (min-width: $xl) {
-      width: 70% !important;
+      width: 58% !important;
     }
     @media screen and (max-width: $xl) {
       width: 100% !important;

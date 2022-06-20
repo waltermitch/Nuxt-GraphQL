@@ -28,6 +28,7 @@ export default {
 .row {
   padding: 10px 20px;
   border-bottom: 1px solid $white-smoke;
+  font-size: 14px;
 
   &--active {
     background: $firebrick;

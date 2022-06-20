@@ -26,7 +26,10 @@
       <CustomTable v-if="units" class="table-reports">
         <template #header>
           <div class="table-row">
-            <span>Select</span>
+            <CustomRadioButton
+            :is-active="selectAllUnits"
+            @set-is-active="setSelectAllUnits()"
+          />
 
             <span>Unit</span>
 
@@ -53,9 +56,9 @@
           </CustomTableContent>
 
           <CustomTableRow class="table-row footer-row">
-            <DefaultButton @event="selectAllUnits"> Select All </DefaultButton>
+            <!-- <DefaultButton @event="selectAllUnits"> Select All </DefaultButton>
 
-            <DefaultButton @event="selectNone"> Select None </DefaultButton>
+            <DefaultButton @event="selectNone"> Select None </DefaultButton> -->
 
             <DefaultButton
               :disabled="!selectedUnits.length || !periodEndDate.id"
@@ -118,6 +121,7 @@ export default {
     return {
       district: '',
       periodEndDate: '',
+      selectAllUnits: false,
     }
   },
   computed: {
@@ -145,17 +149,14 @@ export default {
         return unit
       })
     },
-    selectAllUnits() {
-      this.units = this.units.map((unit) => ({
-        ...unit,
-        selected: true,
-      }))
-    },
-    selectNone() {
-      this.units = this.units.map((unit) => ({
-        ...unit,
-        selected: false,
-      }))
+    setSelectAllUnits(){
+      this.units = this.units.map((item) => {
+        return {
+          ...item,
+          selected: !this.selectAllUnits,
+        }
+      })
+      this.selectAllUnits = !this.selectAllUnits
     },
     async openReport() {
       const {
@@ -191,15 +192,18 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
-
+  padding: 10px 0px;
   @media screen and(min-width: $sm) {
-    grid-template-columns: 50px 100px 300px;
+    grid-template-columns: 80px 200px auto;
   }
   @media screen and(max-width: $sm) {
     grid-template-columns: 50px 110px 110px;
   }
 }
 
+.row {
+  padding: 16px 10px;
+}
 .footer-row {
   grid-template-columns: repeat(3, 150px);
 
@@ -222,7 +226,7 @@ export default {
 }
 
 .table-reports {
-  margin-top: 25px;
+  margin-top: 20px;
   @media screen and(max-width: $xl) {
     width: 100% !important;
     &:last-child {

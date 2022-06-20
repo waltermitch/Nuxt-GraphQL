@@ -147,7 +147,7 @@
     </ValidationObserver>
 
     <div v-if="isAdd" class="buttons-area">
-      <DefaultButton @event="addState"> Add State </DefaultButton>
+      <DefaultButton @event="addState">+ Add State </DefaultButton>
 
       <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
     </div>
@@ -264,8 +264,12 @@ export default {
   align-items: center;
   grid-template-columns: 40px repeat(5, 150px) auto;
   column-gap: 30px;
+  padding: 12px 0;
 }
 
+.row {
+  padding: 16.5px 10px;
+}
 .icon {
   cursor: pointer;
 

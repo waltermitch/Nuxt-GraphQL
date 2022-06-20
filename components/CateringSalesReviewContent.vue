@@ -95,6 +95,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 170px 320px 150px auto;
   }
@@ -104,8 +105,11 @@ export default {
   column-gap: 20px;
 }
 
+.row {
+  padding: 5px 10px;
+}
 .table-content-row {
-  height: 60px;
+  height: 53px;
 }
 
 .icon {

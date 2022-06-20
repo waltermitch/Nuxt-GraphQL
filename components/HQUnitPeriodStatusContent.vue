@@ -91,6 +91,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 80px repeat(2, 300px) 80px;
   }
@@ -98,5 +99,15 @@ export default {
     grid-template-columns: 80px repeat(2, 120px) 80px;
   }
   column-gap: 30px;
+}
+
+.row {
+  padding: 6px 10px;
+
+  span {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
 }
 </style>

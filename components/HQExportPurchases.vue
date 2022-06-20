@@ -195,6 +195,7 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
+  padding: 12px 0;
   @media screen and (min-width: $md) {
     grid-template-columns: 40px 150px 320px;
   }
@@ -203,8 +204,12 @@ export default {
   }
 }
 
+.row {
+  padding: 16.5px 10px;
+}
+
 .input {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 
   @media screen and(max-width: $sm) {
     display: flex;
@@ -213,6 +218,6 @@ export default {
 }
 
 .buttons-area {
-  margin-top: 32px;
+  margin-top: 20px;
 }
 </style>

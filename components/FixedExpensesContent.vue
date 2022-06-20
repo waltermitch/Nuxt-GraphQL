@@ -110,7 +110,7 @@
 
     <div v-if="isAdd" class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="createFixedExpense">
-        Add Expenses
+       + Add Expenses
       </DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEvent">

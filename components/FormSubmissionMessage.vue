@@ -46,6 +46,7 @@ export default {
 
   &--success {
     background: $eucalyptus;
+    color: #fff;
   }
 
   &--error {

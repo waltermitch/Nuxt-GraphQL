@@ -180,12 +180,17 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
+  padding: 12px 0;
   @media screen and (min-width: $lg) {
     grid-template-columns: 10% 30% 30% 25%;
   }
   @media screen and (max-width: $lg) {
     grid-template-columns: 120px 220px 220px 120px;
   }
+}
+
+.row {
+  padding: 5px 10px;
 }
 
 .table-full {

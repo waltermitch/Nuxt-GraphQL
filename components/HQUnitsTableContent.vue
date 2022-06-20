@@ -91,9 +91,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.table-content {
+  .header {
+    padding: 6px 10px;
+  
+    .table-row {
+      padding: 0;
+    }
+  }
+}
+
 .table-row {
   display: grid;
   align-items: center;
+  padding: 6px 10px;
   //grid-template-columns: 160px 340px 200px 160px auto;
   column-gap: 30px;
   @media screen and (min-width: $md) {
@@ -101,6 +113,12 @@ export default {
   }
   @media screen and (max-width: $md) {
     grid-template-columns: 100px 120px 120px 70px auto;
+  }
+
+  span {
+    height: 40px;
+    display: flex;
+    align-items: center;
   }
 }
 </style>

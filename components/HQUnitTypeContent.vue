@@ -125,7 +125,7 @@
       </CustomTable>
 
       <div v-if="isAdd" class="buttons-area">
-        <DefaultButton @event="addUnitType"> Add UnitType</DefaultButton>
+        <DefaultButton @event="addUnitType">+ Add UnitType</DefaultButton>
 
         <DefaultButton @event="cancelAdd"> Cancel</DefaultButton>
       </div>
@@ -356,6 +356,10 @@ export default {
   align-items: baseline;
   justify-content: space-between;
 
+  .table-row {
+    padding: 12px 0;
+  }
+
   @media screen and(max-width: $xl) {
     flex-direction: column;
   }
@@ -370,6 +374,7 @@ export default {
 .table-row {
   display: grid;
   align-items: center;
+  padding: 6px 10px;
   @media screen and(min-width: $md) {
     grid-template-columns: 100px 200px auto auto;
   }
