@@ -81,6 +81,7 @@ export default {
   apollo: {
     expenses: {
       query: Expenses,
+      fetchPolicy: 'network-only',
       variables: {
         activePeriod: true,
       },

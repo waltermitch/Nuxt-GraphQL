@@ -68,6 +68,7 @@ export default {
   apollo: {
     registerCloseouts: {
       query: RegisterCloseouts,
+      fetchPolicy: 'network-only',
       variables: {
         activePeriod: true,
       },
