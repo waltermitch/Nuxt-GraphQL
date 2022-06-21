@@ -296,4 +296,10 @@ export const HQ_ACCOUNTING = [
     pageUrl: '/hq-accounting/periods',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
+  {
+    id: 8,
+    caption: 'Expense Types',
+    pageUrl: '/hq-accounting/expense-types',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
 ]
