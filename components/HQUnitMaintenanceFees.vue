@@ -408,7 +408,6 @@ export default {
           vendors,
           activePeriod,
           periods,
-          employees,
           ...unitInput
         } = this.unit
         const res = await this.mutationAction(
@@ -441,9 +440,6 @@ export default {
               },
               users: {
                 sync: users.map((user) => user.id),
-              },
-              employees: {
-                sync: employees.map((employee) => employee.id),
               },
             },
           },

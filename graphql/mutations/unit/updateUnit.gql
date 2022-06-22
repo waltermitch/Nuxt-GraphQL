@@ -3,8 +3,5 @@
 mutation UpdateUnit($unitInput: UpdateUnitInput!) {
   updateUnit(unitInput: $unitInput) {
     ...UnitFragment
-    employees {
-      id
-    }
   }
 }
