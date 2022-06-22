@@ -32,9 +32,9 @@
       <CustomTable v-if="vendors" class="table table--left" :w-table="580">
         <template #header>
           <div class="table-row">
-            <span> Vendor ID </span>
-
             <span> Vendor Name </span>
+
+            <span> Vendor Code </span>
 
             <span> Vendor Term</span>
 
@@ -49,11 +49,11 @@
             class="table-row"
           >
             <span>
-              {{ vendor.id }}
+              {{ vendor.name }}
             </span>
 
             <span>
-              {{ vendor.name }}
+              {{ vendor.code }}
             </span>
 
             <span v-if="vendor.terms">
@@ -85,9 +85,9 @@
       >
         <template #header>
           <div class="table-row table-row--unit">
-            <span> Vendor ID </span>
-
             <span> Vendor Name </span>
+
+            <span> Vendor Code </span>
 
             <span> Vendor Term</span>
           </div>
@@ -100,11 +100,11 @@
             class="table-row table-row--unit"
           >
             <span>
-              {{ vendor.id }}
+              {{ vendor.name }}
             </span>
 
             <span>
-              {{ vendor.name }}
+              {{ vendor.code }}
             </span>
 
             <span v-if="vendor.terms">
@@ -273,19 +273,19 @@ export default {
   padding: 12px 0;
 
   @media screen and (min-width: $lg) {
-    grid-template-columns: 70px 100px 180px 220px;
+    grid-template-columns: 100px 100px 180px 220px;
   }
   @media screen and (max-width: $lg) {
-    grid-template-columns: 80px repeat(2, 26%) auto;
+    grid-template-columns: 100px repeat(2, 26%) auto;
   }
   column-gap: 20px;
 
   &--unit {
     @media screen and (min-width: $lg) {
-      grid-template-columns: 80px 100px calc(100% - 240px);
+      grid-template-columns: 100px 100px calc(100% - 240px);
     }
     @media screen and (max-width: $lg) {
-      grid-template-columns: 80px repeat(2, 26%);
+      grid-template-columns: 100px repeat(2, 26%);
     }
   }
 }
