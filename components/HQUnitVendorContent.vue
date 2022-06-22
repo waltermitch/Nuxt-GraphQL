@@ -95,7 +95,7 @@
 
         <template #content>
           <CustomTableRow
-            v-for="vendor in unit.vendors"
+            v-for="vendor in sortUnitVendors(unit.vendors)"
             :key="vendor.id"
             class="table-row table-row--unit"
           >
@@ -196,6 +196,25 @@ export default {
         this.unit = updateUnit
       }
     },
+
+    sortUnitVendors(array) {
+      if (!array || !array.length)
+        return array;
+
+      console.log(array);
+
+      return [];
+
+      // function compare(a, b) {
+      //   if (a.name < b.name)
+      //     return -1;
+      //   if (a.name > b.name)
+      //     return 1;
+      //   return 0;
+      // }
+      //
+      // return array.sort(compare);
+    }
   },
 }
 </script>
