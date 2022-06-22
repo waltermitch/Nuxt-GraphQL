@@ -115,19 +115,20 @@
               >
                 <span>{{ glAcc.id }}</span>
 
-                <span>{{ `${glAcc.id} - ${glAcc.name}` }}</span>
+                <span v-if="!glAcc.parent">{{
+                  `${glAcc.id} - ${glAcc.name}`
+                }}</span>
+                <span v-else></span>
 
-                <div v-if="glAcc.child">
-                  <span
-                    v-for="glSubaccount in glAcc.child"
-                    :key="glSubaccount.id"
-                    style="display: inline-block"
-                  >
-                    {{ `${glSubaccount.id} - ${glSubaccount.name}` }}
-                  </span>
+                <div v-if="glAcc.parent">
+                  {{ `${glAcc.id} - ${glAcc.name}` }}
                 </div>
+                <div v-else></div>
 
-                <span>{{
+                <span v-if="glAcc.parent">{{
+                  glAcc.parent.glTypeCode && glAcc.parent.glTypeCode.description
+                }}</span>
+                <span v-else-if="!glAcc.parent">{{
                   glAcc.glTypeCode && glAcc.glTypeCode.description
                 }}</span>
 
@@ -223,7 +224,7 @@
 
           <div v-if="isAddGlTypeCode" class="buttons-area">
             <DefaultButton @event="createGlTypeCode">
-             + Add Unit Type
+              + Add Unit Type
             </DefaultButton>
 
             <DefaultButton @event="cancelAddGlTypeCode"> Cancel </DefaultButton>

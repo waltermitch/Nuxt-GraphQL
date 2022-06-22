@@ -49,6 +49,10 @@ fragment UnitFragment on Unit {
     parent {
       id
       name
+      glTypeCode {
+        id
+        description
+      }
     }
     child {
       id
