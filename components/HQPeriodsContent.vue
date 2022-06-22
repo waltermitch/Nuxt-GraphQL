@@ -117,9 +117,9 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import Periods from '../graphql/queries/periods.gql'
-import CreatePeriod from '../graphql/mutations/periods/createPeriod.gql'
-import UpdatePeriod from '../graphql/mutations/periods/updatePeriod.gql'
-import DeletePeriod from '../graphql/mutations/periods/deletePeriod.gql'
+import CreatePeriod from '../graphql/mutations/period/createPeriod.gql'
+import UpdatePeriod from '../graphql/mutations/period/updatePeriod.gql'
+import DeletePeriod from '../graphql/mutations/period/deletePeriod.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
