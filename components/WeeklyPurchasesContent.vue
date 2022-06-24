@@ -76,6 +76,7 @@ export default {
   apollo: {
     purchases: {
       query: Purchases,
+      fetchPolicy: 'network-only',
       variables: {
         activePeriod: true,
       },

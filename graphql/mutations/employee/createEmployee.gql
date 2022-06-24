@@ -1,5 +1,0 @@
-mutation CreateEmployee($employeeInput: CreateEmployeeInput!) {
-  createEmployee(employeeInput: $employeeInput) {
-    id
-  }
-}

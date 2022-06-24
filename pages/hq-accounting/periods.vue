@@ -5,39 +5,39 @@
     </template>
 
     <template #header>
-      <PageSubtitle> Unit Setup / Unit Employee </PageSubtitle>
+      <PageSubtitle> Accounting / Periods </PageSubtitle>
 
-      <PageTitle> Employee </PageTitle>
+      <PageTitle> Periods </PageTitle>
     </template>
 
     <template #content>
-      <HQEmployeeToUnitContent />
+      <HQPeriodsContent />
     </template>
   </BasePageLayout>
 </template>
 
 <script>
-import { HQ_UNITS_TABS } from '~/constants/constants'
+import { HQ_ACCOUNTING } from '~/constants/constants'
 import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
-import HQEmployeeToUnitContent from '~/components/HQEmployeeToUnitContent.vue'
+import HQPeriodsContent from '~/components/HQPeriodsContent.vue'
 export default {
-  name: 'EmployeeToUnitPage',
+  name: 'PeriodsPage',
   components: {
     BasePageLayout,
     SideBar,
     PageSubtitle,
     PageTitle,
-    HQEmployeeToUnitContent,
+    HQPeriodsContent,
   },
-  mixins: [sideBarNavTabsMixin(HQ_UNITS_TABS)],
+  mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
-  },
+  }
 }
 </script>
 

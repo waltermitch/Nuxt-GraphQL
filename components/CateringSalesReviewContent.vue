@@ -53,6 +53,7 @@ export default {
   apollo: {
     cateringOrders: {
       query: CateringOrders,
+      fetchPolicy: 'network-only',
       variables: {
         activePeriod: true,
       },

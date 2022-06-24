@@ -38,7 +38,7 @@ export default {
       const forgotPasswordInput = {
         email: this.email,
         resetPasswordUrl:
-          'https://brock.staging.insanelab.com/reset-password?email=__EMAIL__&token=__TOKEN__',
+          '/reset-password?email=__EMAIL__&token=__TOKEN__',
       }
       const formValidated = await this.$refs.form.validate()
 

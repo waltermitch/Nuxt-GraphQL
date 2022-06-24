@@ -213,13 +213,7 @@ export const HQ_UNITS_TABS = [
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
   {
-    id: 7,
-    caption: 'Employee',
-    pageUrl: '/hq-unit-setup/employee',
-    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
-  },
-  {
-    id: 8,
+    id: 6,
     caption: 'Unit Period Status',
     pageUrl: '/hq-unit-setup/unit-period-status',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
@@ -288,6 +282,18 @@ export const HQ_ACCOUNTING = [
     id: 6,
     caption: 'Users',
     pageUrl: '/hq-accounting/users',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 7,
+    caption: 'Periods',
+    pageUrl: '/hq-accounting/periods',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 8,
+    caption: 'Expense Types',
+    pageUrl: '/hq-accounting/expense-types',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
 ]

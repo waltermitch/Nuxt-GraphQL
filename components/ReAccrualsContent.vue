@@ -21,17 +21,21 @@
 
         <template v-if="reAccruals" #content>
           <CustomTableRow
-            v-for="reAccrual in reAccruals"
+            v-for="reAccrual in unitsReAccruals"
             :key="reAccrual.id"
             class="table-row table-content-row"
           >
             <span> {{ reAccrual.glAccount.id }} </span>
 
-            <span> {{ reAccrual.glAccount.name }} </span>
+            <span v-if="reAccrual.glAccount">
+              {{ reAccrual.glAccount.name }}
+            </span>
+            <span v-else></span>
 
             <span> {{ reAccrual.amount }} </span>
 
-            <span> {{ reAccrual.vendor.name }} </span>
+            <span v-if="reAccrual.vendor"> {{ reAccrual.vendor.name }} </span>
+            <span v-else></span>
 
             <span> {{ formatDateFromAPI(reAccrual.expenseDate) }}</span>
 
@@ -64,12 +68,20 @@ export default {
   apollo: {
     reAccruals: {
       query: ReAccruals,
+      fetchPolicy: 'network-only',
     },
     expenseTypes: {
       query: ExpenseTypes,
     },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  computed: {
+    unitsReAccruals() {
+      return this.reAccruals.filter(
+        (reAccrual) => reAccrual.unit.id === this.selectedUnit.id
+      )
+    },
+  },
   methods: {
     formatDateFromAPI,
     setExpensesType(expenseType) {

@@ -3,8 +3,5 @@
 query Units {
   units {
     ...UnitFragment
-    employees {
-      id
-    }
   }
 }
