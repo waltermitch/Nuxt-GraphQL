@@ -304,9 +304,6 @@ export default {
   },
   methods: {
     nameWithId({ name, code }) {
-      console.log('name-id', name+' - '+id);
-      console.log('here', this.units);
-      console.log('this',this);
       return `${code} — ${name}`
     },
     showAttachGlAccounts() {
