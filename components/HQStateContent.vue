@@ -40,7 +40,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else>{{ state.salesTaxCafeteria }}</span>
+            <span v-else>{{ state.salesTaxCafeteria }}%</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -49,7 +49,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else> {{ state.salesTaxVending }}</span>
+            <span v-else> {{ state.salesTaxVending }}%</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -59,7 +59,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ state.salesTaxRestaurant }}
+              {{ state.salesTaxRestaurant }}%
             </span>
 
             <CustomInput
@@ -70,7 +70,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ state.salesTaxStore }}
+              {{ state.salesTaxStore }}%
             </span>
 
             <CustomInput
@@ -81,7 +81,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ state.grossReceiptsTax }}
+              {{ state.grossReceiptsTax }}%
             </span>
 
             <CustomTableIconsColumn

@@ -32,7 +32,7 @@
             @set-is-active="setSelectAllUnits()"
           />
 
-          <span> Unit id </span>
+          <span> Unit Number </span>
 
           <span> Unit </span>
         </div>

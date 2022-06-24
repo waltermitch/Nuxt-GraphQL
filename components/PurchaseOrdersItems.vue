@@ -20,7 +20,8 @@
           <CustomInput
             :value="item.amount"
             rules="required|currency"
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
             type="number"
             do-not-show-error-message
             @input="(e) => updateItems(item, Number(e), 'amount')"
@@ -57,7 +58,8 @@
           <CustomInput
             v-model.number="newItem.amount"
             rules="required|currency"
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
             type="number"
             do-not-show-error-message
           />

@@ -21,7 +21,8 @@
               v-model="managementAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -36,7 +37,8 @@
               v-model="managementPercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>
@@ -62,7 +64,8 @@
               v-model="administrativeAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -77,7 +80,8 @@
               v-model="administrativePercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>
@@ -100,7 +104,8 @@
               v-model="supportAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -115,7 +120,8 @@
               v-model="supportPercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>
@@ -130,7 +136,8 @@
               v-model="benefitsPercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>
@@ -154,7 +161,8 @@
               v-model="commissionPercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>

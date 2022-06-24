@@ -8,9 +8,10 @@
           <template #input>
             <CustomInput
               v-model.number="actualCashDeposit"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -21,7 +22,8 @@
           <template #input>
             <CustomInput
               v-model="calculatedCashDeposit"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
               disabled
             />
           </template>
@@ -33,7 +35,7 @@
           <template #title>Over/Short</template>
 
           <template #input>
-            <CustomInput v-model="overShort" placeholder="$0.00" disabled />
+            <CustomInput v-model="overShort" placeholder="0.00" symbol="$" disabled />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -45,9 +47,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountBreakfast"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -58,9 +61,10 @@
           <template #input>
             <CustomInput
               v-model.number="netSalesBreakfast"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -73,9 +77,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountLunch"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -86,9 +91,10 @@
           <template #input>
             <CustomInput
               v-model.number="netSalesLunch"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -101,9 +107,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountDinner"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -114,9 +121,10 @@
           <template #input>
             <CustomInput
               v-model.number="netSalesDinner"
-              placeholder="$0.00"
+              placeholder="0.00"
               rules="required|currency"
               type="number"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -129,8 +137,9 @@
           <template #input>
             <CustomInput
               v-model="customerCountTotals"
-              placeholder="$0.00"
+              placeholder="0.00"
               disabled
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -141,7 +150,8 @@
           <template #input>
             <CustomInput
               v-model="netSalesTotals"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
               disabled
             />
           </template>

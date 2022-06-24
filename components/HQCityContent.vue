@@ -47,7 +47,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ city.tax }}
+              {{ city.tax }}%
             </span>
 
             <CustomTableIconsColumn

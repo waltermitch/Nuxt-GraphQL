@@ -49,7 +49,7 @@
               do-not-show-error-message
             />
             <span v-else>
-              {{ county.tax }}
+              {{ county.tax }}%
             </span>
 
             <CustomTableIconsColumn

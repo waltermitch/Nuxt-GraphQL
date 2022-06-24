@@ -3,19 +3,21 @@
     v-slot="{ errors, classes }"
     mode="eager"
     :rules="rules"
-    :vid="vid"
   >
-    <input
-      class="input"
-      :value="value"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :readonly="readonly"
-      :class="classes"
-      @keyup.enter="$emit('event')"
-      @input="setValue($event.target.value)"
-    />
+    <span :symbol="symbol">
+      <input
+        :symbol="symbol"
+        class="input"
+        :value="value"
+        :type="type"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :readonly="readonly"
+        :class="classes"
+        @keyup.enter="$emit('event')"
+        @input="setValue($event.target.value)"
+      />
+    </span>
     <span v-if="!doNotShowErrorMessage" class="error">{{ errors[0] }}</span>
   </ValidationProvider>
 </template>
@@ -57,6 +59,10 @@ export default {
     doNotShowErrorMessage: {
       type: Boolean,
       default: false,
+    },
+    symbol: {
+      type: String,
+      default: '',
     },
   },
   methods: {

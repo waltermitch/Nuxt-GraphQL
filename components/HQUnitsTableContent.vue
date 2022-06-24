@@ -4,7 +4,7 @@
     <CustomTable v-else :w-table="620">
       <template #header>
         <div class="table-row">
-          <span>Unit</span>
+          <span>Unit Number</span>
 
           <span>Name</span>
 

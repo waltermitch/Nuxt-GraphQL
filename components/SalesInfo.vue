@@ -8,8 +8,9 @@
           <CustomInput
             v-model.number="nonResetable"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -19,7 +20,7 @@
 
         <!-- TODO PECZIS Calculations-->
         <template #input>
-          <CustomInput v-model="netTotal" readonly disabled />
+          <CustomInput v-model="netTotal" readonly disabled symbol="$" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -30,7 +31,7 @@
 
         <!-- TODO PECZIS Calculations-->
         <template #input>
-          <CustomInput v-model="lastNonResetable" readonly disabled />
+          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" />
         </template>
       </InputWithTitle>
 
@@ -42,7 +43,8 @@
             v-model.number="netOV"
             rules="currency|required"
             type="number"
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -54,7 +56,7 @@
 
         <!-- TODO PECZIS Calculations-->
         <template #input>
-          <CustomInput v-model="totalToDistribute" readonly disabled />
+          <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" />
         </template>
       </InputWithTitle>
 
@@ -65,8 +67,9 @@
           <CustomInput
             v-model.number="netCharge"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -80,8 +83,9 @@
           <CustomInput
             v-model.number="taxFromTheTape"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -93,8 +97,9 @@
           <CustomInput
             v-model.number="netVoucher"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -108,8 +113,9 @@
           <CustomInput
             v-model.number="overringVoidTax"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -119,7 +125,7 @@
 
         <!-- TODO PECZIS Calculations-->
         <template #input>
-          <CustomInput v-model="netCash" readonly disabled />
+          <CustomInput v-model="netCash" readonly disabled symbol="$" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -132,8 +138,9 @@
           <CustomInput
             v-model.number="chargeTax"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -147,8 +154,9 @@
           <CustomInput
             v-model.number="voucherTax"
             rules="currency|required"
-            placeholder="$0.00"
+            placeholder="0.00"
             type="number"
+            symbol="$"
           />
         </template>
       </InputWithTitle>
@@ -160,7 +168,7 @@
 
         <!-- TODO PECZIS Calculations-->
         <template #input>
-          <CustomInput v-model="cashTax" readonly disabled />
+          <CustomInput v-model="cashTax" readonly disabled symbol="$" />
         </template>
       </InputWithTitle>
     </InputRow>

@@ -92,7 +92,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else> {{ register.bank }}$ </span>
+            <span v-else> ${{ register.bank }} </span>
 
             <CustomInput
               v-if="isEdit === register.id"
@@ -101,7 +101,7 @@
               rules="required|double"
               do-not-show-error-message
             />
-            <span v-else> {{ register.nonResetable }}$ </span>
+            <span v-else> ${{ register.nonResetable }} </span>
 
             <CustomInput
               v-if="isEdit === register.id"

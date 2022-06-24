@@ -77,7 +77,8 @@
             <template #input>
               <CustomInput
                 v-model.number="amount"
-                placeholder="$0.00"
+                placeholder="0.00"
+                symbol="$"
                 rules="required|currency"
                 type="number"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"

@@ -10,7 +10,8 @@
               v-model="payrollTaxPercent"
               type="number"
               rules="required"
-              placeholder="0%"
+              placeholder="0"
+              symbol="%"
             />
           </template>
         </InputWithTitle>
@@ -23,7 +24,8 @@
               v-model="benefitsAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -38,7 +40,8 @@
               v-model="vendingIncome"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -51,7 +54,8 @@
               v-model="commissionAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -66,7 +70,8 @@
               v-model="vacationAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -93,7 +98,8 @@
               v-model="businessInsuranceAmount"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>

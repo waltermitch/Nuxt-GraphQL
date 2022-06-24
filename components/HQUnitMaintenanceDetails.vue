@@ -3,7 +3,7 @@
     <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
         <InputWithTitle>
-          <template #title> Unit ID </template>
+          <template #title> Unit Number </template>
 
           <template #input>
             <CustomInput v-model="code" rules="required" />
@@ -29,16 +29,10 @@
         </InputWithTitle>
 
         <InputWithTitle>
-          <template #title> City </template>
+          <template #title> Zip Code </template>
 
           <template #input>
-            <CustomSelect
-              v-if="state"
-              :options="state.cities"
-              :selected-item="unitID && unit.city"
-              select-by="name"
-              @input="selectCity"
-            />
+            <CustomInput v-model="zip" rules="required" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -54,34 +48,6 @@
               :selected-item="unitID && unit.district"
               select-by="name"
               @input="selectDistrict"
-            />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title> County </template>
-
-          <template #input>
-            <CustomSelect
-              v-if="state"
-              :options="state.counties"
-              :selected-item="unitID && unit.county"
-              select-by="name"
-              @input="selectCounty"
-            />
-          </template>
-        </InputWithTitle>
-      </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
-          <template #title> Population </template>
-
-          <template #input>
-            <CustomInput
-              v-model.number="population"
-              rules="required"
-              type="number"
             />
           </template>
         </InputWithTitle>
@@ -103,6 +69,34 @@
 
       <InputRow>
         <InputWithTitle>
+          <template #title> Population </template>
+
+          <template #input>
+            <CustomInput
+              v-model.number="population"
+              rules="required"
+              type="number"
+            />
+          </template>
+        </InputWithTitle>
+
+        <InputWithTitle>
+          <template #title> County </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="state"
+              :options="state.counties"
+              :selected-item="unitID && unit.county"
+              select-by="name"
+              @input="selectCounty"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
           <template #title> Mgr First Name </template>
 
           <template #input>
@@ -111,10 +105,16 @@
         </InputWithTitle>
 
         <InputWithTitle>
-          <template #title> Zip Code </template>
+          <template #title> City </template>
 
           <template #input>
-            <CustomInput v-model="zip" rules="required" />
+            <CustomSelect
+              v-if="state"
+              :options="state.cities"
+              :selected-item="unitID && unit.city"
+              select-by="name"
+              @input="selectCity"
+            />
           </template>
         </InputWithTitle>
       </InputRow>

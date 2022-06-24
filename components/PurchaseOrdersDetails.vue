@@ -56,7 +56,8 @@
               v-model.number="purchaseTotal"
               type="number"
               rules="required|currency"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
           </template>
         </InputWithTitle>

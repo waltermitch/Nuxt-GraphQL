@@ -10,6 +10,7 @@
               v-model.number="totalPettyCash"
               type="number"
               rules="required|currency"
+              symbol="$"
             />
           </template>
         </InputWithTitle>
@@ -48,7 +49,8 @@
             <CustomInput
               :value="item.amount"
               do-not-show-error-message
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
               rules="required|currency"
               type="number"
               @input="(e) => updateItems(item, e, 'amount')"
@@ -70,7 +72,8 @@
 
             <CustomInput
               v-model="newItem.amount"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
               do-not-show-error-message
               type="number"
               rules="required|currency"

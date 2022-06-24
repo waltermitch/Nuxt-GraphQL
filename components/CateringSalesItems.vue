@@ -44,7 +44,8 @@
             :value="item.price"
             rules="required|currency"
             do-not-show-error-message
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
             type="number"
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
@@ -55,7 +56,8 @@
             :value="item.ext"
             rules="required|currency"
             do-not-show-error-message
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
             type="number"
             @input="(e) => updateItems(item, Number(e), 'ext')"
           />
@@ -86,7 +88,8 @@
             type="number"
             rules="required|currency"
             do-not-show-error-message
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
           />
 
           <CustomInput
@@ -94,7 +97,8 @@
             type="number"
             rules="required|currency"
             do-not-show-error-message
-            placeholder="$0.00"
+            placeholder="0.00"
+            symbol="$"
           />
         </CustomTableRow>
 
@@ -120,9 +124,10 @@
           <CustomInput
             v-model.number="tax"
             type="number"
-            placeholder="$0.00"
+            placeholder="0.00"
             do-not-show-error-message
             rules="currency"
+            symbol="$"
           />
         </CustomTableRow>
 

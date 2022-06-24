@@ -40,8 +40,9 @@
                 v-model.number="item.inventoryAmount.current"
                 rules="currency"
                 type="number"
-                placeholder="$0.00"
+                placeholder="0.00"
                 do-not-show-error-message
+                symbol="$"
               />
             </CustomTableRow>
 

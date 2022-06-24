@@ -9,7 +9,7 @@
 
             <span>Close Date</span>
 
-            <span> Unit id </span>
+            <span> Unit Number </span>
 
             <span> Register id </span>
           </div>

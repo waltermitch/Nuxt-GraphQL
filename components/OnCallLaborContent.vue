@@ -12,8 +12,9 @@
               <CustomInput
                 v-model.number="amount"
                 type="number"
-                placeholder="$0.00"
+                placeholder="0.00"
                 rules="required|currency"
+                symbol="$"
               />
             </template>
           </InputWithTitle>

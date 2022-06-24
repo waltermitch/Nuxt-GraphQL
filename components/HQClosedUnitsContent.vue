@@ -19,7 +19,7 @@
     <CustomTable v-if="unitsFromDistrict" class="table" :w-table="470">
       <template #header>
         <div class="table-row">
-          <span>Unit ID</span>
+          <span>Unit Number</span>
 
           <span>Unit Name</span>
 

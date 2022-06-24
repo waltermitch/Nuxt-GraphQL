@@ -48,7 +48,8 @@
               rules="required|double|currency"
               do-not-show-error-message
               type="number"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
 
             <span v-else>{{ item.amount }}</span>
@@ -91,7 +92,8 @@
               rules="required|double|currency"
               do-not-show-error-message
               type="number"
-              placeholder="$0.00"
+              placeholder="0.00"
+              symbol="$"
             />
 
             <CustomInput
