@@ -303,10 +303,12 @@ export default {
     },
   },
   methods: {
-    nameWithId({ name, code }) {
-      console.log(this);
-      console.log('here',this.units)
-      return `${code} — ${name}`
+    nameWithId({ name, code, id, }) {
+      if(code == undefined) {
+        return `${id} — ${name}`
+      }else {
+        return `${code} — ${name}`
+      }
     },
     showAttachGlAccounts() {
       this.isAttachGlAccounts = true

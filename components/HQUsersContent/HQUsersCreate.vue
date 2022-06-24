@@ -136,8 +136,12 @@ export default {
     ...mapActions({
       setShowAddUser: 'users/setShowAddUser',
     }),
-    nameWithId({ name, code }) {
-      return `${code} — ${name}`
+    nameWithId({ name, code, id }) {
+      if(code == undefined) {
+        return `${id} — ${name}`
+      }else {
+        return `${code} — ${name}`
+      }
     },
     setIsAdmin(isCheck) {
       if (isCheck) {
