@@ -227,13 +227,13 @@ export default {
       mockedList: [
         {
           id: 1,
-          value: 'DollarsPerWeek',
-          name: 'DollarsPerWeek',
+          value: 'Dollars per week',
+          name: 'Dollars per week',
         },
         {
           id: 2,
-          value: 'DollarsPerWeek',
-          name: 'DollarsPerWeek',
+          value: 'Dollars per week',
+          name: 'Dollars per week',
         },
       ],
     }
