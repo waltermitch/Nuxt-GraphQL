@@ -303,11 +303,11 @@ export default {
     },
   },
   methods: {
-    nameWithId({ name, id }) {
+    nameWithId({ name, code }) {
       console.log('name-id', name+' - '+id);
       console.log('here', this.units);
       console.log('this',this);
-      return `${id} — ${name}`
+      return `${code} — ${name}`
     },
     showAttachGlAccounts() {
       this.isAttachGlAccounts = true
