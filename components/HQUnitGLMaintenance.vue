@@ -305,6 +305,8 @@ export default {
   methods: {
     nameWithId({ name, id }) {
       console.log('name-id', name+' - '+id);
+      console.log('here', this.units);
+      console.log('this',this);
       return `${id} — ${name}`
     },
     showAttachGlAccounts() {
@@ -322,7 +324,6 @@ export default {
       this.isHideTypeCodes = false
     },
     selectUnit(item) {
-      console.log('here', this.units);
       this.unit = item
     },
     async createGlTypeCode() {
