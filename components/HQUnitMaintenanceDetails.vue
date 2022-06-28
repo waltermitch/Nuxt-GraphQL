@@ -11,44 +11,20 @@
         </InputWithTitle>
 
         <InputWithTitle>
-          <template #title> Street Address </template>
-
-          <template #input>
-            <CustomInput v-model="address" rules="required" />
-          </template>
-        </InputWithTitle>
-      </InputRow>
-
-      <InputRow>
-        <InputWithTitle>
           <template #title> Name </template>
 
           <template #input>
             <CustomInput v-model="name" rules="required" />
           </template>
         </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title> Zip Code </template>
-
-          <template #input>
-            <CustomInput v-model="zip" rules="required" />
-          </template>
-        </InputWithTitle>
       </InputRow>
 
       <InputRow>
         <InputWithTitle>
-          <template #title> District </template>
+          <template #title> Street Address </template>
 
           <template #input>
-            <CustomSelect
-              v-if="districts"
-              :options="districts"
-              :selected-item="unitID && unit.district"
-              select-by="name"
-              @input="selectDistrict"
-            />
+            <CustomInput v-model="address" rules="required" />
           </template>
         </InputWithTitle>
 
@@ -69,17 +45,18 @@
 
       <InputRow>
         <InputWithTitle>
-          <template #title> Population </template>
+          <template #title> City </template>
 
           <template #input>
-            <CustomInput
-              v-model.number="population"
-              rules="required"
-              type="number"
+            <CustomSelect
+              v-if="state"
+              :options="state.cities"
+              :selected-item="unitID && unit.city"
+              select-by="name"
+              @input="selectCity"
             />
           </template>
         </InputWithTitle>
-
         <InputWithTitle>
           <template #title> County </template>
 
@@ -97,23 +74,22 @@
 
       <InputRow>
         <InputWithTitle>
-          <template #title> Mgr First Name </template>
+          <template #title> Zip Code </template>
 
           <template #input>
-            <CustomInput v-model="managerFirstName" rules="required" />
+            <CustomInput v-model="zip" rules="required" />
           </template>
         </InputWithTitle>
-
         <InputWithTitle>
-          <template #title> City </template>
+          <template #title> District </template>
 
           <template #input>
             <CustomSelect
-              v-if="state"
-              :options="state.cities"
-              :selected-item="unitID && unit.city"
+              v-if="districts"
+              :options="districts"
+              :selected-item="unitID && unit.district"
               select-by="name"
-              @input="selectCity"
+              @input="selectDistrict"
             />
           </template>
         </InputWithTitle>
@@ -121,23 +97,38 @@
 
       <InputRow>
         <InputWithTitle>
+          <template #title> Population </template>
+
+          <template #input>
+            <CustomInput
+              v-model.number="population"
+              rules="required"
+              type="number"
+            />
+          </template>
+        </InputWithTitle>
+        <InputWithTitle>
+          <template #title>Sysco</template>
+
+          <template #input>
+            <CustomInput v-model="sysco" />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Mgr First Name </template>
+
+          <template #input>
+            <CustomInput v-model="managerFirstName" rules="required" />
+          </template>
+        </InputWithTitle>
+        <InputWithTitle>
           <template #title> Mgr Last Name </template>
 
           <template #input>
             <CustomInput v-model="managerLastName" rules="required" />
-          </template>
-        </InputWithTitle>
-
-        <InputWithTitle>
-          <template #title>Location Manager</template>
-
-          <template #input>
-            <CustomSelect
-              v-if="users"
-              :options="usersIsNotAdmin"
-              select-by="email"
-              @input="selectUser"
-            />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -167,13 +158,17 @@
           </template>
         </InputWithTitle>
       </InputRow>
-
       <InputRow>
         <InputWithTitle>
-          <template #title>Sysco</template>
+          <template #title>Location Manager</template>
 
           <template #input>
-            <CustomInput v-model="sysco" />
+            <CustomSelect
+              v-if="users"
+              :options="usersIsNotAdmin"
+              select-by="email"
+              @input="selectUser"
+            />
           </template>
         </InputWithTitle>
       </InputRow>
