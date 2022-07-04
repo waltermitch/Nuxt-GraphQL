@@ -161,20 +161,8 @@ export const REPORTS_NAV_TABS = [
 ]
 
 export const HQ_MAINTENANCE_TABS = [
-  // {
-  //   id: 1,
-  //   caption: 'Units Reporting',
-  //   pageUrl: '/hq-maintenance/units-reporting',
-  //   iconSrc: require('assets/images/icons/header/home.svg'),
-  // },
-  // {
-  //   id: 2,
-  //   caption: 'Send Unit Update',
-  //   pageUrl: '/hq-maintenance/send-unit-update',
-  //   iconSrc: require('assets/images/icons/hqIcons/default.svg'),
-  // },
   {
-    id: 3,
+    id: 1,
     caption: 'Export Data',
     pageUrl: '/hq-maintenance/export-data',
     iconSrc: require('assets/images/icons/hqIcons/export-purchases.svg'),
@@ -294,6 +282,24 @@ export const HQ_ACCOUNTING = [
     id: 8,
     caption: 'Expense Types',
     pageUrl: '/hq-accounting/expense-types',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 9,
+    caption: 'Inventory Categories',
+    pageUrl: '/hq-accounting/inventory-categories',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 10,
+    caption: 'Terms',
+    pageUrl: '/hq-accounting/terms',
+    iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+  {
+    id: 11,
+    caption: 'Calculation Codes',
+    pageUrl: '/hq-accounting/calculation-codes',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
   },
 ]

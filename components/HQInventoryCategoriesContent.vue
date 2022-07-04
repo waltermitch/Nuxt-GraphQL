@@ -21,19 +21,34 @@
           >
             <CustomInput
               v-if="isEdit === inventoryCategory.id"
-              v-model="inventoryCategoryEdit.type"
+              v-model="inventoryCategoryEdit.name"
               rules="required"
               do-not-show-error-message
             />
-            <span v-else>{{ inventoryCategory.type }}</span>
+            <span v-else>{{ inventoryCategory.name }}</span>
+
+            <CustomSelect
+              v-if="glAccounts && isEdit === inventoryCategory.id"
+              v-model="inventoryCategoryEdit.glAccount"
+              :options="glAccounts"
+              select-by="name"
+              :selected-item="
+                glAccounts.find((glAccount) =>
+                  inventoryCategory.glAccountId
+                    ? glAccount.id == inventoryCategory.glAccountId
+                    : glAccount.id == inventoryCategory.glAccount.id
+                )
+              "
+            />
+            <span v-else>{{ inventoryCategory.glAccount.name }}</span>
 
             <CustomInput
               v-if="isEdit === inventoryCategory.id"
-              v-model="inventoryCategoryEdit.description"
+              v-model="inventoryCategoryEdit.vending"
               rules="required"
               do-not-show-error-message
             />
-            <span v-else>{{ inventoryCategory.description }}</span>
+            <span v-else>{{ inventoryCategory.vending }}</span>
 
             <CustomTableIconsColumn
               :is-edit-active="isEdit === inventoryCategory.id"
@@ -49,13 +64,20 @@
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
-              v-model="inventoryCategoryNew.type"
+              v-model="inventoryCategoryNew.name"
               rules="required"
               do-not-show-error-message
             />
 
+            <CustomSelect
+              v-if="glAccounts"
+              v-model="inventoryCategoryNew.glAccount"
+              :options="glAccounts"
+              select-by="name"
+            />
+
             <CustomInput
-              v-model="inventoryCategoryNew.description"
+              v-model="inventoryCategoryNew.vending"
               rules="required"
               do-not-show-error-message
             />
@@ -78,7 +100,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import InventoryCategories from '../graphql/queries/inventoryCategories.gql'
+import InventoryCategories from '../graphql/queries/inventoryCategoriesSettings.gql'
 import CreateInventoryCategory from '../graphql/mutations/inventoryCategory/createInventoryCategory.gql'
 import UpdateInventoryCategory from '../graphql/mutations/inventoryCategory/updateInventoryCategory.gql'
 import DeleteInventoryCategory from '../graphql/mutations/inventoryCategory/deleteInventoryCategory.gql'
@@ -87,6 +109,7 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
@@ -106,12 +129,16 @@ export default {
     inventoryCategories: {
       query: InventoryCategories,
     },
+    glAccounts: {
+      query: GlAccounts,
+    },
   },
   data() {
     return {
       inventoryCategoryNew: {
-        type: '',
-        description: '',
+        name: '',
+        glAccount: '',
+        vending: '',
       },
       inventoryCategoryEdit: {},
     }
@@ -126,8 +153,11 @@ export default {
         CreateInventoryCategory,
         {
           inventoryCategoryInput: {
-            type: this.inventoryCategoryNew.type,
-            description: this.inventoryCategoryNew.description,
+            name: this.inventoryCategoryNew.name,
+            glAccount: {
+              connect: this.inventoryCategoryNew.glAccount.id,
+            },
+            vending: this.inventoryCategoryNew.vending,
           },
         },
         InventoryCategories,
@@ -138,8 +168,11 @@ export default {
     confirmEdit(inventoryCategory) {
       const editedInventoryCategory = {
         id: inventoryCategory.id,
-        type: this.inventoryCategoryEdit.type,
-        description: this.inventoryCategoryEdit.description,
+        name: this.inventoryCategoryEdit.name,
+        glAccount: {
+          connect: this.inventoryCategoryEdit.glAccount.id,
+        },
+        vending: this.inventoryCategoryEdit.vending,
       }
 
       this.mutationAction(
@@ -175,7 +208,7 @@ export default {
   column-gap: 30px;
   padding: 12px 0;
   @media screen and (min-width: $lg) {
-    grid-template-columns: 30% 30% 30% auto;
+    grid-template-columns: 30% 30% 10% auto;
   }
   @media screen and (max-width: $lg) {
     grid-template-columns: 200px 200px 100px auto;

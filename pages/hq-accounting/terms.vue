@@ -5,35 +5,35 @@
     </template>
 
     <template #header>
-      <PageSubtitle> Maintenance / Units Reporting </PageSubtitle>
+      <PageSubtitle> Accounting / Terms </PageSubtitle>
 
-      <PageTitle> Units Reporting </PageTitle>
+      <PageTitle> Terms </PageTitle>
     </template>
 
     <template #content>
-      <HQUnitsReportingContent />
+      <HQTermsContent />
     </template>
   </BasePageLayout>
 </template>
 
 <script>
-import { HQ_MAINTENANCE_TABS } from '~/constants/constants'
+import { HQ_ACCOUNTING } from '~/constants/constants'
 import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
-import HQUnitsReportingContent from '~/components/HQUnitsReportingContent.vue'
+import HQTermsContent from '~/components/HQTermsContent.vue'
 export default {
-  name: 'UnitsReporting',
+  name: 'TermsPage',
   components: {
     BasePageLayout,
     SideBar,
     PageSubtitle,
     PageTitle,
-    HQUnitsReportingContent,
+    HQTermsContent,
   },
-  mixins: [sideBarNavTabsMixin(HQ_MAINTENANCE_TABS)],
+  mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)

@@ -57,8 +57,7 @@ export const state = () => ({
     supportFeeType: '',
     supportPercent: '',
     benefitsPercent: '',
-    //  TODO Need more information on reg tax field
-    // regTax: '',
+    regTax: '',
     commissionPercent: '',
     isKronos: false,
   },
@@ -159,10 +158,7 @@ export const mutations = {
     state.unit.businessInsuranceAmount = payload
   },
   SET_UNIT_MANAGEMENT_FEE_TYPE(state, payload) {
-    state.unit = {
-      ...state.unit,
-      managementFeeType: payload,
-    }
+    state.unit.managementFeeType = payload
   },
   SET_UNIT_MANAGEMENT_FEE_DOLLAR(state, payload) {
     state.unit.managementAmount = payload
@@ -171,10 +167,7 @@ export const mutations = {
     state.unit.managementPercent = payload
   },
   SET_UNIT_ADMINISTRATIVE_FEE_TYPE(state, payload) {
-    state.unit = {
-      ...state.unit,
-      administrativeFeeType: payload,
-    }
+    state.unit.administrativeFeeType = payload
   },
   SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR(state, payload) {
     state.unit.administrativeAmount = payload
@@ -183,10 +176,7 @@ export const mutations = {
     state.unit.administrativePercent = payload
   },
   SET_UNIT_SUPPORT_FEE_TYPE(state, payload) {
-    state.unit = {
-      ...state.unit,
-      supportFeeType: payload,
-    }
+    state.unit.supportFeeType = payload
   },
   SET_UNIT_SUPPORT_FEE_DOLLAR(state, payload) {
     state.unit.supportAmount = payload
@@ -198,7 +188,10 @@ export const mutations = {
     state.unit.benefitsPercent = payload
   },
   SET_UNIT_REG_TAX(state, payload) {
-    state.unit.regTax = payload
+    state.unit = {
+      ...state.unit,
+      regTax: payload,
+    }
   },
   SET_UNIT_COMMISSION_PERCENT(state, payload) {
     state.unit.commissionPercent = payload

@@ -18,7 +18,7 @@
       <InputWithTitle>
         <template #title>Net Total</template>
 
-        <!-- TODO PECZIS Calculations-->
+        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="netTotal" readonly disabled symbol="$" />
         </template>
@@ -29,7 +29,7 @@
       <InputWithTitle>
         <template #title>Last Non-Resettable</template>
 
-        <!-- TODO PECZIS Calculations-->
+        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" />
         </template>
@@ -54,7 +54,7 @@
       <InputWithTitle>
         <template #title>Total To Distribute</template>
 
-        <!-- TODO PECZIS Calculations-->
+        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" />
         </template>
@@ -123,7 +123,7 @@
       <InputWithTitle>
         <template #title>Net Cash</template>
 
-        <!-- TODO PECZIS Calculations-->
+        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="netCash" readonly disabled symbol="$" />
         </template>
@@ -166,7 +166,7 @@
       <InputWithTitle>
         <template #title>Cash Tax</template>
 
-        <!-- TODO PECZIS Calculations-->
+        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="cashTax" readonly disabled symbol="$" />
         </template>

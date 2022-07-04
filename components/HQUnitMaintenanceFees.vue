@@ -7,7 +7,12 @@
 
           <template #input>
             <CustomSelect
-              :options="mockedList"
+              v-if="calculationCodes"
+              :options="calculationCodes"
+              select-by="description"
+              :selected-item="calculationCodes.find((calculationCode) =>
+                  calculationCode.code === unit.managementFeeType
+                )"
               @input="selectManagementFeeType"
             />
           </template>
@@ -50,7 +55,12 @@
 
           <template #input>
             <CustomSelect
-              :options="mockedList"
+              v-if="calculationCodes"
+              :options="calculationCodes"
+              select-by="description"
+              :selected-item="calculationCodes.find((calculationCode) =>
+                  calculationCode.code === unit.administrativeFeeType
+                )"
               @input="selectAdministrativeFeeType"
             />
           </template>
@@ -92,7 +102,15 @@
           <template #title> Support Fee - Type </template>
 
           <template #input>
-            <CustomSelect :options="mockedList" @input="selectSupportFeeType" />
+            <CustomSelect
+              v-if="calculationCodes"
+              :options="calculationCodes"
+              select-by="description"
+              :selected-item="calculationCodes.find((calculationCode) =>
+                  calculationCode.code === unit.supportFeeType
+                )"
+              @input="selectSupportFeeType"
+            />
           </template>
         </InputWithTitle>
 
@@ -141,15 +159,6 @@
             />
           </template>
         </InputWithTitle>
-
-        <!-- TODO Need more information on reg tax field-->
-        <!-- <InputWithTitle>
-          <template #title> Reg Tax </template>
-
-          <template #input>
-            <CustomSelect :options="mockedList" @input="selectRegTax" />
-          </template>
-        </InputWithTitle> -->
       </InputRow>
 
       <InputRow>
@@ -180,6 +189,22 @@
         </InputWithTitle>
       </InputRow>
 
+      <InputRow>
+        <InputWithTitle>
+          <template #title> Reg Tax </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="glAccounts"
+              :options="glAccounts"
+              :selected-item="unitID && unit.regTax"
+              select-by="name"
+              @input="selectRegTax"
+            />
+          </template>
+        </InputWithTitle>
+      </InputRow>
+
       <div class="buttons-area">
         <DefaultButton
           button-color-gamma="red"
@@ -203,6 +228,8 @@ import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
 import CreateUnit from '../graphql/mutations/unit/createUnit.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
 import Units from '../graphql/queries/units.gql'
+import GlAccounts from '../graphql/queries/glAccounts.gql'
+import CalculationCodes from '../graphql/queries/calculationCodes.gql'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -221,22 +248,13 @@ export default {
     CustomRadioButton,
   },
   mixins: [unitMaintenanceMixin, mutationMixin],
-  data() {
-    // TODO Remove mocked data
-    return {
-      mockedList: [
-        {
-          id: 1,
-          value: 'Dollars per week',
-          name: 'Dollars per week',
-        },
-        {
-          id: 2,
-          value: 'Dollars per week',
-          name: 'Dollars per week',
-        },
-      ],
-    }
+  apollo: {
+    calculationCodes: {
+      query: CalculationCodes,
+    },
+    glAccounts: {
+      query: GlAccounts,
+    },
   },
   computed: {
     managementFeeType() {
@@ -319,8 +337,13 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
       },
     },
-    regTax() {
-      return this.unit.regTax
+    regTax: {
+      get() {
+        return this.unit.regTax
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', value)
+      },
     },
     commissionPercent: {
       get() {
@@ -338,23 +361,23 @@ export default {
     selectManagementFeeType(managementFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_TYPE',
-        managementFeeType.value
+        managementFeeType.code
       )
     },
     selectAdministrativeFeeType(administrativeFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_TYPE',
-        administrativeFeeType.value
+        administrativeFeeType.code
       )
     },
     selectSupportFeeType(supportFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_SUPPORT_FEE_TYPE',
-        supportFeeType.value
+        supportFeeType.code
       )
     },
     selectRegTax(regTax) {
-      this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', regTax)
+      this.regTax = regTax
     },
     setIsKronos() {
       this.$store.commit('unitMaintenance/SET_UNIT_KRONOS', !this.unit.isKronos)
@@ -389,6 +412,9 @@ export default {
             },
             city: {
               connect: Number(this.unit.city.id),
+            },
+            regTax: {
+              connect: Number(this.unit.regTax.id),
             },
             users: {
               sync: users.map((user) => Number(user.id)),
@@ -445,6 +471,9 @@ export default {
               },
               city: {
                 connect: Number(this.unit.city.id),
+              },
+              regTax: {
+                connect: Number(this.unit.regTax.id),
               },
               users: {
                 sync: users.map((user) => user.id),

@@ -83,4 +83,7 @@ fragment UnitFragment on Unit {
   managerFirstName
   managerLastName
   isKronos
+  regTax {
+    ...GlAccountFragment
+  }
 }

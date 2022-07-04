@@ -49,13 +49,13 @@ export const UNIT = {
   managementPercent: '',
   administrativeFeeType: '',
   administrativeAmount: '',
+
   administrativePercent: '',
   supportAmount: '',
   supportFeeType: '',
   supportPercent: '',
   benefitsPercent: '',
-  //  TODO Need more information on reg tax field
-  // regTax: '',
+  regTax: '',
   commissionPercent: '',
   isKronos: false,
 }

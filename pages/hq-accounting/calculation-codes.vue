@@ -5,35 +5,34 @@
     </template>
 
     <template #header>
-      <PageSubtitle> Maintenance / Send Unit Update </PageSubtitle>
+      <PageSubtitle> Accounting / CalculationCodes </PageSubtitle>
 
-      <PageTitle> Send Unit Update </PageTitle>
+      <PageTitle> CalculationCodes </PageTitle>
     </template>
 
     <template #content>
-      <HQSendUnitUpdateContent />
+      <HQCalculationCodesContent />
     </template>
   </BasePageLayout>
 </template>
-
 <script>
-import { HQ_MAINTENANCE_TABS } from '~/constants/constants'
+import { HQ_ACCOUNTING } from '~/constants/constants'
 import { sideBarNavTabsMixin } from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
 import SideBar from '~/components/SideBar.vue'
 import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
-import HQSendUnitUpdateContent from '~/components/HQSendUnitUpdateContent.vue'
+import HQCalculationCodesContent from '~/components/HQCalculationCodesContent.vue'
 export default {
-  name: 'SendUnitUpdatePage',
+  name: 'CalculationCodesPage',
   components: {
     BasePageLayout,
     SideBar,
     PageSubtitle,
     PageTitle,
-    HQSendUnitUpdateContent,
+    HQCalculationCodesContent,
   },
-  mixins: [sideBarNavTabsMixin(HQ_MAINTENANCE_TABS)],
+  mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
