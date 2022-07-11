@@ -303,7 +303,7 @@ export default {
 .table {
   &--right {
     @media screen and (min-width: $xl) {
-      width: 42% !important;
+      width: 40% !important;
     }
     @media screen and (max-width: $xl) {
       width: 100% !important;
@@ -311,7 +311,7 @@ export default {
   }
   &--left {
     @media screen and (min-width: $xl) {
-      width: 58% !important;
+      width: 60% !important;
     }
     @media screen and (max-width: $xl) {
       width: 100% !important;

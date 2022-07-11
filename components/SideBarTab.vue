@@ -1,6 +1,7 @@
 <template>
   <NuxtLink :to="pageUrl" class="tab">
-    <img :src="iconSrc" class="icon" />
+    <!-- <img :src="iconSrc" class="icon" /> -->
+    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
     <span class="caption">{{ caption }}</span>
   </NuxtLink>
 </template>
@@ -63,6 +64,11 @@ export default {
     width: 100%;
   }
 
+  i {
+    color: $firebrick;
+    transition: all .1s linear;
+  }
+
   img.icon {
     filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(991%)
       hue-rotate(185deg) brightness(84%) contrast(94%);
@@ -70,6 +76,10 @@ export default {
 
   &:hover {
     background: $firebrick;
+  
+    i {
+      color: #fff;
+    }
 
     span.caption {
       color: #fff;
