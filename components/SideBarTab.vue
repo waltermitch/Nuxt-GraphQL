@@ -112,6 +112,9 @@ export default {
       hue-rotate(172deg) brightness(103%) contrast(105%);
   }
 
+  i {
+    color: #fff;
+  }
   span.caption {
     color: #fff;
   }
