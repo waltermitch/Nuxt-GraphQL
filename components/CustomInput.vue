@@ -29,6 +29,10 @@ export default {
   name: 'CustomInput',
   components: { ValidationProvider },
   props: {
+    isFloat: {
+      type: String,
+      default: ''
+    },
     value: {
       type: [String, Number],
       default: '',
@@ -71,7 +75,7 @@ export default {
       this.$emit('input', inputValue)
     },
     displayCell(value) {
-      return (typeof value === 'string') ? value : parseFloat(value !== '' ? value : 0).toFixed(2)
+      return (typeof value === 'string') ? value : (this.isFloat === "true" ? parseFloat(value !== '' ? value : 0).toFixed(2) : value)
     }
   },
 }

@@ -45,6 +45,7 @@
               v-model="cityEdit.tax"
               type="number"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('tax', true)"
             />
             <span v-else>
@@ -81,6 +82,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>

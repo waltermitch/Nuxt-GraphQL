@@ -39,6 +39,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxCafeteria', true)"
             />
             <span v-else>{{ parseFloat(state.salesTaxCafeteria).toFixed(2) }}%</span>
@@ -49,6 +50,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxVending', true)"
             />
             <span v-else> {{ parseFloat(state.salesTaxVending).toFixed(2) }}%</span>
@@ -59,6 +61,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxRestaurant', true)"
             />
             <span v-else>
@@ -71,6 +74,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxStore', true)"
             />
             <span v-else>
@@ -83,6 +87,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('grossReceiptsTax', true)"
             />
             <span v-else>
@@ -113,6 +118,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxCafeteria')"
             />
 
@@ -121,6 +127,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxVending')"
             />
 
@@ -129,6 +136,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxRestaurant')"
             />
 
@@ -137,6 +145,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('salesTaxStore')"
             />
 
@@ -145,6 +154,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('grossReceiptsTax')"
             />
           </CustomTableRow>

@@ -47,6 +47,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('tax')"
             />
             <span v-else>
@@ -83,6 +84,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>

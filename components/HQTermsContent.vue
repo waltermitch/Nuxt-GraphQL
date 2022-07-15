@@ -43,9 +43,11 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('discPercent', true)"
             />
             <span v-else>
-              {{ term.discPercent }}%
+              {{ parseFloat(term.discPercent).toFixed(2) }}%
             </span>
 
             <CustomInput
@@ -87,6 +89,8 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('discPercent')"
             />
 
             <CustomInput
@@ -155,6 +159,13 @@ export default {
     }
   },
   methods: {
+    onChangeFloatValue(stateProp, isEdit = false) {
+      if ( isEdit ) {
+        this.termEdit[stateProp] = parseFloat(this.termEdit[stateProp] !== '' ? this.termEdit[stateProp] : 0).toFixed(2)
+      } else {
+        this.termNew[stateProp] = parseFloat(this.termNew[stateProp] !== '' ? this.termNew[stateProp] : 0).toFixed(2)
+      }
+    },
     editTerm(term) {
       this.termEdit = Object.assign({}, term)
       this.edit(term.id)
