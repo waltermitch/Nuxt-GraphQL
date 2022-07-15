@@ -39,8 +39,9 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxCafeteria', true)"
             />
-            <span v-else>{{ state.salesTaxCafeteria }}%</span>
+            <span v-else>{{ parseFloat(state.salesTaxCafeteria).toFixed(2) }}%</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -48,8 +49,9 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxVending', true)"
             />
-            <span v-else> {{ state.salesTaxVending }}%</span>
+            <span v-else> {{ parseFloat(state.salesTaxVending).toFixed(2) }}%</span>
 
             <CustomInput
               v-if="isEdit === state.id"
@@ -57,9 +59,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxRestaurant', true)"
             />
             <span v-else>
-              {{ state.salesTaxRestaurant }}%
+              {{ parseFloat(state.salesTaxRestaurant).toFixed(2) }}%
             </span>
 
             <CustomInput
@@ -68,9 +71,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxStore', true)"
             />
             <span v-else>
-              {{ state.salesTaxStore }}%
+              {{ parseFloat(state.salesTaxStore).toFixed(2) }}%
             </span>
 
             <CustomInput
@@ -79,9 +83,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('grossReceiptsTax', true)"
             />
             <span v-else>
-              {{ state.grossReceiptsTax }}%
+              {{ parseFloat(state.grossReceiptsTax).toFixed(2) }}%
             </span>
 
             <CustomTableIconsColumn
@@ -108,6 +113,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxCafeteria')"
             />
 
             <CustomInput
@@ -115,6 +121,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxVending')"
             />
 
             <CustomInput
@@ -122,6 +129,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxRestaurant')"
             />
 
             <CustomInput
@@ -129,6 +137,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('salesTaxStore')"
             />
 
             <CustomInput
@@ -136,6 +145,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('grossReceiptsTax')"
             />
           </CustomTableRow>
 
@@ -201,6 +211,13 @@ export default {
     }
   },
   methods: {
+    onChangeFloatValue(stateProp, isEdit = false) {
+      if ( isEdit ) {
+        this.stateEdit[stateProp] = parseFloat(this.stateEdit[stateProp] !== '' ? this.stateEdit[stateProp] : 0).toFixed(2)
+      } else {
+        this.stateNew[stateProp] = parseFloat(this.stateNew[stateProp] !== '' ? this.stateNew[stateProp] : 0).toFixed(2)
+      }
+    },
     editState(state) {
       this.stateEdit = Object.assign({}, state)
       this.edit(state.id)

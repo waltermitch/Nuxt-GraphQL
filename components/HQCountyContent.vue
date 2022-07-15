@@ -47,9 +47,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('tax')"
             />
             <span v-else>
-              {{ county.tax }}%
+              {{ parseFloat(county.tax).toFixed(2) }}%
             </span>
 
             <CustomTableIconsColumn
@@ -82,6 +83,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>
 
@@ -141,6 +143,9 @@ export default {
     }
   },
   methods: {
+    onChangeFloatValue(stateProp) {
+      this.countyNew[stateProp] = parseFloat(this.countyNew[stateProp] !== '' ? this.countyNew[stateProp] : 0).toFixed(2)
+    },
     editCounty(county) {
       this.countyNew = Object.assign({}, county)
       this.edit(county.id)

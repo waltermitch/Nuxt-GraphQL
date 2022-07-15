@@ -45,9 +45,10 @@
               v-model="cityEdit.tax"
               type="number"
               do-not-show-error-message
+              @change="onChangeFloatValue('tax', true)"
             />
             <span v-else>
-              {{ city.tax }}%
+              {{ parseFloat(city.tax).toFixed(2) }}%
             </span>
 
             <CustomTableIconsColumn
@@ -80,6 +81,7 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>
 
@@ -154,6 +156,13 @@ export default {
     }
   },
   methods: {
+    onChangeFloatValue(stateProp, isEdit = false) {
+      if ( isEdit ) {
+        this.cityEdit[stateProp] = parseFloat(this.cityEdit[stateProp] !== '' ? this.cityEdit[stateProp] : 0).toFixed(2)
+      } else {
+        this.cityNew[stateProp] = parseFloat(this.cityNew[stateProp] !== '' ? this.cityNew[stateProp] : 0).toFixed(2)
+      }
+    },
     editCity(city) {
       this.cityEdit = Object.assign({}, city)
       this.edit(city.id)

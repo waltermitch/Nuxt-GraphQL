@@ -8,12 +8,13 @@
       <input
         :symbol="symbol"
         class="input"
-        :value="value"
+        :value="displayCell(value)"
         :type="type"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
         :class="classes"
+        @change="$emit('change')"
         @keyup.enter="$emit('event')"
         @input="setValue($event.target.value)"
       />
@@ -69,6 +70,9 @@ export default {
     setValue(inputValue) {
       this.$emit('input', inputValue)
     },
+    displayCell(value) {
+      return (typeof value === 'string') ? value : parseFloat(value !== '' ? value : 0).toFixed(2)
+    }
   },
 }
 </script>
