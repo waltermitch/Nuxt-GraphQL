@@ -88,7 +88,10 @@
             </InputWithTitle>
           </InputRow>
 
-          <TabsView :tabs-headers="tabsHeaders" :tabs="tabs"></TabsView>
+          <TabsView
+            :tabs-headers="tabsHeaders"
+            :tabs="tabs"
+            ></TabsView>
         </div>
         <div class="total">
           <div class="total-section">

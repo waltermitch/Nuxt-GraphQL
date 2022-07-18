@@ -41,7 +41,7 @@ export default {
     tabs: {
       type: Array,
       required: true,
-    },
+    }
   },
   computed: {
     ...mapGetters({

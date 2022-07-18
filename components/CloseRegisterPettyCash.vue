@@ -32,11 +32,11 @@
             class="table-row"
           >
             <CustomSelect
-              v-if="glAccounts && getIsEdit"
-              :options="glAccounts"
+              v-if="me.selectedUnit.glAccounts && getIsEdit"
+              :options="me.selectedUnit.glAccounts"
               select-by="name"
               :selected-item="
-                glAccounts.find((glAccount) =>
+                me.selectedUnit.glAccounts.find((glAccount) =>
                   item.glAccountId
                     ? glAccount.id == item.glAccountId
                     : glAccount.id == item.glAccount.id
@@ -64,8 +64,8 @@
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
-              v-if="glAccounts"
-              :options="glAccounts"
+              v-if="me.selectedUnit.glAccounts"
+              :options="me.selectedUnit.glAccounts"
               select-by="name"
               @input="selectWewItemGlAccount"
             />
@@ -131,7 +131,7 @@ import CustomTableRow from './CustomTableRow.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
-import GlAccounts from '~/graphql/queries/glAccounts.gql'
+import Me from '~/graphql/queries/me.query.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
@@ -156,8 +156,8 @@ export default {
     meMixin,
   ],
   apollo: {
-    glAccounts: {
-      query: GlAccounts,
+    me: {
+      query: Me,
     },
   },
   data() {

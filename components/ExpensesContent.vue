@@ -21,9 +21,9 @@
           <InputWithTitle class="radio-buttons-row">
             <template #title>Expense Type</template>
 
-            <template v-if="expenseTypes" #input>
+            <template v-if="ExpenseTypes" #input>
               <CustomSelect
-                :options="expenseTypes"
+                :options="ExpenseTypes"
                 select-by="type"
                 :selected-item="expenseType"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
@@ -140,7 +140,7 @@ import { EXPENSE } from '~/constants/expense'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { meMixin } from '~/mixins/meMixin'
 import Expenses from '~/graphql/queries/expenses.gql'
-import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
+import ExpenseTypesFiltered from '~/graphql/queries/expenseTypesFiltered.gql'
 import Vendors from '~/graphql/queries/vendors.gql'
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { formatDate } from '~/helpers/helpers'
@@ -161,8 +161,8 @@ export default {
   },
   mixins: [formMixin, mutationMixin, meMixin],
   apollo: {
-    expenseTypes: {
-      query: ExpenseTypes,
+    ExpenseTypes: {
+      query: ExpenseTypesFiltered,
     },
     glAccounts: {
       query: GlAccounts,
