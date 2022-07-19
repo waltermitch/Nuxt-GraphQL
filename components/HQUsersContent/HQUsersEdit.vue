@@ -61,9 +61,26 @@
           </template>
         </InputWithTitle>
       </div>
+      <div v-if="!isAdmin" class="input-col mb-20">
+        <InputWithTitle class="mb-20">
+          <template #title> Role </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="roles"
+              :options="roles"
+              :selected-item="role"
+              select-by="name"
+              @input="selectRole"
+            />
+          </template>
+        </InputWithTitle>
+      </div>
     </div>
     <div v-if="!isAdmin" class="input-row input-row--offset mb-20">
       <div class="input-col">
+        <h5 class="title">Units access</h5>
+
         <multiselect
           v-if="units && !isAdmin"
           v-model="unit"
@@ -96,6 +113,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import Units from '../../graphql/queries/units.gql'
+import Roles from '../../graphql/queries/roles.gql'
 import UpdateUser from '~/graphql/mutations/users/updateUsers.gql'
 import User from '~/graphql/queries/users.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
@@ -109,6 +127,9 @@ export default {
   apollo: {
     units: {
       query: Units,
+    },
+    roles: {
+      query: Roles,
     },
   },
   data() {
@@ -165,6 +186,14 @@ export default {
         this.$store.commit('users/SET_UPDATE_USER_IS_ACTIVE', value)
       },
     },
+    role: {
+      get() {
+        return this.getUpdateUser.role
+      },
+      set(value) {
+        this.$store.commit('users/SET_UPDATE_USER_ROLE', value)
+      },
+    },
     ...mapGetters({
       getUpdateUser: 'users/getUpdateUser',
     }),
@@ -194,6 +223,9 @@ export default {
         this.isActive = !this.isActive
       }
     },
+    selectRole(role) {
+      this.role = role
+    },
     addUser() {
       const obj = {
         id: this.getUpdateUser.id,
@@ -202,7 +234,8 @@ export default {
         email: this.email,
         isAdmin: this.isAdmin,
         isActive: this.isActive,
-        ...(!this.isAdmin && {
+        roleID: this.role ? this.role.id : null,
+        ...(!this.isAdmin && this.unit && {
           units: {
             sync: this.unit.map((unit) => unit.id),
           },
@@ -295,5 +328,13 @@ export default {
   background: url(assets/images/icons/chevron-down.svg);
   display: block;
   top: 0;
+}
+
+.input-col .title {
+  margin-bottom: 4px;
+  font-size: $font-xs;
+  line-height: 16px;
+  font-weight: 600;
+  color: $grey;
 }
 </style>

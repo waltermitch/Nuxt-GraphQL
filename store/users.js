@@ -7,6 +7,7 @@ export const state = () => ({
     unit: '',
     isAdmin: false,
     isActive: false,
+    role: null,
   },
 })
 
@@ -22,6 +23,7 @@ export const mutations = {
     state.updateUser.unit = payload.units
     state.updateUser.isAdmin = payload.isAdmin
     state.updateUser.isActive = payload.isActive
+    state.updateUser.role = payload.role
   },
   SET_UPDATE_USER_FIRSTNAME(state, payload){
     state.updateUser.firstName = payload
@@ -40,6 +42,9 @@ export const mutations = {
   },
   SET_UPDATE_USER_IS_ACTIVE(state, payload){
     state.updateUser.isActive = payload
+  },
+  SET_UPDATE_USER_ROLE(state, payload){
+    state.updateUser.role = payload
   }
 }
 

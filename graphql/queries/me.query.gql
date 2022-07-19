@@ -1,4 +1,5 @@
 #import '../fragments/unit.gql'
+#import '../fragments/role.gql'
 
 query Me {
   me {
@@ -18,6 +19,9 @@ query Me {
     email
     units {
       ...UnitFragment
+    }
+    role {
+      ...RoleFragment
     }
     isAdmin
     isActive

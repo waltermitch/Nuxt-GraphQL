@@ -1,3 +1,5 @@
+#import './role.gql'
+
 fragment UserFragment on User {
   id
   firstName
@@ -6,6 +8,9 @@ fragment UserFragment on User {
   isAdmin
   isActive
   email_verified_at
+  role {
+    ...RoleFragment
+  }
   created_at
   updated_at
 }

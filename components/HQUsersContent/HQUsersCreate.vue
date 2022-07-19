@@ -61,6 +61,21 @@
           </template>
         </InputWithTitle>
       </div>
+      <div v-if="!isAdmin" class="input-col mb-20">
+        <InputWithTitle class="mb-20">
+          <template #title> Role </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="roles"
+              :options="roles"
+              :selected-item="role"
+              select-by="name"
+              @input="selectRole"
+            />
+          </template>
+        </InputWithTitle>
+      </div>
     </div>
     <div class="input-row input-row--offset mb-20">
       <div class="input-col multiselects">
@@ -99,6 +114,7 @@ import PageContentWrapper from '../PageContentWrapper.vue'
 import CreateUser from '../../graphql/mutations/users/createUsers.gql'
 import User from '../../graphql/queries/users.gql'
 import Units from '../../graphql/queries/units.gql'
+import Roles from '../../graphql/queries/roles.gql'
 import CustomInput from '../CustomInput.vue'
 import CustomRadioButton from '../CustomRadioButton.vue'
 import InputWithTitle from '../InputWithTitle.vue'
@@ -120,6 +136,9 @@ export default {
     units: {
       query: Units,
     },
+    roles: {
+      query: Roles,
+    },
   },
   data() {
     return {
@@ -130,6 +149,8 @@ export default {
       password: '',
       isAdmin: false,
       isActive: false,
+      roleID: null,
+      role: null,
     }
   },
   methods: {
@@ -157,6 +178,10 @@ export default {
         this.isActive = !this.isActive
       }
     },
+    selectRole(role) {
+      this.roleID = role.id
+      this.role = role
+    },
     addUser() {
       this.mutationAction(
         CreateUser,
@@ -165,7 +190,7 @@ export default {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
-            ...(!this.isAdmin && {
+            ...(!this.isAdmin && this.unit && {
               units: {
                 sync: this.unit.map((unit) => unit.id),
               },
@@ -173,6 +198,7 @@ export default {
             password: this.password,
             isAdmin: this.isAdmin,
             isActive: this.isActive,
+            roleID: this.roleID,
           },
         },
         User,
