@@ -177,9 +177,9 @@ export default {
 
         this.permissions[i] = {
           menuID: item.id,
-          isView: currentPermission ? currentPermission.isView : true,
-          isCreate: currentPermission ? currentPermission.isCreate : true,
-          isModify: currentPermission ? currentPermission.isModify : true,
+          isView: currentPermission ? currentPermission.isView : false,
+          isCreate: currentPermission ? currentPermission.isCreate : false,
+          isModify: currentPermission ? currentPermission.isModify : false,
         }
 
         this.permissionNames[i] = item.name;

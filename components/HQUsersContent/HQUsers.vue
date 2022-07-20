@@ -146,7 +146,7 @@ export default {
 }
 
 .text-center {
-  text-align: center;
+  text-align: center !important;
 }
 
 table {
