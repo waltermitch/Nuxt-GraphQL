@@ -1,10 +1,13 @@
 <template>
   <button
-    class="pagination-button"
+    :class="'pagination-button' + (!disabled && loading ? ' loading' : '')"
     :disabled="disabled"
     @click="clickEvent"
   >
-    <slot></slot>
+    <div v-if="!disabled && loading" class="loadingIcon">
+        <i class="fa-solid fa-spinner"></i>
+    </div>
+    <slot v-if="disabled || !loading"></slot>
   </button>
 </template>
 
@@ -13,13 +16,18 @@ export default {
   name: 'PaginationButton',
   props: {
     disabled: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
+    loading: {
+        type: Boolean,
+        default: false
+    }
   },
   methods: {
     clickEvent() {
-      this.$emit('event')
+
+        !this.loading && this.$emit('event')
     },
   },
 }
@@ -53,6 +61,26 @@ export default {
     }
     &:hover:not(:disabled) {
         border: 1px solid $firebrick;
+    }
+    &.loading {
+        background: rgb(240, 240, 240);
+    }
+    .loadingIcon {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        animation: rotation 1s infinite linear;
+        i {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 13px;
+        }
+    }
+    @-webkit-keyframes rotation {
+        from {-webkit-transform: rotate(0deg);}
+        to   {-webkit-transform: rotate(359deg);}
     }
 }
 </style>

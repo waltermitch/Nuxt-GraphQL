@@ -66,30 +66,34 @@
             />
           </CustomTableRow>
 
-
-
           <!-- pagination -->
           <PaginationRow v-if="queryData.data.length">
             <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
               <PaginationButton
                 :disabled="currentPage == 1"
+                :loading="fetchingData"
                 @event="firstPage"
               > << </PaginationButton>
               <PaginationButton
                 :disabled="currentPage == 1"
+                :loading="fetchingData"
                 @event="prevPage"
               > < </PaginationButton>
               <PaginationInput
                 v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
                 @event="goToPage"
                 >
               </PaginationInput>
               <PaginationButton
                 :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
                 @event="nextPage"
               > > </PaginationButton>
               <PaginationButton
                 :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
                 @event="lastPage"
               > >> </PaginationButton>
             </div>
@@ -97,8 +101,7 @@
               Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
             </div>
           </PaginationRow>
-
-
+          <!-- pagination -->
 
 
           <CustomTableRow v-if="isAdd" class="table-row">
@@ -150,21 +153,20 @@ import CustomInput from './CustomInput.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 
-
-
 // pagination
 import PaginationRow from './PaginationRow.vue'
 import PaginationButton from './PaginationButton.vue'
 import PaginationInput from './PaginationInput.vue'
-
-
-
+// pagination
 
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
 import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
 
 export default {
   name: 'HQCountyContent',
@@ -178,19 +180,17 @@ export default {
     PaginationRow,
     PaginationButton,
     PaginationInput,
+    // pagination
   },
   mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin, paginatorMixin],
   data() {
     return {
-
-
       // pagination
       query: CountyList,
       queryName: "countyList",
       currentPage: 1,
       queryData: {},
-
-
+      // pagination
 
       countyNew: {
         state: null,
@@ -198,24 +198,6 @@ export default {
         tax: '',
       },
     }
-  },
-  computed: {
-
-
-
-    // pagination
-    page: {
-      get() {
-        return this.currentPage;
-      },
-      set(value) {
-        this.currentPage = parseInt(Math.max(1, Math.min(value, this.queryData.paginatorInfo.lastPage)));
-        console.log('set page input value', this.currentPage);
-      },
-    },
-
-
-
   },
   apollo: {
     states: {
@@ -266,6 +248,7 @@ export default {
       // pagination
       this.clearTableActionState();
       res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
+      // pagination
     },
     async confirmEdit(county) {
       const editedCounty = {
@@ -290,6 +273,7 @@ export default {
       // pagination
       this.clearTableActionState();
       this.goToPage();
+      // pagination
     },
     async confirmDelete(id) {
       const res = await this.mutationAction(
@@ -305,6 +289,7 @@ export default {
       // pagination
       this.clearTableActionState();
       res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelCountyEdit() {
       this.cancelEdit();
