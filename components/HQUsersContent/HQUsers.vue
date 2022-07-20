@@ -8,6 +8,7 @@
             <th>First Name</th>
             <th>Lats Name</th>
             <th>Email</th>
+            <th class="text-center">Role Name</th>
             <th class="tables__col-5">Units</th>
             <th class="text-center">Is Admin</th>
             <th class="text-center">Is Active</th>
@@ -20,6 +21,7 @@
             <td class="nowrap">{{ user.firstName }}</td>
             <td class="nowrap">{{ user.lastName }}</td>
             <td>{{ user.email }}</td>
+            <td class="text-center">{{ user.isAdmin ? 'HQ' : (user.role ? user.role.name : '-') }}</td>
             <td class="tables__col-5">
               <span>
                 {{ user.units.map((unit) => unit.name).join(', ') }}
@@ -145,6 +147,14 @@ export default {
 
 .text-center {
   text-align: center;
+}
+
+table {
+  width: 100%;
+}
+
+table td:last-child {
+  width: 100px;
 }
 
 @media screen and (min-width: $lg) and (max-width: $xxl) {
