@@ -14,9 +14,9 @@
           </div>
         </template>
 
-        <template v-if="counties" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="county in counties"
+            v-for="county in queryData.data"
             :key="county.id"
             class="table-row"
           >
@@ -58,13 +58,48 @@
               :is-edit-active="isEdit === county.id"
               :is-delete-active="isDelete === county.id"
               @edit="isAdd ? null : editCounty(county)"
-              @delete="deleteItem(county.id)"
+              @delete="isAdd ? null : deleteItem(county.id)"
               @cancel="cancelCountyEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(county)"
               @confirm-delete="confirmDelete(county.id)"
             />
           </CustomTableRow>
+
+
+
+          <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+
+
+
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
@@ -107,17 +142,30 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import States from '../graphql/queries/states.gql'
-import Counties from '../graphql/queries/counties.gql'
+import CountyList from '../graphql/queries/countyList.gql'
 import CreateCounty from '../graphql/mutations/county/createCounty.gql'
 import UpdateCounty from '../graphql/mutations/county/updateCounty.gql'
 import DeleteCounty from '../graphql/mutations/county/deleteCounty.gql'
 import CustomInput from './CustomInput.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+
+
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+
+
+
+
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+
 export default {
   name: 'HQCountyContent',
   components: {
@@ -125,24 +173,57 @@ export default {
     CustomInput,
     CustomSelect,
     CustomTableAddIcon,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
-  apollo: {
-    states: {
-      query: States,
-    },
-    counties: {
-      query: Counties,
-    },
-  },
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin, paginatorMixin],
   data() {
     return {
+
+
+      // pagination
+      query: CountyList,
+      queryName: "countyList",
+      currentPage: 1,
+      queryData: {},
+
+
+
       countyNew: {
         state: null,
         name: '',
         tax: '',
       },
     }
+  },
+  computed: {
+
+
+
+    // pagination
+    page: {
+      get() {
+        return this.currentPage;
+      },
+      set(value) {
+        this.currentPage = parseInt(Math.max(1, Math.min(value, this.queryData.paginatorInfo.lastPage)));
+        console.log('set page input value', this.currentPage);
+      },
+    },
+
+
+
+  },
+  apollo: {
+    states: {
+      query: States,
+    },
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     onChangeFloatValue(stateProp) {
@@ -163,24 +244,30 @@ export default {
       }
       this.addRow()
     },
-    addCounty() {
-      this.mutationAction(
-        CreateCounty,
-        {
-          countyInput: {
-            name: this.countyNew.name,
-            state: {
-              connect: Number(this.countyNew.state.id),
-            },
-            tax: +this.countyNew.tax,
-          },
+    async addCounty() {
+      const newCounty = {
+        name: this.countyNew.name,
+        state: {
+          connect: Number(this.countyNew.state.id),
         },
-        Counties,
+        tax: +this.countyNew.tax,
+      }
+
+      const res = await this.mutationAction(
+        CreateCounty,
+        { countyInput: newCounty },
+        null,
         'Add county success',
-        'Add county error'
+        'Add county error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
     },
-    confirmEdit(county) {
+    async confirmEdit(county) {
       const editedCounty = {
         id: county.id,
         name: this.countyNew.name,
@@ -190,25 +277,37 @@ export default {
         tax: +this.countyNew.tax,
       }
 
-      this.mutationAction(
+      await this.mutationAction(
         UpdateCounty,
         { countyInput: editedCounty },
-        Counties,
+        null,
         'Edit county success',
-        'Edit county error'
+        'Edit county error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      this.goToPage();
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteCounty,
         { id },
-        Counties,
+        null,
         'Delete unit success',
-        'Delete unit error'
+        'Delete unit error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
     },
     cancelCountyEdit() {
-      this.cancelEdit()
+      this.cancelEdit();
     },
   },
 }

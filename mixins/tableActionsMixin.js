@@ -1,4 +1,5 @@
 import { addPercentSign } from '~/helpers/helpers'
+
 export const tableActionsMixin = {
   data() {
     return {
@@ -23,14 +24,23 @@ export const tableActionsMixin = {
       this.isEdit = null
     },
     deleteItem(ID) {
+      this.isHide = true
       this.isDelete = ID
     },
     cancelDelete() {
+      this.isHide = false
       this.isDelete = null
     },
     cancelAdd() {
-      this.add = false
-      this.clearState()
+      this.isAdd = false
+      this.isHide = false
+      // this.clearState()
+    },
+    clearTableActionState() {
+      this.isAdd = false;
+      this.isEdit = false;
+      this.isDelete = false;
+      this.isHide = false;
     },
   },
 }

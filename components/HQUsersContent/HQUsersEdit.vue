@@ -62,7 +62,7 @@
         </InputWithTitle>
       </div>
     </div>
-    <div class="input-row input-row--offset mb-20" v-if="!isAdmin">
+    <div v-if="!isAdmin" class="input-row input-row--offset mb-20">
       <div class="input-col">
         <multiselect
           v-if="units && !isAdmin"
@@ -174,7 +174,7 @@ export default {
       setShowAddUser: 'users/setShowAddUser',
     }),
     nameWithId({ name, code, id}) {
-      if(code == undefined) {
+      if(code === undefined) {
         return `${id} — ${name}`
       }else {
         return `${code} — ${name}`

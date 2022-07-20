@@ -1,5 +1,5 @@
-import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
+import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 
 export const mutationMixin = {
   mixins: [submitMessagesMixin, formMixin],
@@ -18,10 +18,13 @@ export const mutationMixin = {
 
       if (formValidated || !this.$refs.form) {
         try {
-          const res = await this.$apollo.mutate({
+          const res = await this.$apollo.mutate(queryToRefetch ? {
             mutation,
             variables: variablesObject,
             refetchQueries: [{ query: queryToRefetch, variables }],
+          } : {
+            mutation,
+            variables: variablesObject,
           })
           if (!doNotClearState) {
             this.clearState()
@@ -50,8 +53,10 @@ export const mutationMixin = {
             }
           }
         }
+        return false
       } else {
         this.showSubmitMessage('Form validation failed', 'error')
+        return false
       }
     },
   },

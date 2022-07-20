@@ -18,6 +18,7 @@ export default {
   props: {
     wTable: {
       type: Number,
+      default: 500
     },
   },
 }

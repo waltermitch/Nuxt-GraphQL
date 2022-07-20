@@ -137,7 +137,7 @@ export default {
       setShowAddUser: 'users/setShowAddUser',
     }),
     nameWithId({ name, code, id }) {
-      if(code == undefined) {
+      if(code === undefined) {
         return `${id} — ${name}`
       }else {
         return `${code} — ${name}`
