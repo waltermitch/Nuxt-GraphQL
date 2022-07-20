@@ -129,6 +129,14 @@ export default {
   text-align: center;
 }
 
+table {
+  width: 100%;
+}
+
+table td:last-child {
+  width: 100px;
+}
+
 @media screen and (min-width: $lg) and (max-width: $xxl) {
   .tables {
     &-wrapper {

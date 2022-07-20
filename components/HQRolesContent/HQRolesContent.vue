@@ -17,6 +17,7 @@ export default {
   destroyed() {
     this.setUpdateRole({
       name: '',
+      permissions: [],
     })
     this.setShowAddRole('HQRoles')
   },

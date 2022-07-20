@@ -1,8 +1,8 @@
 export const state = () => ({
   showAddRole: 'HQRoles',
   updateRole: {
-    name: '',
-    roleMenu: '',
+    roleName: '',
+    permissions: '',
   },
 })
 
@@ -12,14 +12,14 @@ export const mutations = {
   },
   SET_UPDATE_ROLE(state, payload) {
     state.updateRole.id = payload.id
-    state.updateRole.name = payload.name
-    state.updateRole.roleMenu = payload.roleMenus
+    state.updateRole.roleName = payload.roleName
+    state.updateRole.permissions = payload.permissions
   },
   SET_UPDATE_ROLE_NAME(state, payload){
-    state.updateRole.name = payload
+    state.updateRole.roleName = payload
   },
-  SET_UPDATE_ROLE_ROLE_MENU(state, payload){
-    state.updateRole.roleMenu = payload
+  SET_UPDATE_ROLE_PERMISSIONS(state, payload){
+    state.updateRole.permissions = payload
   }
 }
 
