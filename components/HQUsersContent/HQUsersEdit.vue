@@ -251,8 +251,8 @@ export default {
           userInput: objEdit,
         },
         User,
-        'Add user success',
-        'Add user error'
+        'Edit user success',
+        'Edit user error'
       ).then((data) => {
         if (data.data.updateUser.status === 'UPDATED') {
           setTimeout(() => {

@@ -149,8 +149,8 @@ export default {
           roleInput: obj,
         },
         Role,
-        'Add role success',
-        'Add role error'
+        'Edit role success',
+        'Edit role error'
       ).then((data) => {
         if (data.data.updateRole.status === true) {
           setTimeout(() => {
