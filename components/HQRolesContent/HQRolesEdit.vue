@@ -59,9 +59,9 @@
       </div>
     </div>
     <div class="buttons-area">
-      <DefaultButton @event="addRole">+ Add Role</DefaultButton>
+      <DefaultButton @event="editRole">Edit Role</DefaultButton>
 
-      <DefaultButton button-color-gamma="white" @event="cancelAdd">
+      <DefaultButton button-color-gamma="white" @event="cancelEdit">
         Cancel</DefaultButton
       >
     </div>
@@ -69,18 +69,18 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import Role from '../../graphql/queries/roles.gql'
 import Menus from '../../graphql/queries/menus.gql'
-import CreateRole from '../../graphql/mutations/roles/createRoles.gql'
+import UpdateRole from '../../graphql/mutations/roles/updateRoles.gql'
 import CustomInput from '../CustomInput.vue'
 import InputWithTitle from '../InputWithTitle.vue'
 import DefaultButton from '../DefaultButton'
 import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
-  name: 'HQRolesCreate',
+  name: 'HQRolesEdit',
   components: {
     CustomInput,
     InputWithTitle,
@@ -95,10 +95,30 @@ export default {
   },
   data() {
     return {
-      roleName: '',
       permissions: {},
       permissionNames: {},
     }
+  },
+  computed: {
+    roleName: {
+      get() {
+        return this.getUpdateRole.roleName
+      },
+      set(value) {
+        this.$store.commit('roles/SET_UPDATE_ROLE_NAME', value)
+      },
+    },
+    rolePermissions: {
+      get() {
+        return this.getUpdateRole.permissions
+      },
+      set(value) {
+        this.$store.commit('roles/SET_UPDATE_ROLE_PERMISSIONS', value)
+      },
+    },
+    ...mapGetters({
+      getUpdateRole: 'roles/getUpdateRole',
+    }),
   },
   watch: {
     menus() {
@@ -116,41 +136,50 @@ export default {
 
       this.$set(this.permissions, checkboxValue.menuNum, obj);
     },
-    addRole() {
+    editRole() {
+      const obj = {
+        roleID: this.getUpdateRole.id,
+        roleName: this.roleName,
+        permissions: this.permissions,
+      }
+
       this.mutationAction(
-        CreateRole,
+        UpdateRole,
         {
-          roleInput: {
-            roleName: this.roleName,
-            permissions: this.permissions,
-          },
+          roleInput: obj,
         },
         Role,
         'Add role success',
         'Add role error'
       ).then((data) => {
-        if (data.data.createRole.status === true) {
+        if (data.data.updateRole.status === true) {
           setTimeout(() => {
             this.setShowAddRole('HQRoles')
           }, 2000)
         }
       })
     },
-    cancelAdd() {
+    cancelEdit() {
       this.setShowAddRole('HQRoles')
     },
     setupPermissions() {
       this.permissions = [];
 
-      if (!this.menus)
+      if (!this.menus || !this.rolePermissions)
         return;
 
       this.menus.forEach((item, i) => {
+        const permissionFilter = this.rolePermissions.filter((rolePermission) => {
+          return item.id === rolePermission.menu.id;
+        });
+
+        const currentPermission = permissionFilter ? permissionFilter[0] : null;
+
         this.permissions[i] = {
           menuID: item.id,
-          isView: true,
-          isCreate: true,
-          isModify: true,
+          isView: currentPermission ? currentPermission.isView : true,
+          isCreate: currentPermission ? currentPermission.isCreate : true,
+          isModify: currentPermission ? currentPermission.isModify : true,
         }
 
         this.permissionNames[i] = item.name;

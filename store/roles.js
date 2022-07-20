@@ -12,8 +12,8 @@ export const mutations = {
   },
   SET_UPDATE_ROLE(state, payload) {
     state.updateRole.id = payload.id
-    state.updateRole.roleName = payload.roleName
-    state.updateRole.permissions = payload.permissions
+    state.updateRole.roleName = payload.name
+    state.updateRole.permissions = payload.roleMenus
   },
   SET_UPDATE_ROLE_NAME(state, payload){
     state.updateRole.roleName = payload
