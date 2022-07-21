@@ -32,25 +32,31 @@
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isView"
                     :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isCreate"
                     :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isModify"
                     :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
             </tr>
@@ -98,6 +104,7 @@ export default {
       roleName: '',
       permissions: {},
       permissionNames: {},
+      permissionCapabilities: {},
     }
   },
   watch: {
@@ -146,6 +153,12 @@ export default {
         return;
 
       this.menus.forEach((item, i) => {
+        this.permissionCapabilities[i] = {
+          isView: item.hasViewCapability,
+          isCreate: item.hasCreateCapability,
+          isModify: item.hasManageCapability,
+        }
+
         this.permissions[i] = {
           menuID: item.id,
           isView: true,

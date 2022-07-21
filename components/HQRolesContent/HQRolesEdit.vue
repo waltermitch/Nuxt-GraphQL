@@ -32,25 +32,31 @@
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isView"
                     :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isCreate"
                     :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isModify"
                     :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
             </tr>
@@ -97,6 +103,7 @@ export default {
     return {
       permissions: {},
       permissionNames: {},
+      permissionCapabilities: {},
     }
   },
   computed: {
@@ -169,6 +176,12 @@ export default {
         return;
 
       this.menus.forEach((item, i) => {
+        this.permissionCapabilities[i] = {
+          isView: item.hasViewCapability,
+          isCreate: item.hasCreateCapability,
+          isModify: item.hasManageCapability,
+        }
+
         const permissionFilter = this.rolePermissions.filter((rolePermission) => {
           return item.id === rolePermission.menu.id;
         });
@@ -177,9 +190,9 @@ export default {
 
         this.permissions[i] = {
           menuID: item.id,
-          isView: currentPermission ? currentPermission.isView : false,
-          isCreate: currentPermission ? currentPermission.isCreate : false,
-          isModify: currentPermission ? currentPermission.isModify : false,
+          isView: this.permissionCapabilities[i].isView ? (currentPermission ? currentPermission.isView : false) : true,
+          isCreate: this.permissionCapabilities[i].isCreate ? (currentPermission ? currentPermission.isCreate : false) : true,
+          isModify: this.permissionCapabilities[i].isModify ? (currentPermission ? currentPermission.isModify : false) : true,
         }
 
         this.permissionNames[i] = item.name;
