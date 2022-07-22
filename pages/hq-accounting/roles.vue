@@ -9,7 +9,7 @@
 
       <div class="title-area">
         <PageTitle> Roles</PageTitle>
-        <DefaultButton button-color-gamma="red" @event="addRoles">
+        <DefaultButton v-if="isShowAddRole === 'HQRoles'" button-color-gamma="red" @event="addRoles">
           + Add role
         </DefaultButton>
       </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex"
+import { mapGetters, mapActions } from "vuex"
 import {HQ_ACCOUNTING} from '~/constants/constants'
 import {sideBarNavTabsMixin} from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
@@ -31,7 +31,6 @@ import PageSubtitle from '~/components/PageSubtitle.vue'
 import PageTitle from '~/components/PageTitle.vue'
 import HQRolesContent from '~/components/HQRolesContent/HQRolesContent.vue'
 import DefaultButton from '~/components/DefaultButton.vue'
-
 
 export default {
   name: "RolesPage",
@@ -45,6 +44,12 @@ export default {
   },
   mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
+  computed: {
+    ...mapGetters({
+      isShowAddRole: 'roles/getShowAddRole',
+      isUpdateRole: 'roles/getUpdateRole'
+    }),
+  },
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
   },

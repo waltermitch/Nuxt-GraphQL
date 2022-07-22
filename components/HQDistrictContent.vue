@@ -11,9 +11,9 @@
           </div>
         </template>
 
-        <template v-if="districts" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="district in districts"
+            v-for="district in queryData.data"
             :key="district.id"
             class="table-row"
           >
@@ -36,14 +36,51 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === district.id"
               :is-delete-active="isDelete === district.id"
-              @edit="editDistrict(district)"
-              @delete="deleteItem(district.id)"
+              @edit="isAdd ? null : editDistrict(district)"
+              @delete="isAdd ? null : deleteItem(district.id)"
               @cancel="cancelDistrictEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(district)"
               @confirm-delete="confirmDelete(district.id)"
             />
           </CustomTableRow>
+
+            <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
@@ -60,7 +97,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addDistrictRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -76,7 +113,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Districts from '../graphql/queries/districts.gql'
+import DistrictList from '../graphql/queries/districtList.gql'
 import CreateDistrict from '../graphql/mutations/district/createDistrict.gql'
 import UpdateDistrict from '../graphql/mutations/district/updateDistrict.gql'
 import DeleteDistrict from '../graphql/mutations/district/deleteDistrict.gql'
@@ -85,10 +122,22 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
+
 export default {
   name: 'HQDistrictContent',
   components: {
@@ -98,15 +147,25 @@ export default {
     CustomTableRow,
     CustomInput,
     CustomTableAddIcon,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin, paginatorMixin],
   apollo: {
-    districts: {
-      query: Districts,
-    },
   },
   data() {
     return {
+      // pagination
+      query: DistrictList,
+      queryName: "districtList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+
       districtNew: {
         code: '',
         name: '',
@@ -114,13 +173,23 @@ export default {
       districtEdit: {},
     }
   },
+  beforeMount(){
+    this.fetchData();
+  },
   methods: {
     editDistrict(district) {
       this.districtEdit = Object.assign({}, district)
       this.edit(district.id)
     },
-    addDistrict() {
-      this.mutationAction(
+    addDistrictRow() {
+      this.districtNew = {
+        code: '',
+        name: '',
+      }
+      this.addRow()
+    },
+    async addDistrict() {
+      const res = await this.mutationAction(
         CreateDistrict,
         {
           districtInput: {
@@ -128,36 +197,55 @@ export default {
             code: this.districtNew.code,
           },
         },
-        Districts,
+        null,
         'Add district success',
-        'Add district error'
+        'Add district error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
+      // pagination
     },
-    confirmEdit(district) {
+    async confirmEdit(district) {
       const editedDistrict = {
         id: district.id,
         code: this.districtEdit.code,
         name: this.districtEdit.name,
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateDistrict,
-        {
-          districtInput: editedDistrict,
-        },
-        Districts,
+        { districtInput: editedDistrict },
+        null,
         'Edit district success',
-        'Edit district error'
+        'Edit district error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage();
+      // pagination
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteDistrict,
         { id },
-        Districts,
+        null,
         'Delete district success',
-        'Delete district error'
+        'Delete district error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelDistrictEdit() {
       this.cancelEdit()

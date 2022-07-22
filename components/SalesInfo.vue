@@ -11,7 +11,17 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
+          <!-- <CustomInput
+            v-model="getNonResetable"
+            rules="currency|required"
+            placeholder="0.00"
+            type="number"
+            symbol="$"
+            is-float="true"
+            @change="onChangeFloatValue('getNonResetable')"
+          /> -->
         </template>
       </InputWithTitle>
 
@@ -20,7 +30,7 @@
 
         <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="netTotal" readonly disabled symbol="$" />
+          <CustomInput v-model="netTotal" readonly disabled symbol="$" is-float="true" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -31,7 +41,7 @@
 
         <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" />
+          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" is-float="true" />
         </template>
       </InputWithTitle>
 
@@ -45,6 +55,7 @@
             type="number"
             placeholder="0.00"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -56,7 +67,7 @@
 
         <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" />
+          <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
 
@@ -70,6 +81,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -86,6 +98,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -100,6 +113,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -116,6 +130,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -125,7 +140,7 @@
 
         <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="netCash" readonly disabled symbol="$" />
+          <CustomInput v-model="netCash" readonly disabled symbol="$" is-float="true" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -141,6 +156,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -157,6 +173,7 @@
             placeholder="0.00"
             type="number"
             symbol="$"
+            is-float="true"
           />
         </template>
       </InputWithTitle>
@@ -168,7 +185,7 @@
 
         <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="cashTax" readonly disabled symbol="$" />
+          <CustomInput v-model="cashTax" readonly disabled symbol="$" is-float="true" />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -334,6 +351,27 @@ export default {
       },
     },
   },
+  methods: {
+    /* 
+    nonResetable: {
+      get() {
+        return this.getNonResetable
+      },
+      set(value) {
+        this.$store.dispatch('closeRegister/setNonResetable', {
+          ...this.calculationVariables,
+          value,
+        })
+      },
+    },
+    */
+    /* onChangeFloatValue(inputName, value) {
+      this.$store.dispatch('closeRegister/setNonResetable', {
+        ...this.calculationVariables,
+        parseFloat(value !== '' ? value : 0).toFixed(2),
+      })
+    } */
+  }
 }
 </script>
 

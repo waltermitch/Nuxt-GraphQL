@@ -13,9 +13,9 @@
           </div>
         </template>
 
-        <template v-if="vendors" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="vendor in vendors"
+            v-for="vendor in queryData.data"
             :key="vendor.id"
             class="table-row"
           >
@@ -51,14 +51,51 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === vendor.id"
               :is-delete-active="isDelete === vendor.id"
-              @edit="editVendor(vendor)"
-              @delete="deleteItem(vendor.id)"
+              @edit="isAdd ? null : editVendor(vendor)"
+              @delete="isAdd ? null : deleteItem(vendor.id)"
               @cancel="cancelVendorEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(vendor)"
               @confirm-delete="confirmDelete(vendor.id)"
             />
           </CustomTableRow>
+
+            <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
@@ -83,7 +120,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addVendorRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -99,7 +136,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Vendors from '../graphql/queries/vendors.gql'
+import VendorList from '../graphql/queries/vendorList.gql'
 import Terms from '../graphql/queries/terms.gql'
 import CreateVendor from '../graphql/mutations/vendor/createVendor.gql'
 import UpdateVendor from '../graphql/mutations/vendor/updateVendor.gql'
@@ -108,9 +145,21 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableRow from './CustomTableRow.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
+
 export default {
   name: 'HQVendorContent',
   components: {
@@ -120,18 +169,28 @@ export default {
     CustomInput,
     CustomTableRow,
     CustomTableAddIcon,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin, paginatorMixin],
   apollo: {
-    vendors: {
-      query: Vendors,
-    },
     terms: {
       query: Terms,
     },
   },
   data() {
     return {
+      // pagination
+      query: VendorList,
+      queryName: "vendorList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+
       vendorNew: {
         code: '',
         name: '',
@@ -142,6 +201,9 @@ export default {
         terms: [],
       },
     }
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     editVendor(vendor) {
@@ -173,8 +235,17 @@ export default {
         this.vendorEdit.terms.push(option)
       }
     },
-    addVendor() {
-      this.mutationAction(
+    addVendorRow() {
+      this.vendorNew = {
+        code: '',
+        name: '',
+        terms: [],
+      }
+      this.vendorTerms = ''
+      this.addRow()
+    },
+    async addVendor() {
+      const res = await this.mutationAction(
         CreateVendor,
         {
           vendorInput: {
@@ -185,12 +256,18 @@ export default {
             },
           },
         },
-        Vendors,
+        null,
         'Add vendor success',
-        'Add vendor error'
+        'Add vendor error',
+        null,
+        true
       )
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage(1)
+      // pagination
     },
-    confirmEdit(vendor) {
+    async confirmEdit(vendor) {
       const editedVendor = {
         id: vendor.id,
         code: this.vendorEdit.code,
@@ -200,22 +277,36 @@ export default {
         },
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateVendor,
         { vendorInput: editedVendor },
-        Vendors,
+        null,
         'Add vendor success',
-        'Add vendor error'
+        'Add vendor error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage(1);
+      // pagination
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteVendor,
         { id },
-        Vendors,
+        null,
         'Add vendor success',
-        'Add vendor error'
+        'Add vendor error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelVendorEdit() {
       this.cancelEdit()

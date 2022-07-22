@@ -1,8 +1,8 @@
-#import '../fragments/county.gql'
-#import '../fragments/state.gql'
+#import '../fragments/user.gql'
+#import '../fragments/unit.gql'
 
-query CountyList($page: Int!) {
-  countyList(page: $page) {
+query UserList($page: Int!) {
+  userList(page: $page) {
     paginatorInfo {
       count
       perPage
@@ -16,9 +16,9 @@ query CountyList($page: Int!) {
       hasMorePages
     }
     data {
-        ...CountyFragment
-        state {
-        ...StateFragment
+        ...UserFragment
+        units{
+        ...UnitFragment
         }
     }
   }

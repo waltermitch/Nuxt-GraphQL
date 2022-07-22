@@ -11,6 +11,7 @@
               type="number"
               rules="required|currency"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -53,6 +54,7 @@
               symbol="$"
               rules="required|currency"
               type="number"
+              is-float="true"
               @input="(e) => updateItems(item, e, 'amount')"
             />
             <img
@@ -77,6 +79,7 @@
               do-not-show-error-message
               type="number"
               rules="required|currency"
+              is-float="true"
             />
           </CustomTableRow>
 

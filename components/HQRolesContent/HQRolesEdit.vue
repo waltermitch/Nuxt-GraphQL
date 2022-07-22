@@ -77,7 +77,6 @@
 <script>
 import {mapActions, mapGetters} from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
-import Role from '../../graphql/queries/roles.gql'
 import Menus from '../../graphql/queries/menus.gql'
 import UpdateRole from '../../graphql/mutations/roles/updateRoles.gql'
 import CustomInput from '../CustomInput.vue'
@@ -143,28 +142,26 @@ export default {
 
       this.$set(this.permissions, checkboxValue.menuNum, obj);
     },
-    editRole() {
+    async editRole() {
       const obj = {
         roleID: this.getUpdateRole.id,
         roleName: this.roleName,
         permissions: this.permissions,
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateRole,
         {
           roleInput: obj,
         },
-        Role,
+        null,
         'Edit role success',
-        'Edit role error'
-      ).then((data) => {
-        if (data.data.updateRole.status === true) {
-          setTimeout(() => {
-            this.setShowAddRole('HQRoles')
-          }, 2000)
-        }
-      })
+        'Edit role error',
+        null,
+        true
+      )
+
+      res !== false && this.setShowAddRole('HQRoles')
     },
     cancelEdit() {
       this.setShowAddRole('HQRoles')

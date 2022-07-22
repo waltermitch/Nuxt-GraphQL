@@ -18,16 +18,29 @@ export const paginatorMixin = {
     methods: {
         async fetchData() {
             this.fetchingData = true
+
             console.log('loading, ', this.fetchingData)
-            const queryData = await this.$apollo.query({
-            query: this.query,
-            fetchPolicy: 'network-only',
-            variables: {
+
+            const variables = {
                 page: this.currentPage,
-            },
+            }
+            if (  this.hasQueryVariable === true ) {
+                for ( const x in this.queryVariable ) {
+                    variables[x] = this.queryVariable[x]
+                }
+            }         
+            console.log(
+                this.queryName
+            );
+            const queryData = await this.$apollo.query({
+                query: this.query,
+                fetchPolicy: 'network-only',
+                variables,
             });
             this.fetchingData = false
+
             console.log('loading, ', this.fetchingData)
+            
             this.queryData = queryData.data[this.queryName];
         },
         async firstPage() {

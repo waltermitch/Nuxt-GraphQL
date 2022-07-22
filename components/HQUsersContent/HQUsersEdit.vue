@@ -100,7 +100,7 @@
     </div>
 
     <div class="buttons-area">
-      <DefaultButton @event="addUser"> Edit User</DefaultButton>
+      <DefaultButton @event="editUser"> Edit User</DefaultButton>
 
       <DefaultButton button-color-gamma="white" @event="cancelEdit">
         Cancel</DefaultButton
@@ -115,7 +115,6 @@ import Multiselect from 'vue-multiselect'
 import Units from '../../graphql/queries/units.gql'
 import Roles from '../../graphql/queries/roles.gql'
 import UpdateUser from '~/graphql/mutations/users/updateUsers.gql'
-import User from '~/graphql/queries/users.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 
 export default {
@@ -226,7 +225,7 @@ export default {
     selectRole(role) {
       this.role = role
     },
-    addUser() {
+    async editUser() {
       const obj = {
         id: this.getUpdateUser.id,
         firstName: this.firstName,
@@ -245,21 +244,19 @@ export default {
       const objPass = { password: this.password }
       const objEdit = this.password.length > 0 ? { ...obj, ...objPass } : obj
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateUser,
         {
           userInput: objEdit,
         },
-        User,
+        null,
         'Edit user success',
-        'Edit user error'
-      ).then((data) => {
-        if (data.data.updateUser.status === 'UPDATED') {
-          setTimeout(() => {
-            this.setShowAddUser('HQUsers')
-          }, 2000)
-        }
-      })
+        'Edit user error',
+        null,
+        true
+      )
+      
+      res !== false && this.setShowAddUser('HQUsers')
     },
     cancelEdit() {
       this.setShowAddUser('HQUsers')

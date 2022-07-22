@@ -38,7 +38,6 @@ export default {
   padding: 10px 8px;
   margin: 0px 5px;
   font-size: $font-s;
-  line-height: 15px;
   color: #000;
   border: 1px solid gainsboro;
   border-radius: 3px;
@@ -48,7 +47,6 @@ export default {
   &:focus {
     border: 1px solid $firebrick;
   }
-
   &:disabled {
     background: transparent;
     cursor: not-allowed;
