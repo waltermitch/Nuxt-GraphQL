@@ -32,25 +32,31 @@
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isView"
                     :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isCreate"
                     :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
               <td>
                 <div class="checkbox-hld">
                   <CustomCheckbox
+                    v-if="permissionCapabilities[i].isModify"
                     :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
                     @update-checkbox="updateCheckbox"
                   />
+                  <span v-else>-</span>
                 </div>
               </td>
             </tr>
@@ -71,7 +77,6 @@
 <script>
 import { mapActions } from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
-import Role from '../../graphql/queries/roles.gql'
 import Menus from '../../graphql/queries/menus.gql'
 import CreateRole from '../../graphql/mutations/roles/createRoles.gql'
 import CustomInput from '../CustomInput.vue'
@@ -98,6 +103,7 @@ export default {
       roleName: '',
       permissions: {},
       permissionNames: {},
+      permissionCapabilities: {},
     }
   },
   watch: {
@@ -116,8 +122,8 @@ export default {
 
       this.$set(this.permissions, checkboxValue.menuNum, obj);
     },
-    addRole() {
-      this.mutationAction(
+    async addRole() {
+      const res = await this.mutationAction(
         CreateRole,
         {
           roleInput: {
@@ -125,16 +131,14 @@ export default {
             permissions: this.permissions,
           },
         },
-        Role,
+        null,
         'Add role success',
-        'Add role error'
-      ).then((data) => {
-        if (data.data.createRole.status === true) {
-          setTimeout(() => {
-            this.setShowAddRole('HQRoles')
-          }, 2000)
-        }
-      })
+        'Add role error',
+        null,
+        true
+      )
+      
+      res !== false && this.setShowAddRole('HQRoles')
     },
     cancelAdd() {
       this.setShowAddRole('HQRoles')
@@ -146,6 +150,12 @@ export default {
         return;
 
       this.menus.forEach((item, i) => {
+        this.permissionCapabilities[i] = {
+          isView: item.hasViewCapability,
+          isCreate: item.hasCreateCapability,
+          isModify: item.hasManageCapability,
+        }
+
         this.permissions[i] = {
           menuID: item.id,
           isView: true,

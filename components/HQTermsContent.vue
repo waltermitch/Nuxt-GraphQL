@@ -15,9 +15,9 @@
           </div>
         </template>
 
-        <template v-if="terms" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="term in terms"
+            v-for="term in queryData.data"
             :key="term.id"
             class="table-row"
           >
@@ -62,14 +62,51 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === term.id"
               :is-delete-active="isDelete === term.id"
-              @edit="editTerm(term)"
-              @delete="deleteItem(term.id)"
+              @edit="isAdd ? null : editTerm(term)"
+              @delete="isAdd ? null : deleteItem(term.id)"
               @cancel="cancelTermEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(term)"
               @confirm-delete="confirmDelete(term.id)"
             />
           </CustomTableRow>
+
+          <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
@@ -102,7 +139,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addTermRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -118,7 +155,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Terms from '../graphql/queries/terms.gql'
+import TermList from '../graphql/queries/termList.gql'
 import CreateTerm from '../graphql/mutations/term/createTerm.gql'
 import UpdateTerm from '../graphql/mutations/term/updateTerm.gql'
 import DeleteTerm from '../graphql/mutations/term/deleteTerm.gql'
@@ -127,10 +164,22 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
+
 export default {
   name: 'HQTermsContent',
   components: {
@@ -140,15 +189,25 @@ export default {
     CustomTableRow,
     CustomInput,
     CustomTableAddIcon,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin, paginatorMixin],
   apollo: {
-    terms: {
-      query: Terms,
-    },
   },
   data() {
     return {
+      // pagination
+      query: TermList,
+      queryName: "termList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+
       termNew: {
         name: '',
         dueDays: '',
@@ -157,6 +216,9 @@ export default {
       },
       termEdit: {},
     }
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     onChangeFloatValue(stateProp, isEdit = false) {
@@ -170,8 +232,17 @@ export default {
       this.termEdit = Object.assign({}, term)
       this.edit(term.id)
     },
-    addTerm() {
-      this.mutationAction(
+    addTermRow() {
+      this.termNew = {
+        name: '',
+        dueDays: '',
+        discPercent: '',
+        discDays: '',
+      }
+      this.addRow()
+    },
+    async addTerm() {
+      const res = await this.mutationAction(
         CreateTerm,
         {
           termInput: {
@@ -181,12 +252,19 @@ export default {
             discDays: +this.termNew.discDays,
           },
         },
-        Terms,
+        null,
         'Add term success',
-        'Add term error'
+        'Add term error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
+      // pagination
     },
-    confirmEdit(term) {
+    async confirmEdit(term) {
       const editedTerm = {
         id: term.id,
         name: this.termEdit.name,
@@ -195,24 +273,38 @@ export default {
         discDays: +this.termEdit.discDays,
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateTerm,
         {
           termInput: editedTerm,
         },
-        Terms,
+        null,
         'Edit term success',
         'Edit term error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage();
+      // pagination
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteTerm,
         { id },
-        Terms,
+        null,
         'Delete term success',
         'Delete term error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelTermEdit() {
       this.cancelEdit()

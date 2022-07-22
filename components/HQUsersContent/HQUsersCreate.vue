@@ -112,7 +112,6 @@ import { mapActions } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import CreateUser from '../../graphql/mutations/users/createUsers.gql'
-import User from '../../graphql/queries/users.gql'
 import Units from '../../graphql/queries/units.gql'
 import Roles from '../../graphql/queries/roles.gql'
 import CustomInput from '../CustomInput.vue'
@@ -182,8 +181,8 @@ export default {
       this.roleID = role.id
       this.role = role
     },
-    addUser() {
-      this.mutationAction(
+    async addUser() {
+      const res = await this.mutationAction(
         CreateUser,
         {
           userInput: {
@@ -201,16 +200,14 @@ export default {
             roleID: this.roleID,
           },
         },
-        User,
+        null,
         'Add user success',
-        'Add user error'
-      ).then((data) => {
-        if (data.data.createUser.status === 'CREATED') {
-          setTimeout(() => {
-            this.setShowAddUser('HQUsers')
-          }, 2000)
-        }
-      })
+        'Add user error',
+        null,
+        true
+      )
+      
+      res !== false && this.setShowAddUser('HQUsers')
     },
     cancelAdd() {
       this.setShowAddUser('HQUsers')

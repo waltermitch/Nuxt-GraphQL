@@ -12,6 +12,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -25,6 +26,7 @@
               placeholder="0.00"
               symbol="$"
               disabled
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -35,7 +37,7 @@
           <template #title>Over/Short</template>
 
           <template #input>
-            <CustomInput v-model="overShort" placeholder="0.00" symbol="$" disabled />
+            <CustomInput v-model="overShort" placeholder="0.00" symbol="$" disabled is-float="true" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -51,6 +53,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -65,6 +68,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -81,6 +85,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -95,6 +100,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -111,6 +117,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -125,6 +132,7 @@
               rules="required|currency"
               type="number"
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -140,6 +148,7 @@
               placeholder="0.00"
               disabled
               symbol="$"
+              is-float="true"
             />
           </template>
         </InputWithTitle>
@@ -153,6 +162,7 @@
               placeholder="0.00"
               symbol="$"
               disabled
+              is-float="true"
             />
           </template>
         </InputWithTitle>

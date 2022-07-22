@@ -15,7 +15,7 @@
           </div>
         </template>
 
-        <template v-if="periods" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
             v-for="period in mutablePeriods"
             :key="period.id"
@@ -60,14 +60,51 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === period.id"
               :is-delete-active="isDelete === period.id"
-              @edit="editPeriod(period)"
-              @delete="deleteItem(period.id)"
+              @edit="isAdd ? null : editPeriod(period)"
+              @delete="isAdd ? null : deleteItem(period.id)"
               @cancel="cancelPeriodEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(period)"
               @confirm-delete="confirmDelete(period.id)"
             />
           </CustomTableRow>
+
+            <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
@@ -100,7 +137,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addPeriodRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -116,7 +153,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Periods from '../graphql/queries/periods.gql'
+import PeriodList from '../graphql/queries/periodList.gql'
 import CreatePeriod from '../graphql/mutations/period/createPeriod.gql'
 import UpdatePeriod from '../graphql/mutations/period/updatePeriod.gql'
 import DeletePeriod from '../graphql/mutations/period/deletePeriod.gql'
@@ -125,11 +162,23 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import {formatDateFromAPI, formatDate} from "~/helpers/helpers";
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
+
 export default {
   name: 'HQPeriodsContent',
   components: {
@@ -139,18 +188,29 @@ export default {
     CustomTableRow,
     CustomInput,
     CustomTableAddIcon,
+    
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin, paginatorMixin],
   apollo: {
-    periods: {
-      query: Periods,
-      variables: {
-        hasUnits: false,
-      },
-    },
   },
   data() {
     return {
+      // pagination
+      query: PeriodList,
+      hasQueryVariable: true,
+      queryVariable: {
+        hasUnits: false,
+      },
+      queryName: "periodList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+      
       mutablePeriods: [],
       periodNew: {
         periodEnd: '',
@@ -163,7 +223,7 @@ export default {
   },
   computed: {
     formattedPeriods() {
-      return this.periods.map((period) => {
+      return this.queryData.data && this.queryData.data.length && this.queryData.data.map((period) => {
         return {
           ...period,
           periodEnd: this.formatDateFromAPI(period.periodEnd),
@@ -172,13 +232,16 @@ export default {
     },
   },
   watch: {
-    periods() {
-      if (this.periods)
+    queryData() {
+      if (this.queryData.data && this.queryData.data.length)
         this.mutablePeriods = Object.assign({}, this.formattedPeriods);
     },
   },
+  beforeMount(){
+    this.fetchData();
+  },
   mounted() {
-    if (this.periods)
+    if (this.queryData.data && this.queryData.data.length)
       this.mutablePeriods = Object.assign({}, this.formattedPeriods);
   },
   methods: {
@@ -188,8 +251,17 @@ export default {
       this.periodEdit = Object.assign({}, period)
       this.edit(period.id)
     },
-    addPeriod() {
-      this.mutationAction(
+    addPeriodRow() {
+      this.periodNew = {
+        periodEnd: '',
+        year: null,
+        month: null,
+        week: null,
+      }
+      this.addRow()
+    },
+    async addPeriod() {
+      const res = await this.mutationAction(
         CreatePeriod,
         {
           periodInput: {
@@ -199,15 +271,19 @@ export default {
             week: Number(this.periodNew.week),
           },
         },
-        Periods,
+        null,
         'Add period success',
         'Add period error',
-        {
-          hasUnits: false,
-        }
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage(1)
+      // pagination
     },
-    confirmEdit(period) {
+    async confirmEdit(period) {
       const editedPeriod = {
         id: period.id,
         periodEnd: this.formatDate(this.periodEdit.periodEnd),
@@ -216,30 +292,36 @@ export default {
         week: Number(this.periodEdit.week),
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdatePeriod,
-        {
-          periodInput: editedPeriod,
-        },
-        Periods,
+        { periodInput: editedPeriod },
+        null,
         'Edit period success',
         'Edit period error',
-        {
-          hasUnits: false,
-        }
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage(1);
+      // pagination
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeletePeriod,
         { id },
-        Periods,
+        null,
         'Delete period success',
         'Delete period error',
-        {
-          hasUnits: false,
-        }
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelPeriodEdit() {
       this.cancelEdit()

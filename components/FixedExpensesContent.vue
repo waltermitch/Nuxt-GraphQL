@@ -14,9 +14,9 @@
           </div>
         </template>
 
-        <template v-if="fixedExpenses" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="item in fixedExpenses"
+            v-for="item in queryData.data"
             :key="item.id"
             class="table-row"
           >
@@ -65,14 +65,51 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === item.id"
               :is-delete-active="isDelete === item.id"
-              @edit="editItem(item)"
-              @delete="deleteItem(item.id)"
+              @edit="isAdd ? null : editItem(item)"
+              @delete="isAdd ? null : deleteItem(item.id)"
               @cancel="cancelExpensesEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(item)"
               @confirm-delete="confirmDelete(item.id)"
             />
           </CustomTableRow>
+
+          <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomRadioButton
@@ -104,7 +141,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addFixedExpenseRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -131,13 +168,24 @@ import CustomRadioButton from './CustomRadioButton.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import FixedExpense from '~/graphql/queries/fixedExpenses.gql'
+import FixedExpenseList from '~/graphql/queries/fixedExpenseList.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import CreateFixedExpense from '~/graphql/mutations/fixedExpense/createFixedExpenses.gql'
 import DeleteFixedExpense from '~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql'
 import UpdateFixedExpense from '~/graphql/mutations/fixedExpense/updateFixedExpense.gql'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
 
 export default {
   name: 'FixedExpensesContent',
@@ -149,18 +197,28 @@ export default {
     CustomInput,
     ValidationObserver,
     CustomTableAddIcon,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [formMixin, tableActionsMixin, mutationMixin],
+  mixins: [formMixin, tableActionsMixin, mutationMixin, paginatorMixin],
   apollo: {
     glAccounts: {
       query: GlAccounts,
     },
-    fixedExpenses: {
-      query: FixedExpense,
-    },
   },
   data() {
     return {
+      // pagination
+      query: FixedExpenseList,
+      queryName: "fixedExpenseList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+
       newItem: {
         id: '',
         comments: '',
@@ -170,6 +228,9 @@ export default {
       },
       itemEdit: {},
     }
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     editItem(item) {
@@ -182,8 +243,18 @@ export default {
     selectGlAccount(glAccount) {
       this.newItem.glAccount = glAccount
     },
+    addFixedExpenseRow() {
+      this.newItem = {
+        id: '',
+        comments: '',
+        monthly: false,
+        glAccount: '',
+        amount: '',
+      }
+      this.addRow()
+    },
     async createFixedExpense() {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreateFixedExpense,
         {
           fixedExpenseInput: {
@@ -195,10 +266,17 @@ export default {
             monthly: this.newItem.monthly,
           },
         },
-        FixedExpense,
+        null,
         'Add fixed expense success',
-        'Add fixed expense error'
+        'Add fixed expense error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
+      // pagination
     },
     setIsMonthlyEdit() {
       this.itemEdit.monthly = !this.itemEdit.monthly
@@ -211,15 +289,22 @@ export default {
       }
     },
     async confirmDelete(id) {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         DeleteFixedExpense,
         { id },
-        FixedExpense,
+        null,
         'Delete Fixed Expense success',
-        'Delete Fixed Expense error'
+        'Delete Fixed Expense error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
-    confirmEdit(expense) {
+    async confirmEdit(expense) {
       const editedFixedExpense = {
         id: expense.id,
         comments: this.itemEdit.comments,
@@ -230,13 +315,20 @@ export default {
         monthly: this.itemEdit.monthly,
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateFixedExpense,
         { fixedExpenseInput: editedFixedExpense },
-        FixedExpense,
+        null,
         'Add Fixed Expense success',
-        'Add Fixed Expense error'
+        'Add Fixed Expense error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage();
+      // pagination
     },
     cancelEvent() {
       this.isAdd = false

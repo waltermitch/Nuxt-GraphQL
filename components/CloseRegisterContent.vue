@@ -35,7 +35,7 @@
       </PageSubheaderItem>
 
       <PageSubheaderItem>
-        <template #title>${{ getTotalDailyDeposit }}</template>
+        <template #title>${{ parseFloat(getTotalDailyDeposit).toFixed(2) }}</template>
 
         <template #subtitle>Total Daily Deposit</template>
       </PageSubheaderItem>
@@ -98,13 +98,13 @@
             <div class="total-row">
               <h5 class="total-caption">Total Net Sales</h5>
 
-              <span class="total-amount">${{ getTotalNetSale }}</span>
+              <span class="total-amount">${{ parseFloat(getTotalNetSale).toFixed(2) }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">- Charge</h5>
 
-              <span class="total-amount">${{ getCharge }}</span>
+              <span class="total-amount">${{ parseFloat(getCharge).toFixed(2) }}</span>
             </div>
           </div>
 
@@ -114,19 +114,19 @@
             <div class="total-row">
               <h5 class="total-caption">Cash Total</h5>
 
-              <span class="total-amount">${{ getCashTotal }}</span>
+              <span class="total-amount">${{ parseFloat(getCashTotal).toFixed(2) }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">+ Cash Tax</h5>
 
-              <span class="total-amount">${{ getCashTax }}</span>
+              <span class="total-amount">${{ parseFloat(getCashTax).toFixed(2) }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">- Petty Cash</h5>
 
-              <span class="total-amount">${{ getPettyCash }}</span>
+              <span class="total-amount">${{ parseFloat(getPettyCash).toFixed(2) }}</span>
             </div>
           </div>
 
@@ -136,13 +136,13 @@
             <div class="total-row">
               <h5 class="total-caption">Calced Deposit</h5>
 
-              <span class="total-amount">${{ getCalcedDeposit }}</span>
+              <span class="total-amount">${{ parseFloat(getCalcedDeposit).toFixed(2) }}</span>
             </div>
 
             <div class="total-row">
               <h5 class="total-caption">Actual Deposit</h5>
 
-              <span class="total-amount">${{ getActualDeposit }}</span>
+              <span class="total-amount">${{ parseFloat(getActualDeposit).toFixed(2) }}</span>
             </div>
           </div>
 
@@ -152,7 +152,7 @@
             <div class="total-row">
               <h5 class="total-caption">Over/Short</h5>
 
-              <span class="total-amount">${{ getOverShort }}</span>
+              <span class="total-amount">${{ parseFloat(getOverShort).toFixed(2) }}</span>
             </div>
           </div>
         </div>

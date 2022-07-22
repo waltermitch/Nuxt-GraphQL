@@ -1,8 +1,8 @@
-#import '../fragments/county.gql'
+#import '../fragments/city.gql'
 #import '../fragments/state.gql'
 
-query CountyList($page: Int!) {
-  countyList(page: $page) {
+query CityList($page: Int!) {
+  cityList(page: $page) {
     paginatorInfo {
       count
       perPage
@@ -16,7 +16,7 @@ query CountyList($page: Int!) {
       hasMorePages
     }
     data {
-        ...CountyFragment
+        ...CityFragment
         state {
         ...StateFragment
         }

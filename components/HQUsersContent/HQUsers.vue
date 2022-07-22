@@ -15,8 +15,8 @@
             <th></th>
           </tr>
         </thead>
-        <tbody class="tables__body">
-          <tr v-for="(user, i) in users" :key="i">
+        <tbody v-if="queryData.data" class="tables__body">
+          <tr v-for="(user, i) in queryData.data" :key="i">
             <td width="50">{{ user.id }}</td>
             <td class="nowrap">{{ user.firstName }}</td>
             <td class="nowrap">{{ user.lastName }}</td>
@@ -36,8 +36,8 @@
             <td>
               <CustomTableIconsColumn
                 :is-delete-active="isDelete === user.id"
-                @edit="editUnit(user)"
-                @delete="deleteItem(user.id)"
+                @edit="isAdd ? null : editUnit(user)"
+                @delete="isAdd ? null : deleteItem(user.id)"
                 @cancel-delete="cancelDelete"
                 @confirm-delete="confirmDelete(user.id)"
               />
@@ -45,6 +45,44 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- pagination -->
+      <PaginationRow v-if="queryData.data && queryData.data.length">
+        <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+          <PaginationButton
+            :disabled="currentPage == 1"
+            :loading="fetchingData"
+            @event="firstPage"
+          > << </PaginationButton>
+          <PaginationButton
+            :disabled="currentPage == 1"
+            :loading="fetchingData"
+            @event="prevPage"
+          > < </PaginationButton>
+          <PaginationInput
+            v-model="page"
+            :disabled="fetchingData"
+            @change="goToPage"
+            @event="goToPage"
+            >
+          </PaginationInput>
+          <PaginationButton
+            :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+            :loading="fetchingData"
+            @event="nextPage"
+          > > </PaginationButton>
+          <PaginationButton
+            :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+            :loading="fetchingData"
+            @event="lastPage"
+          > >> </PaginationButton>
+        </div>
+        <div class='description-bar'>
+          Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+        </div>
+      </PaginationRow>
+      <!-- pagination -->
+
     </div>
   </PageContentWrapper>
 </template>
@@ -52,23 +90,50 @@
 <script>
 import { mapActions } from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
-import Users from '../../graphql/queries/users.gql'
+import UserList from '../../graphql/queries/userList.gql'
 import CustomTableIconsColumn from '../CustomTableIconsColumn'
+
+// pagination
+import PaginationRow from '../PaginationRow.vue'
+import PaginationButton from '../PaginationButton.vue'
+import PaginationInput from '../PaginationInput.vue'
+// pagination
+
 import DeleteUser from '~/graphql/mutations/users/deleteUser.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
 
 export default {
   name: 'HQUsers',
   components: {
     CustomTableIconsColumn,
     PageContentWrapper,
+
+    // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
   },
-  mixins: [tableActionsMixin, mutationMixin],
+  mixins: [tableActionsMixin, mutationMixin, paginatorMixin],
   apollo: {
-    users: {
-      query: Users,
-    },
+  },
+  data() {
+    return {
+      // pagination
+        query: UserList,
+        queryName: "userList",
+        currentPage: 1,
+        queryData: {},
+        // pagination
+    }
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     ...mapActions({
@@ -78,27 +143,39 @@ export default {
     editUnit(user) {
       this.setUpdateUser(user)
       this.setShowAddUser('HQUsersEdit')
+      this.edit(user.id)
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteUser,
         { id },
-        Users,
-        'Delete user success',
-        'Delete user error'
+        null,
+        'Delete role success',
+        'Delete role error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.pagination-row {
+  border-top: 1px solid #efefef;
+  background: #fff;
+}
 .tables {
   border-collapse: separate;
   border-spacing: 0;
   &-wrapper {
     border-radius: 8px;
-    border: 1px solid #efefef;
+    border: 1px solid #e4e1e1;
     overflow: auto;
   }
 

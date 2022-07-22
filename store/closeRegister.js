@@ -1,5 +1,6 @@
 import { CLOSE_REGISTER } from '~/constants/closeRegister'
-import RegisterCloseoutCalculation from '~/graphql/mutations/registerCloseout/registerCloseoutCalculation'
+import RegisterCloseoutCalculation
+  from '~/graphql/mutations/registerCloseout/registerCloseoutCalculation'
 
 export const state = () => ({
   isEdit: false,

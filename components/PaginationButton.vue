@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     clickEvent() {
-
+        // not clickable when loading the page data at the table
         !this.loading && this.$emit('event')
     },
   },

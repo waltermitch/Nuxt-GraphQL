@@ -13,9 +13,9 @@
           </div>
         </template>
 
-        <template v-if="cities" #content>
+        <template v-if="queryData.data" #content>
           <CustomTableRow
-            v-for="city in cities"
+            v-for="city in queryData.data"
             :key="city.id"
             class="table-row"
           >
@@ -55,8 +55,8 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === city.id"
               :is-delete-active="isDelete === city.id"
-              @edit="editCity(city)"
-              @delete="deleteItem(city.id)"
+              @edit="isAdd ? null : editCity(city)"
+              @delete="isAdd ? null : deleteItem(city.id)"
               @cancel="cancelCityEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(city)"
@@ -64,6 +64,43 @@
             />
           </CustomTableRow>
 
+          <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
+          
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
               :options="states"
@@ -88,7 +125,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addCityRow" />
           </CustomTableRow>
 
           <CustomTableRow>
@@ -108,7 +145,7 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import Cities from '../graphql/queries/cities.gql'
+import CityList from '../graphql/queries/cityList.gql'
 import States from '../graphql/queries/states.gql'
 import CreateCity from '../graphql/mutations/city/createCity.gql'
 import UpdateCity from '../graphql/mutations/city/updateCity.gql'
@@ -121,10 +158,22 @@ import CustomInput from './CustomInput.vue'
 import DefaultButton from './DefaultButton.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import LoadingBar from './LoadingBar.vue'
+
+// pagination
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
+// pagination
+
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { formMixin } from '~/mixins/formMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+
+// pagination
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+// pagination
+
 export default {
   name: 'HQCityContent',
   components: {
@@ -137,18 +186,29 @@ export default {
     DefaultButton,
     CustomTableAddIcon,
     LoadingBar,
+
+     // pagination
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
+    // pagination
+
   },
-  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin],
+  mixins: [submitMessagesMixin, formMixin, mutationMixin, tableActionsMixin,  paginatorMixin],
   apollo: {
-    cities: {
-      query: Cities,
-    },
     states: {
       query: States,
     },
   },
   data() {
     return {
+      // pagination
+      query: CityList,
+      queryName: "cityList",
+      currentPage: 1,
+      queryData: {},
+      // pagination
+      
       cityNew: {
         name: '',
         state: null,
@@ -156,6 +216,9 @@ export default {
       },
       cityEdit: {},
     }
+  },
+  beforeMount(){
+    this.fetchData();
   },
   methods: {
     onChangeFloatValue(stateProp, isEdit = false) {
@@ -175,8 +238,16 @@ export default {
     selectState(state) {
       this.cityNew.state = state
     },
-    addCity() {
-      this.mutationAction(
+    addCityRow() {
+      this.cityNew = {
+        name: '',
+        state: null,
+        tax: '',
+      }
+      this.addRow()
+    },
+    async addCity() {
+      const res = await this.mutationAction(
         CreateCity,
         {
           cityInput: {
@@ -187,12 +258,19 @@ export default {
             tax: +this.cityNew.tax,
           },
         },
-        Cities,
+        null,
         'Add city success',
-        'Add city error'
+        'Add city error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
+      // pagination
     },
-    confirmEdit(city) {
+    async confirmEdit(city) {
       const editedCity = {
         id: city.id,
         name: this.cityEdit.name,
@@ -202,22 +280,36 @@ export default {
         tax: +this.cityEdit.tax,
       }
 
-      this.mutationAction(
+      const res = await this.mutationAction(
         UpdateCity,
         { cityInput: editedCity },
-        Cities,
+        null,
         'Edit city success',
-        'Edit city error'
+        'Edit city error',
+        null,
+        true
       )
+
+      // pagination
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage();
+      // pagination
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteCity,
         { id },
-        Cities,
+        null,
         'Delete state success',
-        'Delete state error'
+        'Delete state error',
+        null,
+        true
       )
+
+      // pagination
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
+      // pagination
     },
     cancelCityEdit() {
       this.cancelEdit()

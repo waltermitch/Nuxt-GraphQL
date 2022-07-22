@@ -103,7 +103,6 @@
           </PaginationRow>
           <!-- pagination -->
 
-
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomSelect
               :options="states"
@@ -246,7 +245,7 @@ export default {
       )
 
       // pagination
-      this.clearTableActionState();
+      res !== false && this.clearTableActionState();
       res !== false && this.goToPage((this.queryData.paginatorInfo.total === this.queryData.paginatorInfo.perPage * this.queryData.paginatorInfo.lastPage) ? this.queryData.paginatorInfo.lastPage + 1 : this.queryData.paginatorInfo.lastPage)
       // pagination
     },
@@ -260,7 +259,7 @@ export default {
         tax: +this.countyNew.tax,
       }
 
-      await this.mutationAction(
+      const res = await this.mutationAction(
         UpdateCounty,
         { countyInput: editedCounty },
         null,
@@ -271,8 +270,8 @@ export default {
       )
 
       // pagination
-      this.clearTableActionState();
-      this.goToPage();
+      res !== false && this.clearTableActionState();
+      res !== false && this.goToPage();
       // pagination
     },
     async confirmDelete(id) {

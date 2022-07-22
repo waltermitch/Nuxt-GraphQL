@@ -20,7 +20,7 @@ export default {
     justify-content: space-between;
 
     border-bottom: 1px solid $white-smoke;
-    font-size: 14px;
+    font-size: $font-s;
 
     &:last-child {
         border-bottom: none;

@@ -2,4 +2,7 @@ fragment MenuFragment on Menu {
   id
   name
   slugName
+  hasViewCapability
+  hasCreateCapability
+  hasManageCapability
 }

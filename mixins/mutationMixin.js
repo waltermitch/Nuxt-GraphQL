@@ -18,6 +18,7 @@ export const mutationMixin = {
 
       if (formValidated || !this.$refs.form) {
         try {
+          // if I send the Query as null it doesn't run any query after mutation
           const res = await this.$apollo.mutate(queryToRefetch ? {
             mutation,
             variables: variablesObject,
@@ -29,9 +30,21 @@ export const mutationMixin = {
           if (!doNotClearState) {
             this.clearState()
           }
-          this.showSubmitMessage(successMessage, 'success')
 
-          return res
+          // get the mutation name from the response
+          let mutationName
+          for ( const x in res.data ) {
+            mutationName = x
+          }
+
+          // check if it has the error which is sent by developer
+          if ( res.data[mutationName].status !== false && res.data[mutationName].status !== 'error' && res.data[mutationName].status !== 'ERROR' ) {
+            this.showSubmitMessage(successMessage, 'success')
+            return res
+          } else {
+            this.showSubmitMessage(res.data[mutationName].message || 'Not received Error message but has an error', 'error')
+            return false
+          }
         } catch (error) {
           const errorObj = error.graphQLErrors[0]
           const extensionsErrorName = errorObj.extensions.category
@@ -53,10 +66,10 @@ export const mutationMixin = {
             }
           }
         }
-        return false
+        return false // return false when fail
       } else {
         this.showSubmitMessage('Form validation failed', 'error')
-        return false
+        return false // return false when fail
       }
     },
   },

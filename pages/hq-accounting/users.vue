@@ -9,7 +9,7 @@
 
       <div class="title-area">
         <PageTitle> Users</PageTitle>
-        <DefaultButton button-color-gamma="red" @event="addUsers">
+        <DefaultButton v-if="isShowAddUser == 'HQUsers'" button-color-gamma="red" @event="addUsers">
           + Add user
         </DefaultButton>
       </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {mapActions} from "vuex"
+import {mapActions, mapGetters} from "vuex"
 import {HQ_ACCOUNTING} from '~/constants/constants'
 import {sideBarNavTabsMixin} from '~/mixins/sideBarNavTabsMixin'
 import BasePageLayout from '~/components/BasePageLayout.vue'
@@ -45,6 +45,11 @@ export default {
   },
   mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
+  computed: {
+    ...mapGetters({
+      isShowAddUser: 'users/getShowAddUser',
+    }),
+  },
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
   },
