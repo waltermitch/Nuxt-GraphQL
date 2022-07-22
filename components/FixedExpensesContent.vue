@@ -50,9 +50,10 @@
               type="number"
               placeholder="0.00"
               symbol="$"
+              @change="onChangeFloatValue(true)"
             />
 
-            <span v-else>{{ item.amount }}</span>
+            <span v-else>{{ parseFloat(item.amount).toFixed(2) }}</span>
 
             <CustomInput
               v-if="isEdit === item.id"
@@ -131,6 +132,7 @@
               type="number"
               placeholder="0.00"
               symbol="$"
+              @change="onChangeFloatValue()"
             />
 
             <CustomInput
@@ -177,7 +179,8 @@ import PaginationInput from './PaginationInput.vue'
 
 import GlAccounts from '~/graphql/queries/glAccounts.gql'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import FixedExpenseList from '~/graphql/queries/fixedExpenseList.gql'
+import FixedExpensesFiltered from '~/graphql/queries/fixedExpensesFiltered.gql'
+import Me from '~/graphql/queries/me.query.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import CreateFixedExpense from '~/graphql/mutations/fixedExpense/createFixedExpenses.gql'
 import DeleteFixedExpense from '~/graphql/mutations/fixedExpense/deleteFixedExpenses.gql'
@@ -213,10 +216,14 @@ export default {
   data() {
     return {
       // pagination
-      query: FixedExpenseList,
-      queryName: "fixedExpenseList",
+      query: FixedExpensesFiltered,
+      queryName: "FixedExpenses",
       currentPage: 1,
       queryData: {},
+      hasQueryVariable: true,
+      queryVariable: {
+        unit_id: null
+      },
       // pagination
 
       newItem: {
@@ -230,11 +237,29 @@ export default {
     }
   },
   beforeMount(){
-    this.fetchData();
+    this.getMyData().then((me) => {
+      this.queryVariable.unit_id = me.selectedUnit.id;
+      this.fetchData();
+    });
   },
   methods: {
+    onChangeFloatValue(isEdit = false) {
+      if ( isEdit ) {
+        this.itemEdit.amount = parseFloat(this.itemEdit.amount !== '' ? this.itemEdit.amount : 0).toFixed(2);
+      } else {
+        this.newItem.amount = parseFloat(this.newItem.amount !== '' ? this.newItem.amount : 0).toFixed(2);
+      }
+    },
+    async getMyData() {
+      const me = await this.$apollo.query({
+        query: Me,
+        fetchPolicy: 'network-only'
+      });
+      return me.data.me;
+    },
     editItem(item) {
       this.itemEdit = Object.assign({}, item)
+      this.onChangeFloatValue(true);
       this.edit(item.id)
     },
     selectGlAccountEdit(glAccount) {

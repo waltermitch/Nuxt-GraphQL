@@ -10,11 +10,12 @@
 
             <template #input>
               <CustomInput
-                v-model.number="amount"
+                v-model="amount"
                 type="number"
                 placeholder="0.00"
                 rules="required|currency"
                 symbol="$"
+                @change="onChangeFloatValue"
               />
             </template>
           </InputWithTitle>
@@ -30,13 +31,12 @@
       </ValidationObserver>
 
       <div class="buttons-area">
-        <DefaultButton button-color-gamma="red" @event="saveEvent">
+        <DefaultButton button-color-gamma="red" @event="addCallLabor">
           Save
         </DefaultButton>
-
-        <DefaultButton button-color-gamma="white" @event="cancelEvent">
+<!--         <DefaultButton button-color-gamma="white" @event="cancelEvent">
           Cancel
-        </DefaultButton>
+        </DefaultButton> -->
       </div>
     </PageContentWrapper>
   </div>
@@ -44,12 +44,16 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-import { formMixin } from '../mixins/formMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
 import PageSubHeaderContent from './PageSubHeaderContent.vue'
+import CreateCallLabor from '~/graphql/mutations/callLabor/createCallLabor.gql'
+
+import { formMixin } from '~/mixins/formMixin'
+import { mutationMixin } from '~/mixins/mutationMixin'
+
 export default {
   name: 'OnCallLaborContent',
   components: {
@@ -60,13 +64,34 @@ export default {
     CustomInput,
     PageSubHeaderContent,
   },
-  mixins: [formMixin],
+  mixins: [formMixin, mutationMixin],
   data() {
     return {
       amount: '',
-      nameComment: '',
+      nameComment: ''
     }
   },
+  methods: {
+    onChangeFloatValue() {
+      this.amount = parseFloat(this.amount !== '' ? this.amount : 0).toFixed(2);
+    },
+    async addCallLabor() {
+      console.log(this.name, this.nameComment)
+      const res = await this.mutationAction(
+        CreateCallLabor,
+        {
+          amount: this.amount,
+          comments: this.nameComment
+        },
+        null,
+        'Add fixed expense success',
+        'Add fixed expense error',
+        null,
+        true
+      )
+      console.log('res', res)
+    }
+  }
 }
 </script>
 

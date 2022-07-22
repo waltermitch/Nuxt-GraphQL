@@ -91,8 +91,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('bank', true)"
             />
-            <span v-else> ${{ register.bank }} </span>
+            <span v-else> ${{ parseFloat(register.bank).toFixed(2) }} </span>
 
             <CustomInput
               v-if="isEdit === register.id"
@@ -100,8 +102,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('nonResetable', true)"
             />
-            <span v-else> ${{ register.nonResetable }} </span>
+            <span v-else> ${{ parseFloat(register.nonResetable).toFixed(2) }} </span>
 
             <CustomInput
               v-if="isEdit === register.id"
@@ -109,8 +113,10 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('commission', true)"
             />
-            <span v-else> {{ register.commission }}% </span>
+            <span v-else> {{ parseFloat(register.commission).toFixed(2) }}% </span>
 
             <CustomRadioButton
               v-if="isEdit === register.id"
@@ -141,8 +147,8 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === register.id"
               :is-delete-active="isDelete === register.id"
-              @edit="editRegister(register)"
-              @delete="deleteItem(register.id)"
+              @edit="isAdd ? null : editRegister(register)"
+              @delete="isAdd ? null : deleteItem(register.id)"
               @cancel="cancelRegisterEdit"
               @cancel-delete="cancelDelete"
               @confirm-edit="confirmEdit(registerEdit)"
@@ -174,6 +180,8 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('bank')"
             />
 
             <CustomInput
@@ -181,6 +189,8 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('nonResetable')"
             />
 
             <CustomInput
@@ -188,6 +198,8 @@
               type="number"
               rules="required|double"
               do-not-show-error-message
+              is-float="true"
+              @change="onChangeFloatValue('commission')"
             />
 
             <CustomRadioButton
@@ -285,6 +297,13 @@ export default {
     },
   },
   methods: {
+    onChangeFloatValue(stateProp, isEdit = false) {
+      if ( isEdit ) {
+        this.registerEdit[stateProp] = parseFloat(this.registerEdit[stateProp] !== '' ? this.registerEdit[stateProp] : 0).toFixed(2)
+      } else {
+        this.registerNew[stateProp] = parseFloat(this.registerNew[stateProp] !== '' ? this.registerNew[stateProp] : 0).toFixed(2)
+      }
+    },
     editRegister(register) {
       this.registerEdit = Object.assign({}, register)
       this.edit(register.id)
