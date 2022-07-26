@@ -28,6 +28,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              @change="onChangeFloatValue('managementAmount')"
             />
           </template>
         </InputWithTitle>
@@ -42,8 +43,9 @@
               v-model="managementPercent"
               type="number"
               rules="required"
-              placeholder="0"
+              placeholder="0.00"
               symbol="%"
+              @change="onChangeFloatValue('managementPercent')"
             />
           </template>
         </InputWithTitle>
@@ -76,6 +78,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              @change="onChangeFloatValue('administrativeAmount')"
             />
           </template>
         </InputWithTitle>
@@ -90,8 +93,9 @@
               v-model="administrativePercent"
               type="number"
               rules="required"
-              placeholder="0"
+              placeholder="0.00"
               symbol="%"
+              @change="onChangeFloatValue('administrativePercent')"
             />
           </template>
         </InputWithTitle>
@@ -124,6 +128,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              @change="onChangeFloatValue('supportAmount')"
             />
           </template>
         </InputWithTitle>
@@ -138,8 +143,9 @@
               v-model="supportPercent"
               type="number"
               rules="required"
-              placeholder="0"
+              placeholder="0.00"
               symbol="%"
+              @change="onChangeFloatValue('supportPercent')"
             />
           </template>
         </InputWithTitle>
@@ -154,8 +160,9 @@
               v-model="benefitsPercent"
               type="number"
               rules="required"
-              placeholder="0"
+              placeholder="0.00"
               symbol="%"
+              @change="onChangeFloatValue('benefitsPercent')"
             />
           </template>
         </InputWithTitle>
@@ -170,8 +177,9 @@
               v-model="commissionPercent"
               type="number"
               rules="required"
-              placeholder="0"
+              placeholder="0.00"
               symbol="%"
+              @change="onChangeFloatValue('commissionPercent')"
             />
           </template>
         </InputWithTitle>
@@ -256,11 +264,26 @@ export default {
       query: GlAccounts,
     },
   },
+  data () {
+    return {
+      managementAmount: '',
+      managementPercent: '',
+
+      administrativeAmount: '',
+      administrativePercent: '',
+
+      supportAmount: '',
+      supportPercent: '',
+
+      benefitsPercent: '',
+      commissionPercent: '',
+    }
+  },
   computed: {
     managementFeeType() {
       return this.unit.managementFeeType
     },
-    managementAmount: {
+    /* managementAmount: {
       get() {
         return this.unit.managementAmount
       },
@@ -270,8 +293,8 @@ export default {
           value
         )
       },
-    },
-    managementPercent: {
+    }, */
+    /* managementPercent: {
       get() {
         return this.unit.managementPercent
       },
@@ -281,11 +304,11 @@ export default {
           value
         )
       },
-    },
+    }, */
     administrativeFeeType() {
       return this.unit.administrativeFeeType
     },
-    administrativeAmount: {
+    /* administrativeAmount: {
       get() {
         return this.unit.administrativeAmount
       },
@@ -295,8 +318,8 @@ export default {
           value
         )
       },
-    },
-    administrativePercent: {
+    }, */
+    /* administrativePercent: {
       get() {
         return this.unit.administrativePercent
       },
@@ -306,19 +329,19 @@ export default {
           value
         )
       },
-    },
-    supportAmount: {
+    }, */
+    /* supportAmount: {
       get() {
         return this.unit.supportAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
       },
-    },
+    }, */
     supportFeeType() {
       return this.unit.supportFeeType
     },
-    supportPercent: {
+    /* supportPercent: {
       get() {
         return this.unit.supportPercent
       },
@@ -328,15 +351,15 @@ export default {
           value
         )
       },
-    },
-    benefitsPercent: {
+    }, */
+    /* benefitsPercent: {
       get() {
         return this.unit.benefitsPercent
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
       },
-    },
+    }, */
     regTax: {
       get() {
         return this.unit.regTax
@@ -345,19 +368,39 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', value)
       },
     },
-    commissionPercent: {
+    /* commissionPercent: {
       get() {
         return this.unit.commissionPercent
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
       },
-    },
+    }, */
     isKronos() {
       return this.unit.isKronos
     },
   },
   methods: {
+    onChangeFloatValue(stateProp) {
+      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      if ( stateProp === 'managementAmount' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR', this[stateProp])
+      } else if ( stateProp === 'managementPercent' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT', this[stateProp])
+      } else if ( stateProp === 'administrativeAmount' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR', this[stateProp])
+      } else if ( stateProp === 'administrativePercent' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT', this[stateProp])
+      } else if ( stateProp === 'supportAmount' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', this[stateProp])
+      } else if ( stateProp === 'supportPercent' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT', this[stateProp])
+      } else if ( stateProp === 'benefitsPercent' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', this[stateProp])
+      } else if ( stateProp === 'commissionPercent' ) {
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', this[stateProp])
+      }
+    },
     selectManagementFeeType(managementFeeType) {
       this.$store.commit(
         'unitMaintenance/SET_UNIT_MANAGEMENT_FEE_TYPE',
@@ -412,6 +455,9 @@ export default {
             },
             city: {
               connect: Number(this.unit.city.id),
+            },
+            startPeriod: {
+              connect: Number(this.unit.startPeriod.id)
             },
             regTax: {
               connect: Number(this.unit.regTax.id),

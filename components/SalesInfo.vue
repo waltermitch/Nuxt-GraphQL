@@ -6,22 +6,13 @@
 
         <template #input>
           <CustomInput
-            v-model.number="nonResetable"
+            v-model="nonResetable"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('nonResetable')"
           />
-          <!-- <CustomInput
-            v-model="getNonResetable"
-            rules="currency|required"
-            placeholder="0.00"
-            type="number"
-            symbol="$"
-            is-float="true"
-            @change="onChangeFloatValue('getNonResetable')"
-          /> -->
         </template>
       </InputWithTitle>
 
@@ -50,12 +41,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="netOV"
+            v-model="netOV"
             rules="currency|required"
             type="number"
             placeholder="0.00"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('netOV')"
           />
         </template>
       </InputWithTitle>
@@ -76,12 +67,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="netCharge"
+            v-model="netCharge"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('netCharge')"
           />
         </template>
       </InputWithTitle>
@@ -93,12 +84,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="taxFromTheTape"
+            v-model="taxFromTheTape"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('taxFromTheTape')"
           />
         </template>
       </InputWithTitle>
@@ -108,12 +99,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="netVoucher"
+            v-model="netVoucher"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('netVoucher')"
           />
         </template>
       </InputWithTitle>
@@ -125,12 +116,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="overringVoidTax"
+            v-model="overringVoidTax"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('overringVoidTax')"
           />
         </template>
       </InputWithTitle>
@@ -151,12 +142,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="chargeTax"
+            v-model="chargeTax"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('chargeTax')"
           />
         </template>
       </InputWithTitle>
@@ -168,12 +159,12 @@
 
         <template #input>
           <CustomInput
-            v-model.number="voucherTax"
+            v-model="voucherTax"
             rules="currency|required"
             placeholder="0.00"
             type="number"
             symbol="$"
-            is-float="true"
+            @change="onChangeFloatValue('voucherTax')"
           />
         </template>
       </InputWithTitle>
@@ -221,8 +212,20 @@ export default {
   name: 'SalesInfo',
   components: { ValidationObserver, InputRow, CustomInput },
   mixins: [closeRegisterMixin, tabsViewMixin, meMixin],
+  data () {
+    return {
+      nonResetable: '',
+      netOV: '',
+      netCharge: '',
+      taxFromTheTape: '',
+      netVoucher: '',
+      overringVoidTax: '',
+      chargeTax: '',
+      voucherTax: '',
+    }
+  },
   computed: {
-    nonResetable: {
+    /* nonResetable: {
       get() {
         return this.getNonResetable
       },
@@ -232,7 +235,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     netTotal: {
       get() {
         return this.getNetTotal
@@ -249,7 +252,7 @@ export default {
         this.$store.commit('closeRegister/SET_LAST_NON_RESETTABLE', value)
       },
     },
-    netOV: {
+    /* netOV: {
       get() {
         return this.getNetOV
       },
@@ -259,7 +262,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     totalToDistribute: {
       get() {
         return this.getTotalToDistribute
@@ -268,7 +271,7 @@ export default {
         this.$store.commit('closeRegister/SET_TOTAL_TO_DISTRIBUTE', value)
       },
     },
-    netCharge: {
+    /* netCharge: {
       get() {
         return this.getNetCharge
       },
@@ -278,8 +281,8 @@ export default {
           value,
         })
       },
-    },
-    taxFromTheTape: {
+    }, */
+    /* taxFromTheTape: {
       get() {
         return this.getTaxFromTheTape
       },
@@ -289,8 +292,8 @@ export default {
           value,
         })
       },
-    },
-    netVoucher: {
+    }, */
+    /* netVoucher: {
       get() {
         return this.getNetVoucher
       },
@@ -300,8 +303,8 @@ export default {
           value,
         })
       },
-    },
-    overringVoidTax: {
+    }, */
+    /* overringVoidTax: {
       get() {
         return this.getOverringVoidTax
       },
@@ -311,7 +314,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     netCash: {
       get() {
         return this.getNetCash
@@ -320,7 +323,7 @@ export default {
         this.$store.commit('closeRegister/SET_NET_CASH', value)
       },
     },
-    chargeTax: {
+    /* chargeTax: {
       get() {
         return this.getChargeTax
       },
@@ -330,8 +333,8 @@ export default {
           value,
         })
       },
-    },
-    voucherTax: {
+    }, */
+    /* voucherTax: {
       get() {
         return this.getVoucherTax
       },
@@ -341,7 +344,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     cashTax: {
       get() {
         return this.getCashTax
@@ -352,25 +355,50 @@ export default {
     },
   },
   methods: {
-    /* 
-    nonResetable: {
-      get() {
-        return this.getNonResetable
-      },
-      set(value) {
+    onChangeFloatValue(stateProp) {
+      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      if ( stateProp === 'nonResetable' ) {
         this.$store.dispatch('closeRegister/setNonResetable', {
           ...this.calculationVariables,
-          value,
+          value: this[stateProp],
         })
-      },
-    },
-    */
-    /* onChangeFloatValue(inputName, value) {
-      this.$store.dispatch('closeRegister/setNonResetable', {
-        ...this.calculationVariables,
-        parseFloat(value !== '' ? value : 0).toFixed(2),
-      })
-    } */
+      } else if ( stateProp === 'netOV' ) {
+        this.$store.dispatch('closeRegister/setNetOV', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'netCharge' ) {
+        this.$store.dispatch('closeRegister/setNetCharge', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'taxFromTheTape' ) {
+        this.$store.dispatch('closeRegister/setTaxFromTheTape', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'netVoucher' ) {
+        this.$store.dispatch('closeRegister/setNetVoucher', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'overringVoidTax' ) {
+        this.$store.dispatch('closeRegister/setOverringTax', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'chargeTax' ) {
+        this.$store.dispatch('closeRegister/setChargeTax', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'voucherTax' ) {
+        this.$store.dispatch('closeRegister/setVoucherTax', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      }
+    }
   }
 }
 </script>

@@ -7,11 +7,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="totalPettyCash"
+              v-model="totalPettyCash"
               type="number"
               rules="required|currency"
+              placeholder="0.00"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('totalPettyCash')"
             />
           </template>
         </InputWithTitle>
@@ -79,7 +80,7 @@
               do-not-show-error-message
               type="number"
               rules="required|currency"
-              is-float="true"
+              @change="onChangeFloatValue('amount', true)"
             />
           </CustomTableRow>
 
@@ -169,6 +170,8 @@ export default {
         glAccount: '',
         amount: '',
       },
+
+      totalPettyCash: '',
     }
   },
   computed: {
@@ -177,9 +180,9 @@ export default {
         return Number(prev) + Number(current.amount)
       }, 0)
 
-      return this.totalPettyCash - totalAmount
+      return parseFloat(this.totalPettyCash - totalAmount).toFixed(2)
     },
-    totalPettyCash: {
+    /* totalPettyCash: {
       get() {
         return this.getTotalPettyCash
       },
@@ -189,9 +192,22 @@ export default {
           value,
         })
       },
-    },
+    }, */
   },
   methods: {
+    onChangeFloatValue(stateProp, crud = false) {
+      if ( crud ) {
+        this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2)
+        return ;
+      }
+      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      if ( stateProp === 'totalPettyCash' ) {
+        this.$store.dispatch('closeRegister/setTotalPettyCash', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      }
+    },
     async addItem() {
       const formValidated =
         this.$refs.form && (await this.$refs.form.validate())

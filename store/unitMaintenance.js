@@ -100,6 +100,12 @@ export const mutations = {
       county: payload,
     }
   },
+  SET_UNIT_START_PERIOD(state, payload) {
+    state.unit = {
+      ...state.unit,
+      startPeriod: payload,
+    }
+  },
   SET_UNIT_POPULATION(state, payload) {
     state.unit.population = payload
   },
@@ -127,6 +133,8 @@ export const mutations = {
   SET_UNIT_SYSCO(state, payload) {
     state.unit.sysco = payload
   },
+
+
   SET_UNIT_USERS(state, payload) {
     state.unit = {
       ...state.unit,

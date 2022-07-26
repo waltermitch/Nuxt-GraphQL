@@ -15,6 +15,7 @@ export const UNIT = {
   },
   district: '',
   county: '',
+  startPeriod: '',
   population: '',
   state: {
     id: '',

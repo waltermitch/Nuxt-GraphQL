@@ -38,6 +38,9 @@ fragment UnitFragment on Unit {
       ...StateFragment
     }
   }
+  startPeriod {
+    ...PeriodFragment
+  }
   unitType {
     ...UnitTypeFragment
   }

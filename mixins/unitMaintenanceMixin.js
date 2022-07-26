@@ -1,5 +1,9 @@
-import { mapActions, mapGetters } from 'vuex'
+import {
+  mapActions,
+  mapGetters,
+} from 'vuex'
 import { UNIT } from '~/constants/unit'
+
 export const unitMaintenanceMixin = {
   computed: {
     ...mapGetters({

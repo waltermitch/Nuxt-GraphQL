@@ -49,6 +49,7 @@ export default {
   methods: {
     addUnit() {
       this.$store.dispatch('unitMaintenance/setUnit', { ...UNIT })
+      this.setUnitID(null)
       this.showAddUnit()
     },
   },

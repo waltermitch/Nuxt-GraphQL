@@ -7,12 +7,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="actualCashDeposit"
+              v-model="actualCashDeposit"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('actualCashDeposit')"
             />
           </template>
         </InputWithTitle>
@@ -48,12 +48,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="customerCountBreakfast"
+              v-model="customerCountBreakfast"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('customerCountBreakfast')"
             />
           </template>
         </InputWithTitle>
@@ -63,12 +63,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="netSalesBreakfast"
+              v-model="netSalesBreakfast"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('netSalesBreakfast')"
             />
           </template>
         </InputWithTitle>
@@ -80,12 +80,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="customerCountLunch"
+              v-model="customerCountLunch"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('customerCountLunch')"
             />
           </template>
         </InputWithTitle>
@@ -95,12 +95,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="netSalesLunch"
+              v-model="netSalesLunch"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('netSalesLunch')"
             />
           </template>
         </InputWithTitle>
@@ -112,12 +112,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="customerCountDinner"
+              v-model="customerCountDinner"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('customerCountDinner')"
             />
           </template>
         </InputWithTitle>
@@ -127,12 +127,12 @@
 
           <template #input>
             <CustomInput
-              v-model.number="netSalesDinner"
+              v-model="netSalesDinner"
               placeholder="0.00"
               rules="required|currency"
               type="number"
               symbol="$"
-              is-float="true"
+              @change="onChangeFloatValue('netSalesDinner')"
             />
           </template>
         </InputWithTitle>
@@ -213,8 +213,19 @@ export default {
       query: Me,
     },
   },
+  data () {
+    return {
+      actualCashDeposit: '',
+      customerCountBreakfast: '',
+      customerCountLunch: '',
+      netSalesBreakfast: '',
+      netSalesLunch: '',
+      customerCountDinner: '',
+      netSalesDinner: '',
+    }
+  },
   computed: {
-    actualCashDeposit: {
+    /* actualCashDeposit: {
       get() {
         return this.getActualCashDeposit
       },
@@ -224,7 +235,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     calculatedCashDeposit: {
       get() {
         return this.getCalculatedCashDeposit
@@ -241,7 +252,7 @@ export default {
         this.$store.commit('closeRegister/SET_OVER_SHORT', value)
       },
     },
-    customerCountBreakfast: {
+    /* customerCountBreakfast: {
       get() {
         return this.getCustomerCountBreakfast
       },
@@ -251,8 +262,8 @@ export default {
           value,
         })
       },
-    },
-    customerCountLunch: {
+    }, */
+    /* customerCountLunch: {
       get() {
         return this.getCustomerCountLunch
       },
@@ -262,8 +273,8 @@ export default {
           value,
         })
       },
-    },
-    netSalesBreakfast: {
+    }, */
+    /* netSalesBreakfast: {
       get() {
         return this.getNetSalesBreakfast
       },
@@ -273,8 +284,8 @@ export default {
           value,
         })
       },
-    },
-    netSalesLunch: {
+    }, */
+    /* netSalesLunch: {
       get() {
         return this.getNetSalesLunch
       },
@@ -284,8 +295,8 @@ export default {
           value,
         })
       },
-    },
-    customerCountDinner: {
+    }, */
+    /* customerCountDinner: {
       get() {
         return this.getCustomerCountDinner
       },
@@ -295,8 +306,8 @@ export default {
           value,
         })
       },
-    },
-    netSalesDinner: {
+    }, */
+    /* netSalesDinner: {
       get() {
         return this.getNetSalesDinner
       },
@@ -306,7 +317,7 @@ export default {
           value,
         })
       },
-    },
+    }, */
     customerCountTotals: {
       get() {
         return this.getCustomerCountTotals
@@ -325,6 +336,45 @@ export default {
     },
   },
   methods: {
+    onChangeFloatValue(stateProp) {
+      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      if ( stateProp === 'actualCashDeposit' ) {
+        this.$store.dispatch('closeRegister/setActualCashDeposit', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'customerCountBreakfast' ) {
+        this.$store.dispatch('closeRegister/setCustomerCountBreakfast', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'customerCountLunch' ) {
+        this.$store.dispatch('closeRegister/setCustomerCountLunch', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'netSalesBreakfast' ) {
+        this.$store.dispatch('closeRegister/setNetSalesBreakfast', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'netSalesLunch' ) {
+        this.$store.dispatch('closeRegister/setNetSalesLunch', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'customerCountDinner' ) {
+        this.$store.dispatch('closeRegister/setCustomerCountDinner', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      } else if ( stateProp === 'netSalesDinner' ) {
+        this.$store.dispatch('closeRegister/setNetSalesDinner', {
+          ...this.calculationVariables,
+          value: this[stateProp],
+        })
+      }
+    },
     formatDateForCloseRegisterAPI,
     async CreateCloseRegister() {
       const res = await this.mutationAction(

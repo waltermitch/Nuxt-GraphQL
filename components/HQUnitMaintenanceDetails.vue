@@ -171,6 +171,19 @@
             />
           </template>
         </InputWithTitle>
+        <InputWithTitle v-if="!unitID">
+          <template #title> Start Period </template>
+
+          <template #input>
+            <CustomSelect
+              v-if="PeriodsActive"
+              :options="PeriodsActive"
+              :selected-item="unitID && unit.startPeriod.periodEnd"
+              select-by="periodEnd"
+              @input="selectPeriod"
+            />
+          </template>
+        </InputWithTitle>
       </InputRow>
 
       <div class="buttons-area">
@@ -197,6 +210,7 @@ import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
 import Districts from '../graphql/queries/districts.gql'
 import States from '../graphql/queries/states.gql'
 import Users from '../graphql/queries/users.gql'
+import PeriodsActive from '../graphql/queries/periodsActive.gql'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput.vue'
 import InputWithTitle from './InputWithTitle.vue'
@@ -221,6 +235,9 @@ export default {
     },
     users: {
       query: Users,
+    },
+    PeriodsActive: {
+      query: PeriodsActive,
     },
   },
   computed: {
@@ -273,6 +290,14 @@ export default {
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_COUNTY', value)
+      },
+    },
+    startPeriod: {
+      get() {
+        return this.unit.startPeriod
+      },
+      set(value) {
+        this.$store.commit('unitMaintenance/SET_UNIT_START_PERIOD', value)
       },
     },
     population: {
@@ -346,6 +371,10 @@ export default {
     },
     selectCounty(county) {
       this.county = county
+    },
+    selectPeriod(period) {
+      this.startPeriod = period
+      console.log(this.startPeriod.id);
     },
     selectState(state) {
       this.state = state
