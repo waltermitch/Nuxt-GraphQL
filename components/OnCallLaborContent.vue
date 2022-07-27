@@ -76,7 +76,7 @@ export default {
       this.amount = parseFloat(this.amount !== '' ? this.amount : 0).toFixed(2);
     },
     async addCallLabor() {
-      const res = await this.mutationAction(
+      await this.mutationAction(
         CreateCallLabor,
         {
           amount: this.amount,
@@ -86,12 +86,9 @@ export default {
         'Add on-call labor success',
         'Add on-call labor error',
         null,
+        null,
         true
       )
-      if ( res && res.data.createCallLabor.status ) {
-        this.amount = '';
-        this.nameComment = '';
-      }
     }
   }
 }
