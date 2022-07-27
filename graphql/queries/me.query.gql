@@ -4,6 +4,7 @@
 query Me {
   me {
     id
+    avatar
     firstName
     lastName
     selectedUnit {

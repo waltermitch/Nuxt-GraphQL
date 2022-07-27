@@ -33,13 +33,23 @@
             fill="white"
           />
         </svg>
-
-        <div v-if="isShowDropdown" class="logout">
+        <div v-if="isShowDropdown" class="profile-menu">
+          <div class="nav--mobile">
+            <HeaderNavigation v-if="!onlyLogo" />
+          </div>
+          <div class="menu-item">
+            <span @click="profile">Profile</span>
+          </div>
+          <div class="menu-item">
+            <span @click="logout">Logout</span>
+          </div>
+        </div>
+        <!-- <div v-if="isShowDropdown" class="logout">
           <div class="nav--mobile">
             <HeaderNavigation v-if="!onlyLogo" />
           </div>
           <span class="logout-item" @click="logout">Logout</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </header>
@@ -68,6 +78,9 @@ export default {
   methods: {
     setIsShowSideBar() {
       this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
+    },
+    profile() {
+      this.$router.push('/profile')
     },
     async logout() {
       const {
@@ -168,44 +181,36 @@ export default {
   }
 }
 
-.logout {
+.profile-menu {
   position: absolute;
   right: 0;
-  bottom: -63px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 53px;
-  width: 120px;
+  bottom: calc(-100%);
+  width: 100px;
+
   background: #ffffff;
-  box-shadow: 2px 2px 4px rgba(196, 197, 221, 0.25),
-    -2px -2px 4px rgba(196, 197, 221, 0.25);
-  border-radius: 2px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4),
+    -2px 0px 4px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 10px;
 
-  @media screen and (max-width: $lg) {
+  display: flex;
+  flex-direction: column;
+
+  .menu-item {
+    width: 100%;
+    padding: 10px;
     display: flex;
-    flex-direction: column;
-    height: unset;
-    width: unset;
-    padding: 20px 15px;
-    bottom: -425px;
-    background: $nero;
-  }
-
-  &-item {
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-
-    @media screen and (max-width: $lg) {
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      color: $white-smoke;
+    align-items: center;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
-
+    &:last-child {
+      border-bottom-left-radius: 10px;
+    }
+    cursor: pointer;
+    transition: .2s all;
     &:hover {
       color: $firebrick;
+      background: #EFEFEF;
     }
   }
 }

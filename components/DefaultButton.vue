@@ -46,6 +46,7 @@ export default {
   font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
+  transition: .2 all;
 
   &--red {
     color: #fff;
