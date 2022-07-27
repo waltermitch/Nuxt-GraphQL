@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -34,6 +36,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/google-fonts',
     '@nuxtjs/style-resources',
+    '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,7 +51,7 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.BACKEND_API,
+        httpEndpoint: process.env.BACKEND_API || 'http://localhost:8000/graphql',
       },
     },
   },
@@ -57,6 +60,10 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
+  },
+
+  env: {
+    baseURL: process.env.BASE_URL || 'http://localhost:8000/storage',
   },
 
   // Content module configuration: https://go.nuxtjs.dev/config-content

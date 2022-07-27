@@ -14,7 +14,8 @@
       </div>
 
       <div v-if="!onlyLogo" class="profile">
-        <img src="~assets/images/header/avatar.svg" />
+        <img v-if="avatarResource == '' || avatarResource == null" src="~assets/images/header/avatar.svg" />
+        <img v-else :src="avatarResource"/>
 
         <svg
           width="24"
@@ -59,6 +60,9 @@
 import Logout from '../graphql/mutations/logout.gql'
 import HeaderNavigation from './HeaderNavigation.vue'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
+
+import Me from '~/graphql/queries/me.query.gql'
+
 export default {
   name: 'TheHeader',
   components: { HeaderNavigation },
@@ -69,13 +73,42 @@ export default {
       default: false,
     },
   },
+  apollo: {
+  },
   data() {
     return {
+      timer: null,
+      avatarResource: '',
+
       isShowDropdown: false,
       isShowSideBar:false,
     }
   },
+  beforeMount() {
+    this.timer = setInterval(function () {
+      this.fetchData();
+    }.bind(this), 2000);
+    this.fetchData();
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
   methods: {
+    fetchData() {
+        this.me = {};
+        this.getMyData().then((me) => {
+          if ( me !== undefined ) {
+            this.avatarResource = me.avatar != null ? process.env.BASE_URL + me.avatar : '';
+          }
+        });
+    },
+    async getMyData() {
+        const me = await this.$apollo.query({
+            query: Me,
+            fetchPolicy: 'network-only'
+        });
+        return me.data.me;
+    },
     setIsShowSideBar() {
       this.$store.commit('sidebar/SET_IS_SHOW_SIDEBAR', !this.isShowSideBar)
     },
@@ -177,6 +210,9 @@ export default {
     display: none;
   }
   img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     margin-right: 10px;
   }
 }

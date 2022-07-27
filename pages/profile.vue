@@ -155,7 +155,7 @@ export default {
                 this.me = me;
                 console.log(me.avatar);
                 this.profileInput = {
-                    avatarResource: me.avatar != null ? 'http://localhost:8000/storage/' + me.avatar : '',
+                    avatarResource: me.avatar != null ? process.env.BASE_URL + me.avatar : '',
                     avatar: null,
                     firstName: me.firstName,
                     lastName: me.lastName,
@@ -208,7 +208,7 @@ export default {
         },
         reset() {
             this.profileInput = {
-                avatarResource: this.me.avatar != null ? 'http://localhost:8000/storage/' + this.me.avatar : '',
+                avatarResource: this.me.avatar != null ? process.env.BASE_URL + this.me.avatar : '',
                 avatar: null,
                 firstName: this.me.firstName,
                 lastName: this.me.lastName,
