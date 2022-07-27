@@ -1,95 +1,98 @@
 <template>
     <div class="my-container">
         <div class="content">
-            <div class="form-content">
-                <div class="input-panel">
-                    <ValidationObserver ref="form">
-                        <!-- First name -->
-                        <div class="form-input">
+            <div class="page-content">
+                <div class="form-content">
+                    <div class="input-panel">
+                        <ValidationObserver ref="form">
+                            <!-- First name -->
+                            <div class="form-input">
+                                <InputWithTitle>
+                                <template #title>First name</template>
+                                <template #input>
+                                    <CustomInput
+                                    v-model="profileInput.firstName"
+                                    type="text"
+                                    rules="required"
+                                    />
+                                </template>
+                                </InputWithTitle>
+                            </div>
+
+                            <!-- Last name -->
+                            <div class="form-input">
+                                <InputWithTitle>
+                                <template #title>Last name</template>
+
+                                <template #input>
+                                    <CustomInput
+                                    v-model="profileInput.lastName"
+                                    type="text"
+                                    />
+                                </template>
+                                </InputWithTitle>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-input">
                             <InputWithTitle>
-                            <template #title>First name</template>
-                            <template #input>
-                                <CustomInput
-                                v-model="profileInput.firstName"
-                                type="text"
-                                rules="required"
-                                />
-                            </template>
-                            </InputWithTitle>
-                        </div>
-
-                        <!-- Last name -->
-                        <div class="form-input">
-                            <InputWithTitle>
-                            <template #title>Last name</template>
-
-                            <template #input>
-                                <CustomInput
-                                v-model="profileInput.lastName"
-                                type="text"
-                                />
-                            </template>
-                            </InputWithTitle>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-input">
-                        <InputWithTitle>
-                        <template #title>Email</template>
-
-                        <template #input>
-                            <CustomInput
-                            v-model="profileInput.email"
-                            vid="email"
-                            type="email"
-                            rules="email|required"
-                            />
-                        </template>
-                        </InputWithTitle>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="form-input">
-                            <InputWithTitle>
-                            <template #title>Password</template>
+                            <template #title>Email</template>
 
                             <template #input>
                                 <CustomInput
-                                v-model="profileInput.password"
-                                type="password"
+                                v-model="profileInput.email"
+                                vid="email"
+                                type="email"
+                                rules="email|required"
                                 />
                             </template>
                             </InputWithTitle>
-                        </div>
+                            </div>
 
-                        <!-- Confirm : Password -->
-                        <div class="form-input">
-                            <InputWithTitle>
-                            <template #title>Confirm : Password</template>
+                            <!-- Password -->
+                            <div class="form-input">
+                                <InputWithTitle>
+                                <template #title>Password</template>
 
-                            <template #input>
-                                <CustomInput
-                                v-model="profileInput.confirmPassword"
-                                type="password"
-                                />
-                            </template>
-                            </InputWithTitle>
-                        </div>
-                        <div v-if="profileInput.password != ''" :class="'password-match ' + (isPasswordConfirmed ? 'match' : 'notMatch')">
-                            {{ isPasswordConfirmed ? 'Match confirmed!' : 'Need to confirm with the same password.' }}
-                        </div>
-                    </ValidationObserver>
+                                <template #input>
+                                    <CustomInput
+                                    v-model="profileInput.password"
+                                    type="password"
+                                    />
+                                </template>
+                                </InputWithTitle>
+                            </div>
+
+                            <!-- Confirm : Password -->
+                            <div class="form-input">
+                                <InputWithTitle>
+                                <template #title>Confirm : Password</template>
+
+                                <template #input>
+                                    <CustomInput
+                                    v-model="profileInput.confirmPassword"
+                                    type="password"
+                                    />
+                                </template>
+                                </InputWithTitle>
+                            </div>
+                            <div v-if="profileInput.password != ''" :class="'password-match ' + (isPasswordConfirmed ? 'match' : 'notMatch')">
+                                {{ isPasswordConfirmed ? 'Match confirmed!' : 'Need to confirm with the same password.' }}
+                            </div>
+                        </ValidationObserver>
+                    </div>
+                    <div class='action-panel'>
+                        <DefaultButton button-color-gamma="red" padding="7px 12px" @event="saveProfile"> Save </DefaultButton>
+                        <DefaultButton button-color-gamma="white" padding="7px 12px" @event="reset"> Reset </DefaultButton>
+                    </div>
                 </div>
-                <div class='action-panel'>
-                    <DefaultButton button-color-gamma="red" padding="7px 12px" @event="saveProfile"> Save </DefaultButton>
-                    <DefaultButton button-color-gamma="white" padding="7px 12px" @event="reset"> Reset </DefaultButton>
+                <div class="avatar-panel">
+                    <!-- Avatar -->
+                    <ProfileAvatar :avatar="profileInput.avatarResource" @changed="onAvatarChange">
+                    </ProfileAvatar>
                 </div>
             </div>
-            <div class="avatar-panel">
-                <!-- Avatar -->
-                <ProfileAvatar :avatar="profileInput.avatarResource" @changed="onAvatarChange">
-                </ProfileAvatar>
-            </div>
+            
             <FormSubmissionMessage
                 v-if="showMessage"
                 :type="messageType"
@@ -235,6 +238,13 @@ export default {
         align-items: center;
         overflow: hidden;
 
+        .page-content {
+            max-height: 100%;
+            width: 100%;
+            overflow: auto;
+            display: flex;
+            padding: 2rem 0px;
+        }
         .form-content {
             width: 60%;
             display: flex;
@@ -266,6 +276,8 @@ export default {
         }
         .avatar-panel {
             width: 40%;
+            display: flex;
+            align-items: center;
         }
     }
 }
