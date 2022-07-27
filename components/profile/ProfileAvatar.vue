@@ -20,7 +20,7 @@ export default {
     },
     data () {
         return {
-            avatarResourceB: ''
+            avatarResource: ''
         }
     },
     watch: { 
