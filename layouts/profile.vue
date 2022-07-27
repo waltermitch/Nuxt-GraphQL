@@ -11,11 +11,12 @@
 <script>
 import TheHeader from '@/components/TheHeader'
 export default {
-  name: 'LoginLayout',
+  name: 'ProfileLayout',
   components: {
     TheHeader,
   },
   mixins: [],
+  middleware: ['isAuth']  
 }
 </script>
 

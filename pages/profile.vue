@@ -98,6 +98,7 @@
                 :type="messageType"
                 :message="message"
             />
+
         </div>
     </div>
 </template>
@@ -226,7 +227,6 @@ export default {
 
 <style lang="scss" scoped>
 .my-container {
-    position: absolute;
     width: 100%;
     height: calc(100% - 109px);
 
@@ -239,7 +239,6 @@ export default {
         overflow: hidden;
 
         .page-content {
-            max-height: 100%;
             width: 100%;
             overflow: auto;
             display: flex;
@@ -271,6 +270,7 @@ export default {
             }
             .action-panel {
                 margin-top: 1rem;
+                margin-bottom: 1rem;
                 width: 240px;
             }
         }

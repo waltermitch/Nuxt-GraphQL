@@ -63,7 +63,7 @@ export default {
   },
 
   env: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8000/storage',
+    baseURL: process.env.BASE_URL || 'http://localhost:8000/storage/',
   },
 
   // Content module configuration: https://go.nuxtjs.dev/config-content
