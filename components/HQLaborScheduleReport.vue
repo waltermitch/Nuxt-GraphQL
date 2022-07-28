@@ -193,10 +193,12 @@ export default {
   align-items: center;
   column-gap: 20px;
   padding: 10px 0px;
-  @media screen and(min-width: $sm) {
+
+  @media screen and (min-width: $sm) {
     grid-template-columns: 80px 200px auto;
   }
-  @media screen and(max-width: $sm) {
+
+  @media screen and (max-width: $sm) {
     grid-template-columns: 50px 110px 110px;
   }
 }
@@ -207,8 +209,9 @@ export default {
 .footer-row {
   grid-template-columns: repeat(3, 150px);
 
-  @media screen and(max-width: $sm) {
+  @media screen and (max-width: $sm) {
     grid-template-columns: repeat(2, 150px);
+
     button {
       margin-bottom: 20px;
     }
@@ -227,11 +230,14 @@ export default {
 
 .table-reports {
   margin-top: 20px;
-  @media screen and(max-width: $xl) {
+
+  @media screen and (max-width: $xl) {
     width: 100% !important;
+
     &:last-child {
       margin-bottom: 20px;
     }
+
     &:first-child {
       margin-right: 0 !important;
     }

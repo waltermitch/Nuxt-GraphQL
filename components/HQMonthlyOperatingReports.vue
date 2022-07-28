@@ -148,21 +148,25 @@ export default {
   display: grid;
   align-items: center;
   column-gap: 20px;
-  @media screen and(min-width: $sm) {
+
+  @media screen and (min-width: $sm) {
     grid-template-columns: 100px 300px;
   }
-  @media screen and(max-width: $sm) {
+
+  @media screen and (max-width: $sm) {
     grid-template-columns: 60px 120px;
   }
 }
 .table-operating {
   margin-top: 25px;
 
-  @media screen and(max-width: $xl) {
+  @media screen and (max-width: $xl) {
     width: 100% !important;
+
     &:last-child {
       margin-bottom: 20px;
     }
+
     &:first-child {
       margin-right: 0 !important;
     }

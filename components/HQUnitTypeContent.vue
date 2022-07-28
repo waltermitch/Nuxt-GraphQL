@@ -1,6 +1,6 @@
 <template>
   <PageContentWrapper>
-    <LoadingBar v-if="$apollo.loading" />
+    <LoadingBar v-if="$apollo.loading"/>
     <div v-else class="header">
       <div>
         <InputRow class="input-row">
@@ -25,7 +25,7 @@
             <template #title> Name</template>
 
             <template #input>
-              <CustomInput v-model="unit.name" readonly disabled />
+              <CustomInput v-model="unit.name" readonly disabled/>
             </template>
           </InputWithTitle>
         </InputRow>
@@ -119,7 +119,7 @@
           </CustomTableRow>
 
           <CustomTableRow class="table-row add-row">
-            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow" />
+            <CustomTableAddIcon :is-hide="isHide" @add-row="addRow"/>
           </CustomTableRow>
         </template>
       </CustomTable>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
+import {ValidationObserver} from 'vee-validate'
 import UnitTypes from '../graphql/queries/unitTypes.gql'
 import Units from '../graphql/queries/units.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
@@ -146,9 +146,9 @@ import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
-import { mutationMixin } from '~/mixins/mutationMixin'
-import { tableActionsMixin } from '~/mixins/tableActionsMixin'
-import { multiselectMixin } from '~/mixins/multiselectMixin'
+import {mutationMixin} from '~/mixins/mutationMixin'
+import {tableActionsMixin} from '~/mixins/tableActionsMixin'
+import {multiselectMixin} from '~/mixins/multiselectMixin'
 
 export default {
   name: 'HQUnitTypeContent',
@@ -224,7 +224,7 @@ export default {
 
       await this.mutationAction(
         DeleteUnitType,
-        { id },
+        {id},
         UnitTypes,
         'Delete unitType success',
         'Delete unitType error'
@@ -232,10 +232,10 @@ export default {
       this.unit = unit
     },
     async addUnitTypeToUnit(unitType) {
-      const { id } = this.unit
+      const {id} = this.unit
 
       const {
-        data: { updateUnit },
+        data: {updateUnit},
       } = await this.mutationAction(
         UpdateUnit,
         {
@@ -258,10 +258,10 @@ export default {
       }
     },
     async removeUnitTypeFromUnit() {
-      const { id } = this.unit
+      const {id} = this.unit
 
       const {
-        data: { updateUnit },
+        data: {updateUnit},
       } = await this.mutationAction(
         UpdateUnit,
         {
@@ -324,6 +324,7 @@ export default {
   color: #fff;
   background-color: #b01d22;
 }
+
 .multiselect__option--selected.multiselect__option--highlight {
   background: rgba(#b01d22, 0.6);
 }
@@ -360,13 +361,13 @@ export default {
     padding: 12px 0;
   }
 
-  @media screen and(max-width: $xl) {
+  @media screen and (max-width: $xl) {
     flex-direction: column;
   }
 }
 
 .col-left {
-  @media screen and(max-width: $md) {
+  @media screen and (max-width: $md) {
     width: 100%;
   }
 }
@@ -375,19 +376,21 @@ export default {
   display: grid;
   align-items: center;
   padding: 6px 10px;
-  @media screen and(min-width: $md) {
+  @media screen and (min-width: $md) {
     grid-template-columns: 100px 200px auto auto;
   }
-  @media screen and(max-width: $md) {
+
+  @media screen and (max-width: $md) {
     grid-template-columns: 30px 120px auto auto;
   }
   column-gap: 30px;
 
   &--unit-types {
-    @media screen and(min-width: $md) {
+    @media screen and (min-width: $md) {
       grid-template-columns: 100px 200px auto auto;
     }
-    @media screen and(max-width: $md) {
+
+    @media screen and (max-width: $md) {
       grid-template-columns: 80px 150px auto 250px;
     }
   }
