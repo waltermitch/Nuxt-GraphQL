@@ -82,6 +82,7 @@
                 rules="required|currency"
                 type="number"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
+                @change="onChangeFloatValue"
               />
             </template>
           </InputWithTitle>
@@ -241,6 +242,10 @@ export default {
     this.cancelCreate()
   },
   methods: {
+    onChangeFloatValue() {
+      const value = this.amount;
+      this.amount = Number(value === '' ? 0 : value).toFixed(2);
+    },
     formatDate,
     setExpensesType(expenseType) {
       this.expenseType = expenseType

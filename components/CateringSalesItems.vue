@@ -38,7 +38,7 @@
             @input="(e) => updateItems(item, Number(e), 'menuItem')"
           />
 
-          <span v-if="!getIsEdit">{{ item.price }}$</span>
+          <span v-if="!getIsEdit">{{ parseFloat(item.price).toFixed(2) }}$</span>
           <CustomInput
             v-else
             :value="item.price"
@@ -50,7 +50,7 @@
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
 
-          <span v-if="!getIsEdit">{{ item.ext }}$</span>
+          <span v-if="!getIsEdit">{{ parseFloat(item.ext).toFixed(2) }}$</span>
           <CustomInput
             v-else
             :value="item.ext"
@@ -90,6 +90,7 @@
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
+            @change="onChangeFloatValue('price')"
           />
 
           <CustomInput
@@ -99,6 +100,7 @@
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
+            @change="onChangeFloatValue('ext')"
           />
         </CustomTableRow>
 
@@ -128,6 +130,7 @@
             do-not-show-error-message
             rules="currency"
             symbol="$"
+            @change="onChangeFloatValue('tax')"
           />
         </CustomTableRow>
 
@@ -188,6 +191,7 @@ export default {
         price: '',
         ext: '',
       },
+      tax: '',
     }
   },
   computed: {
@@ -208,16 +212,24 @@ export default {
     totalPriceWithTax() {
       return (Number(this.totalPrice) + Number(this.getTax)).toFixed(2)
     },
-    tax: {
+    /* tax: {
       get() {
         return this.getTax
       },
       set(value) {
         this.$store.commit('cateringSales/SET_TAX', value)
       },
-    },
+    }, */
   },
   methods: {
+    onChangeFloatValue(stateProp) {
+      if ( stateProp === 'price' || stateProp === 'ext' ) {
+        this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2);
+      } else if ( stateProp === 'tax' ) {
+        this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+        this.$store.commit('cateringSales/SET_TAX', this[stateProp])
+      }
+    },
     updateItems(item, event, itemProp) {
       this.$store.commit(
         'cateringSales/SET_ITEMS',

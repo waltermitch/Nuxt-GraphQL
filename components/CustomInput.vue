@@ -29,9 +29,13 @@ export default {
   name: 'CustomInput',
   components: { ValidationProvider },
   props: {
+    changeFloat: {
+      type: String,
+      default: '',
+    },
     isFloat: {
       type: String,
-      default: ''
+      default: '',
     },
     value: {
       type: [String, Number],

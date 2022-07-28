@@ -25,6 +25,7 @@
             type="number"
             do-not-show-error-message
             @input="(e) => updateItems(item, Number(e), 'amount')"
+            @change="onChangeFloatValue('amount', true, item)"
           />
 
           <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
@@ -62,6 +63,7 @@
             symbol="$"
             type="number"
             do-not-show-error-message
+            @change="onChangeFloatValue('amount')"
           />
 
           <CustomSelect
@@ -103,7 +105,7 @@
       <template #title>Left to distribute</template>
 
       <template #input>
-        <span>{{ leftToDistribute }}$</span>
+        <span>{{ Number(leftToDistribute).toFixed(2) }}$</span>
       </template>
     </InputWithTitle>
 
@@ -202,6 +204,15 @@ export default {
     },
   },
   methods: {
+    onChangeFloatValue(stateProp, isEdit = false, item = null) {
+      if ( stateProp === 'amount' ) {
+        if ( isEdit ) {
+          this.updateItems(item, Number(item.amount).toFixed(2), 'amount');
+        } else {
+          this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2);
+        }
+      }
+    },
     formatDate,
     updateItems(item, event, itemProp) {
       this.$store.commit(

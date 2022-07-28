@@ -33,7 +33,7 @@
               </span>
 
               <span class="table-text">
-                ${{ item.inventoryAmount.previous }}
+                ${{ Number(item.inventoryAmount.previous).toFixed(2) }}
               </span>
 
               <CustomInput
@@ -43,15 +43,16 @@
                 placeholder="0.00"
                 do-not-show-error-message
                 symbol="$"
+                @change="onChangeFloatValue(item)"
               />
             </CustomTableRow>
 
             <CustomTableRow class="table-row footer">
               <span class="table-text"> Total: </span>
 
-              <span class="table-text">${{ totalPreviousAmount }}</span>
+              <span class="table-text">${{ Number(totalPreviousAmount).toFixed(2) }}</span>
 
-              <span class="table-text">${{ totalCurrentValue }}</span>
+              <span class="table-text">${{ Number(totalCurrentValue).toFixed(2) }}</span>
             </CustomTableRow>
           </template>
         </CustomTable>
@@ -98,11 +99,13 @@ export default {
     PageSubHeaderContent,
   },
   apollo: {
-    inventoryCategories: {
-      query: InventoryCategories,
-    },
   },
   mixins: [formMixin, mutationMixin],
+  data () {
+    return {
+      inventoryCategories: []
+    }
+  },
   computed: {
     totalPreviousAmount() {
       return this.inventoryCategories.reduce((prev, current) => {
@@ -123,7 +126,14 @@ export default {
       )
     },
   },
+  beforeMount () {
+    this.fetchData();
+  },
   methods: {
+    onChangeFloatValue(item) {
+      const value = item.inventoryAmount.current;
+      item.inventoryAmount.current = Number(value === '' ? 0 : value).toFixed(2);
+    },
     async fetchData() {
       const {
         data: { inventoryCategories },
@@ -131,7 +141,10 @@ export default {
         query: InventoryCategories,
         fetchPolicy: 'no-cache',
       })
-
+      for ( const item of inventoryCategories ) {
+        const value = item.inventoryAmount.current;
+        item.inventoryAmount.current = Number(value === '' ? 0 : value).toFixed(2);
+      }
       this.inventoryCategories = inventoryCategories
     },
     async updateInventories() {
@@ -151,7 +164,10 @@ export default {
         'Update Inventory Categories success',
         'Update Inventory Categories error'
       )
-
+      for ( const item of updateInventories ) {
+        const value = item.inventoryAmount.current;
+        item.inventoryAmount.current = Number(value === '' ? 0 : value).toFixed(2);
+      }
       this.inventoryCategories = updateInventories
     },
     async cancelUpdate() {

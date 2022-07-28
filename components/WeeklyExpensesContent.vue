@@ -44,7 +44,7 @@
 
             <span> {{ expense.glAccount.name }} </span>
 
-            <span> {{ expense.amount }} </span>
+            <span> {{ Number(expense.amount).toFixed(2) }} </span>
 
             <span> {{ expense.comments }} </span>
 
@@ -114,6 +114,7 @@ export default {
     editExpense(expense) {
       this.$store.commit('expense/SET_EXPENSE', {
         ...expense,
+        amount: Number(expense.amount).toFixed(2),
         expenseDate: this.formatDateFromAPI(expense.expenseDate),
       })
       this.$store.commit('expense/SET_IS_EDIT', true)

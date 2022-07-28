@@ -32,7 +32,7 @@
             </span>
             <span v-else></span>
 
-            <span> {{ reAccrual.amount }} </span>
+            <span> {{ Number(reAccrual.amount).toFixed(2) }} </span>
 
             <span v-if="reAccrual.vendor"> {{ reAccrual.vendor.name }} </span>
             <span v-else></span>
