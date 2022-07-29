@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex'
+
 export const formMixin = {
   methods: {
     ...mapActions({
@@ -21,6 +22,7 @@ export const formMixin = {
     },
     saveEvent() {
       this.$refs.form.validate().then((result) => {
+        console.log(result);
         if (result) {
           this.setShowMessage(true)
           this.setMessageType('success')

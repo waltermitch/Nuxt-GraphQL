@@ -365,6 +365,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.$store.commit('tabsView/SET_ALLOW_SWITCH', false)
+  },
   methods: {
     selectDistrict(district) {
       this.district = district

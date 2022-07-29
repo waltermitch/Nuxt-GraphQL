@@ -30,6 +30,7 @@
               v-model="stateEdit.code"
               rules="required|alpha"
               do-not-show-error-message
+              name="state-code"
             />
             <span v-else>{{ state.code }}</span>
 
@@ -40,6 +41,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxCafeteria"
               @change="onChangeFloatValue('salesTaxCafeteria', true)"
             />
             <span v-else>{{ parseFloat(state.salesTaxCafeteria).toFixed(2) }}%</span>
@@ -51,6 +53,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxVending"
               @change="onChangeFloatValue('salesTaxVending', true)"
             />
             <span v-else> {{ parseFloat(state.salesTaxVending).toFixed(2) }}%</span>
@@ -62,6 +65,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxRestaurant"
               @change="onChangeFloatValue('salesTaxRestaurant', true)"
             />
             <span v-else>
@@ -75,6 +79,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxStore"
               @change="onChangeFloatValue('salesTaxStore', true)"
             />
             <span v-else>
@@ -88,6 +93,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-grossReceiptsTax"
               @change="onChangeFloatValue('grossReceiptsTax', true)"
             />
             <span v-else>
@@ -148,6 +154,7 @@
               v-model="stateNew.code"
               rules="required|alpha"
               do-not-show-error-message
+              name="state-code"
             />
 
             <CustomInput
@@ -156,6 +163,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxCafeteria"
               @change="onChangeFloatValue('salesTaxCafeteria')"
             />
 
@@ -165,6 +173,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxVending"
               @change="onChangeFloatValue('salesTaxVending')"
             />
 
@@ -174,6 +183,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxRestaurant"
               @change="onChangeFloatValue('salesTaxRestaurant')"
             />
 
@@ -183,6 +193,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxStore"
               @change="onChangeFloatValue('salesTaxStore')"
             />
 
@@ -192,6 +203,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="state-grossReceiptsTax"
               @change="onChangeFloatValue('grossReceiptsTax')"
             />
           </CustomTableRow>
