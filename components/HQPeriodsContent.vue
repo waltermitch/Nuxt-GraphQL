@@ -113,7 +113,7 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="periodNew.periodEnd"
-              rules="required|date"
+              rules="required|date:mm/dd/yyyy"
               placeholder="mm/dd/yyyy"
               do-not-show-error-message
               name="period-end"

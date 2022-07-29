@@ -13,9 +13,9 @@ export const mutationMixin = {
       variables,
       doNotClearState
     ) {
-      const validate = await this.$refs.form.validate()
+      // const validate = await this.$refs.form.validate()
       const formValidated =
-        this.$refs.form && validate
+        this.$refs.form && await this.$refs.form.validate()
       if (formValidated || !this.$refs.form) {
         try {
           // if I send the Query as null it doesn't run any query after mutation
@@ -94,7 +94,7 @@ export const mutationMixin = {
             // HQCityContent - /hq-accounting/city
             if ( propNames[0].includes('cityInput') === true ) {
               graphQLErrorMessage = graphQLErrorMessage.replace(/name/g,'"City Name"');
-              graphQLErrorMessage = graphQLErrorMessage.replace(/tax/g,'"City Tax"');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/tax/g,'"City Sales Tax"');
             }
 
             // HQDistrictContent - /hq-accounting/district
@@ -239,7 +239,7 @@ export const mutationMixin = {
       if ( fieldName === 'city-name' ) {
         inputName = 'City Name';
       } else if ( fieldName === 'city-tax' ) {
-        inputName = 'City Tax';
+        inputName = 'City Sales Tax';
       }
 
       // HQDistrictContent - /hq-accounting/district

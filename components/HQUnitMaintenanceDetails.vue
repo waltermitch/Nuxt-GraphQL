@@ -6,7 +6,7 @@
           <template #title> Unit Number </template>
 
           <template #input>
-            <CustomInput v-model="code" rules="required" />
+            <CustomInput v-model="code" rules="required" name="unit-code" />
           </template>
         </InputWithTitle>
 
@@ -14,7 +14,7 @@
           <template #title> Name </template>
 
           <template #input>
-            <CustomInput v-model="name" rules="required" />
+            <CustomInput v-model="name" rules="required" name="unit-name" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -24,7 +24,7 @@
           <template #title> Street Address </template>
 
           <template #input>
-            <CustomInput v-model="address" rules="required" />
+            <CustomInput v-model="address" rules="required" name="unit-address" />
           </template>
         </InputWithTitle>
 
@@ -77,7 +77,7 @@
           <template #title> Zip Code </template>
 
           <template #input>
-            <CustomInput v-model="zip" rules="required" />
+            <CustomInput v-model="zip" rules="required" name="unit-zip-code" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
@@ -104,6 +104,7 @@
               v-model.number="population"
               rules="required"
               type="number"
+              name="unit-population"
             />
           </template>
         </InputWithTitle>
@@ -111,7 +112,7 @@
           <template #title>Sysco</template>
 
           <template #input>
-            <CustomInput v-model="sysco" />
+            <CustomInput v-model="sysco" name="unit-sysco" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -121,14 +122,14 @@
           <template #title> Mgr First Name </template>
 
           <template #input>
-            <CustomInput v-model="managerFirstName" rules="required" />
+            <CustomInput v-model="managerFirstName" rules="required" name="first-name" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
           <template #title> Mgr Last Name </template>
 
           <template #input>
-            <CustomInput v-model="managerLastName" rules="required" />
+            <CustomInput v-model="managerLastName" rules="required" name="last-name" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -142,6 +143,7 @@
               v-model="payrollPassword"
               rules="required"
               type="password"
+              name="unit-password"
             />
           </template>
         </InputWithTitle>
@@ -154,6 +156,7 @@
               v-model="emailAccount"
               rules="email|required"
               type="email"
+              name="unit-email"
             />
           </template>
         </InputWithTitle>

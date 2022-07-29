@@ -45,6 +45,7 @@
               v-if="isEdit === city.id"
               v-model="cityEdit.tax"
               type="number"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="city-tax"
@@ -120,7 +121,7 @@
             <CustomInput
               v-model="cityNew.tax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="city-tax"

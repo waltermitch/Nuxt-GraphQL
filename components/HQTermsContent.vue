@@ -33,6 +33,7 @@
             <CustomInput
               v-if="isEdit === term.id"
               v-model="termEdit.dueDays"
+              type="number"
               rules="required"
               do-not-show-error-message
               name="term-dueDays"
@@ -43,7 +44,7 @@
               v-if="isEdit === term.id"
               v-model="termEdit.discPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="term-discPercent"
@@ -122,6 +123,7 @@
 
             <CustomInput
               v-model="termNew.dueDays"
+              type="number"
               rules="required"
               do-not-show-error-message
               name="term-dueDays"
@@ -130,7 +132,7 @@
             <CustomInput
               v-model="termNew.discPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="term-discPercent"

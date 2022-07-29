@@ -46,7 +46,7 @@
               v-if="isEdit === county.id"
               v-model="countyNew.tax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="county-tax"
@@ -122,7 +122,7 @@
             <CustomInput
               v-model="countyNew.tax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="county-tax"

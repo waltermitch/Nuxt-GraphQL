@@ -28,6 +28,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-managementAmount"
               @change="onChangeFloatValue('managementAmount')"
             />
           </template>
@@ -42,9 +43,10 @@
             <CustomInput
               v-model="managementPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-managementPercent"
               @change="onChangeFloatValue('managementPercent')"
             />
           </template>
@@ -78,6 +80,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-administrativeAmount"
               @change="onChangeFloatValue('administrativeAmount')"
             />
           </template>
@@ -92,9 +95,10 @@
             <CustomInput
               v-model="administrativePercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-administrativePercent"
               @change="onChangeFloatValue('administrativePercent')"
             />
           </template>
@@ -128,6 +132,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-supportAmount"
               @change="onChangeFloatValue('supportAmount')"
             />
           </template>
@@ -142,9 +147,10 @@
             <CustomInput
               v-model="supportPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-supportPercent"
               @change="onChangeFloatValue('supportPercent')"
             />
           </template>
@@ -159,9 +165,10 @@
             <CustomInput
               v-model="benefitsPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-benefitsPercent"
               @change="onChangeFloatValue('benefitsPercent')"
             />
           </template>
@@ -176,9 +183,10 @@
             <CustomInput
               v-model="commissionPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-commissionPercent" 
               @change="onChangeFloatValue('commissionPercent')"
             />
           </template>

@@ -9,9 +9,10 @@
             <CustomInput
               v-model="payrollTaxPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-payrollTaxPercent"
               @change="onChangeFloatValue('payrollTaxPercent')"
             />
           </template>
@@ -27,6 +28,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-benefitsAmount"
               @change="onChangeFloatValue('benefitsAmount')"
             />
           </template>
@@ -44,6 +46,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-vendingIncome"
               @change="onChangeFloatValue('vendingIncome')"
             />
           </template>
@@ -59,6 +62,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-commissionAmount"
               @change="onChangeFloatValue('commissionAmount')"
             />
           </template>
@@ -76,6 +80,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-vacationAmount"
               @change="onChangeFloatValue('vacationAmount')"
             />
           </template>
@@ -105,6 +110,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-businessInsuranceAmount"
               @change="onChangeFloatValue('businessInsuranceAmount')"
             />
           </template>

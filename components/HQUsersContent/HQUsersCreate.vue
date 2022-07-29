@@ -36,7 +36,7 @@
             <template #input>
               <CustomInput 
                 v-model="email"
-                rules="required"
+                rules="required|email"
                 name="user-email"
                 />
             </template>
