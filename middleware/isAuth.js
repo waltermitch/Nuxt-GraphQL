@@ -11,7 +11,7 @@ export default async function ({ app, redirect }) {
   } catch (error) {
     const errorObj = error.graphQLErrors[0]
 
-    if (errorObj.message === 'Unauthenticated.') {
+    if (errorObj != undefined && errorObj.message === 'Unauthenticated.') {
       app.$apolloHelpers.onLogout()
       return redirect('/login')
     }
