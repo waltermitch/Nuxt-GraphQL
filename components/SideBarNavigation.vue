@@ -1,7 +1,7 @@
 <template>
   <nav class="navigation">
     <SideBarTab
-      v-for="tab in navTabs"
+      v-for="tab in mutableNav"
       :key="tab.id"
       :page-url="tab.pageUrl"
       :icon-src="tab.iconSrc"
@@ -12,13 +12,44 @@
 
 <script>
 import SideBarTab from './SideBarTab.vue'
+import CheckPermission from "~/graphql/mutations/checkPermissions/checkPermissions.gql";
+
 export default {
   name: 'SideBarNavigation',
-  components: { SideBarTab },
+  components: {SideBarTab},
   props: {
     navTabs: {
       type: [Array, String],
       required: true,
+    },
+  },
+  data() {
+    return {
+      mutableNav: {},
+    }
+  },
+  mounted() {
+    this.verifyPermissions();
+  },
+  methods: {
+    async verifyPermissions() {
+      this.mutableNav = [];
+
+      for (const item of this.navTabs) {
+        if (!item.permission) {
+          this.mutableNav.push(item);
+        } else {
+          await this.$apollo.mutate({
+            mutation: CheckPermission,
+            variables: item.permission,
+          }).then((res) => {
+            console.log(res.data.checkPermission.permission);
+
+            if (res.data.checkPermission.permission)
+              this.mutableNav.push(item);
+          });
+        }
+      }
     },
   },
 }

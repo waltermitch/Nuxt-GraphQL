@@ -64,36 +64,60 @@ export const HOME_NAV_TABS = [
     caption: 'Close Register',
     pageUrl: '/home/close-register',
     iconSrc: require('assets/images/icons/home/window-close.svg'),
+    permission: {
+      'slugName': 'close-register',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 3,
     caption: 'Catering Sales',
     pageUrl: '/home/catering-sales',
     iconSrc: require('assets/images/icons/home/room_service.svg'),
+    permission: {
+      'slugName': 'catering-sales',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 4,
     caption: 'Purchase Orders',
     pageUrl: '/home/purchase-orders',
     iconSrc: require('assets/images/icons/home/order.svg'),
+    permission: {
+      'slugName': 'purchase-orders',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 5,
     caption: 'Inventory',
     pageUrl: '/home/inventory',
     iconSrc: require('assets/images/icons/home/inventory.svg'),
+    permission: {
+      'slugName': 'inventory',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 6,
     caption: 'Expenses',
     pageUrl: '/home/expenses',
     iconSrc: require('assets/images/icons/home/account_balance_wallet.svg'),
+    permission: {
+      'slugName': 'expenses',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 7,
     caption: 'On-Call Labor',
     pageUrl: '/home/on-call-labor',
     iconSrc: require('assets/images/icons/home/on-call.svg'),
+    permission: {
+      'slugName': 'on-call-labor',
+      'permissionType': 'CREATE'
+    }
   },
   // {
   //   id: 8,
@@ -106,6 +130,10 @@ export const HOME_NAV_TABS = [
     caption: 'ReAccruals',
     pageUrl: '/home/reaccruals',
     iconSrc: require('assets/images/icons/home/chart-line.svg'),
+    permission: {
+      'slugName': 'reaccruals',
+      'permissionType': 'CREATE'
+    }
   },
 ]
 
