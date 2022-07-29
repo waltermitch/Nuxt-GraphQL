@@ -41,7 +41,7 @@
 
             <span> {{ reAccrual.comments }} </span>
 
-            <DefaultButton @event="ReAccrual(reAccrual.id)">
+            <DefaultButton v-if="canManage" @event="ReAccrual(reAccrual.id)">
               Re-Accrue
             </DefaultButton>
           </CustomTableRow>
@@ -62,6 +62,7 @@ import { meMixin } from '~/mixins/meMixin'
 import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
 import ReAccruals from '~/graphql/queries/reAccruals.gql'
 import reAccrual from '~/graphql/mutations/expense/reAccrual.gql'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 export default {
   name: 'ReAccrualsContent',
   components: { CustomTable, CustomTableRow },
@@ -73,14 +74,27 @@ export default {
     expenseTypes: {
       query: ExpenseTypes,
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  data () {
+    return {
+      canManage: false
+    }
+  },
   computed: {
     unitsReAccruals() {
       return this.reAccruals.filter(
         (reAccrual) => reAccrual.unit.id === this.selectedUnit.id
       )
     },
+  },
+  mounted () {
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'reaccruals') && (privilege.permissionType === 'CREATE')
+    }).length
   },
   methods: {
     formatDateFromAPI,

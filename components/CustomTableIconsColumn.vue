@@ -20,7 +20,7 @@
       @click="isEditActive ? $emit('cancel') : $emit('cancel-delete')"
     />
     <img
-      v-else
+      v-else-if="showDelete"
       class="icon"
       src="~assets/images/icons/review/trash-can.svg"
       @click="$emit('delete')"
@@ -41,6 +41,10 @@ export default {
       default: false,
     },
     showEdit: {
+      type: Boolean,
+      default: true,
+    },
+    showDelete: {
       type: Boolean,
       default: true,
     },

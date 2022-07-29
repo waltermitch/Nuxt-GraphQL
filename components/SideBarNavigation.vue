@@ -12,15 +12,16 @@
 
 <script>
 import SideBarTab from './SideBarTab.vue'
-// import CheckPermission from "~/graphql/mutations/checkPermissions/checkPermissions.gql";
-import Me from "~/graphql/queries/me.query.gql";
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 
 export default {
   name: 'SideBarNavigation',
-  components: {SideBarTab},
+  components: {
+    SideBarTab
+  },
   apollo: {
-    me: {
-      query: Me,
+    RolePrivileges: {
+      query: RolePrivileges,
     },
   },
   props: {
@@ -35,26 +36,21 @@ export default {
     }
   },
   mounted() {
-    // this.verifyPermissions();
+    this.verifyPermissions();
   },
   methods: {
-    // async verifyPermissions() {
-    //   this.mutableNav = [];
-    //
-    //   for (const item of this.navTabs) {
-    //     if (!item.permission) {
-    //       this.mutableNav.push(item);
-    //     } else {
-    //       await this.$apollo.mutate({
-    //         mutation: CheckPermission,
-    //         variables: item.permission,
-    //       }).then((res) => {
-    //         if (res.data.checkPermission.permission)
-    //           this.mutableNav.push(item);
-    //       });
-    //     }
-    //   }
-    // },
+    verifyPermissions() {
+      this.mutableNav = [];
+
+      for (const item of this.navTabs) {
+        const permissionsFilter = item.permission ? !!this.RolePrivileges.filter(privilege => {
+          return (privilege.slugName === item.permission.slugName) && (privilege.permissionType === item.permission.permissionType)
+        }).length : null;
+
+        if (!item.permission || permissionsFilter)
+          this.mutableNav.push(item);
+      }
+    },
   },
 }
 </script>

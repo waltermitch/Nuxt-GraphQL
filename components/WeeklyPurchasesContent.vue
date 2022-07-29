@@ -43,6 +43,8 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === purchase.id"
               :is-delete-active="isDelete === purchase.id"
+              :show-edit="canCreate"
+              :show-delete="canManage"
               @edit="editPurchaseOrder(purchase)"
               @delete="deleteItem(purchase.id)"
               @cancel-delete="cancelDelete"
@@ -65,6 +67,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import DeletePurchase from '~/graphql/mutations/purchaseOrder/deletePurchase'
 import { meMixin } from '~/mixins/meMixin'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 
 export default {
   name: 'WeeklyPurchasesContent',
@@ -81,8 +84,25 @@ export default {
         activePeriod: true,
       },
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  data () {
+    return {
+      canCreate: false,
+      canManage: false
+    }
+  },
+  mounted () {
+    this.canCreate = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'purchase-orders') && (privilege.permissionType === 'CREATE')
+    }).length
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'purchase-orders') && (privilege.permissionType === 'MODIFY')
+    }).length
+  },
   methods: {
     formatDateFromAPI,
     editPurchaseOrder(purchase) {

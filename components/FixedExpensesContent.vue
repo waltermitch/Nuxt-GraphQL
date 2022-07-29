@@ -64,6 +64,7 @@
             <span v-else>{{ item.comments }}</span>
 
             <CustomTableIconsColumn
+              v-if="canManage"
               :is-edit-active="isEdit === item.id"
               :is-delete-active="isDelete === item.id"
               @edit="isAdd ? null : editItem(item)"
@@ -112,7 +113,7 @@
           </PaginationRow>
           <!-- pagination -->
 
-          <CustomTableRow v-if="isAdd" class="table-row">
+          <CustomTableRow v-if="isAdd && canCreate" class="table-row">
             <CustomRadioButton
               :is-active="newItem.monthly"
               @set-is-active="setIsMonthly"
@@ -142,14 +143,14 @@
             />
           </CustomTableRow>
 
-          <CustomTableRow class="table-row add-row">
+          <CustomTableRow v-if="canCreate" class="table-row add-row">
             <CustomTableAddIcon :is-hide="isHide" @add-row="addFixedExpenseRow" />
           </CustomTableRow>
         </template>
       </CustomTable>
     </ValidationObserver>
 
-    <div v-if="isAdd" class="buttons-area">
+    <div v-if="isAdd && canCreate" class="buttons-area">
       <DefaultButton button-color-gamma="red" @event="createFixedExpense">
        + Add Expenses
       </DefaultButton>
@@ -188,6 +189,7 @@ import UpdateFixedExpense from '~/graphql/mutations/fixedExpense/updateFixedExpe
 
 // pagination
 import { paginatorMixin } from '~/mixins/paginatorMixin'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 // pagination
 
 export default {
@@ -212,6 +214,9 @@ export default {
     glAccounts: {
       query: GlAccounts,
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   data() {
     return {
@@ -234,6 +239,8 @@ export default {
         amount: '',
       },
       itemEdit: {},
+      canCreate: false,
+      canManage: false
     }
   },
   beforeMount(){
@@ -241,6 +248,14 @@ export default {
       this.queryVariable.unit_id = me.selectedUnit.id;
       this.fetchData();
     });
+  },
+  mounted () {
+    this.canCreate = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'fixed-expense') && (privilege.permissionType === 'CREATE')
+    }).length
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'fixed-expense') && (privilege.permissionType === 'MODIFY')
+    }).length
   },
   methods: {
     onChangeFloatValue(isEdit = false) {
