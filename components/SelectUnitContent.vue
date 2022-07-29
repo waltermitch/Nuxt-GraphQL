@@ -66,7 +66,7 @@ export default {
         'select unit error'
       )
 
-      this.$router.push('/home/close-register')
+      // this.$router.push('/home/close-register')
     },
     selectUnit(unit) {
       this.unit = unit
