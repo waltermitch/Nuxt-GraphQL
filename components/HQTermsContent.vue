@@ -26,6 +26,7 @@
               v-model="termEdit.name"
               rules="required"
               do-not-show-error-message
+              name="term-name"
             />
             <span v-else>{{ term.name }}</span>
 
@@ -34,6 +35,7 @@
               v-model="termEdit.dueDays"
               rules="required"
               do-not-show-error-message
+              name="term-dueDays"
             />
             <span v-else>{{ term.dueDays }}</span>
 
@@ -44,6 +46,7 @@
               rules="required"
               do-not-show-error-message
               is-float="true"
+              name="term-discPercent"
               @change="onChangeFloatValue('discPercent', true)"
             />
             <span v-else>
@@ -56,6 +59,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              name="term-discDays"
             />
             <span v-else>{{ term.discDays }}</span>
 
@@ -113,12 +117,14 @@
               v-model="termNew.name"
               rules="required"
               do-not-show-error-message
+              name="term-name"
             />
 
             <CustomInput
               v-model="termNew.dueDays"
               rules="required"
               do-not-show-error-message
+              name="term-dueDays"
             />
 
             <CustomInput
@@ -127,6 +133,7 @@
               rules="required"
               do-not-show-error-message
               is-float="true"
+              name="term-discPercent"
               @change="onChangeFloatValue('discPercent')"
             />
 
@@ -135,6 +142,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              name="term-discDays"
             />
           </CustomTableRow>
 

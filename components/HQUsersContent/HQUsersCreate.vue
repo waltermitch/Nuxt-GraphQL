@@ -1,102 +1,119 @@
 <template>
   <PageContentWrapper>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> First Name</template>
+    <ValidationObserver ref="form">
+      <LoadingBar v-if="$apollo.loading" />
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> First Name</template>
 
-          <template #input>
-            <CustomInput v-model="firstName" />
-          </template>
-        </InputWithTitle>
-      </div>
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> Last Name</template>
+            <template #input>
+              <CustomInput 
+                v-model="firstName"
+                rules="required"
+                name="user-first-name"
+                />
+            </template>
+          </InputWithTitle>
+        </div>
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> Last Name</template>
 
-          <template #input>
-            <CustomInput v-model="lastName" />
-          </template>
-        </InputWithTitle>
+            <template #input>
+              <CustomInput 
+                v-model="lastName"
+               />
+            </template>
+          </InputWithTitle>
+        </div>
       </div>
-    </div>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> Email</template>
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> Email</template>
 
-          <template #input>
-            <CustomInput v-model="email" />
-          </template>
-        </InputWithTitle>
-      </div>
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> Password</template>
+            <template #input>
+              <CustomInput 
+                v-model="email"
+                rules="required"
+                name="user-email"
+                />
+            </template>
+          </InputWithTitle>
+        </div>
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> Password</template>
 
-          <template #input>
-            <CustomInput v-model="password" />
-          </template>
-        </InputWithTitle>
+            <template #input>
+              <CustomInput 
+                v-model="password" 
+                rules="required"
+                name="user-password"
+              />
+            </template>
+          </InputWithTitle>
+        </div>
       </div>
-    </div>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col">
-        <InputWithTitle class="mb-20">
-          <template #title> Is Admin</template>
-          <template #input>
-            <CustomRadioButton
-              :is-active="isAdmin"
-              @set-is-active="setIsAdmin"
-            />
-          </template>
-        </InputWithTitle>
-        <InputWithTitle>
-          <template #title> Is Active</template>
-          <template #input>
-            <CustomRadioButton
-              :is-active="isActive"
-              @set-is-active="setIsActive"
-            />
-          </template>
-        </InputWithTitle>
-      </div>
-      <div v-if="!isAdmin" class="input-col mb-20">
-        <InputWithTitle class="mb-20">
-          <template #title> Role </template>
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col">
+          <InputWithTitle class="mb-20">
+            <template #title> Is Admin</template>
+            <template #input>
+              <CustomRadioButton
+                :is-active="isAdmin"
+                @set-is-active="setIsAdmin"
+              />
+            </template>
+          </InputWithTitle>
+          <InputWithTitle>
+            <template #title> Is Active</template>
+            <template #input>
+              <CustomRadioButton
+                :is-active="isActive"
+                @set-is-active="setIsActive"
+              />
+            </template>
+          </InputWithTitle>
+        </div>
+        <div v-if="!isAdmin" class="input-col mb-20">
+          <InputWithTitle class="mb-20">
+            <template #title> Role </template>
 
-          <template #input>
-            <CustomSelect
-              v-if="roles"
-              :options="roles"
-              :selected-item="role"
-              select-by="name"
-              @input="selectRole"
-            />
-          </template>
-        </InputWithTitle>
+            <template #input>
+              <CustomSelect
+                v-if="roles"
+                :options="roles"
+                :selected-item="role"
+                select-by="name"
+                @input="selectRole"
+              />
+            </template>
+          </InputWithTitle>
+        </div>
       </div>
-    </div>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col multiselects">
-        <multiselect
-          v-if="units && !isAdmin"
-          v-model="unit"
-          :options="units"
-          :multiple="true"
-          :close-on-select="false"
-          :clear-on-select="false"
-          :show-labels="false"
-          :custom-label="nameWithId"
-          :preserve-search="true"
-          placeholder="Pick some"
-          label="name"
-          track-by="name"
-          :preselect-first="false"
-        >
-        </multiselect>
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col multiselects">
+          <multiselect
+            v-if="units && !isAdmin"
+            v-model="unit"
+            :options="units"
+            :multiple="true"
+            :close-on-select="false"
+            :clear-on-select="false"
+            :show-labels="false"
+            :custom-label="nameWithId"
+            :preserve-search="true"
+            placeholder="Pick some"
+            label="name"
+            track-by="name"
+            :preselect-first="false"
+          >
+          </multiselect>
+        </div>
       </div>
-    </div>
+    </ValidationObserver>
     <div class="buttons-area">
       <DefaultButton @event="addUser">+ Add User</DefaultButton>
 
@@ -108,6 +125,7 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import { mapActions } from 'vuex'
 import Multiselect from 'vue-multiselect'
 import PageContentWrapper from '../PageContentWrapper.vue'
@@ -123,6 +141,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQUsersCreate',
   components: {
+    ValidationObserver,
     CustomInput,
     CustomRadioButton,
     InputWithTitle,

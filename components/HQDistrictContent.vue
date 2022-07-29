@@ -22,6 +22,7 @@
               v-model="districtEdit.code"
               rules="required"
               do-not-show-error-message
+              name="district-code"
             />
             <span v-else>{{ district.code }}</span>
 
@@ -30,6 +31,7 @@
               v-model="districtEdit.name"
               rules="required"
               do-not-show-error-message
+              name="district-name"
             />
             <span v-else>{{ district.name }}</span>
 
@@ -87,12 +89,14 @@
               v-model="districtNew.code"
               rules="required"
               do-not-show-error-message
+              name="district-code"
             />
 
             <CustomInput
               v-model="districtNew.name"
               rules="required"
               do-not-show-error-message
+              name="district-name"
             />
           </CustomTableRow>
 

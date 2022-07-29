@@ -1,93 +1,97 @@
 <template>
   <PageContentWrapper>
-    <div class="tables-wrapper">
-      <table class="tables">
-        <thead class="tables__thead">
-          <tr>
-            <th width="50">ID</th>
-            <th>First Name</th>
-            <th>Lats Name</th>
-            <th>Email</th>
-            <th class="text-center">Role Name</th>
-            <th class="tables__col-5">Units</th>
-            <th class="text-center">Is Admin</th>
-            <th class="text-center">Is Active</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody v-if="queryData.data" class="tables__body">
-          <tr v-for="(user, i) in queryData.data" :key="i">
-            <td width="50">{{ user.id }}</td>
-            <td class="nowrap">{{ user.firstName }}</td>
-            <td class="nowrap">{{ user.lastName }}</td>
-            <td>{{ user.email }}</td>
-            <td class="text-center">{{ user.isAdmin ? 'HQ' : (user.role ? user.role.name : '-') }}</td>
-            <td class="tables__col-5">
-              <span>
-                {{ user.units.map((unit) => unit.name).join(', ') }}
-              </span>
-            </td>
-            <td class="text-center">
-              <span v-if="user.isAdmin">+</span><span v-else>-</span>
-            </td>
-            <td class="text-center">
-              <span v-if="user.isActive">+</span><span v-else>-</span>
-            </td>
-            <td>
-              <CustomTableIconsColumn
-                :is-delete-active="isDelete === user.id"
-                @edit="isAdd ? null : editUnit(user)"
-                @delete="isAdd ? null : deleteItem(user.id)"
-                @cancel-delete="cancelDelete"
-                @confirm-delete="confirmDelete(user.id)"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <ValidationObserver ref="form">
+      <LoadingBar v-if="$apollo.loading" />
+      <div class="tables-wrapper">
+        <table class="tables">
+          <thead class="tables__thead">
+            <tr>
+              <th width="50">ID</th>
+              <th>First Name</th>
+              <th>Lats Name</th>
+              <th>Email</th>
+              <th class="text-center">Role Name</th>
+              <th class="tables__col-5">Units</th>
+              <th class="text-center">Is Admin</th>
+              <th class="text-center">Is Active</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody v-if="queryData.data" class="tables__body">
+            <tr v-for="(user, i) in queryData.data" :key="i">
+              <td width="50">{{ user.id }}</td>
+              <td class="nowrap">{{ user.firstName }}</td>
+              <td class="nowrap">{{ user.lastName }}</td>
+              <td>{{ user.email }}</td>
+              <td class="text-center">{{ user.isAdmin ? 'HQ' : (user.role ? user.role.name : '-') }}</td>
+              <td class="tables__col-5">
+                <span>
+                  {{ user.units.map((unit) => unit.name).join(', ') }}
+                </span>
+              </td>
+              <td class="text-center">
+                <span v-if="user.isAdmin">+</span><span v-else>-</span>
+              </td>
+              <td class="text-center">
+                <span v-if="user.isActive">+</span><span v-else>-</span>
+              </td>
+              <td>
+                <CustomTableIconsColumn
+                  :is-delete-active="isDelete === user.id"
+                  @edit="isAdd ? null : editUnit(user)"
+                  @delete="isAdd ? null : deleteItem(user.id)"
+                  @cancel-delete="cancelDelete"
+                  @confirm-delete="confirmDelete(user.id)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <!-- pagination -->
-      <PaginationRow v-if="queryData.data && queryData.data.length">
-        <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
-          <PaginationButton
-            :disabled="currentPage == 1"
-            :loading="fetchingData"
-            @event="firstPage"
-          > << </PaginationButton>
-          <PaginationButton
-            :disabled="currentPage == 1"
-            :loading="fetchingData"
-            @event="prevPage"
-          > < </PaginationButton>
-          <PaginationInput
-            v-model="page"
-            :disabled="fetchingData"
-            @change="goToPage"
-            @event="goToPage"
-            >
-          </PaginationInput>
-          <PaginationButton
-            :disabled="currentPage >= queryData.paginatorInfo.lastPage"
-            :loading="fetchingData"
-            @event="nextPage"
-          > > </PaginationButton>
-          <PaginationButton
-            :disabled="currentPage >= queryData.paginatorInfo.lastPage"
-            :loading="fetchingData"
-            @event="lastPage"
-          > >> </PaginationButton>
-        </div>
-        <div class='description-bar'>
-          Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
-        </div>
-      </PaginationRow>
-      <!-- pagination -->
+        <!-- pagination -->
+        <PaginationRow v-if="queryData.data && queryData.data.length">
+          <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+            <PaginationButton
+              :disabled="currentPage == 1"
+              :loading="fetchingData"
+              @event="firstPage"
+            > << </PaginationButton>
+            <PaginationButton
+              :disabled="currentPage == 1"
+              :loading="fetchingData"
+              @event="prevPage"
+            > < </PaginationButton>
+            <PaginationInput
+              v-model="page"
+              :disabled="fetchingData"
+              @change="goToPage"
+              @event="goToPage"
+              >
+            </PaginationInput>
+            <PaginationButton
+              :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+              :loading="fetchingData"
+              @event="nextPage"
+            > > </PaginationButton>
+            <PaginationButton
+              :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+              :loading="fetchingData"
+              @event="lastPage"
+            > >> </PaginationButton>
+          </div>
+          <div class='description-bar'>
+            Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+          </div>
+        </PaginationRow>
+        <!-- pagination -->
 
-    </div>
+      </div>
+    </ValidationObserver>
   </PageContentWrapper>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import { mapActions } from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import UserList from '../../graphql/queries/userList.gql'
@@ -110,6 +114,7 @@ import { paginatorMixin } from '~/mixins/paginatorMixin'
 export default {
   name: 'HQUsers',
   components: {
+    ValidationObserver,
     CustomTableIconsColumn,
     PageContentWrapper,
 
@@ -150,8 +155,8 @@ export default {
         DeleteUser,
         { id },
         null,
-        'Delete role success',
-        'Delete role error',
+        'Delete user success',
+        'Delete user error',
         null,
         true
       )

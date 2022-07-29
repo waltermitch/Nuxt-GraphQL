@@ -35,6 +35,7 @@
               v-model="cityEdit.name"
               rules="required"
               do-not-show-error-message
+              name="city-name"
             />
             <span v-else>
               {{ city.name }}
@@ -46,6 +47,7 @@
               type="number"
               do-not-show-error-message
               is-float="true"
+              name="city-tax"
               @change="onChangeFloatValue('tax', true)"
             />
             <span v-else>
@@ -112,6 +114,7 @@
               v-model="cityNew.name"
               rules="required"
               do-not-show-error-message
+              name="city-name"
             />
 
             <CustomInput
@@ -120,6 +123,7 @@
               rules="required|double"
               do-not-show-error-message
               is-float="true"
+              name="city-tax"
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>
@@ -300,8 +304,8 @@ export default {
         DeleteCity,
         { id },
         null,
-        'Delete state success',
-        'Delete state error',
+        'Delete city success',
+        'Delete city error',
         null,
         true
       )

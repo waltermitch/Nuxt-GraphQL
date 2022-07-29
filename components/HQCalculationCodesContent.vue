@@ -22,6 +22,7 @@
               v-model="calculationCodeEdit.code"
               rules="required"
               do-not-show-error-message
+              name="calculationCode-code"
             />
             <span v-else>{{ calculationCode.code }}</span>
 
@@ -30,6 +31,7 @@
               v-model="calculationCodeEdit.description"
               rules="required"
               do-not-show-error-message
+              name="calculationCode-description"
             />
             <span v-else>{{ calculationCode.description }}</span>
 
@@ -87,12 +89,14 @@
               v-model="calculationCodeNew.code"
               rules="required"
               do-not-show-error-message
+              name="calculationCode-code"
             />
 
             <CustomInput
               v-model="calculationCodeNew.description"
               rules="required"
               do-not-show-error-message
+              name="calculationCode-description"
             />
           </CustomTableRow>
 

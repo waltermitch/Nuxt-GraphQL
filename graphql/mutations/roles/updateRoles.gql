@@ -1,5 +1,5 @@
 mutation UpdateRole($roleInput: UpdateRoleInput!) {
-  updateRole(input: $roleInput) {
+  updateRole(roleInput: $roleInput) {
     status
     message
   }

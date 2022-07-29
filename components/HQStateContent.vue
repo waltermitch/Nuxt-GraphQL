@@ -38,7 +38,7 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxCafeteria"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxCafeteria"
@@ -50,7 +50,7 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxVending"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxVending"
@@ -62,7 +62,7 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxRestaurant"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxRestaurant"
@@ -76,7 +76,7 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxStore"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxStore"
@@ -90,7 +90,7 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.grossReceiptsTax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-grossReceiptsTax"
@@ -160,7 +160,7 @@
             <CustomInput
               v-model="stateNew.salesTaxCafeteria"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxCafeteria"
@@ -170,7 +170,7 @@
             <CustomInput
               v-model="stateNew.salesTaxVending"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxVending"
@@ -180,7 +180,7 @@
             <CustomInput
               v-model="stateNew.salesTaxRestaurant"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxRestaurant"
@@ -190,7 +190,7 @@
             <CustomInput
               v-model="stateNew.salesTaxStore"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-salesTaxStore"
@@ -200,7 +200,7 @@
             <CustomInput
               v-model="stateNew.grossReceiptsTax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
               name="state-grossReceiptsTax"

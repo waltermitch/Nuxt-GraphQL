@@ -1,53 +1,56 @@
 <template>
   <PageContentWrapper>
-    <LoadingBar v-if="$apollo.loading" />
-    <CustomTable v-else :w-table="620">
-      <template #header>
-        <div class="table-row">
-          <span>Unit Number</span>
+    <ValidationObserver ref="form">
+      <LoadingBar v-if="$apollo.loading" />
+      <CustomTable v-else :w-table="620">
+        <template #header>
+          <div class="table-row">
+            <span>Unit Number</span>
 
-          <span>Name</span>
+            <span>Name</span>
 
-          <span>City</span>
+            <span>City</span>
 
-          <span>State</span>
-        </div>
-      </template>
+            <span>State</span>
+          </div>
+        </template>
 
-      <template v-if="units" #content>
-        <CustomTableRow v-for="unit in units" :key="unit.id" class="table-row">
-          <span>
-            {{ unit.code }}
-          </span>
+        <template v-if="units" #content>
+          <CustomTableRow v-for="unit in units" :key="unit.id" class="table-row">
+            <span>
+              {{ unit.code }}
+            </span>
 
-          <span>
-            {{ unit.name }}
-          </span>
+            <span>
+              {{ unit.name }}
+            </span>
 
-          <span v-if="unit.city">
-            {{ unit.city.name }}
-          </span>
-          <span v-else>-</span>
+            <span v-if="unit.city">
+              {{ unit.city.name }}
+            </span>
+            <span v-else>-</span>
 
-          <span v-if="unit.city">
-            {{ unit.city.state.code }}
-          </span>
-          <span v-else>-</span>
+            <span v-if="unit.city">
+              {{ unit.city.state.code }}
+            </span>
+            <span v-else>-</span>
 
-          <CustomTableIconsColumn
-            :is-delete-active="isDelete === unit.id"
-            @edit="editUnit(unit)"
-            @delete="deleteItem(unit.id)"
-            @cancel-delete="cancelDelete"
-            @confirm-delete="confirmDelete(unit.id)"
-          />
-        </CustomTableRow>
-      </template>
-    </CustomTable>
+            <CustomTableIconsColumn
+              :is-delete-active="isDelete === unit.id"
+              @edit="editUnit(unit)"
+              @delete="deleteItem(unit.id)"
+              @cancel-delete="cancelDelete"
+              @confirm-delete="confirmDelete(unit.id)"
+            />
+          </CustomTableRow>
+        </template>
+      </CustomTable>
+    </ValidationObserver>
   </PageContentWrapper>
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import Units from '../graphql/queries/units.gql'
 import DeleteUnit from '../graphql/mutations/unit/deleteUnit.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
@@ -60,6 +63,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQUnitsTableContent',
   components: {
+    ValidationObserver,
     PageContentWrapper,
     CustomTable,
     CustomTableRow,

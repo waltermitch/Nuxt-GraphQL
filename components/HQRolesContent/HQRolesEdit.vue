@@ -1,69 +1,72 @@
 <template>
   <PageContentWrapper>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> Role Name</template>
+    <ValidationObserver ref="form">
+      <LoadingBar v-if="$apollo.loading" />
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> Role Name</template>
 
-          <template #input>
-            <CustomInput v-model="roleName" />
-          </template>
-        </InputWithTitle>
+            <template #input>
+              <CustomInput v-model="roleName" name="role-name" />
+            </template>
+          </InputWithTitle>
+        </div>
       </div>
-    </div>
-    <div class="input-row input-row--offset mb-20">
-      <div class="input-col">
-        <InputWithTitle>
-          <template #title> Permissions</template>
-        </InputWithTitle>
+      <div class="input-row input-row--offset mb-20">
+        <div class="input-col">
+          <InputWithTitle>
+            <template #title> Permissions</template>
+          </InputWithTitle>
 
-        <table class="permissions-table">
-          <thead class="permissions-table__thead">
-          <tr>
-            <th width="50">Name</th>
-            <th width="50">View</th>
-            <th width="50">Create</th>
-            <th width="50">Modify</th>
-          </tr>
-          </thead>
-          <tbody class="permissions-table__body">
-            <tr v-for="(permission, i) in permissions" :key="i">
-              <td>{{ permissionNames[i] }}</td>
-              <td>
-                <div class="checkbox-hld">
-                  <CustomCheckbox
-                    v-if="permissionCapabilities[i].isView"
-                    :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
-                    @update-checkbox="updateCheckbox"
-                  />
-                  <span v-else>-</span>
-                </div>
-              </td>
-              <td>
-                <div class="checkbox-hld">
-                  <CustomCheckbox
-                    v-if="permissionCapabilities[i].isCreate"
-                    :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
-                    @update-checkbox="updateCheckbox"
-                  />
-                  <span v-else>-</span>
-                </div>
-              </td>
-              <td>
-                <div class="checkbox-hld">
-                  <CustomCheckbox
-                    v-if="permissionCapabilities[i].isModify"
-                    :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
-                    @update-checkbox="updateCheckbox"
-                  />
-                  <span v-else>-</span>
-                </div>
-              </td>
+          <table class="permissions-table">
+            <thead class="permissions-table__thead">
+            <tr>
+              <th width="50">Name</th>
+              <th width="50">View</th>
+              <th width="50">Create</th>
+              <th width="50">Modify</th>
             </tr>
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="permissions-table__body">
+              <tr v-for="(permission, i) in permissions" :key="i">
+                <td>{{ permissionNames[i] }}</td>
+                <td>
+                  <div class="checkbox-hld">
+                    <CustomCheckbox
+                      v-if="permissionCapabilities[i].isView"
+                      :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
+                      @update-checkbox="updateCheckbox"
+                    />
+                    <span v-else>-</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox-hld">
+                    <CustomCheckbox
+                      v-if="permissionCapabilities[i].isCreate"
+                      :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
+                      @update-checkbox="updateCheckbox"
+                    />
+                    <span v-else>-</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox-hld">
+                    <CustomCheckbox
+                      v-if="permissionCapabilities[i].isModify"
+                      :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
+                      @update-checkbox="updateCheckbox"
+                    />
+                    <span v-else>-</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </ValidationObserver>
     <div class="buttons-area">
       <DefaultButton @event="editRole">Edit Role</DefaultButton>
 
@@ -75,6 +78,7 @@
 </template>
 
 <script>
+import { ValidationObserver } from 'vee-validate'
 import {mapActions, mapGetters} from 'vuex'
 import PageContentWrapper from '../PageContentWrapper.vue'
 import Menus from '../../graphql/queries/menus.gql'
@@ -87,6 +91,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 export default {
   name: 'HQRolesEdit',
   components: {
+    ValidationObserver,
     CustomInput,
     InputWithTitle,
     PageContentWrapper,

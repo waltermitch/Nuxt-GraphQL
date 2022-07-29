@@ -1,5 +1,5 @@
 mutation CreateRole($roleInput: CreateRoleInput!) {
-  createRole(input: $roleInput) {
+  createRole(roleInput: $roleInput) {
     status
   }
 }

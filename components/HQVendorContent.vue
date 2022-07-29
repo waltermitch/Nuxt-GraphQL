@@ -24,6 +24,7 @@
               v-model="vendorEdit.code"
               rules="required"
               do-not-show-error-message
+              name="vendor-code"
             />
             <span v-else>{{ vendor.code }}</span>
 
@@ -32,6 +33,7 @@
               v-model="vendorEdit.name"
               rules="required"
               do-not-show-error-message
+              name="vendor-name"
             />
             <span v-else>{{ vendor.name }}</span>
 
@@ -102,12 +104,14 @@
               v-model="vendorNew.code"
               rules="required"
               do-not-show-error-message
+              name="vendor-code"
             />
 
             <CustomInput
               v-model="vendorNew.name"
               rules="required"
               do-not-show-error-message
+              name="vendor-name"
             />
 
             <CustomSelect
@@ -281,8 +285,8 @@ export default {
         UpdateVendor,
         { vendorInput: editedVendor },
         null,
-        'Add vendor success',
-        'Add vendor error',
+        'Edit vendor success',
+        'Edit vendor error',
         null,
         true
       )
@@ -297,8 +301,8 @@ export default {
         DeleteVendor,
         { id },
         null,
-        'Add vendor success',
-        'Add vendor error',
+        'Delete vendor success',
+        'Delete vendor error',
         null,
         true
       )
