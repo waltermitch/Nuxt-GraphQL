@@ -35,6 +35,11 @@ export default {
       mutableNav: {},
     }
   },
+  watch: {
+    navTabs() {
+      this.verifyPermissions();
+    },
+  },
   mounted() {
     this.verifyPermissions();
   },
@@ -43,7 +48,7 @@ export default {
       this.mutableNav = [];
 
       for (const item of this.navTabs) {
-        const permissionsFilter = item.permission ? !!this.RolePrivileges.filter(privilege => {
+        const permissionsFilter = (item.permission && this.RolePrivileges) ? !!this.RolePrivileges.filter(privilege => {
           return (privilege.slugName === item.permission.slugName) && (privilege.permissionType === item.permission.permissionType)
         }).length : null;
 

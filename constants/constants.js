@@ -1,32 +1,3 @@
-export const HEADER_TABS = [
-  {
-    id: 1,
-    name: 'Home',
-    src: require('assets/images/icons/header/home.svg'),
-    to: '/home',
-  },
-  {
-    id: 2,
-    name: 'Review',
-    src: require('assets/images/icons/header/portfolio.svg'),
-    to: '/review',
-  },
-  {
-    id: 3,
-    name: 'Reports',
-    src: require('assets/images/icons/header/graph-line.svg'),
-    to: '/reports',
-  },
-  {
-    id: 4,
-    name: 'Admin',
-    src: require('assets/images/icons/header/person-circle.svg'),
-    to: '/admin',
-  },
-]
-
-//
-
 export const HOME_NAV_TABS = [
   {
     id: 1,
@@ -187,30 +158,34 @@ export const ADMIN_NAV_TABS = [
 
 //
 
-export const HQ_HEADER_TABS = [
+export const HEADER_TABS = [
   {
     id: 1,
-    name: 'Maintenance',
-    src: require('assets/images/icons/hqHeader/maintenance.svg'),
-    to: '/hq-maintenance',
+    name: 'Home',
+    src: require('assets/images/icons/header/home.svg'),
+    to: '/home',
+    permissionTabs: HOME_NAV_TABS,
   },
   {
     id: 2,
-    name: 'Unit Setup',
-    src: require('assets/images/icons/hqHeader/units.svg'),
-    to: '/hq-unit-setup',
+    name: 'Review',
+    src: require('assets/images/icons/header/portfolio.svg'),
+    to: '/review',
+    permissionTabs: REVIEW_NAV_TABS,
   },
   {
     id: 3,
     name: 'Reports',
-    src: require('assets/images/icons/hqHeader/reports.svg'),
-    to: '/hq-reports',
+    src: require('assets/images/icons/header/graph-line.svg'),
+    to: '/reports',
+    permissionTabs: REPORTS_NAV_TABS,
   },
   {
     id: 4,
-    name: 'Accounting',
-    src: require('assets/images/icons/hqHeader/accounting.svg'),
-    to: '/hq-accounting',
+    name: 'Admin',
+    src: require('assets/images/icons/header/person-circle.svg'),
+    to: '/admin',
+    permissionTabs: ADMIN_NAV_TABS,
   },
 ]
 
@@ -363,5 +338,34 @@ export const HQ_ACCOUNTING = [
     caption: 'Calculation Codes',
     pageUrl: '/hq-accounting/calculation-codes',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+]
+
+//
+
+export const HQ_HEADER_TABS = [
+  {
+    id: 1,
+    name: 'Maintenance',
+    src: require('assets/images/icons/hqHeader/maintenance.svg'),
+    to: '/hq-maintenance',
+  },
+  {
+    id: 2,
+    name: 'Unit Setup',
+    src: require('assets/images/icons/hqHeader/units.svg'),
+    to: '/hq-unit-setup',
+  },
+  {
+    id: 3,
+    name: 'Reports',
+    src: require('assets/images/icons/hqHeader/reports.svg'),
+    to: '/hq-reports',
+  },
+  {
+    id: 4,
+    name: 'Accounting',
+    src: require('assets/images/icons/hqHeader/accounting.svg'),
+    to: '/hq-accounting',
   },
 ]
