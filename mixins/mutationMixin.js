@@ -152,8 +152,33 @@ export const mutationMixin = {
 
             // HQUnitsTableContent,HQUnitMaintenance - Detail, Financials, Fees - /hq-unit-setup/unit-info
             if ( propNames[0].includes('unitInput') === true ) {
-              graphQLErrorMessage = graphQLErrorMessage.replace(/a/g,'The "CalculationCode Code" ');
-              graphQLErrorMessage = graphQLErrorMessage.replace(/a/g,'The "CalculationCode Description" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The code/g,'The "Details -> Unit Number"');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The name/g,'The "Details -> Name" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The address/g,'The "Details -> Street Address" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The zip/g,'The "Details -> Zip Code" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The population/g,'The "Details -> Population" ');
+              
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The sysco/g,'The "Details -> Sysco" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The manager first name/g,'The "Details -> Mgr First Name" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The manager last name/g,'The "Details -> Mgr Last Name" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The payroll password/g,'The "Details -> Password" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The email account/g,'The "Details -> Email" ');
+
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The payroll tax percent/g,'The "Financials -> Payroll Tax" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The benefits amount/g,'The "Financials -> Benefit Dollars" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The vending income/g,'The "Financials -> Vending Income" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The commission amount/g,'The "Financials -> Commission Dollars" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The vacation amount/g,'The "Financials -> Vacation Dollars" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The business insurance amount/g,'The "Financials -> Business Insurance" ');
+
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The management amount/g,'The "Financials -> Management Fee - Dollar" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The management percent/g,'The "Financials -> Management Fee - Percent" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The administrative amount/g,'The "Financials -> Administrative Fee - Dollar" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The administrative percent/g,'The "Financials -> Administrative Fee - Percent" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The support amount/g,'The "Financials -> Support Fee - Dollar" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The support percent/g,'The "Financials -> Support Fee - Percent" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The benefits percent/g,'The "Financials -> Benefits Percent" ');
+              graphQLErrorMessage = graphQLErrorMessage.replace(/The commission percent/g,'The "Financials -> Commission Percent" ');
             }
 
             this.showSubmitMessage(graphQLErrorMessage, 'error');
@@ -161,11 +186,17 @@ export const mutationMixin = {
             const errMessage = errorObj.message
             const errorMessageArray = errMessage.split(';')
             console.log(errMessage, errorMessageArray)
+            let error;
             if (errorMessageArray.length > 1) {
-              this.showSubmitMessage(errorMessageArray[1], 'error')
+              error = errorMessageArray[1];
             } else {
-              this.showSubmitMessage(errMessage, 'error')
+              error = errMessage;
             }
+
+            // error = error.replace(/Field "startPeriod" is not defined by type UpdateUnitInput./g, 'The ')
+            error = error.replace(/Expected type Int at value.population/g,'The "Details -> Population" must be Int value');
+
+            this.showSubmitMessage(error, 'error')
           }
         }
         return false // return false when fail
@@ -314,10 +345,59 @@ export const mutationMixin = {
       }
 
       // HQUnitsTableContent,HQUnitMaintenance - Detail, Financials, Fees - /hq-unit-setup/unit-info
-      if ( fieldName === '' ) {
-        inputName = '';
-      } else if ( fieldName === '' ) {
-        inputName = '';
+      // Detail Tab
+      if ( fieldName === 'unit-code' ) {
+        inputName = 'Details -> Unit Number';
+      } else if ( fieldName === 'unit-name' ) {
+        inputName = 'Details -> Name';
+      } else if ( fieldName === 'unit-address' ) {
+        inputName = 'Details -> Street Address';
+      } else if ( fieldName === 'unit-zip' ) {
+        inputName = 'Details -> Zip Code';
+      } else if ( fieldName === 'unit-population' ) {
+        inputName = 'Details -> Population';
+      } else if ( fieldName === 'unit-sysco' ) {
+        inputName = 'Details -> Sysco';
+      } else if ( fieldName === 'unit-first-name' ) {
+        inputName = 'Details -> Mgr First Name';
+      } else if ( fieldName === 'unit-last-name' ) {
+        inputName = 'Details -> Mgr Last Name';
+      } else if ( fieldName === 'unit-password' ) {
+        inputName = 'Details -> Password';
+      } else if ( fieldName === 'unit-email' ) {
+        inputName = 'Details -> Email';
+      }
+      // Financials Tab
+      else if ( fieldName === 'unit-payrollTaxPercent' ) {
+        inputName = 'Financials -> Payroll Tax';
+      } else if ( fieldName === 'unit-benefitsAmount' ) {
+        inputName = 'Financials -> Benefit Dollars';
+      } else if ( fieldName === 'unit-vendingIncome' ) {
+        inputName = 'Financials -> Vending Income';
+      } else if ( fieldName === 'unit-commissionAmount' ) {
+        inputName = 'Financials -> Commission Dollars';
+      } else if ( fieldName === 'unit-vacationAmount' ) {
+        inputName = 'Financials -> Vacation Dollars';
+      } else if ( fieldName === 'unit-businessInsuranceAmount' ) {
+        inputName = 'Financials -> Business Insurance';
+      }
+      // Fees Tab
+      else if ( fieldName === 'unit-managementAmount' ) {
+        inputName = 'Financials -> Management Fee - Dollar';
+      } else if ( fieldName === 'unit-managementPercent' ) {
+        inputName = 'Financials -> Management Fee - Percent';
+      } else if ( fieldName === 'unit-administrativeAmount' ) {
+        inputName = 'Financials -> Administrative Fee - Dollar';
+      } else if ( fieldName === 'unit-administrativePercent' ) {
+        inputName = 'Financials -> Administrative Fee - Percent';
+      } else if ( fieldName === 'unit-supportAmount' ) {
+        inputName = 'Financials -> Support Fee - Dollar';
+      } else if ( fieldName === 'unit-supportPercent' ) {
+        inputName = 'Financials -> Support Fee - Percent';
+      } else if ( fieldName === 'unit-benefitsPercent' ) {
+        inputName = 'Financials -> Benefits Percent';
+      } else if ( fieldName === 'unit-commissionPercent' ) {
+        inputName = 'Financials -> Commission Percent';
       }
 
       /*

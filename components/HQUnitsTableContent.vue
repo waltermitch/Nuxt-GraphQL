@@ -73,6 +73,12 @@ export default {
   },
   methods: {
     editUnit(unit) {
+      const propertyList = ['administrativeAmount', 'administrativePercent', 'benefitsAmount', 'benefitsPercent', 'businessInsuranceAmount', 'commissionAmount', 'commissionPercent', 'managementAmount', 'managementPercent', 'payrollTaxPercent', 'supportAmount', 'supportPercent', 'vacationAmount', 'vendingIncome'];
+      for ( const property of propertyList ) {
+        unit[property] = Number(unit[property]).toFixed(2);
+      }
+      console.log(unit);
+
       this.setUnit(unit)
       this.setUnitID(unit.id)
       this.showAddUnit()

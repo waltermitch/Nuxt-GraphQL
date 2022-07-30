@@ -1,13 +1,12 @@
 <template>
   <ValidationProvider
-    v-slot="{ errors, classes, valid }"
+    v-slot="{ errors, classes }"
     mode="eager"
     :rules="rules"
     :name="name"
   >
     <span :symbol="symbol">
       <input
-        :valid="valid"
         :symbol="symbol"
         class="input"
         :name="name"

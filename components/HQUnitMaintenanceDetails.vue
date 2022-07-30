@@ -77,7 +77,7 @@
           <template #title> Zip Code </template>
 
           <template #input>
-            <CustomInput v-model="zip" rules="required" name="unit-zip-code" />
+            <CustomInput v-model="zip" rules="required" name="unit-zip" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
@@ -122,14 +122,14 @@
           <template #title> Mgr First Name </template>
 
           <template #input>
-            <CustomInput v-model="managerFirstName" rules="required" name="first-name" />
+            <CustomInput v-model="managerFirstName" rules="required" name="unit-first-name" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
           <template #title> Mgr Last Name </template>
 
           <template #input>
-            <CustomInput v-model="managerLastName" rules="required" name="last-name" />
+            <CustomInput v-model="managerLastName" rules="required" name="unit-last-name" />
           </template>
         </InputWithTitle>
       </InputRow>

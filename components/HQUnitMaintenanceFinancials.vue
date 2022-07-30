@@ -167,85 +167,85 @@ export default {
   mixins: [formMixin, unitMaintenanceMixin, tabsViewMixin],
   data () {
     return {
-      payrollTaxPercent: '',
+      /* payrollTaxPercent: '',
       benefitsAmount: '',
       vendingIncome: '',
       commissionAmount: '',
       vacationAmount: '',
-      businessInsuranceAmount: '',
+      businessInsuranceAmount: '', */
     }
   },
   computed: {
-    /* payrollTaxPercent: {
+    payrollTaxPercent: {
       get() {
         return this.unit.payrollTaxPercent
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_PAYROLL_TAX', value)
       },
-    }, */
-    /* benefitsAmount: {
+    },
+    benefitsAmount: {
       get() {
         return this.unit.benefitsAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_BENEFIT_DOLLARS', value)
       },
-    }, */
-    /* vendingIncome: {
+    },
+    vendingIncome: {
       get() {
         return this.unit.vendingIncome
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_VENDING_INCOME', value)
       },
-    }, */
-    /* commissionAmount: {
+    },
+    commissionAmount: {
       get() {
         return this.unit.commissionAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_DOLLARS', value)
       },
-    }, */
-    /* vacationAmount: {
+    },
+    vacationAmount: {
       get() {
         return this.unit.vacationAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_VACATION_DOLLARS', value)
       },
-    }, */
+    },
     isVending() {
       return this.unit.isVending
     },
     isActive() {
       return this.unit.isActive
     },
-    /* businessInsuranceAmount: {
+    businessInsuranceAmount: {
       get() {
         return this.unit.businessInsuranceAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', value)
       },
-    }, */
+    },
   },
   methods: {
     onChangeFloatValue(stateProp) {
-      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      const value = parseFloat(this.unit[stateProp] !== '' ? this.unit[stateProp] : 0).toFixed(2);
       if ( stateProp === 'payrollTaxPercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_PAYROLL_TAX', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_PAYROLL_TAX', value)
       } else if ( stateProp === 'benefitsAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BENEFIT_DOLLARS', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFIT_DOLLARS', value)
       } else if ( stateProp === 'vendingIncome' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_VENDING_INCOME', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_VENDING_INCOME', value)
       } else if ( stateProp === 'commissionAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_DOLLARS', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_DOLLARS', value)
       } else if ( stateProp === 'vacationAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_VACATION_DOLLARS', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_VACATION_DOLLARS', value)
       } else if ( stateProp === 'businessInsuranceAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', value)
       }
     },
     setIsVending() {
