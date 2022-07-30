@@ -380,7 +380,6 @@ export default {
     },
     selectPeriod(period) {
       this.startPeriod = period
-      console.log(this.startPeriod.id);
     },
     selectState(state) {
       this.state = state

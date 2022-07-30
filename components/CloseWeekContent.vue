@@ -126,7 +126,6 @@ export default {
       const res = await this.$apollo.mutate({
         mutation: CloseWeek,
       });
-      console.log('closeWeek res', res);
       if (res) {
         this.exitEvent()
         this.showSubmitMessage('Close week success', 'success')

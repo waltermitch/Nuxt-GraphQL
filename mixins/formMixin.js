@@ -22,7 +22,6 @@ export const formMixin = {
     },
     saveEvent() {
       this.$refs.form.validate().then((result) => {
-        console.log(result);
         if (result) {
           this.setShowMessage(true)
           this.setMessageType('success')

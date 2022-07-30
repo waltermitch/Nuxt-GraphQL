@@ -23,7 +23,7 @@ export default {
             avatarResource: ''
         }
     },
-    watch: { 
+    watch: {
       	avatar(newVal, oldVal) {
             this.avatarResource = newVal
 
@@ -34,11 +34,10 @@ export default {
     methods: {
         onChangeAvatar() {
             const avatarInput = this.$refs.avatarInput;
-            avatarInput.click();                
+            avatarInput.click();
         },
         onAvatarChange() {
             const avatarInput = this.$refs.avatarInput;
-            console.log(avatarInput);
 
             if (avatarInput.files && avatarInput.files[0]) {
                 const reader = new FileReader();
@@ -63,7 +62,7 @@ export default {
         border-radius: 50%;
         box-shadow: 2px 2px 6px black;
         cursor: pointer;
-        
+
         img {
             width: 100%;
             height: 100%;

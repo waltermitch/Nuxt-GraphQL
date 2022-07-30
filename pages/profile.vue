@@ -92,7 +92,7 @@
                     </ProfileAvatar>
                 </div>
             </div>
-            
+
             <FormSubmissionMessage
                 v-if="showMessage"
                 :type="messageType"
@@ -157,7 +157,6 @@ export default {
             this.me = {};
             this.getMyData().then((me) => {
                 this.me = me;
-                console.log(me.avatar);
                 this.profileInput = {
                     avatarResource: me.avatar != null ? process.env.BASE_URL + me.avatar : '',
                     avatar: null,
@@ -181,15 +180,8 @@ export default {
             this.profileInput.avatarResource = avatarResource
         },
         async saveProfile() {
-            console.log({
-                avatar: this.profileInput.avatar,
-                firstName: this.profileInput.firstName,
-                lastName: this.profileInput.lastName,
-                email: this.profileInput.email,
-                password: this.profileInput.password,
-            });
             if ( this.isPasswordConfirmed ) {
-                const res = await this.mutationAction(
+                await this.mutationAction(
                     UpdateProfile,
                     {
                         profileInput: {
@@ -206,7 +198,6 @@ export default {
                     null,
                     true
                 )
-                console.log(res);
                 this.fetchData();
             }
         },

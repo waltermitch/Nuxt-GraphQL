@@ -11,15 +11,12 @@ export const paginatorMixin = {
             },
             set(value) {
                 this.currentPage = parseInt(Math.max(1, Math.min(value, this.queryData.paginatorInfo.lastPage)));
-                console.log('set page input value', this.currentPage);
             },
         },
     },
     methods: {
         async fetchData() {
             this.fetchingData = true
-
-            console.log('loading, ', this.fetchingData)
 
             const variables = {
                 page: this.currentPage,
@@ -28,10 +25,8 @@ export const paginatorMixin = {
                 for ( const x in this.queryVariable ) {
                     variables[x] = this.queryVariable[x]
                 }
-            }         
-            console.log(
-                this.queryName
-            );
+            }
+
             const queryData = await this.$apollo.query({
                 query: this.query,
                 fetchPolicy: 'network-only',
@@ -39,8 +34,6 @@ export const paginatorMixin = {
             });
             this.fetchingData = false
 
-            console.log('loading, ', this.fetchingData)
-            
             this.queryData = queryData.data[this.queryName];
         },
         async firstPage() {
@@ -61,7 +54,6 @@ export const paginatorMixin = {
         },
         async goToPage(page = null) {
             this.currentPage = (page !== null ? page : this.currentPage);
-            console.log('gotoPage', this.currentPage);
             await this.fetchData();
         },
     },
