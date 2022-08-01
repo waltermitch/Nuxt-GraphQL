@@ -12,7 +12,8 @@
         :value="value"
         @change="$emit('change')"
         @keyup.enter="$emit('event')"
-        @input="setValue($event.target.value)"
+        :type="type"
+        :format="(type == 'date' ? 'MM-DD-YYYY' : 'MM-DD-YYYY HH:mm')"
         ></date-picker>
     </span>
     <span v-if="!doNotShowErrorMessage" class="error">{{ errors[0] }}</span>
@@ -35,10 +36,6 @@ export default {
     value: {
       type: [String, Number],
       default: '',
-    },
-    type: {
-      type: String,
-      default: 'text',
     },
     placeholder: {
       type: String,
@@ -64,10 +61,10 @@ export default {
       type: Boolean,
       default: false,
     },
-    symbol: {
+    type: {
       type: String,
-      default: '',
-    },
+      default: 'date',
+    }
   },
   data() {
     return {

@@ -24,11 +24,12 @@
           <template #title>Order Date</template>
 
           <template #input>
-            <CustomInput
+            <CustomDatePicker
               v-model="orderDate"
               rules="required|date"
               name="Order Date"
               placeholder="mm/dd/yyyy"
+              type="date"
             />
           </template>
         </InputWithTitle>
@@ -52,11 +53,12 @@
           <template #title>Delivery Date/Time</template>
 
           <template #input>
-            <CustomInput
+            <CustomDatePicker
               v-model="deliveryDate"
               rules="required|dateWithTime"
               name="Delivery Date/Time"
               placeholder="mm/dd/yyyy hh:mm"
+              type="datetime"
             />
           </template>
         </InputWithTitle>
@@ -148,6 +150,7 @@ import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
+import CustomDatePicker from './CustomDatePicker.vue'
 import InputRow from './InputRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
 import DefaultButton from './DefaultButton.vue'
@@ -158,6 +161,7 @@ export default {
   components: {
     InputWithTitle,
     CustomInput,
+    CustomDatePicker,
     InputRow,
     CustomRadioButton,
     DefaultButton,
