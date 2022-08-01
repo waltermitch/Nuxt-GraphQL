@@ -9,10 +9,10 @@
             <template #title>Expense Date</template>
 
             <template #input>
-              <CustomInput
+              <CustomDatePicker
                 v-model="expensesDate"
-                placeholder="mm/dd/yyyy"
                 rules="required|date"
+                type="date"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
             </template>
@@ -133,6 +133,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import InputRow from './InputRow.vue'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
+import CustomDatePicker from './CustomDatePicker.vue'
 import CustomSelect from './CustomSelect.vue'
 import CustomTextarea from './CustomTextarea.vue'
 import DefaultButton from './DefaultButton.vue'
@@ -154,6 +155,7 @@ export default {
     InputRow,
     InputWithTitle,
     CustomInput,
+    CustomDatePicker,
     CustomSelect,
     CustomTextarea,
     DefaultButton,

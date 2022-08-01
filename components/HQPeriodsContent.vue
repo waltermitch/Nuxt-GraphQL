@@ -21,11 +21,11 @@
             :key="period.id"
             class="table-row"
           >
-            <CustomInput
+            <CustomDatePicker
               v-if="isEdit === period.id"
               v-model="periodEdit.periodEnd"
               rules="required|date"
-              placeholder="mm/dd/yyyy"
+              type="date"
               do-not-show-error-message
             />
             <span v-else>{{ period.periodEnd }}</span>
@@ -107,10 +107,10 @@
           <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
-            <CustomInput
+            <CustomDatePicker
               v-model="periodNew.periodEnd"
               rules="required|date"
-              placeholder="mm/dd/yyyy"
+              type="date"
               do-not-show-error-message
             />
 
@@ -161,6 +161,7 @@ import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomInput from './CustomInput.vue'
+import CustomDatePicker from './CustomDatePicker.vue'
 import CustomTableAddIcon from './CustomTableAddIcon.vue'
 
 // pagination
@@ -188,7 +189,8 @@ export default {
     CustomTableRow,
     CustomInput,
     CustomTableAddIcon,
-    
+    CustomDatePicker,
+
     // pagination
     PaginationRow,
     PaginationButton,

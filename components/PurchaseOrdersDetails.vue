@@ -14,10 +14,10 @@
           <template #title>Purchase Date</template>
 
           <template #input>
-            <CustomInput
+            <CustomDatePicker
               v-model="purchaseDate"
               rules="required|date"
-              placeholder="mm/dd/yyyy"
+              type="date"
             />
           </template>
         </InputWithTitle>
@@ -90,6 +90,7 @@ import { ValidationObserver } from 'vee-validate'
 import { formMixin } from '../mixins/formMixin'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomInput from './CustomInput.vue'
+import CustomDatePicker from './CustomDatePicker.vue'
 import InputRow from './InputRow.vue'
 import DefaultButton from './DefaultButton.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
@@ -101,6 +102,7 @@ export default {
   components: {
     InputWithTitle,
     CustomInput,
+    CustomDatePicker,
     InputRow,
     DefaultButton,
     ValidationObserver,
