@@ -59,7 +59,8 @@
             <CustomInput
               v-if="isEdit === register.id"
               v-model="registerEdit.code"
-              rules="required"
+              rules="required|max:255"
+              name='"Code(ID)"'
               do-not-show-error-message
             />
             <span v-else>
@@ -69,7 +70,8 @@
             <CustomInput
               v-if="isEdit === register.id"
               v-model="registerEdit.name"
-              rules="required"
+              rules="required|max:255"
+              name='"Name"'
               do-not-show-error-message
             />
             <span v-else>

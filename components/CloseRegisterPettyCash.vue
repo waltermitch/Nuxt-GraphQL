@@ -9,8 +9,9 @@
             <CustomInput
               v-model="totalPettyCash"
               type="number"
-              rules="required|currency"
+              rules="required|currency|max:255"
               placeholder="0.00"
+              name="Total Petty Cash"
               symbol="$"
               @change="onChangeFloatValue('totalPettyCash')"
             />
@@ -53,7 +54,8 @@
               do-not-show-error-message
               placeholder="0.00"
               symbol="$"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Petty Cash Amount"
               type="number"
               is-float="true"
               @input="(e) => updateItems(item, e, 'amount')"
@@ -79,7 +81,8 @@
               symbol="$"
               do-not-show-error-message
               type="number"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Petty Cash Amount"
               @change="onChangeFloatValue('amount', true)"
             />
           </CustomTableRow>
@@ -229,7 +232,7 @@ export default {
           glAccount: '',
         }
       } else {
-        this.showSubmitMessage('Form validation failed', 'error')
+        this.showSubmitMessage('The Pretty Cash Amount is required', 'error')
       }
     },
     deleteRow(item) {

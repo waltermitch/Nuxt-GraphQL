@@ -33,9 +33,9 @@
             <CustomInput
               v-if="isEdit === city.id"
               v-model="cityEdit.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="city-name"
+              name='"City Name"'
             />
             <span v-else>
               {{ city.name }}
@@ -48,7 +48,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="city-tax"
+              name='"City Sales Tax"'
               @change="onChangeFloatValue('tax', true)"
             />
             <span v-else>
@@ -113,9 +113,9 @@
 
             <CustomInput
               v-model="cityNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="city-name"
+              name='"City Name"'
             />
 
             <CustomInput
@@ -124,7 +124,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="city-tax"
+              name='"City Sales Tax"'
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>

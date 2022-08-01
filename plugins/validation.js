@@ -1,11 +1,11 @@
 import { extend } from 'vee-validate'
 import {
-  required,
-  numeric,
+  alpha,
+  between,
   double,
   email,
-  between,
-  alpha,
+  numeric,
+  required,
 } from 'vee-validate/dist/rules'
 import {
   CURRENCY_VALIDATION_REGEX,
@@ -16,22 +16,30 @@ import {
 
 extend('currency', {
   validate: (value) => CURRENCY_VALIDATION_REGEX.test(value),
-  message: 'This field must have to be digit with two digits after dot',
+  message: 'The {_field_} must have to be digit with two digits after dot',
 })
 
 extend('required', {
   ...required,
-  message: 'The field is required',
+  message: 'The {_field_} is required',
 })
 
 extend('date', {
   validate: (value) => DATE_VALIDATION_REGEX.test(value),
-  message: 'Date must be in mm/dd/yyyy format',
+  message: 'The {_field_} must be in "mm/dd/yyyy" format',
 })
+
+extend('max', {
+  params: ['length'],
+  validate(value, args) {
+    return value.length <= args.length;
+  },
+  message: 'The {_field_} length must be less than 255.'
+});
 
 extend('dateWithTime', {
   validate: (value) => DATE_WITH_TIME_VALIDATION_REGEX.test(value),
-  message: 'Date must be in mm/dd/yyyy hh:mm format',
+  message: 'The {_field_} must be in "mm/dd/yyyy hh:mm" format',
 })
 
 extend('phone', {
@@ -41,12 +49,12 @@ extend('phone', {
 
 extend('numeric', {
   ...numeric,
-  message: 'This field must be numeric',
-})
+  message: 'The {_field_} must be numeric',
+}) 
 
 extend('double', {
   ...double,
-  message: 'This should not contain letters',
+  message: 'The {_field_} should not contain letters',
 })
 
 extend('email', {
@@ -56,7 +64,7 @@ extend('email', {
 
 extend('between', {
   ...between,
-  message: 'Amount is bigger than left to distribute',
+  message: 'This {_field_} value must be between {min} and {max}',
 })
 
 extend('password', {
@@ -69,5 +77,5 @@ extend('password', {
 
 extend('alpha', {
   ...alpha,
-  message: 'Field should be alphabetic',
+  message: 'The {_field_} should be alphabetic',
 })

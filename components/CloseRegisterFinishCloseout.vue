@@ -9,7 +9,8 @@
             <CustomInput
               v-model="actualCashDeposit"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Actual Cash Deposit"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('actualCashDeposit')"
@@ -50,7 +51,8 @@
             <CustomInput
               v-model="customerCountBreakfast"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Customer Count-Breakfast"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('customerCountBreakfast')"
@@ -65,7 +67,8 @@
             <CustomInput
               v-model="netSalesBreakfast"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Net Sales-Breakfast"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('netSalesBreakfast')"
@@ -82,7 +85,8 @@
             <CustomInput
               v-model="customerCountLunch"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Customer Count-Lunch"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('customerCountLunch')"
@@ -97,7 +101,8 @@
             <CustomInput
               v-model="netSalesLunch"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Net Sales-Lunch"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('netSalesLunch')"
@@ -114,7 +119,8 @@
             <CustomInput
               v-model="customerCountDinner"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Customer Count-Dinner"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('customerCountDinner')"
@@ -129,7 +135,8 @@
             <CustomInput
               v-model="netSalesDinner"
               placeholder="0.00"
-              rules="required|currency"
+              rules="required|currency|max:255"
+              name="Net Sales-Dinner"
               type="number"
               symbol="$"
               @change="onChangeFloatValue('netSalesDinner')"

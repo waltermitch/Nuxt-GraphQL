@@ -1,7 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors, classes }" mode="eager" :rules="rules">
     <textarea
-      name=""
+      :name="name"
       :value="value"
       class="textarea"
       :class="classes"

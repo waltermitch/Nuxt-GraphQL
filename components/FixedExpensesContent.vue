@@ -50,6 +50,7 @@
               type="number"
               placeholder="0.00"
               symbol="$"
+              name="fixedExpense-amount"
               @change="onChangeFloatValue(true)"
             />
 
@@ -58,8 +59,9 @@
             <CustomInput
               v-if="isEdit === item.id"
               v-model="itemEdit.comments"
-              rules="required"
+              rules="required|max255"
               do-not-show-error-message
+              name="fixedExpense-comments"
             />
             <span v-else>{{ item.comments }}</span>
 
@@ -133,13 +135,15 @@
               type="number"
               placeholder="0.00"
               symbol="$"
+              name="fixedExpense-amount"
               @change="onChangeFloatValue()"
             />
 
             <CustomInput
               v-model="newItem.comments"
-              rules="required"
+              rules="required|max255"
               do-not-show-error-message
+              name="fixedExpense-comments"
             />
           </CustomTableRow>
 
@@ -307,8 +311,8 @@ export default {
           },
         },
         null,
-        'Add fixed expense success',
-        'Add fixed expense error',
+        'Add Fixed Expense success',
+        'Add Fixed Expense error',
         null,
         true
       )

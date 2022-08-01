@@ -20,18 +20,18 @@
             <CustomInput
               v-if="isEdit === calculationCode.id"
               v-model="calculationCodeEdit.code"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="calculationCode-code"
+              name='"Calculation Code"'
             />
             <span v-else>{{ calculationCode.code }}</span>
 
             <CustomInput
               v-if="isEdit === calculationCode.id"
               v-model="calculationCodeEdit.description"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="calculationCode-description"
+              name='"CalculationCode Description"'
             />
             <span v-else>{{ calculationCode.description }}</span>
 
@@ -87,16 +87,16 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="calculationCodeNew.code"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="calculationCode-code"
+              name='"Calculation Code"'
             />
 
             <CustomInput
               v-model="calculationCodeNew.description"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="calculationCode-description"
+              name='"CalculationCode Description"'
             />
           </CustomTableRow>
 

@@ -169,7 +169,8 @@
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCodeEdit.code"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Code"'
                   do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.code }}</span>
@@ -177,7 +178,8 @@
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCodeEdit.description"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Description"'
                   do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.description }}</span>
@@ -202,13 +204,15 @@
 
                 <CustomInput
                   v-model="glTypeCodeNew.code"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Code"'
                   do-not-show-error-message
                 />
 
                 <CustomInput
                   v-model="glTypeCodeNew.description"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Description  "'
                   do-not-show-error-message
                 />
               </CustomTableRow>

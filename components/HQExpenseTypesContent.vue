@@ -22,7 +22,7 @@
               v-model="expenseTypeEdit.type"
               rules="required"
               do-not-show-error-message
-              name="expenseType-type"
+              name='"ExpenseType Name"'
             />
             <span v-else>{{ expenseType.type }}</span>
 
@@ -31,7 +31,7 @@
               v-model="expenseTypeEdit.description"
               rules="required"
               do-not-show-error-message
-              name="expenseType-description"
+              name='"ExpenseType Description"'
             />
             <span v-else>{{ expenseType.description }}</span>
 
@@ -89,14 +89,14 @@
               v-model="expenseTypeNew.type"
               rules="required"
               do-not-show-error-message
-              name="expenseType-type"
+              name='"ExpenseType Name"'
             />
 
             <CustomInput
               v-model="expenseTypeNew.description"
               rules="required"
               do-not-show-error-message
-              name="expenseType-description"
+              name='"ExpenseType Description"'
             />
           </CustomTableRow>
 

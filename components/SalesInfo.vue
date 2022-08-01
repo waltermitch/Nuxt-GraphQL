@@ -7,7 +7,8 @@
         <template #input>
           <CustomInput
             v-model="nonResetable"
-            rules="currency|required"
+            rules="currency|required|max:255"
+            name="Non Resettable"
             placeholder="0.00"
             type="number"
             symbol="$"
@@ -42,8 +43,9 @@
         <template #input>
           <CustomInput
             v-model="netOV"
-            rules="currency|required"
+            rules="currency|required|max:255"
             type="number"
+            name="Net O/V"
             placeholder="0.00"
             symbol="$"
             @change="onChangeFloatValue('netOV')"
@@ -68,8 +70,9 @@
         <template #input>
           <CustomInput
             v-model="netCharge"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Net Charge"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('netCharge')"
@@ -85,8 +88,9 @@
         <template #input>
           <CustomInput
             v-model="taxFromTheTape"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Tax From The Tape"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('taxFromTheTape')"
@@ -100,8 +104,9 @@
         <template #input>
           <CustomInput
             v-model="netVoucher"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Net Voucher"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('netVoucher')"
@@ -117,8 +122,9 @@
         <template #input>
           <CustomInput
             v-model="overringVoidTax"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Overring/Void Tax"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('overringVoidTax')"
@@ -143,8 +149,9 @@
         <template #input>
           <CustomInput
             v-model="chargeTax"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Charge Tax"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('chargeTax')"
@@ -160,8 +167,9 @@
         <template #input>
           <CustomInput
             v-model="voucherTax"
-            rules="currency|required"
+            rules="currency|required|max:255"
             placeholder="0.00"
+            name="Voucher Tax"
             type="number"
             symbol="$"
             @change="onChangeFloatValue('voucherTax')"

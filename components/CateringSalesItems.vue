@@ -25,6 +25,7 @@
             :value="item.quantity"
             do-not-show-error-message
             rules="required|numeric"
+            name="Quantity"
             type="number"
             @input="(e) => updateItems(item, Number(e), 'quantity')"
           />
@@ -34,7 +35,8 @@
             v-else
             :value="item.menuItem"
             do-not-show-error-message
-            rules="required"
+            rules="required|max:255"
+            name="Menu Item"
             @input="(e) => updateItems(item, Number(e), 'menuItem')"
           />
 
@@ -42,7 +44,8 @@
           <CustomInput
             v-else
             :value="item.price"
-            rules="required|currency"
+            rules="required|currency|max:255"
+            name="Unit Price"
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
@@ -54,7 +57,8 @@
           <CustomInput
             v-else
             :value="item.ext"
-            rules="required|currency"
+            rules="required|currency|max:255"
+            name="Ext"
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
@@ -75,18 +79,21 @@
             type="number"
             do-not-show-error-message
             rules="required|numeric"
+            name="Quantity"
           />
 
           <CustomInput
             v-model.number="newItem.menuItem"
             do-not-show-error-message
-            rules="required"
+            rules="required|max:255"
+            name="Menu Item"
           />
 
           <CustomInput
             v-model.number="newItem.price"
             type="number"
-            rules="required|currency"
+            rules="required|currency|max:255"
+            name="Unit Price"
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
@@ -96,7 +103,8 @@
           <CustomInput
             v-model.number="newItem.ext"
             type="number"
-            rules="required|currency"
+            rules="required|currency|max:255"
+            name="Ext"
             do-not-show-error-message
             placeholder="0.00"
             symbol="$"
@@ -128,7 +136,8 @@
             type="number"
             placeholder="0.00"
             do-not-show-error-message
-            rules="currency"
+            rules="currency|max:255"
+            name="Tax"
             symbol="$"
             @change="onChangeFloatValue('tax')"
           />

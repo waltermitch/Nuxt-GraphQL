@@ -20,18 +20,18 @@
             <CustomInput
               v-if="isEdit === district.id"
               v-model="districtEdit.code"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="district-code"
+              name='"District Code"'
             />
             <span v-else>{{ district.code }}</span>
 
             <CustomInput
               v-if="isEdit === district.id"
               v-model="districtEdit.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="district-name"
+              name='"District Name"'
             />
             <span v-else>{{ district.name }}</span>
 
@@ -87,16 +87,16 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="districtNew.code"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="district-code"
+              name='"District Code"'
             />
 
             <CustomInput
               v-model="districtNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="district-name"
+              name='"District Name"'
             />
           </CustomTableRow>
 

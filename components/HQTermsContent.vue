@@ -24,9 +24,9 @@
             <CustomInput
               v-if="isEdit === term.id"
               v-model="termEdit.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="term-name"
+              name='"Term Name"'
             />
             <span v-else>{{ term.name }}</span>
 
@@ -36,7 +36,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
-              name="term-dueDays"
+              name='"Term Due Days"'
             />
             <span v-else>{{ term.dueDays }}</span>
 
@@ -47,7 +47,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="term-discPercent"
+              name='"Term Disc Percent"'
               @change="onChangeFloatValue('discPercent', true)"
             />
             <span v-else>
@@ -60,7 +60,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
-              name="term-discDays"
+              name='"Term Disc Days"'
             />
             <span v-else>{{ term.discDays }}</span>
 
@@ -116,9 +116,9 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="termNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="term-name"
+              name='"Term Name"'
             />
 
             <CustomInput
@@ -126,7 +126,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
-              name="term-dueDays"
+              name='"Term Due Days"'
             />
 
             <CustomInput
@@ -135,7 +135,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="term-discPercent"
+              name='"Term Disc Percent"'
               @change="onChangeFloatValue('discPercent')"
             />
 
@@ -144,7 +144,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
-              name="term-discDays"
+              name='"Term Disc Days"'
             />
           </CustomTableRow>
 

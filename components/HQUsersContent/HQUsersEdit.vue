@@ -10,8 +10,8 @@
             <template #input>
               <CustomInput
                 v-model="firstName"
-                rules="required"
-                name="user-first-name"
+                rules="required|max:255"
+                name='"User First Name"'
                 />
             </template>
           </InputWithTitle>
@@ -34,8 +34,8 @@
             <template #input>
               <CustomInput 
                 v-model="email" 
-                rules="required"
-                name="user-email"
+                rules="required|email|max:255"
+                name='"User Email"'
               />
             </template>
           </InputWithTitle>
@@ -47,6 +47,8 @@
             <template #input>
               <CustomInput 
                 v-model="password"
+                rules="required"
+                name='"User Password"'
               />
             </template>
           </InputWithTitle>

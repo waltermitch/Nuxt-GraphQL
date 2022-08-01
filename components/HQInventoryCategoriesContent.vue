@@ -22,9 +22,9 @@
             <CustomInput
               v-if="isEdit === inventoryCategory.id"
               v-model="inventoryCategoryEdit.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="inventoryCategory-name"
+              name='"InventoryCategory Name"'
             />
             <span v-else>{{ inventoryCategory.name }}</span>
 
@@ -46,9 +46,9 @@
             <CustomInput
               v-if="isEdit === inventoryCategory.id"
               v-model="inventoryCategoryEdit.vending"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="inventoryCategory-vending"
+              name='"InventoryCategory Vending"'
             />
             <span v-else>{{ inventoryCategory.vending }}</span>
 
@@ -104,9 +104,9 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="inventoryCategoryNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="inventoryCategory-name"
+              name='"InventoryCategory Name"'
             />
 
             <CustomSelect
@@ -118,9 +118,9 @@
 
             <CustomInput
               v-model="inventoryCategoryNew.vending"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="inventoryCategory-vending"
+              name='"InventoryCategory Vending"'
             />
           </CustomTableRow>
 
