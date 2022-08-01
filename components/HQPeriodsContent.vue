@@ -113,8 +113,8 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomDatePicker
               v-model="periodNew.periodEnd"
-              rules="required|date:mm/dd/yyyy"
-              placeholder="mm/dd/yyyy"
+              rules="required|date"
+              type="date"
               do-not-show-error-message
               name="period-end"
             />
