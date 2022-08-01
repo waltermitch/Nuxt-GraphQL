@@ -30,6 +30,7 @@
               v-model="stateEdit.code"
               rules="required|alpha"
               do-not-show-error-message
+              name="state-code"
             />
             <span v-else>{{ state.code }}</span>
 
@@ -37,9 +38,10 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxCafeteria"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxCafeteria"
               @change="onChangeFloatValue('salesTaxCafeteria', true)"
             />
             <span v-else>{{ parseFloat(state.salesTaxCafeteria).toFixed(2) }}%</span>
@@ -48,9 +50,10 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxVending"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxVending"
               @change="onChangeFloatValue('salesTaxVending', true)"
             />
             <span v-else> {{ parseFloat(state.salesTaxVending).toFixed(2) }}%</span>
@@ -59,9 +62,10 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxRestaurant"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxRestaurant"
               @change="onChangeFloatValue('salesTaxRestaurant', true)"
             />
             <span v-else>
@@ -72,9 +76,10 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.salesTaxStore"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxStore"
               @change="onChangeFloatValue('salesTaxStore', true)"
             />
             <span v-else>
@@ -85,9 +90,10 @@
               v-if="isEdit === state.id"
               v-model="stateEdit.grossReceiptsTax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-grossReceiptsTax"
               @change="onChangeFloatValue('grossReceiptsTax', true)"
             />
             <span v-else>
@@ -148,50 +154,56 @@
               v-model="stateNew.code"
               rules="required|alpha"
               do-not-show-error-message
+              name="state-code"
             />
 
             <CustomInput
               v-model="stateNew.salesTaxCafeteria"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxCafeteria"
               @change="onChangeFloatValue('salesTaxCafeteria')"
             />
 
             <CustomInput
               v-model="stateNew.salesTaxVending"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxVending"
               @change="onChangeFloatValue('salesTaxVending')"
             />
 
             <CustomInput
               v-model="stateNew.salesTaxRestaurant"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxRestaurant"
               @change="onChangeFloatValue('salesTaxRestaurant')"
             />
 
             <CustomInput
               v-model="stateNew.salesTaxStore"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-salesTaxStore"
               @change="onChangeFloatValue('salesTaxStore')"
             />
 
             <CustomInput
               v-model="stateNew.grossReceiptsTax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="state-grossReceiptsTax"
               @change="onChangeFloatValue('grossReceiptsTax')"
             />
           </CustomTableRow>

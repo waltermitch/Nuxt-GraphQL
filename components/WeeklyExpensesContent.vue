@@ -49,8 +49,10 @@
             <span> {{ expense.comments }} </span>
 
             <CustomTableIconsColumn
-              :is-edit-active="isEdit === expense.id"
+              :is-edit-active="canCreate && isEdit === expense.id"
               :is-delete-active="isDelete === expense.id"
+              :show-edit="canCreate"
+              :show-delete="canManage"
               @edit="editExpense(expense)"
               @delete="deleteItem(expense.id)"
               @cancel-delete="cancelDelete"
@@ -75,6 +77,7 @@ import { formatDateFromAPI } from '~/helpers/helpers'
 import DeleteExpense from '~/graphql/mutations/expense/deleteExpense.gql'
 import { meMixin } from '~/mixins/meMixin'
 import ExpenseTypes from '~/graphql/queries/expenseTypes.gql'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 export default {
   name: 'WeeklyExpensesContent',
   components: { CustomTable, CustomTableRow, InputRow, InputWithTitle },
@@ -89,10 +92,15 @@ export default {
     expenseTypes: {
       query: ExpenseTypes,
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
   data() {
     return {
+      canCreate: false,
+      canManage: false,
       expenseType: '',
     }
   },
@@ -102,6 +110,14 @@ export default {
         (expense) => expense.expenseType.type === this.expenseType.type
       )
     },
+  },
+  mounted () {
+    this.canCreate = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'expenses') && (privilege.permissionType === 'CREATE')
+    }).length
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'expenses') && (privilege.permissionType === 'MODIFY')
+    }).length
   },
   methods: {
     formatDateFromAPI,

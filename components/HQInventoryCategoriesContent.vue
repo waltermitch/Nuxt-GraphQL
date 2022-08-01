@@ -24,6 +24,7 @@
               v-model="inventoryCategoryEdit.name"
               rules="required"
               do-not-show-error-message
+              name="inventoryCategory-name"
             />
             <span v-else>{{ inventoryCategory.name }}</span>
 
@@ -47,6 +48,7 @@
               v-model="inventoryCategoryEdit.vending"
               rules="required"
               do-not-show-error-message
+              name="inventoryCategory-vending"
             />
             <span v-else>{{ inventoryCategory.vending }}</span>
 
@@ -104,6 +106,7 @@
               v-model="inventoryCategoryNew.name"
               rules="required"
               do-not-show-error-message
+              name="inventoryCategory-name"
             />
 
             <CustomSelect
@@ -117,6 +120,7 @@
               v-model="inventoryCategoryNew.vending"
               rules="required"
               do-not-show-error-message
+              name="inventoryCategory-vending"
             />
           </CustomTableRow>
 

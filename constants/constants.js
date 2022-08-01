@@ -1,57 +1,3 @@
-export const HEADER_TABS = [
-  {
-    id: 1,
-    name: 'Home',
-    src: require('assets/images/icons/header/home.svg'),
-    to: '/home',
-  },
-  {
-    id: 2,
-    name: 'Review',
-    src: require('assets/images/icons/header/portfolio.svg'),
-    to: '/review',
-  },
-  {
-    id: 3,
-    name: 'Reports',
-    src: require('assets/images/icons/header/graph-line.svg'),
-    to: '/reports',
-  },
-  {
-    id: 4,
-    name: 'Admin',
-    src: require('assets/images/icons/header/person-circle.svg'),
-    to: '/admin',
-  },
-]
-
-export const HQ_HEADER_TABS = [
-  {
-    id: 1,
-    name: 'Maintenance',
-    src: require('assets/images/icons/hqHeader/maintenance.svg'),
-    to: '/hq-maintenance',
-  },
-  {
-    id: 2,
-    name: 'Unit Setup',
-    src: require('assets/images/icons/hqHeader/units.svg'),
-    to: '/hq-unit-setup',
-  },
-  {
-    id: 3,
-    name: 'Reports',
-    src: require('assets/images/icons/hqHeader/reports.svg'),
-    to: '/hq-reports',
-  },
-  {
-    id: 4,
-    name: 'Accounting',
-    src: require('assets/images/icons/hqHeader/accounting.svg'),
-    to: '/hq-accounting',
-  },
-]
-
 export const HOME_NAV_TABS = [
   {
     id: 1,
@@ -64,63 +10,70 @@ export const HOME_NAV_TABS = [
     caption: 'Close Register',
     pageUrl: '/home/close-register',
     iconSrc: require('assets/images/icons/home/window-close.svg'),
+    permission: {
+      'slugName': 'close-register',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 3,
     caption: 'Catering Sales',
     pageUrl: '/home/catering-sales',
     iconSrc: require('assets/images/icons/home/room_service.svg'),
+    permission: {
+      'slugName': 'catering-sales',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 4,
     caption: 'Purchase Orders',
     pageUrl: '/home/purchase-orders',
     iconSrc: require('assets/images/icons/home/order.svg'),
+    permission: {
+      'slugName': 'purchase-orders',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 5,
     caption: 'Inventory',
     pageUrl: '/home/inventory',
     iconSrc: require('assets/images/icons/home/inventory.svg'),
+    permission: {
+      'slugName': 'inventory',
+      'permissionType': 'VIEW'
+    }
   },
   {
     id: 6,
     caption: 'Expenses',
     pageUrl: '/home/expenses',
     iconSrc: require('assets/images/icons/home/account_balance_wallet.svg'),
+    permission: {
+      'slugName': 'expenses',
+      'permissionType': 'CREATE'
+    }
   },
   {
     id: 7,
     caption: 'On-Call Labor',
     pageUrl: '/home/on-call-labor',
     iconSrc: require('assets/images/icons/home/on-call.svg'),
+    permission: {
+      'slugName': 'on-call-labor',
+      'permissionType': 'CREATE'
+    }
   },
-  // {
-  //   id: 8,
-  //   caption: 'Accruals',
-  //   pageUrl: '/home/accruals',
-  //   iconSrc: require('assets/images/icons/home/chart-line.svg'),
-  // },
   {
-    id: 9,
+    id: 8,
     caption: 'ReAccruals',
     pageUrl: '/home/reaccruals',
     iconSrc: require('assets/images/icons/home/chart-line.svg'),
-  },
-]
-
-export const ADMIN_NAV_TABS = [
-  {
-    id: 1,
-    caption: 'Fixed Expenses',
-    pageUrl: '/admin/fixed-expenses',
-    iconSrc: require('assets/images/icons/admin/account_balance_wallet.svg'),
-  },
-  {
-    id: 2,
-    caption: 'Close week',
-    pageUrl: '/admin/close-week',
-    iconSrc: require('assets/images/icons/admin/date.svg'),
+    permission: {
+      'slugName': 'reaccruals',
+      'permissionType': 'VIEW'
+    }
   },
 ]
 
@@ -130,24 +83,40 @@ export const REVIEW_NAV_TABS = [
     caption: 'Register Closeout',
     pageUrl: '/review/register-closeout',
     iconSrc: require('assets/images/icons/review/period.svg'),
+    permission: {
+      'slugName': 'close-register',
+      'permissionType': 'VIEW'
+    }
   },
   {
     id: 2,
     caption: 'Catering Sales',
     pageUrl: '/review/catering-sales',
     iconSrc: require('assets/images/icons/review/period.svg'),
+    permission: {
+      'slugName': 'catering-sales',
+      'permissionType': 'VIEW'
+    }
   },
   {
     id: 3,
     caption: 'Weekly Purchases',
     pageUrl: '/review/weekly-purchases',
     iconSrc: require('assets/images/icons/review/period.svg'),
+    permission: {
+      'slugName': 'purchase-orders',
+      'permissionType': 'VIEW'
+    }
   },
   {
     id: 4,
     caption: 'Weekly Expenses',
     pageUrl: '/review/weekly-expenses',
     iconSrc: require('assets/images/icons/review/period.svg'),
+    permission: {
+      'slugName': 'expenses',
+      'permissionType': 'VIEW'
+    }
   },
 ]
 
@@ -157,8 +126,70 @@ export const REPORTS_NAV_TABS = [
     caption: 'Open Report',
     pageUrl: '/reports/open-report',
     iconSrc: require('assets/images/icons/header/graph-line.svg'),
+    permission: {
+      'slugName': 'reports',
+      'permissionType': 'VIEW'
+    }
   },
 ]
+
+export const ADMIN_NAV_TABS = [
+  {
+    id: 1,
+    caption: 'Fixed Expenses',
+    pageUrl: '/admin/fixed-expenses',
+    iconSrc: require('assets/images/icons/admin/account_balance_wallet.svg'),
+    permission: {
+      'slugName': 'fixed-expense',
+      'permissionType': 'VIEW'
+    }
+  },
+  {
+    id: 2,
+    caption: 'Close week',
+    pageUrl: '/admin/close-week',
+    iconSrc: require('assets/images/icons/admin/date.svg'),
+    permission: {
+      'slugName': 'close-week',
+      'permissionType': 'CREATE'
+    }
+  },
+]
+
+//
+
+export const HEADER_TABS = [
+  {
+    id: 1,
+    name: 'Home',
+    src: require('assets/images/icons/header/home.svg'),
+    to: '/home',
+    permissionTabs: HOME_NAV_TABS,
+  },
+  {
+    id: 2,
+    name: 'Review',
+    src: require('assets/images/icons/header/portfolio.svg'),
+    to: '/review',
+    permissionTabs: REVIEW_NAV_TABS,
+  },
+  {
+    id: 3,
+    name: 'Reports',
+    src: require('assets/images/icons/header/graph-line.svg'),
+    to: '/reports',
+    permissionTabs: REPORTS_NAV_TABS,
+  },
+  {
+    id: 4,
+    name: 'Admin',
+    src: require('assets/images/icons/header/person-circle.svg'),
+    to: '/admin',
+    permissionTabs: ADMIN_NAV_TABS,
+  },
+]
+
+//
 
 export const HQ_MAINTENANCE_TABS = [
   {
@@ -307,5 +338,34 @@ export const HQ_ACCOUNTING = [
     caption: 'Calculation Codes',
     pageUrl: '/hq-accounting/calculation-codes',
     iconSrc: require('assets/images/icons/hqIcons/default.svg'),
+  },
+]
+
+//
+
+export const HQ_HEADER_TABS = [
+  {
+    id: 1,
+    name: 'Maintenance',
+    src: require('assets/images/icons/hqHeader/maintenance.svg'),
+    to: '/hq-maintenance',
+  },
+  {
+    id: 2,
+    name: 'Unit Setup',
+    src: require('assets/images/icons/hqHeader/units.svg'),
+    to: '/hq-unit-setup',
+  },
+  {
+    id: 3,
+    name: 'Reports',
+    src: require('assets/images/icons/hqHeader/reports.svg'),
+    to: '/hq-reports',
+  },
+  {
+    id: 4,
+    name: 'Accounting',
+    src: require('assets/images/icons/hqHeader/accounting.svg'),
+    to: '/hq-accounting',
   },
 ]

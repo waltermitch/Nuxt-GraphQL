@@ -26,6 +26,8 @@
             <CustomTableIconsColumn
               :is-edit-active="isEdit === cateringOrder.id"
               :is-delete-active="isDelete === cateringOrder.id"
+              :show-edit="canCreate"
+              :show-delete="canManage"
               @edit="editCateringOrder(cateringOrder)"
               @delete="deleteItem(cateringOrder.id)"
               @cancel-delete="cancelDelete"
@@ -47,6 +49,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import DeleteCateringOrder from '~/graphql/mutations/cateringOrder/deleteCateringOrder'
 import { formatDateFromAPI, formatDateAndTimeFromAPI } from '~/helpers/helpers'
 import { meMixin } from '~/mixins/meMixin'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 export default {
   name: 'CateringSalesReviewContent',
   components: { CustomTable, CustomTableRow },
@@ -58,8 +61,25 @@ export default {
         activePeriod: true,
       },
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  data () {
+    return {
+      canCreate: false,
+      canManage: false
+    }
+  },
+  mounted () {
+    this.canCreate = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'catering-sales') && (privilege.permissionType === 'CREATE')
+    }).length
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'catering-sales') && (privilege.permissionType === 'MODIFY')
+    }).length
+  },
   methods: {
     formatDateFromAPI,
     formatDateAndTimeFromAPI,

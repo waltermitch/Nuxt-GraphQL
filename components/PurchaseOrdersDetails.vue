@@ -154,7 +154,6 @@ export default {
         return this.getPurchaseTotal
       },
       set(value) {
-        console.log(value);
         this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', value)
       },
     },
@@ -186,7 +185,6 @@ export default {
       this.vendor = vendor
     },
     onChangeFloatValue() {
-      console.log(Number(this.purchaseTotal).toFixed(2));
       this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal).toFixed(2));
     },
   },

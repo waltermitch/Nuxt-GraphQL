@@ -34,8 +34,10 @@
             }}</span>
 
             <CustomTableIconsColumn
-              :is-edit-active="isEdit === registerCloseout.id"
+              :is-edit-active="canCreate && isEdit === registerCloseout.id"
               :is-delete-active="isDelete === registerCloseout.id"
+              :show-edit="canCreate"
+              :show-delete="canManage"
               @edit="editRegisterCloseoutOrder(registerCloseout)"
               @delete="deleteItem(registerCloseout.id)"
               @cancel-delete="cancelDelete"
@@ -58,6 +60,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import { meMixin } from '~/mixins/meMixin'
 import DeleteRegisterCloseout from '~/graphql/mutations/registerCloseout/deleteRegisterCloseout'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 export default {
   name: 'RegisterCloseoutReviewContent',
   components: {
@@ -73,8 +76,25 @@ export default {
         activePeriod: true,
       },
     },
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [tableActionsMixin, mutationMixin, meMixin],
+  data () {
+    return {
+      canCreate: false,
+      canManage: false
+    }
+  },
+  mounted () {
+    this.canCreate = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'close-register') && (privilege.permissionType === 'CREATE')
+    }).length
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'close-register') && (privilege.permissionType === 'MODIFY')
+    }).length
+  },
   methods: {
     formatDateFromAPI,
     editRegisterCloseoutOrder(closeRegister) {

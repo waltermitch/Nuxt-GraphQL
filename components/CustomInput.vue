@@ -3,11 +3,13 @@
     v-slot="{ errors, classes }"
     mode="eager"
     :rules="rules"
+    :name="name"
   >
     <span :symbol="symbol">
       <input
         :symbol="symbol"
         class="input"
+        :name="name"
         :value="displayCell(value)"
         :type="type"
         :placeholder="placeholder"
@@ -29,6 +31,10 @@ export default {
   name: 'CustomInput',
   components: { ValidationProvider },
   props: {
+    name: {
+      type: String,
+      default: '',
+    },
     changeFloat: {
       type: String,
       default: '',

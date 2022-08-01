@@ -27,6 +27,7 @@
               rules="required|date"
               type="date"
               do-not-show-error-message
+              name="period-end"
             />
             <span v-else>{{ period.periodEnd }}</span>
 
@@ -36,6 +37,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
+              name="period-year"
             />
             <span v-else class="text-center">{{ period.year }}</span>
 
@@ -45,6 +47,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
+              name="period-month"
             />
             <span v-else class="text-center">{{ period.month }}</span>
 
@@ -54,6 +57,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
+              name="period-week"
             />
             <span v-else class="text-center">{{ period.week }}</span>
 
@@ -109,16 +113,18 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomDatePicker
               v-model="periodNew.periodEnd"
-              rules="required|date"
-              type="date"
+              rules="required|date:mm/dd/yyyy"
+              placeholder="mm/dd/yyyy"
               do-not-show-error-message
+              name="period-end"
             />
 
             <CustomInput
               v-model="periodNew.year"
-              rules="required|numeric"
+              rules="required|numeric"  
               type="number"
               do-not-show-error-message
+              name="period-year"
             />
 
             <CustomInput
@@ -126,6 +132,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
+              name="period-month"
             />
 
             <CustomInput
@@ -133,6 +140,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
+              name="period-week"
             />
           </CustomTableRow>
 

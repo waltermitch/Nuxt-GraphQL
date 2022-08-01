@@ -1,4 +1,5 @@
 import { mapActions } from 'vuex'
+
 export const formMixin = {
   methods: {
     ...mapActions({

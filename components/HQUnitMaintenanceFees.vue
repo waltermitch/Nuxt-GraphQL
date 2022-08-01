@@ -28,6 +28,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-managementAmount"
               @change="onChangeFloatValue('managementAmount')"
             />
           </template>
@@ -42,9 +43,10 @@
             <CustomInput
               v-model="managementPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-managementPercent"
               @change="onChangeFloatValue('managementPercent')"
             />
           </template>
@@ -78,6 +80,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-administrativeAmount"
               @change="onChangeFloatValue('administrativeAmount')"
             />
           </template>
@@ -92,9 +95,10 @@
             <CustomInput
               v-model="administrativePercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-administrativePercent"
               @change="onChangeFloatValue('administrativePercent')"
             />
           </template>
@@ -128,6 +132,7 @@
               rules="required|currency"
               placeholder="0.00"
               symbol="$"
+              name="unit-supportAmount"
               @change="onChangeFloatValue('supportAmount')"
             />
           </template>
@@ -142,9 +147,10 @@
             <CustomInput
               v-model="supportPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-supportPercent"
               @change="onChangeFloatValue('supportPercent')"
             />
           </template>
@@ -159,9 +165,10 @@
             <CustomInput
               v-model="benefitsPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-benefitsPercent"
               @change="onChangeFloatValue('benefitsPercent')"
             />
           </template>
@@ -176,9 +183,10 @@
             <CustomInput
               v-model="commissionPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               placeholder="0.00"
               symbol="%"
+              name="unit-commissionPercent" 
               @change="onChangeFloatValue('commissionPercent')"
             />
           </template>
@@ -266,7 +274,7 @@ export default {
   },
   data () {
     return {
-      managementAmount: '',
+      /* managementAmount: '',
       managementPercent: '',
 
       administrativeAmount: '',
@@ -276,14 +284,14 @@ export default {
       supportPercent: '',
 
       benefitsPercent: '',
-      commissionPercent: '',
+      commissionPercent: '', */
     }
   },
   computed: {
     managementFeeType() {
       return this.unit.managementFeeType
     },
-    /* managementAmount: {
+    managementAmount: {
       get() {
         return this.unit.managementAmount
       },
@@ -293,8 +301,8 @@ export default {
           value
         )
       },
-    }, */
-    /* managementPercent: {
+    },
+    managementPercent: {
       get() {
         return this.unit.managementPercent
       },
@@ -304,11 +312,11 @@ export default {
           value
         )
       },
-    }, */
+    },
     administrativeFeeType() {
       return this.unit.administrativeFeeType
     },
-    /* administrativeAmount: {
+    administrativeAmount: {
       get() {
         return this.unit.administrativeAmount
       },
@@ -318,8 +326,8 @@ export default {
           value
         )
       },
-    }, */
-    /* administrativePercent: {
+    },
+    administrativePercent: {
       get() {
         return this.unit.administrativePercent
       },
@@ -329,19 +337,19 @@ export default {
           value
         )
       },
-    }, */
-    /* supportAmount: {
+    },
+    supportAmount: {
       get() {
         return this.unit.supportAmount
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
       },
-    }, */
+    },
     supportFeeType() {
       return this.unit.supportFeeType
     },
-    /* supportPercent: {
+    supportPercent: {
       get() {
         return this.unit.supportPercent
       },
@@ -351,15 +359,15 @@ export default {
           value
         )
       },
-    }, */
-    /* benefitsPercent: {
+    },
+    benefitsPercent: {
       get() {
         return this.unit.benefitsPercent
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
       },
-    }, */
+    },
     regTax: {
       get() {
         return this.unit.regTax
@@ -368,37 +376,37 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_REG_TAX', value)
       },
     },
-    /* commissionPercent: {
+    commissionPercent: {
       get() {
         return this.unit.commissionPercent
       },
       set(value) {
         this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
       },
-    }, */
+    },
     isKronos() {
       return this.unit.isKronos
     },
   },
   methods: {
     onChangeFloatValue(stateProp) {
-      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      const value = parseFloat(this.unit[stateProp] !== '' ? this.unit[stateProp] : 0).toFixed(2);
       if ( stateProp === 'managementAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_DOLLAR', value)
       } else if ( stateProp === 'managementPercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_MANAGEMENT_FEE_PERCENT', value)
       } else if ( stateProp === 'administrativeAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_DOLLAR', value)
       } else if ( stateProp === 'administrativePercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_ADMINISTRATIVE_FEE_PERCENT', value)
       } else if ( stateProp === 'supportAmount' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_DOLLAR', value)
       } else if ( stateProp === 'supportPercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_SUPPORT_FEE_PERCENT', value)
       } else if ( stateProp === 'benefitsPercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_BENEFITS_PERCENT', value)
       } else if ( stateProp === 'commissionPercent' ) {
-        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', this[stateProp])
+        this.$store.commit('unitMaintenance/SET_UNIT_COMMISSION_PERCENT', value)
       }
     },
     selectManagementFeeType(managementFeeType) {
@@ -490,10 +498,7 @@ export default {
           periods,
           ...unitInput
         } = this.unit
-        const res = await this.mutationAction(
-          UpdateUnit,
-          {
-            unitInput: {
+        const updateUnitInput = {
               ...unitInput,
               payrollTaxPercent: +this.unit.payrollTaxPercent,
               benefitsAmount: +this.unit.benefitsAmount,
@@ -524,7 +529,12 @@ export default {
               users: {
                 sync: users.map((user) => user.id),
               },
-            },
+            }
+        delete updateUnitInput.startPeriod
+        const res = await this.mutationAction(
+          UpdateUnit,
+          {
+            unitInput: updateUnitInput,
           },
           Units,
           'Edit unit success',

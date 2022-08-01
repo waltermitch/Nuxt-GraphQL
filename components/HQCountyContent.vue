@@ -36,6 +36,7 @@
               v-model="countyNew.name"
               rules="required"
               do-not-show-error-message
+              name="county-name"
             />
             <span v-else>
               {{ county.name }}
@@ -45,9 +46,10 @@
               v-if="isEdit === county.id"
               v-model="countyNew.tax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="county-tax"
               @change="onChangeFloatValue('tax')"
             />
             <span v-else>
@@ -114,14 +116,16 @@
               v-model="countyNew.name"
               rules="required"
               do-not-show-error-message
+              name="county-name"
             />
 
             <CustomInput
               v-model="countyNew.tax"
               type="number"
-              rules="required|double"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="county-tax"
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>
@@ -279,8 +283,8 @@ export default {
         DeleteCounty,
         { id },
         null,
-        'Delete unit success',
-        'Delete unit error',
+        'Delete county success',
+        'Delete county error',
         null,
         true
       )

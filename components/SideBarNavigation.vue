@@ -1,7 +1,7 @@
 <template>
   <nav class="navigation">
     <SideBarTab
-      v-for="tab in navTabs"
+      v-for="tab in mutableNav"
       :key="tab.id"
       :page-url="tab.pageUrl"
       :icon-src="tab.iconSrc"
@@ -12,13 +12,49 @@
 
 <script>
 import SideBarTab from './SideBarTab.vue'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
+
 export default {
   name: 'SideBarNavigation',
-  components: { SideBarTab },
+  components: {
+    SideBarTab
+  },
+  apollo: {
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
+  },
   props: {
     navTabs: {
       type: [Array, String],
       required: true,
+    },
+  },
+  data() {
+    return {
+      mutableNav: {},
+    }
+  },
+  watch: {
+    navTabs() {
+      this.verifyPermissions();
+    },
+  },
+  mounted() {
+    this.verifyPermissions();
+  },
+  methods: {
+    verifyPermissions() {
+      this.mutableNav = [];
+
+      for (const item of this.navTabs) {
+        const permissionsFilter = (item.permission && this.RolePrivileges) ? !!this.RolePrivileges.filter(privilege => {
+          return (privilege.slugName === item.permission.slugName) && (privilege.permissionType === item.permission.permissionType)
+        }).length : null;
+
+        if (!item.permission || permissionsFilter)
+          this.mutableNav.push(item);
+      }
     },
   },
 }

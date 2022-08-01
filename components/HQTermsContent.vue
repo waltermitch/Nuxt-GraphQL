@@ -26,14 +26,17 @@
               v-model="termEdit.name"
               rules="required"
               do-not-show-error-message
+              name="term-name"
             />
             <span v-else>{{ term.name }}</span>
 
             <CustomInput
               v-if="isEdit === term.id"
               v-model="termEdit.dueDays"
+              type="number"
               rules="required"
               do-not-show-error-message
+              name="term-dueDays"
             />
             <span v-else>{{ term.dueDays }}</span>
 
@@ -41,9 +44,10 @@
               v-if="isEdit === term.id"
               v-model="termEdit.discPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="term-discPercent"
               @change="onChangeFloatValue('discPercent', true)"
             />
             <span v-else>
@@ -56,6 +60,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              name="term-discDays"
             />
             <span v-else>{{ term.discDays }}</span>
 
@@ -113,20 +118,24 @@
               v-model="termNew.name"
               rules="required"
               do-not-show-error-message
+              name="term-name"
             />
 
             <CustomInput
               v-model="termNew.dueDays"
+              type="number"
               rules="required"
               do-not-show-error-message
+              name="term-dueDays"
             />
 
             <CustomInput
               v-model="termNew.discPercent"
               type="number"
-              rules="required"
+              rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
+              name="term-discPercent"
               @change="onChangeFloatValue('discPercent')"
             />
 
@@ -135,6 +144,7 @@
               type="number"
               rules="required"
               do-not-show-error-message
+              name="term-discDays"
             />
           </CustomTableRow>
 

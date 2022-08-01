@@ -36,7 +36,12 @@
                 ${{ Number(item.inventoryAmount.previous).toFixed(2) }}
               </span>
 
+              <span v-if="!canManage" class="table-text">
+                ${{ Number(item.inventoryAmount.current).toFixed(2) }}
+              </span>
+
               <CustomInput
+                v-else
                 v-model.number="item.inventoryAmount.current"
                 rules="currency"
                 type="number"
@@ -57,7 +62,7 @@
           </template>
         </CustomTable>
 
-        <div class="buttons-area">
+        <div v-if="canManage" class="buttons-area">
           <DefaultButton
             button-color-gamma="red"
             :disabled="everyIsEmpty || invalid"
@@ -89,6 +94,7 @@ import PageSubHeaderContent from './PageSubHeaderContent.vue'
 import InventoryCategories from '~/graphql/queries/inventoryCategories.gql'
 import UpdateInventories from '~/graphql/mutations/inventoryCategories/updateInventories.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import RolePrivileges from "~/graphql/queries/RolePrivileges.gql";
 export default {
   name: 'InventoryContent',
   components: {
@@ -99,11 +105,15 @@ export default {
     PageSubHeaderContent,
   },
   apollo: {
+    RolePrivileges: {
+      query: RolePrivileges,
+    },
   },
   mixins: [formMixin, mutationMixin],
   data () {
     return {
-      inventoryCategories: []
+      inventoryCategories: [],
+      canManage: false
     }
   },
   computed: {
@@ -128,6 +138,11 @@ export default {
   },
   beforeMount () {
     this.fetchData();
+  },
+  mounted () {
+    this.canManage = !!this.RolePrivileges.filter(privilege => {
+      return (privilege.slugName === 'inventory') && (privilege.permissionType === 'MODIFY')
+    }).length
   },
   methods: {
     onChangeFloatValue(item) {
@@ -169,6 +184,7 @@ export default {
         item.inventoryAmount.current = Number(value === '' ? 0 : value).toFixed(2);
       }
       this.inventoryCategories = updateInventories
+      this.canManage = true;
     },
     async cancelUpdate() {
       await this.fetchData()
