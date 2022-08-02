@@ -1,6 +1,18 @@
 <template>
   <PageContentWrapper>
+    
     <InputRow>
+      <InputWithTitle>
+        <template #title> Search </template>
+
+        <template #input>
+          <CustomInput
+            v-model="searchVendor"
+            placeholder="Vendor Code"
+          />
+        </template>
+      </InputWithTitle>
+
       <InputWithTitle>
         <template #title> Unit </template>
 
@@ -131,9 +143,6 @@ export default {
   name: 'HQUnitVendorContent',
   components: { PageContentWrapper, DefaultButton, CustomTablesArea },
   apollo: {
-    vendors: {
-      query: Vendors,
-    },
     units: {
       query: Units,
     },
@@ -142,10 +151,51 @@ export default {
   data() {
     return {
       unit: '',
+
+      vendors: {},
+      search: '',
+      queryVariable: {
+        search: '',
+      },
+      timeout: null
     }
   },
+  computed: {
+    searchVendor: {
+      get() {
+        return this.search
+      },
+      set(value) {
+        this.search = value
+      }
+    }
+  },
+  watch: {
+    search() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => this.fetchData(), 500)
+    }
+  },
+  beforeMount() {
+    this.fetchData()
+  },
   methods: {
+    async fetchData() {
+      
+      if(this.search !== '') this.queryVariable.search = '%' + this.search + '%';
+      else this.queryVariable.search = '%';
+
+      const queryData = await this.$apollo.query({
+          query: Vendors,
+          fetchPolicy: 'network-only',
+          variables: this.queryVariable,
+      });
+      this.vendors = queryData.data.vendors
+    },
     async addVendorToUnit(vendor) {
+      const search = this.search
+      const vendors = this.vendors
+
       const { id } = this.unit
 
       const {
@@ -167,12 +217,18 @@ export default {
         'Add vendor to unit success',
         'Add vendor to unit error'
       )
+ 
+      this.search = search
+      this.vendors = vendors
 
       if (updateUnit) {
         this.unit = updateUnit
       }
     },
     async removeVendorFromUnit(vendor) {
+      const search = this.search
+      const vendors = this.vendors
+
       const { id } = this.unit
 
       const {
@@ -192,6 +248,9 @@ export default {
         'Remove vendor from unit error'
       )
 
+      this.search = search
+      this.vendors = vendors
+      
       if (updateUnit) {
         this.unit = updateUnit
       }
@@ -318,5 +377,9 @@ export default {
       margin: 0 !important;
     }
   }
+}
+
+.input-row div{
+  margin-right: 20px;
 }
 </style>

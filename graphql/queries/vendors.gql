@@ -1,8 +1,8 @@
 #import '../fragments/vendor.gql'
 #import '../fragments/term.gql'
 
-query Vendors {
-  vendors {
+query Vendors($search: String) {
+  vendors(code: $search) {
     ...VendorFragment
   }
 }
