@@ -8,6 +8,7 @@ export default {
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/hq-reports',
     redirectTo: '/hq-reports/labor-schedule-report',
   },
 }

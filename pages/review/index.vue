@@ -7,6 +7,7 @@ export default {
   name: 'ReviewIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/review',
     redirectTo: '/review/register-closeout',
   },
 }

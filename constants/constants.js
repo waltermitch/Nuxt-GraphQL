@@ -349,23 +349,27 @@ export const HQ_HEADER_TABS = [
     name: 'Maintenance',
     src: require('assets/images/icons/hqHeader/maintenance.svg'),
     to: '/hq-maintenance',
+    permissionTabs: HQ_MAINTENANCE_TABS
   },
   {
     id: 2,
     name: 'Unit Setup',
     src: require('assets/images/icons/hqHeader/units.svg'),
     to: '/hq-unit-setup',
+    permissionTabs: HQ_UNITS_TABS
   },
   {
     id: 3,
     name: 'Reports',
     src: require('assets/images/icons/hqHeader/reports.svg'),
     to: '/hq-reports',
+    permissionTabs: HQ_REPORT_TABS
   },
   {
     id: 4,
     name: 'Accounting',
     src: require('assets/images/icons/hqHeader/accounting.svg'),
     to: '/hq-accounting',
+    permissionTabs: HQ_ACCOUNTING
   },
 ]
