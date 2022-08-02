@@ -1,8 +1,8 @@
 #import '../fragments/vendor.gql'
 #import '../fragments/term.gql'
 
-query VendorList($page: Int!) {
-  vendorList(page: $page) {
+query VendorList($page: Int!, $search: String) {
+  VendorList(page: $page, code: $search) {
     paginatorInfo {
       count
       perPage

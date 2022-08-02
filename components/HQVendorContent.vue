@@ -13,7 +13,7 @@
           </div>
         </template>
 
-        <template v-if="queryData.data" #content>
+        <template v-if="queryData && queryData.data" #content>
           <CustomTableRow
             v-for="vendor in queryData.data"
             :key="vendor.id"
@@ -104,7 +104,7 @@
               v-model="vendorNew.code"
               rules="required|max:255"
               do-not-show-error-message
-              name='"Vendor Code"'
+              name='"Vendor Number"'
             />
 
             <CustomInput
@@ -181,6 +181,12 @@ export default {
     // pagination
   },
   mixins: [mutationMixin, tableActionsMixin, paginatorMixin],
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   apollo: {
     terms: {
       query: Terms,
@@ -190,9 +196,13 @@ export default {
     return {
       // pagination
       query: VendorList,
-      queryName: "vendorList",
+      queryName: "VendorList",
       currentPage: 1,
       queryData: {},
+      hasQueryVariable: true,
+      queryVariable: {
+        search: '%',
+      },
       // pagination
 
       vendorNew: {
@@ -204,12 +214,23 @@ export default {
       vendorEdit: {
         terms: [],
       },
+      timeout: null
+    }
+  },
+  watch: {
+    search() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => this.showFilterVendors(), 500)
     }
   },
   beforeMount(){
-    this.fetchData();
+    this.fetchData()
   },
   methods: {
+    showFilterVendors() {
+      this.queryVariable.search = '%' + this.search + '%'
+      this.goToPage(1)
+    },
     editVendor(vendor) {
       this.vendorEdit = Object.assign(
         {},

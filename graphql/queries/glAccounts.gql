@@ -1,7 +1,7 @@
 #import '../fragments/glAccount.gql'
 
-query GlAccounts {
-  glAccounts {
+query GlAccounts($search: String) {
+  glAccounts(name: $search) {
     ...GlAccountFragment
     parent {
       id

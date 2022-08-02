@@ -66,12 +66,42 @@ export default {
     CustomTableIconsColumn,
   },
   mixins: [unitMaintenanceMixin, tableActionsMixin, mutationMixin],
-  apollo: {
-    units: {
-      query: Units,
-    },
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      units: {},
+      queryVariable: {
+        search: '',
+      },
+      timeout: null
+    }
+  },
+  watch: {
+    search() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => this.fetchData(), 500)
+    }
+  },
+  beforeMount() {
+    this.fetchData()
   },
   methods: {
+    async fetchData() {
+      if(this.search !== '') this.queryVariable.search = '%' + this.search + '%';
+      else this.queryVariable.search = '%';
+
+      const queryData = await this.$apollo.query({
+          query: Units,
+          fetchPolicy: 'network-only',
+          variables: this.queryVariable,
+      });
+      this.units = queryData.data.units
+    },
     editUnit(unit) {
       const propertyList = ['administrativeAmount', 'administrativePercent', 'benefitsAmount', 'benefitsPercent', 'businessInsuranceAmount', 'commissionAmount', 'commissionPercent', 'managementAmount', 'managementPercent', 'payrollTaxPercent', 'supportAmount', 'supportPercent', 'vacationAmount', 'vendingIncome'];
       for ( const property of propertyList ) {

@@ -32,7 +32,7 @@
       <CustomTable v-else-if="unit" class="table-register" :w-table="1100">
         <template #header>
           <div class="table-row">
-            <span>ID</span>
+            <span>Code</span>
 
             <span>Name</span>
 
@@ -60,7 +60,7 @@
               v-if="isEdit === register.id"
               v-model="registerEdit.code"
               rules="required|max:255"
-              name='"Code(ID)"'
+              name='"Code"'
               do-not-show-error-message
             />
             <span v-else>

@@ -57,7 +57,7 @@
       <CustomTable class="table" :w-table="400">
         <template #header>
           <div class="table-row">
-            <span>ID</span>
+            <!-- <span>ID</span> -->
 
             <span>Name</span>
             <span></span>
@@ -70,7 +70,7 @@
             :key="unitType.id"
             class="table-row"
           >
-            <span>{{ unitType.id }}</span>
+            <!-- <span>{{ unitType.id }}</span> -->
 
             <CustomInput
               v-if="isEdit === unitType.id"
@@ -384,11 +384,11 @@ export default {
   align-items: center;
   padding: 6px 10px;
   @media screen and (min-width: $md) {
-    grid-template-columns: 100px 200px auto auto;
+    grid-template-columns: 250px auto auto;
   }
 
   @media screen and (max-width: $md) {
-    grid-template-columns: 30px 120px auto auto;
+    grid-template-columns: 125px auto auto;
   }
   column-gap: 30px;
 
