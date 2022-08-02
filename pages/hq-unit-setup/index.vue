@@ -8,6 +8,7 @@ export default {
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/hq-unit-setup',
     redirectTo: '/hq-unit-setup/unit-info',
   },
 }

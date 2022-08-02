@@ -8,6 +8,7 @@ export default {
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/hq-maintenance',
     redirectTo: '/hq-maintenance/export-data',
   },
 }

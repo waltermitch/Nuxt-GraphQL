@@ -1,6 +1,7 @@
 export const state = () => ({
   activeTab: 0,
   allowSwitch: true,
+  redirects: [],
 })
 
 export const mutations = {
@@ -10,9 +11,13 @@ export const mutations = {
   SET_ALLOW_SWITCH(state, payload) {
     state.allowSwitch = payload
   },
+  SET_REDIRECTS(state, payload) {
+    state.redirects = payload
+  },
 }
 
 export const getters = {
   getActiveTab: (state) => state.activeTab,
   getAllowSwitch: (state) => state.allowSwitch,
+  getRedirects: (state) => state.redirects,
 }

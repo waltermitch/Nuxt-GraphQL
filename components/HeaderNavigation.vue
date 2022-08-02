@@ -52,13 +52,14 @@ export default {
   methods: {
     verifyPermissions() {
       this.mutableNav = [];
+      this.redirectTabs = {};
 
       for (const item of this.headerTabs) {
         let addItem = !item.permissionTabs;
+        const returnTabs = [];
 
         if (!addItem) {
           addItem = false;
-          const returnTabs = [];
 
           for (const subItem of item.permissionTabs) {
             const permissionsFilter = (subItem.permission && this.RolePrivileges) ? !!this.RolePrivileges.filter(privilege => {
@@ -73,9 +74,15 @@ export default {
             addItem = true;
         }
 
-        if (addItem)
+        if (addItem) {
           this.mutableNav.push(item);
+
+          if (returnTabs.length)
+            this.redirectTabs[item.to] = returnTabs.map(a => a.pageUrl);
+        }
       }
+
+      this.$store.commit('tabsView/SET_REDIRECTS', this.redirectTabs);
     },
   },
 }

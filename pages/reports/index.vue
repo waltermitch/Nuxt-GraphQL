@@ -7,6 +7,7 @@ export default {
   name: 'ReportsIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/reports',
     redirectTo: '/reports/open-report',
   },
 }

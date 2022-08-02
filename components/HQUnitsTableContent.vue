@@ -77,7 +77,6 @@ export default {
       for ( const property of propertyList ) {
         unit[property] = Number(unit[property]).toFixed(2);
       }
-      console.log(unit);
 
       this.setUnit(unit)
       this.setUnitID(unit.id)
@@ -101,7 +100,7 @@ export default {
 .table-content {
   .header {
     padding: 6px 10px;
-  
+
     .table-row {
       padding: 0;
     }
