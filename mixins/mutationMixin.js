@@ -39,7 +39,7 @@ export const mutationMixin = {
 
           // check if it has the error which is sent by developer
           if ( res.data[mutationName].status !== false && res.data[mutationName].status !== 'error' && res.data[mutationName].status !== 'ERROR' ) {
-            this.showSubmitMessage(successMessage, 'success')
+            this.showSubmitMessage(successMessage, 'success') 
             return res
           } else {
             this.showSubmitMessage(res.data[mutationName].message || 'Not received Error message but has an error', 'error')
@@ -56,6 +56,7 @@ export const mutationMixin = {
               error.graphQLErrors[0].extensions.validation[propNames[0]][0],
               'error'
             )
+            
           } else {
             const errMessage = errorObj.message
             const errorMessageArray = errMessage.split(';')
@@ -77,7 +78,7 @@ export const mutationMixin = {
             // Home / Purchase Orders
             error = error.replace(/Expected type Date at value.date/g,'The "Purchase Date" must be Date value');
 
-            // Unit Setup / Units
+            // HQ Unit Setup / Units
             error = error.replace(/Expected type Int at value.population/g,'The "Details / Population" must be Int value');
             this.showSubmitMessage(error, 'error')
           }

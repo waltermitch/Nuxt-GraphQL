@@ -6,6 +6,7 @@
 
 <script>
 import { unitMaintenanceMixin } from '../mixins/unitMaintenanceMixin'
+import { submitMessagesMixin } from '../mixins/submitMessagesMixin'
 import PageContentWrapper from './PageContentWrapper.vue'
 import TabsView from './TabsView.vue'
 import HQUnitMaintenanceDetails from './HQUnitMaintenanceDetails.vue'
@@ -17,7 +18,7 @@ export default {
     PageContentWrapper,
     TabsView,
   },
-  mixins: [unitMaintenanceMixin],
+  mixins: [unitMaintenanceMixin, submitMessagesMixin],
   data() {
     return {
       tabsHeaders: ['Details', 'Financials', 'Fees'],

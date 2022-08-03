@@ -92,6 +92,7 @@
               v-model="registerEdit.bank"
               type="number"
               rules="required|double"
+              name='"Reg Bank"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('bank', true)"
@@ -103,6 +104,7 @@
               v-model="registerEdit.nonResetable"
               type="number"
               rules="required|double"
+              name='"Non-Resetable"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('nonResetable', true)"
@@ -114,6 +116,7 @@
               v-model="registerEdit.commission"
               type="number"
               rules="required|double"
+              name='"Commission"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('commission', true)"
@@ -161,13 +164,15 @@
           <CustomTableRow v-if="isAdd" class="table-row">
             <CustomInput
               v-model="registerNew.code"
-              rules="required"
+              rules="required|max:255"
+              name='"Code"'
               do-not-show-error-message
             />
 
             <CustomInput
               v-model="registerNew.name"
-              rules="required"
+              rules="required|max:255"
+              name='"Name"'
               do-not-show-error-message
             />
 
@@ -181,6 +186,7 @@
               v-model="registerNew.bank"
               type="number"
               rules="required|double"
+              name='"Reg Bank"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('bank')"
@@ -190,6 +196,7 @@
               v-model="registerNew.nonResetable"
               type="number"
               rules="required|double"
+              name='"Non-Resetable"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('nonResetable')"
@@ -199,6 +206,7 @@
               v-model="registerNew.commission"
               type="number"
               rules="required|double"
+              name='"Commission"'
               do-not-show-error-message
               is-float="true"
               @change="onChangeFloatValue('commission')"

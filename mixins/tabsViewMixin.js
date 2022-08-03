@@ -3,6 +3,7 @@ export const tabsViewMixin = {
   computed: {
     ...mapGetters({
       activeTab: 'tabsView/getActiveTab',
+      activeValidate: 'tabsView/getActiveValidate'
     }),
   },
   destroyed() {

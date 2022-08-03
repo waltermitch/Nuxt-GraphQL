@@ -141,7 +141,6 @@
           <template #input>
             <CustomInput
               v-model="payrollPassword"
-              rules="required"
               type="password"
               name="unit-password"
             />
@@ -367,6 +366,11 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_SYSCO', value)
       },
     },
+  },
+  watch: {
+    activeValidate() {
+      if(this.activeValidate === 'Details') this.$refs.form.validate()
+    }
   },
   mounted() {
     // this.$store.commit('tabsView/SET_ALLOW_SWITCH', false)

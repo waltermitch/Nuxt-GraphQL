@@ -89,7 +89,7 @@
 
               <CustomInput
                 v-model="searchGlAccount"
-                placeholder="GL Account / Sub Name"
+                placeholder="GL(Sub) Name, ID"
               />
             </div>
           
@@ -366,7 +366,7 @@ export default {
   },
   methods: {
     fetchAccountData() {
-      const glAccounts = this.glAccountsTmp ? this.glAccountsTmp.filter((data) => data.name.includes(this.searchAccount)) : []
+      const glAccounts = this.glAccountsTmp ? this.glAccountsTmp.filter((data) => data.name.toLowerCase().includes(this.searchAccount.toLowerCase()) || data.id.includes(this.searchAccount)) : []
       this.unit.glAccounts = glAccounts
     },
     async fetchTypeData() {
@@ -381,7 +381,7 @@ export default {
       });
       this.glTypeCodes = queryData.data.glTypeCodes
     },
-    nameWithId({ name, code, id, }) {
+    nameWithId({ name, code, id }) {
       if(code === undefined) {
         return `${id} — ${name}`
       }else {
