@@ -224,6 +224,7 @@ export default {
       if (updateUnit) {
         this.unit = updateUnit
       }
+      console.log(updateUnit)
     },
     async removeVendorFromUnit(vendor) {
       const search = this.search
@@ -250,7 +251,7 @@ export default {
 
       this.search = search
       this.vendors = vendors
-      
+
       if (updateUnit) {
         this.unit = updateUnit
       }

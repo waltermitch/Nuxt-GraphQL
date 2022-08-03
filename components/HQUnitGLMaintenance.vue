@@ -80,7 +80,7 @@
     <ValidationObserver v-if="!isAttachGlAccounts" ref="form">
       <div>
         <div class="gl-table">
-          <div v-if="unit.glAccounts && unit.glAccounts.length" class="gl-account-area">
+          <div v-if="(unit.glAccounts && unit.glAccounts.length) || searchAccount" class="gl-account-area">
             <h2 class="gl-account-header">
               Gl Accounts
             </h2>
@@ -97,7 +97,7 @@
           <h2 v-else class="table-header">Please, attach new GL Account</h2>
 
           <CustomTable
-            v-if="unit.glAccounts && unit.glAccounts.length"
+            v-if="(unit.glAccounts && unit.glAccounts.length) || searchAccount"
             class="table table-gls"
             :w-table="1000"
           >
@@ -298,10 +298,7 @@ export default {
     },
     glAccounts: {
       query: GlAccounts,
-    },
-    glTypeCodes: {
-      query: GlTypeCodes,
-    },
+    }
   },
   mixins: [mutationMixin, tableActionsMixin],
   data() {
@@ -322,7 +319,7 @@ export default {
       searchType: '',
       searchAccount: '',
       
-      glAccounts: {},
+      glAccountsTmp: '',
       glTypeCodes: {},
       queryVariable: {
         search: '',
@@ -349,23 +346,30 @@ export default {
     }
   },
   watch: {
+    unit() {
+      this.glAccountsTmp = this.unit.glAccounts
+      this.fetchAccountData()
+    },
     glAccount() {
       this.glSubAccount = ''
     },
     searchGlType() {
       clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => this.fetchData(), 500)
+      this.timeout = setTimeout(() => this.fetchTypeData())
     },
     searchGlAccount() {
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => this.fetchData(), 500)
+      this.fetchAccountData()
     }
   },
   beforeMount() {
-    this.fetchData()
+    this.fetchTypeData()
   },
   methods: {
-    async fetchData() {
+    fetchAccountData() {
+      const glAccounts = this.glAccountsTmp ? this.glAccountsTmp.filter((data) => data.name.includes(this.searchAccount)) : []
+      this.unit.glAccounts = glAccounts
+    },
+    async fetchTypeData() {
       
       if(this.searchType !== '') this.queryVariable.search = '%' + this.searchType + '%';
       else this.queryVariable.search = '%';
@@ -403,6 +407,7 @@ export default {
     },
     async createGlTypeCode() {
       const unit = this.unit
+      const searchAccount = this.searchAccount
       await this.mutationAction(
         CreateGlTypeCode,
         {
@@ -416,9 +421,11 @@ export default {
         'Add Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async confirmEditGlTypeCode(GlType) {
       const unit = this.unit
+      const searchAccount = this.searchAccount
       const editedUnitType = {
         id: GlType.id,
         code: this.glTypeCodeEdit.code,
@@ -435,10 +442,11 @@ export default {
         'Edit Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async confirmDeleteGlTypeCode(id) {
       const unit = this.unit
-
+      const searchAccount = this.searchAccount
       await this.mutationAction(
         DeleteGlTypeCode,
         { id },
@@ -447,8 +455,11 @@ export default {
         'Delete Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async addGlToUnit() {
+      const searchType = this.searchType
+      const glTypeCodes = this.glTypeCodes
       const { id } = this.unit
 
       const {
@@ -477,14 +488,19 @@ export default {
         'Add Gl account to unit error'
       )
 
+      this.searchType = searchType
+      this.glTypeCodes = glTypeCodes
+
       if (updateUnit) {
         this.unit = updateUnit
         this.cancelAttach()
       }
     },
     async removeGlFromUnit(glAccount) {
+      const searchType = this.searchType
+      const glTypeCodes = this.glTypeCodes
       const { id } = this.unit
-
+      
       const {
         data: { updateUnit },
       } = await this.mutationAction(
@@ -501,6 +517,9 @@ export default {
         'Remove Gl account from unit success',
         'Remove Gl account from unit error'
       )
+
+      this.searchType = searchType
+      this.glTypeCodes = glTypeCodes
 
       if (updateUnit) {
         this.unit = updateUnit
