@@ -3,17 +3,6 @@
     
     <InputRow>
       <InputWithTitle>
-        <template #title> Search </template>
-
-        <template #input>
-          <CustomInput
-            v-model="searchVendor"
-            placeholder="Vendor Code"
-          />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
         <template #title> Unit </template>
 
         <template #input>
@@ -148,26 +137,21 @@ export default {
     },
   },
   mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       unit: '',
 
       vendors: {},
-      search: '',
       queryVariable: {
         search: '',
       },
       timeout: null
-    }
-  },
-  computed: {
-    searchVendor: {
-      get() {
-        return this.search
-      },
-      set(value) {
-        this.search = value
-      }
     }
   },
   watch: {
@@ -193,7 +177,6 @@ export default {
       this.vendors = queryData.data.vendors
     },
     async addVendorToUnit(vendor) {
-      const search = this.search
       const vendors = this.vendors
 
       const { id } = this.unit
@@ -218,16 +201,13 @@ export default {
         'Add vendor to unit error'
       )
  
-      this.search = search
       this.vendors = vendors
 
       if (updateUnit) {
         this.unit = updateUnit
       }
-      console.log(updateUnit)
     },
     async removeVendorFromUnit(vendor) {
-      const search = this.search
       const vendors = this.vendors
 
       const { id } = this.unit
@@ -249,7 +229,6 @@ export default {
         'Remove vendor from unit error'
       )
 
-      this.search = search
       this.vendors = vendors
 
       if (updateUnit) {
@@ -378,9 +357,5 @@ export default {
       margin: 0 !important;
     }
   }
-}
-
-.input-row div{
-  margin-right: 20px;
 }
 </style>

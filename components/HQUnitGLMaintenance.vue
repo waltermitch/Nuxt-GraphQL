@@ -319,7 +319,7 @@ export default {
       searchType: '',
       searchAccount: '',
       
-      glAccountsTmp: '',
+      glAccountsTmp: {},
       glTypeCodes: {},
       queryVariable: {
         search: '',
@@ -347,6 +347,8 @@ export default {
   },
   watch: {
     unit() {
+      console.log(this.unit)
+
       this.glAccountsTmp = this.unit.glAccounts
       this.fetchAccountData()
     },
@@ -392,7 +394,7 @@ export default {
       this.isAttachGlAccounts = true
     },
     cancelAttach() {
-      this.isAttachGlAccounts = false
+      this.isAttachGlAccounts = false 
     },
     addGlTypeRow() {
       this.isAddGlTypeCode = true
