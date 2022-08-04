@@ -7,6 +7,7 @@ export default {
   name: 'AdminIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/admin',
     redirectTo: '/admin/close-week',
   },
 }

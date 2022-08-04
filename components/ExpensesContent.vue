@@ -11,7 +11,9 @@
             <template #input>
               <CustomDatePicker
                 v-model="expensesDate"
+                placeholder="mm/dd/yyyy"
                 rules="required|date"
+                name="Expense Date"
                 type="date"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
@@ -80,6 +82,7 @@
                 placeholder="0.00"
                 symbol="$"
                 rules="required|currency"
+                name="Amount"
                 type="number"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @change="onChangeFloatValue"
@@ -95,8 +98,8 @@
             <template #input>
               <CustomTextarea
                 v-model="comments"
-                name="comments"
-                rules="required"
+                name="Comments"
+                rules="required|max:255"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
               />
             </template>

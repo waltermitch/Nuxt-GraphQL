@@ -10,8 +10,8 @@
             <template #input>
               <CustomInput
                 v-model="roleName"
-                rules="required"
-                name="role-name" />
+                rules="required|max:255"
+                name='"Role Name"' />
             </template>
           </InputWithTitle>
         </div>

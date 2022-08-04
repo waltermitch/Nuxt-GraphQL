@@ -7,6 +7,7 @@ export default {
   name: 'HomeIndexPage',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/home',
     redirectTo: '/home/select-unit',
   },
 }

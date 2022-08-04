@@ -6,7 +6,7 @@
           <template #title>Invoice Number</template>
 
           <template #input>
-            <CustomInput v-model="invoiceNumber" rules="required" />
+            <CustomInput v-model="invoiceNumber" rules="required|max:255" name="Invoice Number" />
           </template>
         </InputWithTitle>
 
@@ -17,6 +17,8 @@
             <CustomDatePicker
               v-model="purchaseDate"
               rules="required|date"
+              name="Purchase Date"
+              placeholder="mm/dd/yyyy"
               type="date"
             />
           </template>
@@ -56,6 +58,7 @@
               v-model.number="purchaseTotal"
               type="number"
               rules="required|currency"
+              name="Purchase Total"
               placeholder="0.00"
               symbol="$"
               @change="onChangeFloatValue()"

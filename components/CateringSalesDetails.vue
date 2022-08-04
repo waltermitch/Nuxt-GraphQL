@@ -14,7 +14,7 @@
           <template #title>Description</template>
 
           <template #input>
-            <CustomInput v-model="description" rules="required" />
+            <CustomInput v-model="description" rules="required|max:255" name="Description" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -27,6 +27,8 @@
             <CustomDatePicker
               v-model="orderDate"
               rules="required|date"
+              name="Order Date"
+              placeholder="mm/dd/yyyy"
               type="date"
             />
           </template>
@@ -38,7 +40,8 @@
           <template #input>
             <CustomInput
               v-model="phone"
-              rules="required|phone"
+              rules="required|phone|max:255"
+              name="Phone Number"
               placeholder="(123) 456-7890"
             />
           </template>
@@ -53,6 +56,8 @@
             <CustomDatePicker
               v-model="deliveryDate"
               rules="required|dateWithTime"
+              name="Delivery Date/Time"
+              placeholder="mm/dd/yyyy hh:mm"
               type="datetime"
             />
           </template>
@@ -62,7 +67,7 @@
           <template #title>Head Count</template>
 
           <template #input>
-            <CustomInput v-model.number="headCount" rules="required" />
+            <CustomInput v-model.number="headCount" rules="required" name="Head Count" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -72,7 +77,7 @@
           <template #title>Ordered By</template>
 
           <template #input>
-            <CustomInput v-model="orderedBy" rules="required" />
+            <CustomInput v-model="orderedBy" rules="required|max:255" name="Ordered By" />
           </template>
         </InputWithTitle>
 
@@ -80,7 +85,7 @@
           <template #title>Ordered For</template>
 
           <template #input>
-            <CustomInput v-model="orderedFor" rules="required" />
+            <CustomInput v-model="orderedFor" rules="required|max:255" name="Ordered For" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -101,7 +106,7 @@
           <template #title>Charge #</template>
 
           <template #input>
-            <CustomInput v-model="chargeNumber" rules="required" />
+            <CustomInput v-model="chargeNumber" rules="required|max:255" name="Charge Number" />
           </template>
         </InputWithTitle>
       </InputRow>

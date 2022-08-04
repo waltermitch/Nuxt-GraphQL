@@ -10,14 +10,24 @@
       <div class="title-area">
         <PageTitle> Unit Maintenance </PageTitle>
 
-        <DefaultButton button-color-gamma="red" @event="addUnit">
-          + Add unit
-        </DefaultButton>
+        <div class="search-area">
+          <span class="search-span">Search: </span>
+
+          <CustomInput
+            v-model="searchUnit"
+            placeholder="Unit Code"
+            class="search-text"
+          />
+
+          <DefaultButton button-color-gamma="red" @event="addUnit">
+            + Add unit
+          </DefaultButton>
+        </div>
       </div>
     </template>
 
     <template #content>
-      <component :is="isShowAddUnit" />
+      <component :is="isShowAddUnit" :search="search" />
     </template>
   </BasePageLayout>
 </template>
@@ -43,6 +53,21 @@ export default {
   },
   mixins: [unitMaintenanceMixin, sideBarNavTabsMixin(HQ_UNITS_TABS)],
   layout: 'hqlayout',
+  data() {
+    return {
+      search: ''
+    }
+  },
+  computed: {
+    searchUnit: {
+      get() {
+        return this.search
+      },
+      set(value) {
+        this.search = value
+      }
+    }
+  },
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
   },
@@ -61,5 +86,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.search-area {
+  display: flex;
+  align-items: center;
+
+  .search-span, .search-text {
+    margin-right: 10px;
+  }
 }
 </style>

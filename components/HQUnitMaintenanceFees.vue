@@ -25,7 +25,7 @@
             <CustomInput
               v-model="managementAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-managementAmount"
@@ -43,7 +43,7 @@
             <CustomInput
               v-model="managementPercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-managementPercent"
@@ -77,7 +77,7 @@
             <CustomInput
               v-model="administrativeAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-administrativeAmount"
@@ -95,7 +95,7 @@
             <CustomInput
               v-model="administrativePercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-administrativePercent"
@@ -129,7 +129,7 @@
             <CustomInput
               v-model="supportAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-supportAmount"
@@ -147,7 +147,7 @@
             <CustomInput
               v-model="supportPercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-supportPercent"
@@ -165,7 +165,7 @@
             <CustomInput
               v-model="benefitsPercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-benefitsPercent"
@@ -183,7 +183,7 @@
             <CustomInput
               v-model="commissionPercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-commissionPercent" 
@@ -222,6 +222,11 @@
       </InputRow>
 
       <div class="buttons-area">
+        <!-- <DefaultButton
+          button-color-gamma="red"
+          :disabled="invalid"
+          @event="unitID ? updateUnit() : addUnit()"
+        > -->
         <DefaultButton
           button-color-gamma="red"
           :disabled="invalid"
@@ -387,6 +392,11 @@ export default {
     isKronos() {
       return this.unit.isKronos
     },
+  },
+  watch: {
+    activeValidate() {
+      if(this.activeValidate === 'Fees') this.$refs.form.validate()
+    }
   },
   methods: {
     onChangeFloatValue(stateProp) {

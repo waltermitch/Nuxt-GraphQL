@@ -33,7 +33,7 @@ export const paginatorMixin = {
                 variables,
             });
             this.fetchingData = false
-
+            
             this.queryData = queryData.data[this.queryName];
         },
         async firstPage() {

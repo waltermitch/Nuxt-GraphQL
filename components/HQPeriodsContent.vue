@@ -27,7 +27,7 @@
               rules="required|date"
               type="date"
               do-not-show-error-message
-              name="period-end"
+              name='"Period End"'
             />
             <span v-else>{{ period.periodEnd }}</span>
 
@@ -37,7 +37,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
-              name="period-year"
+              name='"Period Year"'
             />
             <span v-else class="text-center">{{ period.year }}</span>
 
@@ -47,7 +47,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
-              name="period-month"
+              name='"Period Month"'
             />
             <span v-else class="text-center">{{ period.month }}</span>
 
@@ -57,7 +57,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
-              name="period-week"
+              name='"Period Week"'
             />
             <span v-else class="text-center">{{ period.week }}</span>
 
@@ -116,7 +116,7 @@
               rules="required|date"
               type="date"
               do-not-show-error-message
-              name="period-end"
+              name='"Period End"'
             />
 
             <CustomInput
@@ -124,7 +124,7 @@
               rules="required|numeric"  
               type="number"
               do-not-show-error-message
-              name="period-year"
+              name='"Period Year"'
             />
 
             <CustomInput
@@ -132,7 +132,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
-              name="period-month"
+              name='"Period Month"'
             />
 
             <CustomInput
@@ -140,7 +140,7 @@
               rules="required|numeric"
               type="number"
               do-not-show-error-message
-              name="period-week"
+              name='"Period Week"'
             />
           </CustomTableRow>
 

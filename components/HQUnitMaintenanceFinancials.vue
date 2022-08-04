@@ -9,7 +9,7 @@
             <CustomInput
               v-model="payrollTaxPercent"
               type="number"
-              rules="required|double|between:0,100"
+              rules="double|between:0,100"
               placeholder="0.00"
               symbol="%"
               name="unit-payrollTaxPercent"
@@ -25,7 +25,7 @@
             <CustomInput
               v-model="benefitsAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-benefitsAmount"
@@ -43,7 +43,7 @@
             <CustomInput
               v-model="vendingIncome"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-vendingIncome"
@@ -59,7 +59,7 @@
             <CustomInput
               v-model="commissionAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-commissionAmount"
@@ -77,7 +77,7 @@
             <CustomInput
               v-model="vacationAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-vacationAmount"
@@ -107,7 +107,7 @@
             <CustomInput
               v-model="businessInsuranceAmount"
               type="number"
-              rules="required|currency"
+              rules="currency"
               placeholder="0.00"
               symbol="$"
               name="unit-businessInsuranceAmount"
@@ -230,6 +230,11 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_BUSINESS_INSURANCE', value)
       },
     },
+  },
+  watch: {
+    activeValidate() {
+      if(this.activeValidate === 'Financials') this.$refs.form.validate()
+    }
   },
   methods: {
     onChangeFloatValue(stateProp) {

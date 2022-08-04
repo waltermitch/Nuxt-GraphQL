@@ -57,7 +57,7 @@
       <CustomTable class="table" :w-table="400">
         <template #header>
           <div class="table-row">
-            <span>ID</span>
+            <!-- <span>ID</span> -->
 
             <span>Name</span>
             <span></span>
@@ -70,12 +70,13 @@
             :key="unitType.id"
             class="table-row"
           >
-            <span>{{ unitType.id }}</span>
+            <!-- <span>{{ unitType.id }}</span> -->
 
             <CustomInput
               v-if="isEdit === unitType.id"
               v-model="unitTypeEdit.name"
-              rules="required"
+              rules="required|max:255"
+              name='"Unit Type Name"'
               do-not-show-error-message
             />
             <span v-else>{{ unitType.name }}</span>
@@ -113,7 +114,8 @@
 
             <CustomInput
               v-model="unitTypeNew.name"
-              rules="required"
+              rules="required|max:255"
+              name='"Unit Type Name"'
               do-not-show-error-message
             />
           </CustomTableRow>
@@ -149,6 +151,7 @@ import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import {mutationMixin} from '~/mixins/mutationMixin'
 import {tableActionsMixin} from '~/mixins/tableActionsMixin'
 import {multiselectMixin} from '~/mixins/multiselectMixin'
+import {submitMessagesMixin} from '~/mixins/submitMessagesMixin'
 
 export default {
   name: 'HQUnitTypeContent',
@@ -160,7 +163,7 @@ export default {
     CustomInput,
     CustomTableAddIcon,
   },
-  mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
+  mixins: [mutationMixin, tableActionsMixin, multiselectMixin, submitMessagesMixin],
   apollo: {
     units: {
       query: Units,
@@ -233,7 +236,11 @@ export default {
     },
     async addUnitTypeToUnit(unitType) {
       const {id} = this.unit
-
+      if(!id) {
+        this.showSubmitMessage('The "Unit ID" is required. Choose the Unit.', 'error')
+        return
+      } 
+      
       const {
         data: {updateUnit},
       } = await this.mutationAction(
@@ -252,7 +259,7 @@ export default {
         null,
         null
       )
-
+     
       if (updateUnit) {
         this.unit = updateUnit
       }
@@ -377,11 +384,11 @@ export default {
   align-items: center;
   padding: 6px 10px;
   @media screen and (min-width: $md) {
-    grid-template-columns: 100px 200px auto auto;
+    grid-template-columns: 250px auto auto;
   }
 
   @media screen and (max-width: $md) {
-    grid-template-columns: 30px 120px auto auto;
+    grid-template-columns: 125px auto auto;
   }
   column-gap: 30px;
 

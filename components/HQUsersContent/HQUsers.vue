@@ -6,7 +6,7 @@
         <table class="tables">
           <thead class="tables__thead">
             <tr>
-              <th width="50">ID</th>
+              <!-- <th width="50">ID</th> -->
               <th>First Name</th>
               <th>Lats Name</th>
               <th>Email</th>
@@ -19,7 +19,7 @@
           </thead>
           <tbody v-if="queryData.data" class="tables__body">
             <tr v-for="(user, i) in queryData.data" :key="i">
-              <td width="50">{{ user.id }}</td>
+              <!-- <td width="50">{{ user.id }}</td> -->
               <td class="nowrap">{{ user.firstName }}</td>
               <td class="nowrap">{{ user.lastName }}</td>
               <td>{{ user.email }}</td>

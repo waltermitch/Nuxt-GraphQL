@@ -34,9 +34,9 @@
             <CustomInput
               v-if="isEdit === county.id"
               v-model="countyNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="county-name"
+              name='"County Name"'
             />
             <span v-else>
               {{ county.name }}
@@ -49,7 +49,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="county-tax"
+              name='"Tax"'
               @change="onChangeFloatValue('tax')"
             />
             <span v-else>
@@ -114,9 +114,9 @@
 
             <CustomInput
               v-model="countyNew.name"
-              rules="required"
+              rules="required|max:255"
               do-not-show-error-message
-              name="county-name"
+              name='"County Name"'
             />
 
             <CustomInput
@@ -125,7 +125,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name="county-tax"
+              name='"Tax"'
               @change="onChangeFloatValue('tax')"
             />
           </CustomTableRow>

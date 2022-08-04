@@ -1,5 +1,6 @@
 <template>
   <PageContentWrapper>
+    
     <InputRow>
       <InputWithTitle>
         <template #title> Unit </template>
@@ -131,21 +132,53 @@ export default {
   name: 'HQUnitVendorContent',
   components: { PageContentWrapper, DefaultButton, CustomTablesArea },
   apollo: {
-    vendors: {
-      query: Vendors,
-    },
     units: {
       query: Units,
     },
   },
   mixins: [mutationMixin, tableActionsMixin, multiselectMixin],
+  props: {
+    search: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       unit: '',
+
+      vendors: {},
+      queryVariable: {
+        search: '',
+      },
+      timeout: null
     }
   },
+  watch: {
+    search() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => this.fetchData(), 500)
+    }
+  },
+  beforeMount() {
+    this.fetchData()
+  },
   methods: {
+    async fetchData() {
+      
+      if(this.search !== '') this.queryVariable.search = '%' + this.search + '%';
+      else this.queryVariable.search = '%';
+
+      const queryData = await this.$apollo.query({
+          query: Vendors,
+          fetchPolicy: 'network-only',
+          variables: this.queryVariable,
+      });
+      this.vendors = queryData.data.vendors
+    },
     async addVendorToUnit(vendor) {
+      const vendors = this.vendors
+
       const { id } = this.unit
 
       const {
@@ -167,12 +200,16 @@ export default {
         'Add vendor to unit success',
         'Add vendor to unit error'
       )
+ 
+      this.vendors = vendors
 
       if (updateUnit) {
         this.unit = updateUnit
       }
     },
     async removeVendorFromUnit(vendor) {
+      const vendors = this.vendors
+
       const { id } = this.unit
 
       const {
@@ -191,6 +228,8 @@ export default {
         'Remove vendor from unit success',
         'Remove vendor from unit error'
       )
+
+      this.vendors = vendors
 
       if (updateUnit) {
         this.unit = updateUnit

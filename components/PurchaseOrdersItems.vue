@@ -20,6 +20,7 @@
           <CustomInput
             :value="item.amount"
             rules="required|currency"
+            name="Amount"
             placeholder="0.00"
             symbol="$"
             type="number"
@@ -59,6 +60,7 @@
           <CustomInput
             v-model.number="newItem.amount"
             rules="required|currency"
+            name="Amount"
             placeholder="0.00"
             symbol="$"
             type="number"

@@ -7,11 +7,22 @@
     <template #header>
       <PageSubtitle> Accounting / Vendor </PageSubtitle>
 
-      <PageTitle> Vendor </PageTitle>
+      <div class="title-area">
+        <PageTitle> Vendor </PageTitle>
+
+        <div class="search-area">
+          <span class="search-span">Search: </span>
+
+          <CustomInput
+            v-model="searchVendor"
+            placeholder="Vendor Code"
+          />
+        </div>
+      </div>
     </template>
 
     <template #content>
-      <HQVendorContent />
+      <HQVendorContent :search="search" />
     </template>
   </BasePageLayout>
 </template>
@@ -35,10 +46,39 @@ export default {
   },
   mixins: [sideBarNavTabsMixin(HQ_ACCOUNTING)],
   layout: 'hqlayout',
+  data() {
+    return {
+      search: ''
+    }
+  },
+  computed: {
+    searchVendor: {
+      get() {
+        return this.search
+      },
+      set(value) {
+        this.search = value
+      }
+    }
+  },
   created() {
     this.$store.commit('sidebar/SET_MENU', this.navTabs)
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.title-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.search-area {
+  display: flex;
+  align-items: center;
+
+  .search-span {
+    margin-right: 10px;
+  }
+}
+</style>

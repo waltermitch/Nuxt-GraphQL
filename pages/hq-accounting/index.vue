@@ -8,6 +8,7 @@ export default {
   layout: 'hqlayout',
   middleware: 'redirectToSpecificPage',
   meta: {
+    redirectFrom: '/hq-accounting',
     redirectTo: '/hq-accounting/state',
   },
 }

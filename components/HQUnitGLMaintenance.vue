@@ -80,22 +80,30 @@
     <ValidationObserver v-if="!isAttachGlAccounts" ref="form">
       <div>
         <div class="gl-table">
-          <h2
-            v-if="unit.glAccounts && unit.glAccounts.length"
-            class="table-header"
-          >
-            Gl Accounts
-          </h2>
+          <div v-if="(unit.glAccounts && unit.glAccounts.length) || searchAccount" class="gl-account-area">
+            <h2 class="gl-account-header">
+              Gl Accounts
+            </h2>
+            <div class="search-area">
+              <span class="search-span">Search: </span>
+
+              <CustomInput
+                v-model="searchGlAccount"
+                placeholder="GL(Sub) Name, ID"
+              />
+            </div>
+          
+          </div>
           <h2 v-else class="table-header">Please, attach new GL Account</h2>
 
           <CustomTable
-            v-if="unit.glAccounts && unit.glAccounts.length"
+            v-if="(unit.glAccounts && unit.glAccounts.length) || searchAccount"
             class="table table-gls"
             :w-table="1000"
           >
             <template #header>
               <div class="table-row">
-                <span>ID</span>
+                <!-- <span>ID</span> -->
 
                 <span>GL account ID - GL account Name</span>
 
@@ -103,7 +111,7 @@
 
                 <span> Type </span>
 
-                <span>Action</span>
+                <!-- <span>Action</span> -->
               </div>
             </template>
 
@@ -113,7 +121,7 @@
                 :key="glAcc.id"
                 class="table-row"
               >
-                <span>{{ glAcc.id }}</span>
+                <!-- <span>{{ glAcc.id }}</span> -->
 
                 <span v-if="!glAcc.parent">{{
                   `${glAcc.id} - ${glAcc.name}`
@@ -145,12 +153,23 @@
         </div>
 
         <div>
-          <h2 class="table-header">Gl Types</h2>
+          <div class="gl-type-area">
+            <h2 class="gl-type-header">Gl Types</h2>
+
+            <div class="search-area">
+              <span class="search-span">Search: </span>
+
+              <CustomInput
+                v-model="searchGlType"
+                placeholder="GL Type Code"
+              />
+            </div>
+          </div>
 
           <CustomTable class="table table-gls" :w-table="600">
             <template #header>
               <div class="table-row table-row--gl-type">
-                <span>ID</span>
+                <!-- <span>ID</span> -->
 
                 <span>Code</span>
 
@@ -164,12 +183,13 @@
                 :key="glTypeCode.id"
                 class="table-row table-row--gl-type"
               >
-                <span>{{ glTypeCode.id }}</span>
+                <!-- <span>{{ glTypeCode.id }}</span> -->
 
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCodeEdit.code"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Code"'
                   do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.code }}</span>
@@ -177,7 +197,8 @@
                 <CustomInput
                   v-if="editGlTypeCodeId === glTypeCode.id"
                   v-model="glTypeCodeEdit.description"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Description"'
                   do-not-show-error-message
                 />
                 <span v-else>{{ glTypeCode.description }}</span>
@@ -202,13 +223,15 @@
 
                 <CustomInput
                   v-model="glTypeCodeNew.code"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Code"'
                   do-not-show-error-message
                 />
 
                 <CustomInput
                   v-model="glTypeCodeNew.description"
-                  rules="required"
+                  rules="required|max:255"
+                  name='"GL Type Description  "'
                   do-not-show-error-message
                 />
               </CustomTableRow>
@@ -275,10 +298,7 @@ export default {
     },
     glAccounts: {
       query: GlAccounts,
-    },
-    glTypeCodes: {
-      query: GlTypeCodes,
-    },
+    }
   },
   mixins: [mutationMixin, tableActionsMixin],
   data() {
@@ -295,15 +315,75 @@ export default {
       glSubAccount: '',
       isAttachGlAccounts: false,
       glTypeCodeEdit: false,
+      
+      searchType: '',
+      searchAccount: '',
+      
+      glAccountsTmp: {},
+      glTypeCodes: {},
+      queryVariable: {
+        search: '',
+      },
+      timeout: null
+    }
+  },
+  computed: {
+    searchGlType: {
+      get() {
+        return this.searchType
+      },
+      set(value) {
+        this.searchType = value
+      }
+    },
+    searchGlAccount: {
+      get() {
+        return this.searchAccount
+      },
+      set(value) {
+        this.searchAccount = value
+      }
     }
   },
   watch: {
+    unit() {
+      console.log(this.unit)
+
+      this.glAccountsTmp = this.unit.glAccounts
+      this.fetchAccountData()
+    },
     glAccount() {
       this.glSubAccount = ''
     },
+    searchGlType() {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => this.fetchTypeData())
+    },
+    searchGlAccount() {
+      this.fetchAccountData()
+    }
+  },
+  beforeMount() {
+    this.fetchTypeData()
   },
   methods: {
-    nameWithId({ name, code, id, }) {
+    fetchAccountData() {
+      const glAccounts = this.glAccountsTmp ? this.glAccountsTmp.filter((data) => data.name.toLowerCase().includes(this.searchAccount.toLowerCase()) || data.id.includes(this.searchAccount)) : []
+      this.unit.glAccounts = glAccounts
+    },
+    async fetchTypeData() {
+      
+      if(this.searchType !== '') this.queryVariable.search = '%' + this.searchType + '%';
+      else this.queryVariable.search = '%';
+
+      const queryData = await this.$apollo.query({
+          query: GlTypeCodes,
+          fetchPolicy: 'network-only',
+          variables: this.queryVariable,
+      });
+      this.glTypeCodes = queryData.data.glTypeCodes
+    },
+    nameWithId({ name, code, id }) {
       if(code === undefined) {
         return `${id} — ${name}`
       }else {
@@ -314,7 +394,7 @@ export default {
       this.isAttachGlAccounts = true
     },
     cancelAttach() {
-      this.isAttachGlAccounts = false
+      this.isAttachGlAccounts = false 
     },
     addGlTypeRow() {
       this.isAddGlTypeCode = true
@@ -329,6 +409,7 @@ export default {
     },
     async createGlTypeCode() {
       const unit = this.unit
+      const searchAccount = this.searchAccount
       await this.mutationAction(
         CreateGlTypeCode,
         {
@@ -342,9 +423,11 @@ export default {
         'Add Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async confirmEditGlTypeCode(GlType) {
       const unit = this.unit
+      const searchAccount = this.searchAccount
       const editedUnitType = {
         id: GlType.id,
         code: this.glTypeCodeEdit.code,
@@ -361,10 +444,11 @@ export default {
         'Edit Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async confirmDeleteGlTypeCode(id) {
       const unit = this.unit
-
+      const searchAccount = this.searchAccount
       await this.mutationAction(
         DeleteGlTypeCode,
         { id },
@@ -373,8 +457,11 @@ export default {
         'Delete Gl Type error'
       )
       this.unit = unit
+      this.searchAccount = searchAccount
     },
     async addGlToUnit() {
+      const searchType = this.searchType
+      const glTypeCodes = this.glTypeCodes
       const { id } = this.unit
 
       const {
@@ -403,14 +490,19 @@ export default {
         'Add Gl account to unit error'
       )
 
+      this.searchType = searchType
+      this.glTypeCodes = glTypeCodes
+
       if (updateUnit) {
         this.unit = updateUnit
         this.cancelAttach()
       }
     },
     async removeGlFromUnit(glAccount) {
+      const searchType = this.searchType
+      const glTypeCodes = this.glTypeCodes
       const { id } = this.unit
-
+      
       const {
         data: { updateUnit },
       } = await this.mutationAction(
@@ -427,6 +519,9 @@ export default {
         'Remove Gl account from unit success',
         'Remove Gl account from unit error'
       )
+
+      this.searchType = searchType
+      this.glTypeCodes = glTypeCodes
 
       if (updateUnit) {
         this.unit = updateUnit
@@ -511,13 +606,13 @@ export default {
   column-gap: 30px;
   padding: 12px 0;
   @media screen and (min-width: $md) {
-    grid-template-columns: 5% repeat(2, 25%) 20% auto;
+    grid-template-columns: 25% 30% 15% auto;
   }
   @media screen and (max-width: $md) {
-    grid-template-columns: 80px 165px 165px 150px auto;
+    grid-template-columns: 200px 250px 150px auto;
   }
   &--gl-type {
-    grid-template-columns: 5% repeat(2, 25%) auto;
+    grid-template-columns: 20% 25% auto;
   }
 }
 
@@ -555,5 +650,21 @@ export default {
 
 .table-header {
   margin-bottom: 8px;
+}
+
+.gl-type-area, .gl-account-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.search-area {
+  display: flex;
+  align-items: center;
+
+  .search-span {
+    margin-right: 10px;
+  }
 }
 </style>

@@ -6,7 +6,7 @@
           <template #title>Ship To Name</template>
 
           <template #input>
-            <CustomInput v-model="shipToName" rules="required" />
+            <CustomInput v-model="shipToName" rules="required|max:255" name="Ship To Name" />
           </template>
         </InputWithTitle>
 
@@ -14,7 +14,7 @@
           <template #title>Bill To Name</template>
 
           <template #input>
-            <CustomInput v-model="billToName" rules="required" />
+            <CustomInput v-model="billToName" rules="required|max:255" name="Bill To Name" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -26,8 +26,8 @@
           <template #input>
             <CustomTextarea
               v-model="shipToAddress"
-              rules="required"
-              name="shipToAddress"
+              rules="required|max:255"
+              name="Ship To Address"
             />
           </template>
         </InputWithTitle>
@@ -38,8 +38,8 @@
           <template #input>
             <CustomTextarea
               v-model="billToAddress"
-              rules="required"
-              name="billToAddress"
+              rules="required|max:255"
+              name="Bill To Address"
             />
           </template>
         </InputWithTitle>

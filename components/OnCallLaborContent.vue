@@ -14,6 +14,7 @@
                 type="number"
                 placeholder="0.00"
                 rules="required|currency"
+                name="Amount"
                 symbol="$"
                 @change="onChangeFloatValue"
               />
@@ -24,7 +25,7 @@
             <template #title> Name/Comment </template>
 
             <template #input>
-              <CustomInput v-model="nameComment" rules="required" />
+              <CustomInput v-model="nameComment" rules="required|max:255" name="Name/Comment" />
             </template>
           </InputWithTitle>
         </InputRow>

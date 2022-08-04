@@ -6,7 +6,7 @@
           <template #title> Unit Number </template>
 
           <template #input>
-            <CustomInput v-model="code" rules="required" name="unit-code" />
+            <CustomInput v-model="code" rules="required|max:255" name="unit-code" />
           </template>
         </InputWithTitle>
 
@@ -14,7 +14,7 @@
           <template #title> Name </template>
 
           <template #input>
-            <CustomInput v-model="name" rules="required" name="unit-name" />
+            <CustomInput v-model="name" rules="required|max:255" name="unit-name" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -24,7 +24,7 @@
           <template #title> Street Address </template>
 
           <template #input>
-            <CustomInput v-model="address" rules="required" name="unit-address" />
+            <CustomInput v-model="address" rules="required|max:255" name="unit-address" />
           </template>
         </InputWithTitle>
 
@@ -77,7 +77,7 @@
           <template #title> Zip Code </template>
 
           <template #input>
-            <CustomInput v-model="zip" rules="required" name="unit-zip" />
+            <CustomInput v-model="zip" rules="required|max:255" name="unit-zip" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
@@ -112,7 +112,7 @@
           <template #title>Sysco</template>
 
           <template #input>
-            <CustomInput v-model="sysco" name="unit-sysco" />
+            <CustomInput v-model="sysco" rules="max:255" name="unit-sysco" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -122,14 +122,14 @@
           <template #title> Mgr First Name </template>
 
           <template #input>
-            <CustomInput v-model="managerFirstName" rules="required" name="unit-first-name" />
+            <CustomInput v-model="managerFirstName" rules="max:255" name="unit-first-name" />
           </template>
         </InputWithTitle>
         <InputWithTitle>
           <template #title> Mgr Last Name </template>
 
           <template #input>
-            <CustomInput v-model="managerLastName" rules="required" name="unit-last-name" />
+            <CustomInput v-model="managerLastName" rules="max:255" name="unit-last-name" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -141,7 +141,6 @@
           <template #input>
             <CustomInput
               v-model="payrollPassword"
-              rules="required"
               type="password"
               name="unit-password"
             />
@@ -154,7 +153,7 @@
           <template #input>
             <CustomInput
               v-model="emailAccount"
-              rules="email|required"
+              rules="email|required|max:255"
               type="email"
               name="unit-email"
             />
@@ -367,6 +366,11 @@ export default {
         this.$store.commit('unitMaintenance/SET_UNIT_SYSCO', value)
       },
     },
+  },
+  watch: {
+    activeValidate() {
+      if(this.activeValidate === 'Details') this.$refs.form.validate()
+    }
   },
   mounted() {
     // this.$store.commit('tabsView/SET_ALLOW_SWITCH', false)
