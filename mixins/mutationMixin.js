@@ -42,8 +42,8 @@ export const mutationMixin = {
             this.showSubmitMessage(successMessage, 'success') 
             return res
           } else {
-            this.showSubmitMessage(res.data[mutationName].message || 'Not received Error message but has an error', 'error')
-            return false
+            this.showSubmitMessage(res.data[mutationName].message || errorMessage || 'Not received Error message but has an error', 'error')
+            return res
           }
         } catch (error) {
           const errorObj = error.graphQLErrors[0]
@@ -76,7 +76,7 @@ export const mutationMixin = {
             error = error.replace(/Expected type DateTime at value.deliveryDate/g,'The "Details / DeliveryDate" must be DateTime value');
             
             // Home / Purchase Orders
-            error = error.replace(/Expected type Date at value.date/g,'The "Purchase Date" must be Date value');
+            error = error.replace(/Expected type Date at value.date/g,'The "Details / Purchase Date" must be Date value');
 
             // HQ Unit Setup / Units
             error = error.replace(/Expected type Int at value.population/g,'The "Details / Population" must be Int value');

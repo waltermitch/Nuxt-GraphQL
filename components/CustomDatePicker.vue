@@ -3,17 +3,18 @@
     v-slot="{ errors, classes }"
     mode="eager"
     :rules="rules"
+    :name="name"
   >
     <span>
       <date-picker
-        v-model="time1"
-        valueType="format"
+        v-model="dateValue"
+        value-type="format"
         :class="classes"
         :value="value"
-        @change="$emit('change')"
-        @keyup.enter="$emit('event')"
         :type="type"
-        :format="(type == 'date' ? 'MM-DD-YYYY' : 'MM-DD-YYYY HH:mm')"
+        :format="(type == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm')"
+        @change="$emit('change', dateValue)"
+        @keyup.enter="$emit('event')"
         ></date-picker>
     </span>
     <span v-if="!doNotShowErrorMessage" class="error">{{ errors[0] }}</span>
@@ -29,7 +30,7 @@ export default {
   name: 'CustomInput',
   components: { ValidationProvider, DatePicker },
   props: {
-    isFloat: {
+    name: {
       type: String,
       default: ''
     },
@@ -68,7 +69,7 @@ export default {
   },
   data() {
     return {
-      time1: null,
+      dateValue: null,
     }
   },
   methods: {

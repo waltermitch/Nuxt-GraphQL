@@ -10,6 +10,7 @@
               v-model="email"
               vid="email"
               type="email"
+              name="Email"
               rules="email|required"
             />
           </template>
@@ -22,6 +23,7 @@
             <CustomInput
               v-model="password"
               type="password"
+              name="Password"
               rules="required"
               @event="login"
             />

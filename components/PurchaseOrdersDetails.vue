@@ -18,8 +18,9 @@
               v-model="purchaseDate"
               rules="required|date"
               name="Purchase Date"
-              placeholder="mm/dd/yyyy"
+              placeholder="yyyy-mm-dd"
               type="date"
+              @change="(e) => onChangeDateValue(e)"
             />
           </template>
         </InputWithTitle>
@@ -190,6 +191,9 @@ export default {
     onChangeFloatValue() {
       this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal).toFixed(2));
     },
+    onChangeDateValue(value) {
+      this.$store.commit('purchaseOrders/SET_PURCHASE_DATE', value)
+    }
   },
 }
 </script>

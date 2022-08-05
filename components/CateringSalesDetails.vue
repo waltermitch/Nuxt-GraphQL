@@ -28,7 +28,7 @@
               v-model="orderDate"
               rules="required|date"
               name="Order Date"
-              placeholder="mm/dd/yyyy"
+              placeholder="yyyy-mm-dd"
               type="date"
             />
           </template>
@@ -57,7 +57,7 @@
               v-model="deliveryDate"
               rules="required|dateWithTime"
               name="Delivery Date/Time"
-              placeholder="mm/dd/yyyy hh:mm"
+              placeholder="yyyy-mm-dd hh:mm"
               type="datetime"
             />
           </template>

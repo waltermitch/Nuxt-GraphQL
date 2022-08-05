@@ -1,6 +1,7 @@
 export const addPercentSign = (value) => value + '%'
 
 export const formatDate = (timeStamp) => {
+  if(!timeStamp.includes('/')) return timeStamp
   const timeStampArray = timeStamp.split('/')
   return `${timeStampArray[2]}-${timeStampArray[0]}-${timeStampArray[1]}`
 }

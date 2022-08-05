@@ -2,6 +2,10 @@
 
 mutation UpdateInventories($inventoriesInput: [InventoryInput!]!) {
   updateInventories(inventoriesInput: $inventoriesInput) {
-    ...InventoryCategoryFragment
+    status
+    message
+    category {
+      ...InventoryCategoryFragment
+    }
   }
 }

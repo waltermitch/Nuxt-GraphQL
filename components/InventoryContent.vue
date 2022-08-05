@@ -140,9 +140,10 @@ export default {
     this.fetchData();
   },
   mounted () {
-    this.canManage = !!this.RolePrivileges.filter(privilege => {
-      return (privilege.slugName === 'inventory') && (privilege.permissionType === 'MODIFY')
-    }).length
+    // this.canManage = !!this.RolePrivileges.filter(privilege => {
+    //   return (privilege.slugName === 'inventory') && (privilege.permissionType === 'MODIFY')
+    // }).length
+    this.canManage = true
   },
   methods: {
     onChangeFloatValue(item) {
@@ -176,14 +177,14 @@ export default {
           }),
         },
         InventoryCategories,
-        'Update Inventory Categories success',
-        'Update Inventory Categories error'
+        'Update Inventory Categories Success',
+        'Update Inventory Categories Error'
       )
-      for ( const item of updateInventories ) {
+      for ( const item of updateInventories.category ) {
         const value = item.inventoryAmount.current;
         item.inventoryAmount.current = Number(value === '' ? 0 : value).toFixed(2);
       }
-      this.inventoryCategories = updateInventories
+      this.inventoryCategories = updateInventories.category
       this.canManage = true;
     },
     async cancelUpdate() {

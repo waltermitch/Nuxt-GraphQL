@@ -11,11 +11,12 @@
             <template #input>
               <CustomDatePicker
                 v-model="expensesDate"
-                placeholder="mm/dd/yyyy"
+                placeholder="yyyy-mm-dd"
                 rules="required|date"
                 name="Expense Date"
                 type="date"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
+                @change="(e) => onChangeDateValue(e)"
               />
             </template>
           </InputWithTitle>
@@ -251,6 +252,9 @@ export default {
       const value = this.amount;
       this.amount = Number(value === '' ? 0 : value).toFixed(2);
     },
+    onChangeDateValue(value) {
+      this.$store.commit('expense/SET_EXPENSE_DATE', value)
+    },
     formatDate,
     setExpensesType(expenseType) {
       this.expenseType = expenseType
@@ -262,7 +266,6 @@ export default {
       if (!this.glAccount) {
         this.selectError = true
       }
-
       const res = await this.mutationAction(
         CreateExpense,
         {
@@ -285,8 +288,8 @@ export default {
           },
         },
         Expenses,
-        'Add Expense success',
-        'Add Expense error',
+        'Add Expense Success',
+        'Add Expense Error',
         {
           activePeriod: true,
         }
@@ -319,8 +322,8 @@ export default {
           },
         },
         Expenses,
-        'Update Expense success',
-        'Update Expense error',
+        'Update Expense Success',
+        'Update Expense Error',
         {
           activePeriod: true,
         }

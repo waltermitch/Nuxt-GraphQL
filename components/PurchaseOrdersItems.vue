@@ -19,7 +19,7 @@
         >
           <CustomInput
             :value="item.amount"
-            rules="required|currency"
+            rules="required|double|currency"
             name="Amount"
             placeholder="0.00"
             symbol="$"
@@ -59,7 +59,7 @@
         <CustomTableRow v-if="isAdd" class="table-row">
           <CustomInput
             v-model.number="newItem.amount"
-            rules="required|currency"
+            rules="required|double|currency"
             name="Amount"
             placeholder="0.00"
             symbol="$"
@@ -150,6 +150,7 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import Purchases from '~/graphql/queries/purchases.gql'
 import InventoryCategories from '~/graphql/queries/inventoryCategories.gql'
 import { PURCHASE_ORDER } from '~/constants/purchaseOrder'
+
 export default {
   name: 'PurchaseOrdersItems',
   components: {
@@ -297,7 +298,9 @@ export default {
       }
     },
     async CreatePurchaseOrder() {
-      await this.mutationAction(
+      const {
+        data: { createPurchaseOrder },
+      } = await this.mutationAction(
         CreatePurchaseOrder,
         {
           PurchaseInput: {
@@ -337,7 +340,8 @@ export default {
           activePeriod: true,
         }
       )
-      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
+      console.log(createPurchaseOrder)
+      if(createPurchaseOrder) this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
     },
     async UpdatePurchaseOrder() {
       await this.mutationAction(
