@@ -7,14 +7,16 @@
   >
     <span>
       <date-picker
-        v-model="dateValue"
+        v-model="time1"
+        :default-value="new Date()"
+        :value="value"
         value-type="format"
         :class="classes"
-        :value="value"
         :type="type"
-        :format="(type == 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm')"
-        @change="$emit('change', dateValue)"
+        :format="(type == 'date' ? 'MM/DD/YYYY' : 'MM/DD/YYYY HH:mm')"
+        @change="$emit('change');"
         @keyup.enter="$emit('event')"
+        @input="setValue(time1)"
         ></date-picker>
     </span>
     <span v-if="!doNotShowErrorMessage" class="error">{{ errors[0] }}</span>
@@ -69,7 +71,7 @@ export default {
   },
   data() {
     return {
-      dateValue: null,
+      time1: this.value,
     }
   },
   methods: {
