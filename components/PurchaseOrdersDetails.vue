@@ -20,7 +20,7 @@
               name="Purchase Date"
               placeholder="yyyy-mm-dd"
               type="date"
-              @change="(e) => onChangeDateValue(e)"
+              @input="(e) => onChangeDateValue(e)"
             />
           </template>
         </InputWithTitle>

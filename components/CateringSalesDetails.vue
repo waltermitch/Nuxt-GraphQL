@@ -30,6 +30,7 @@
               name="Order Date"
               placeholder="yyyy-mm-dd"
               type="date"
+              @input="(e) => onChangeDateValue(e)"
             />
           </template>
         </InputWithTitle>
@@ -59,6 +60,7 @@
               name="Delivery Date/Time"
               placeholder="yyyy-mm-dd hh:mm"
               type="datetime"
+              @input="(e) => onChangeDateTimeValue(e)"
             />
           </template>
         </InputWithTitle>
@@ -67,7 +69,7 @@
           <template #title>Head Count</template>
 
           <template #input>
-            <CustomInput v-model.number="headCount" rules="required" name="Head Count" />
+            <CustomInput v-model.number="headCount" rules="required|numeric" name="Head Count" />
           </template>
         </InputWithTitle>
       </InputRow>
@@ -256,6 +258,12 @@ export default {
     },
     setIsCashOrder() {
       this.isCashOrder = !this.isCashOrder
+    },
+    onChangeDateValue(value) {
+      this.$store.commit('cateringSales/SET_ORDER_DATE', value)
+    },
+    onChangeDateTimeValue(value) {
+      this.$store.commit('cateringSales/SET_DELIVERY_DATE', value)
     },
   },
 }

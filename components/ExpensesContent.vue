@@ -16,7 +16,7 @@
                 name="Expense Date"
                 type="date"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
-                @change="(e) => onChangeDateValue(e)"
+                @input="(e) => onChangeDateValue(e)"
               />
             </template>
           </InputWithTitle>

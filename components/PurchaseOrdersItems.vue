@@ -210,9 +210,9 @@ export default {
     onChangeFloatValue(stateProp, isEdit = false, item = null) {
       if ( stateProp === 'amount' ) {
         if ( isEdit ) {
-          this.updateItems(item, Number(item.amount).toFixed(2), 'amount');
+          this.updateItems(item, parseFloat(Number(item.amount).toFixed(2)), 'amount');
         } else {
-          this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2);
+          this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0);
         }
       }
     },
@@ -298,9 +298,7 @@ export default {
       }
     },
     async CreatePurchaseOrder() {
-      const {
-        data: { createPurchaseOrder },
-      } = await this.mutationAction(
+      await this.mutationAction(
         CreatePurchaseOrder,
         {
           PurchaseInput: {
@@ -340,8 +338,7 @@ export default {
           activePeriod: true,
         }
       )
-      console.log(createPurchaseOrder)
-      if(createPurchaseOrder) this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
+      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
     },
     async UpdatePurchaseOrder() {
       await this.mutationAction(

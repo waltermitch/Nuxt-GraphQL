@@ -92,7 +92,7 @@
           <CustomInput
             v-model.number="newItem.price"
             type="number"
-            rules="required|currency|max:255"
+            rules="required|currency"
             name="Unit Price"
             do-not-show-error-message
             placeholder="0.00"
@@ -103,7 +103,7 @@
           <CustomInput
             v-model.number="newItem.ext"
             type="number"
-            rules="required|currency|max:255"
+            rules="required|currency"
             name="Ext"
             do-not-show-error-message
             placeholder="0.00"
@@ -136,7 +136,7 @@
             type="number"
             placeholder="0.00"
             do-not-show-error-message
-            rules="currency|max:255"
+            rules="currency"
             name="Tax"
             symbol="$"
             @change="onChangeFloatValue('tax')"
@@ -233,9 +233,9 @@ export default {
   methods: {
     onChangeFloatValue(stateProp) {
       if ( stateProp === 'price' || stateProp === 'ext' ) {
-        this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2);
+        this.newItem[stateProp] = parseFloat(Number(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2));
       } else if ( stateProp === 'tax' ) {
-        this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+        this[stateProp] = parseFloat(Number(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2));
         this.$store.commit('cateringSales/SET_TAX', this[stateProp])
       }
     },

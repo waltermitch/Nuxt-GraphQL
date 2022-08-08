@@ -26,7 +26,7 @@ extend('required', {
 
 extend('date', {
   validate: (value) => DATE_VALIDATION_REGEX.test(value),
-  message: 'The {_field_} must be in "yyyy-mm-dd" format',
+  message: 'The {_field_} must be in "mm/dd/yyyy" format',
 })
 
 extend('max', {
@@ -39,7 +39,7 @@ extend('max', {
 
 extend('dateWithTime', {
   validate: (value) => DATE_WITH_TIME_VALIDATION_REGEX.test(value),
-  message: 'The {_field_} must be in "yyyy-mm-dd hh:mm" format',
+  message: 'The {_field_} must be in "mm/dd/yyyy hh:mm" format',
 })
 
 extend('phone', {
