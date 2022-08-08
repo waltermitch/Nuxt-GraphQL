@@ -25,7 +25,7 @@
               v-if="isEdit === period.id"
               v-model="periodEdit.periodEnd"
               rules="required|date"
-              placeholder="yyyy-mm-dd"
+              placeholder="mm/dd/yyyy"
               type="date"
               do-not-show-error-message
               name='"Period End"'
@@ -116,7 +116,7 @@
               v-model="periodNew.periodEnd"
               rules="required|date"
               type="date"
-              placeholder="yyyy-mm-dd"
+              placeholder="mm/dd/yyyy"
               do-not-show-error-message
               name='"Period End"'
             />

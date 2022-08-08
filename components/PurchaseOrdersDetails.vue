@@ -18,7 +18,7 @@
               v-model="purchaseDate"
               rules="required|date"
               name="Purchase Date"
-              placeholder="yyyy-mm-dd"
+              placeholder="mm/dd/yyyy"
               type="date"
               @input="(e) => onChangeDateValue(e)"
             />

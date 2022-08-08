@@ -11,7 +11,7 @@
             <template #input>
               <CustomDatePicker
                 v-model="expensesDate"
-                placeholder="yyyy-mm-dd"
+                placeholder="mm/dd/yyyy"
                 rules="required|date"
                 name="Expense Date"
                 type="date"

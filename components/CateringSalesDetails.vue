@@ -28,7 +28,7 @@
               v-model="orderDate"
               rules="required|date"
               name="Order Date"
-              placeholder="yyyy-mm-dd"
+              placeholder="mm/dd/yyyy"
               type="date"
               @input="(e) => onChangeDateValue(e)"
             />
@@ -58,7 +58,7 @@
               v-model="deliveryDate"
               rules="required|dateWithTime"
               name="Delivery Date/Time"
-              placeholder="yyyy-mm-dd hh:mm"
+              placeholder="mm/dd/yyyy hh:mm"
               type="datetime"
               @input="(e) => onChangeDateTimeValue(e)"
             />
