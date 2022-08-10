@@ -5,76 +5,82 @@
                 <div class="form-content">
                     <div class="input-panel">
                         <ValidationObserver ref="form">
-                            <!-- First name -->
-                            <div class="form-input">
-                                <InputWithTitle>
-                                <template #title>First name</template>
-                                <template #input>
-                                    <CustomInput
-                                    v-model="profileInput.firstName"
-                                    type="text"
-                                    rules="required"
-                                    />
-                                </template>
-                                </InputWithTitle>
-                            </div>
-
-                            <!-- Last name -->
-                            <div class="form-input">
-                                <InputWithTitle>
-                                <template #title>Last name</template>
-
-                                <template #input>
-                                    <CustomInput
-                                    v-model="profileInput.lastName"
-                                    type="text"
-                                    />
-                                </template>
-                                </InputWithTitle>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="form-input">
-                            <InputWithTitle>
-                            <template #title>Email</template>
-
-                            <template #input>
-                                <CustomInput
-                                v-model="profileInput.email"
-                                vid="email"
-                                type="email"
-                                rules="email|required"
-                                />
-                            </template>
-                            </InputWithTitle>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="form-input">
-                                <InputWithTitle>
-                                <template #title>Password</template>
-
-                                <template #input>
-                                    <CustomInput
-                                    v-model="profileInput.password"
-                                    type="password"
-                                    />
-                                </template>
-                                </InputWithTitle>
-                            </div>
-
-                            <!-- Confirm : Password -->
-                            <div class="form-input">
-                                <InputWithTitle>
-                                <template #title>Confirm : Password</template>
-
-                                <template #input>
-                                    <CustomInput
-                                    v-model="profileInput.confirmPassword"
-                                    type="password"
-                                    />
-                                </template>
-                                </InputWithTitle>
+                            <div class="inputs-all">
+                                <div class="texts">
+                                    <!-- First name -->
+                                    <div class="form-input">
+                                        <InputWithTitle>
+                                        <template #title>First name</template>
+                                        <template #input>
+                                            <CustomInput
+                                            v-model="profileInput.firstName"
+                                            type="text"
+                                            rules="required"
+                                            />
+                                        </template>
+                                        </InputWithTitle>
+                                    </div>
+        
+                                    <!-- Last name -->
+                                    <div class="form-input">
+                                        <InputWithTitle>
+                                        <template #title>Last name</template>
+        
+                                        <template #input>
+                                            <CustomInput
+                                            v-model="profileInput.lastName"
+                                            type="text"
+                                            />
+                                        </template>
+                                        </InputWithTitle>
+                                    </div>
+        
+                                    <!-- Email -->
+                                    <div class="form-input">
+                                    <InputWithTitle>
+                                    <template #title>Email</template>
+        
+                                    <template #input>
+                                        <CustomInput
+                                        v-model="profileInput.email"
+                                        vid="email"
+                                        type="email"
+                                        rules="email|required"
+                                        />
+                                    </template>
+                                    </InputWithTitle>
+                                    </div>
+                                </div>
+    
+                                <div class="passwords">
+                                    <!-- Password -->
+                                    <div class="form-input">
+                                        <InputWithTitle>
+                                        <template #title>Password</template>
+        
+                                        <template #input>
+                                            <CustomInput
+                                            v-model="profileInput.password"
+                                            type="password"
+                                            />
+                                        </template>
+                                        </InputWithTitle>
+                                    </div>
+        
+                                    <!-- Confirm : Password -->
+                                    <div class="form-input">
+                                        <InputWithTitle>
+                                        <template #title>Confirm Password</template>
+        
+                                        <template #input>
+                                            <CustomInput
+                                            v-model="profileInput.confirmPassword"
+                                            type="password"
+                                            />
+                                        </template>
+                                        </InputWithTitle>
+                                    </div>
+                                </div>
                             </div>
                             <div v-if="profileInput.password != ''" :class="'password-match ' + (isPasswordConfirmed ? 'match' : 'notMatch')">
                                 {{ isPasswordConfirmed ? 'Match confirmed!' : 'Need to confirm with the same password.' }}
@@ -234,14 +240,25 @@ export default {
             overflow: auto;
             display: flex;
             padding: 2rem 0px;
+            justify-content: center;
         }
+
         .form-content {
-            width: 60%;
+            width: 30%;
             display: flex;
             flex-direction: column;
             align-items: center;
 
             .input-panel {
+
+                .inputs-all {
+                    display: flex;
+
+                    .passwords {
+                        padding-left: 20px;
+                    }
+                }
+
                 .form-input {
                     height: 90px;
                     .container {
@@ -262,11 +279,12 @@ export default {
             .action-panel {
                 margin-top: 1rem;
                 margin-bottom: 1rem;
-                width: 240px;
+                width: 100%;
+                padding-left: 40px;
             }
         }
         .avatar-panel {
-            width: 40%;
+            width: 15%;
             display: flex;
             align-items: center;
         }

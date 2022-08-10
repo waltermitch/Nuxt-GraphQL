@@ -42,7 +42,7 @@ export default {
   right: 0;
   z-index: 100;
   padding: 10px 15px;
-  animation: message 2s ease-in-out;
+  animation: message 0.5s ease-in-out;
 
   &--success {
     background: $eucalyptus;

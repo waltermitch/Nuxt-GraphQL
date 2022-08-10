@@ -21,7 +21,7 @@
         {{
           selected && selectBySecond
             ? `${selected[selectBySecond]} - ${selected[selectBy]}`
-            : selected && selected[selectBy]
+            : selected && formatIfDate(selected[selectBy])
         }}
       </span>
 
@@ -51,7 +51,7 @@
         {{
           selectBySecond
             ? `${option[selectBySecond]} - ${option[selectBy]}`
-            : option[selectBy]
+            : formatIfDate(option[selectBy])
         }}
       </div>
     </div>
@@ -170,6 +170,32 @@ export default {
     this.open = false
   },
   methods: {
+    formatIfDate(data){
+      if(this.testDate(data)){
+        const tempDate = new Date(data);
+        const formatedDate = [(tempDate.getMonth() + 1).toString().padStart(2,'0'), (tempDate.getDate()).toString().padStart(2,'0'), tempDate.getFullYear()].join('-');
+        return formatedDate;
+      }else {
+        return data;
+      }
+    },
+    testDate(value){
+      const regex = /^\d{4}-\d{2}-\d{2}$/;
+
+      if (value.match(regex) === null) {
+        return false;
+      }
+
+      const date = new Date(value);
+
+      const timestamp = date.getTime();
+
+      if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+        return false;
+      }
+
+      return date.toISOString().startsWith(value);
+    },
     adjustPosition() {
       if (typeof window === 'undefined') return
 

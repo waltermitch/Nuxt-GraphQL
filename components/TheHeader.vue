@@ -39,7 +39,7 @@
             <HeaderNavigation v-if="!onlyLogo" />
           </div>
           <div class="menu-item">
-            <span @click="profile">Profile</span>
+            <span @click="profile">My Profile</span>
           </div>
           <div class="menu-item">
             <span @click="logout">Logout</span>
@@ -227,6 +227,7 @@ export default {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4),
     -2px 0px 4px rgba(0, 0, 0, 0.1);
   border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   display: flex;
   flex-direction: column;
@@ -241,6 +242,7 @@ export default {
     }
     &:last-child {
       border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
     }
     cursor: pointer;
     transition: .2s all;

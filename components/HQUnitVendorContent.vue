@@ -39,7 +39,7 @@
 
             <span> Vendor Term</span>
 
-            <span> Add Vendor to Unit </span>
+            <span> ADD </span>
           </div>
         </template>
 
@@ -71,8 +71,8 @@
               {{
                 unit.vendors &&
                 unit.vendors.find((item) => item.id === vendor.id)
-                  ? 'Remove Vendor From Unit'
-                  : 'Add Vendor to Unit'
+                  ? 'REMOVE'
+                  : 'ADD'
               }}
             </DefaultButton>
           </CustomTableRow>
