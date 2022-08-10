@@ -12,7 +12,11 @@ export default async function ({ app, redirect }) {
     const errorObj = error.graphQLErrors[0]
 
     if (errorObj !== undefined && errorObj.message === 'Unauthenticated.') {
-      app.$apolloHelpers.onLogout()
+      const defaultClient = app.apolloProvider.defaultClient
+      app.$apolloHelpers.onLogout(defaultClient, true)
+      defaultClient.stop()
+      defaultClient.cache.reset()
+      defaultClient.resetStore()
       return redirect('/login')
     }
   }

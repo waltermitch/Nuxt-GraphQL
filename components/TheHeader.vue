@@ -57,10 +57,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Logout from '../graphql/mutations/logout.gql'
 import HeaderNavigation from './HeaderNavigation.vue'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
-
 import Me from '~/graphql/queries/me.query.gql'
 
 export default {
@@ -73,25 +73,28 @@ export default {
       default: false,
     },
   },
-  apollo: {
-  },
   data() {
     return {
-      timer: null,
       avatarResource: '',
 
       isShowDropdown: false,
       isShowSideBar:false,
     }
   },
-  beforeMount() {
-    this.timer = setInterval(function () {
-      this.fetchData();
-    }.bind(this), 2000);
-    this.fetchData();
+  computed: {
+    ...mapGetters ({
+      getUpdated: 'profile/getUpdated'
+    })
   },
-  destroyed() {
-    clearInterval(this.timer);
+  watch: {
+    getUpdated() {
+      this.fetchData()
+    }
+  },
+  beforeMount() {
+    if(!this.onlyLogo) {
+      this.fetchData();
+    }
   },
   methods: {
     fetchData() {
@@ -121,11 +124,14 @@ export default {
       } = await this.$apollo.mutate({
         mutation: Logout,
       })
-
       if (logout.status === 'TOKEN_REVOKED') {
-        this.$apolloHelpers.onLogout()
+        const defaultClient = this.$apolloProvider.defaultClient
+        this.$apolloHelpers.onLogout(defaultClient, true)
+        defaultClient.stop()
+        defaultClient.cache.reset()
+        defaultClient.resetStore()
         this.showSubmitMessage(logout.message, 'success')
-        this.$router.push('/')
+        this.$router.push('/login')
       }
     },
   },

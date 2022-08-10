@@ -105,13 +105,12 @@
 
 <script>
 import { ValidationObserver } from 'vee-validate'
-
+import { mapActions } from 'vuex'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
 import { errorHandlerMixin } from '~/mixins/errorHandlerMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import UpdateProfile from '~/graphql/mutations/profile/updateProfile.mutation.gql'
 import Me from '~/graphql/queries/me.query.gql'
-
 import ProfileAvatar from '~/components/profile/ProfileAvatar.vue'
 import InputWithTitle from '~/components/InputWithTitle.vue'
 import CustomInput from '~/components/CustomInput.vue'
@@ -153,6 +152,9 @@ export default {
         this.fetchData();
     },
     methods: {
+        ...mapActions({
+            setUpdated: 'profile/setUpdated'
+        }),
         fetchData() {
             this.me = {};
             this.getMyData().then((me) => {
@@ -198,6 +200,7 @@ export default {
                     null,
                     true
                 )
+                this.setUpdated(this.profileInput.avatar);
                 this.fetchData();
             }
         },

@@ -52,9 +52,13 @@ export default {
       })
 
       if (logout.status === 'TOKEN_REVOKED') {
-        this.$apolloHelpers.onLogout()
+        const defaultClient = this.$apolloProvider.defaultClient
+        this.$apolloHelpers.onLogout(defaultClient, true)
+        defaultClient.stop()
+        defaultClient.cache.reset()
+        defaultClient.resetStore()
         this.showSubmitMessage(logout.message, 'success')
-        this.$router.push('/')
+        this.$router.push('/login')
       }
     },
   }

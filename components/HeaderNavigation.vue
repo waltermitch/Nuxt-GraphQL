@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       mutableNav: {},
+      RolePrivileges: {}
     }
   },
   computed: {
@@ -47,9 +48,17 @@ export default {
     },
   },
   mounted() {
-    this.verifyPermissions();
+    this.getRoleRivileges()
   },
   methods: {
+    async getRoleRivileges() {
+      const roleResponse = await this.$apollo.query({
+        query: RolePrivileges,
+        fetchPolicy: 'network-only'
+      });
+      this.RolePrivileges = roleResponse.data.RolePrivileges;
+      this.verifyPermissions();
+    },
     verifyPermissions() {
       this.mutableNav = [];
       this.redirectTabs = {};
@@ -62,6 +71,7 @@ export default {
           addItem = false;
 
           for (const subItem of item.permissionTabs) {
+            
             const permissionsFilter = (subItem.permission && this.RolePrivileges) ? !!this.RolePrivileges.filter(privilege => {
               return (privilege.slugName === subItem.permission.slugName) && (privilege.permissionType === subItem.permission.permissionType)
             }).length : null;
@@ -70,8 +80,9 @@ export default {
               returnTabs.push(subItem);
           }
 
-          if (returnTabs.length)
+          if (returnTabs.length) {
             addItem = true;
+          }
         }
 
         if (addItem) {
