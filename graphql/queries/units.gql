@@ -1,7 +1,7 @@
 #import '../fragments/unit.gql'
 
-query Units($search: String) {
-  units(code: $search) {
+query Units {
+  units {
     ...UnitFragment
   }
 }

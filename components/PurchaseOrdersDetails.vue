@@ -189,7 +189,7 @@ export default {
       this.vendor = vendor
     },
     onChangeFloatValue() {
-      this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal).toFixed(2));
+      this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal));
     },
     onChangeDateValue(value) {
       this.$store.commit('purchaseOrders/SET_PURCHASE_DATE', value)

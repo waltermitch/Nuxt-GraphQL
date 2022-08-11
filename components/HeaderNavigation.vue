@@ -44,11 +44,11 @@ export default {
   },
   watch: {
     headerTabs() {
-      this.verifyPermissions();
+      this.getRoleRivileges();
     },
   },
   mounted() {
-    this.getRoleRivileges()
+    this.getRoleRivileges();
   },
   methods: {
     async getRoleRivileges() {

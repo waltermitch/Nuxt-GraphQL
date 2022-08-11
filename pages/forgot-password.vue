@@ -5,7 +5,7 @@
         <template #title>Email</template>
 
         <template #input>
-          <CustomInput v-model="email" type="email" rules="email|required" />
+          <CustomInput v-model="email" type="email" rules="email|required" name="Email"/>
         </template>
       </InputWithTitle>
 

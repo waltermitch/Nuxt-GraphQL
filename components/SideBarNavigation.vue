@@ -33,17 +33,26 @@ export default {
   data() {
     return {
       mutableNav: {},
+      RolePrivileges: {}
     }
   },
   watch: {
     navTabs() {
-      this.verifyPermissions();
+      this.getRolePrivileges();
     },
   },
   mounted() {
-    this.verifyPermissions();
+    this.getRolePrivileges();
   },
   methods: {
+    async getRolePrivileges() {
+      const roleResponse = await this.$apollo.query({
+        query: RolePrivileges,
+        fetchPolicy: 'network-only'
+      });
+      this.RolePrivileges = roleResponse.data.RolePrivileges;
+      this.verifyPermissions();
+    },
     verifyPermissions() {
       this.mutableNav = [];
 

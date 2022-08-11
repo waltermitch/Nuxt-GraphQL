@@ -14,8 +14,8 @@
         </div>
       </template>
 
-      <template v-if="units" #content>
-        <CustomTableRow v-for="unit in units" :key="unit.id" class="table-row">
+      <template v-if="queryData.data" #content>
+        <CustomTableRow v-for="unit in queryData.data" :key="unit.id" class="table-row">
           <span>
             {{ unit.code }}
           </span>
@@ -42,21 +42,63 @@
             @confirm-delete="confirmDelete(unit.id)"
           />
         </CustomTableRow>
+
+        <!-- pagination -->
+          <PaginationRow v-if="queryData.data.length">
+            <div :class="(!isHide || isAdd ? 'show' : 'hide') + ' button-bar'">
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="firstPage"
+              > << </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage == 1"
+                :loading="fetchingData"
+                @event="prevPage"
+              > < </PaginationButton>
+              <PaginationInput
+                v-model="page"
+                :disabled="fetchingData"
+                @change="goToPage"
+                @event="goToPage"
+                >
+              </PaginationInput>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="nextPage"
+              > > </PaginationButton>
+              <PaginationButton
+                :disabled="currentPage >= queryData.paginatorInfo.lastPage"
+                :loading="fetchingData"
+                @event="lastPage"
+              > >> </PaginationButton>
+            </div>
+            <div class='description-bar'>
+              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            </div>
+          </PaginationRow>
+          <!-- pagination -->
       </template>
     </CustomTable>
   </PageContentWrapper>
 </template>
 
 <script>
-import Units from '../graphql/queries/units.gql'
+import UnitList from '../graphql/queries/unitList.gql'
 import DeleteUnit from '../graphql/mutations/unit/deleteUnit.gql'
 import PageContentWrapper from './PageContentWrapper.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow'
 import CustomTableIconsColumn from './CustomTableIconsColumn'
+import PaginationRow from './PaginationRow.vue'
+import PaginationButton from './PaginationButton.vue'
+import PaginationInput from './PaginationInput.vue'
 import { unitMaintenanceMixin } from '~/mixins/unitMaintenanceMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { mutationMixin } from '~/mixins/mutationMixin'
+import { paginatorMixin } from '~/mixins/paginatorMixin'
+
 export default {
   name: 'HQUnitsTableContent',
   components: {
@@ -64,8 +106,11 @@ export default {
     CustomTable,
     CustomTableRow,
     CustomTableIconsColumn,
+    PaginationRow,
+    PaginationButton,
+    PaginationInput,
   },
-  mixins: [unitMaintenanceMixin, tableActionsMixin, mutationMixin],
+  mixins: [unitMaintenanceMixin, tableActionsMixin, mutationMixin, paginatorMixin],
   props: {
     search: {
       type: String,
@@ -74,33 +119,31 @@ export default {
   },
   data() {
     return {
-      units: {},
+      query: UnitList,
+      queryName: 'unitList',
+      currentPage: 1,
+      queryData: {},
+      hasQueryVariable: true,
       queryVariable: {
-        search: '',
+        search: '%',
       },
+
       timeout: null
     }
   },
   watch: {
     search() {
       clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => this.fetchData(), 500)
+      this.timeout = setTimeout(() => this.showFilterUnits(), 500)
     }
   },
   beforeMount() {
     this.fetchData()
   },
   methods: {
-    async fetchData() {
-      if(this.search !== '') this.queryVariable.search = '%' + this.search + '%';
-      else this.queryVariable.search = '%';
-
-      const queryData = await this.$apollo.query({
-          query: Units,
-          fetchPolicy: 'network-only',
-          variables: this.queryVariable,
-      });
-      this.units = queryData.data.units
+    showFilterUnits() {
+      this.queryVariable.search = '%' + this.search + '%'
+      this.goToPage(1)
     },
     editUnit(unit) {
       const propertyList = ['administrativeAmount', 'administrativePercent', 'benefitsAmount', 'benefitsPercent', 'businessInsuranceAmount', 'commissionAmount', 'commissionPercent', 'managementAmount', 'managementPercent', 'payrollTaxPercent', 'supportAmount', 'supportPercent', 'vacationAmount', 'vendingIncome'];
@@ -112,14 +155,16 @@ export default {
       this.setUnitID(unit.id)
       this.showAddUnit()
     },
-    confirmDelete(id) {
-      this.mutationAction(
+    async confirmDelete(id) {
+      const res = await this.mutationAction(
         DeleteUnit,
         { id },
-        Units,
+        null,
         'Delete unit success',
         'Delete unit error'
       )
+      this.clearTableActionState();
+      res !== false && this.goToPage((this.currentPage > 1 && this.queryData.paginatorInfo.count === 1) ? this.currentPage - 1 : null);
     },
   },
 }

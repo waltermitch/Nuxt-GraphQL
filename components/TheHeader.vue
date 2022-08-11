@@ -6,7 +6,7 @@
           <img src="~assets/images/header/logo.svg" />
         </NuxtLink>
 
-        <button type="button" class="btn-humburger" @click="setIsShowSideBar"><img src="~assets/images/icons/menu.svg"></button>
+        <button v-if="!onlyLogo" type="button" class="btn-humburger" @click="setIsShowSideBar"><img src="~assets/images/icons/menu.svg"></button>
 
         <div class="nav">
           <HeaderNavigation v-if="!onlyLogo" />
@@ -38,11 +38,12 @@
           <div class="nav--mobile">
             <HeaderNavigation v-if="!onlyLogo" />
           </div>
-          <div class="menu-item">
-            <span @click="profile">My Profile</span>
+
+          <div class="menu-item" @click="profile">
+            My Profile
           </div>
-          <div class="menu-item">
-            <span @click="logout">Logout</span>
+          <div class="menu-item" @click="logout">
+            Logout
           </div>
         </div>
         <!-- <div v-if="isShowDropdown" class="logout">
@@ -157,8 +158,6 @@ export default {
   }
 }
 
-
-
 .btn-humburger{
   background: transparent;
   @media screen and (min-width: $lg) {
@@ -243,6 +242,7 @@ export default {
     padding: 10px;
     display: flex;
     align-items: center;
+
     &:not(:last-child) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
@@ -250,6 +250,7 @@ export default {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
     }
+
     cursor: pointer;
     transition: .2s all;
     &:hover {
