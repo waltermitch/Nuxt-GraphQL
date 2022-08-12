@@ -222,17 +222,12 @@
       </InputRow>
 
       <div class="buttons-area">
-        <!-- <DefaultButton
-          button-color-gamma="red"
-          :disabled="invalid"
-          @event="unitID ? updateUnit() : addUnit()"
-        > -->
         <DefaultButton
           button-color-gamma="red"
           :disabled="invalid"
           @event="unitID ? updateUnit() : addUnit()"
         >
-          Save
+          {{ unitID ? 'Edit' : 'Save' }}
         </DefaultButton>
 
         <DefaultButton button-color-gamma="white" @event="cancel">

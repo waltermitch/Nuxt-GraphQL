@@ -107,7 +107,7 @@
       <template #title>Left to distribute</template>
 
       <template #input>
-        <span>{{ Number(leftToDistribute).toFixed(2) }}$</span>
+        <span>${{ Number(leftToDistribute).toFixed(2) }}</span>
       </template>
     </InputWithTitle>
 
@@ -298,7 +298,7 @@ export default {
       }
     },
     async CreatePurchaseOrder() {
-      await this.mutationAction(
+      const res = await this.mutationAction(
         CreatePurchaseOrder,
         {
           PurchaseInput: {
@@ -338,7 +338,10 @@ export default {
           activePeriod: true,
         }
       )
-      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', PURCHASE_ORDER)
+      console.log(res)
+      if(res) {
+        this.cancelCreate()
+      }
     },
     async UpdatePurchaseOrder() {
       await this.mutationAction(
@@ -408,6 +411,14 @@ export default {
         }
       )
       this.$router.push('/review/weekly-purchases')
+    },
+    cancelEdit() {
+      this.cancelEvent()
+      this.$router.push('/review/weekly-purchases')
+    },
+    cancelCreate() {
+      this.cancelEvent()
+      this.$store.commit('purchaseOrders/SET_PURCHASE_ORDER', { ...PURCHASE_ORDER })
     },
     purchaseOrderAction() {
       this.getIsEdit ? this.UpdatePurchaseOrder() : this.CreatePurchaseOrder()

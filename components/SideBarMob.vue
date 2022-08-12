@@ -7,9 +7,9 @@
         </button>
       </div>
       <HeaderNavigation/>
-      <div class="sidebar-mob__item">
+      <div class="sidebar-mob__item" @click="logout">
         <img src="~/assets/images/icons/logout-svgrepo-com.svg" width="22" height="22" class="icon"/>
-        <span class="logout-item caption" @click="logout">Logout</span>
+        <span class="logout-item caption">Logout</span>
       </div>
       <div class="sidebar-mob__page">
         <SideBarNavigation :nav-tabs="menuItem"/>
@@ -26,6 +26,7 @@ import HeaderNavigation from './HeaderNavigation.vue'
 import SideBarNavigation from './SideBarNavigation.vue'
 import {HOME_NAV_TABS} from '~/constants/constants'
 import {sideBarNavTabsMixin} from "~/mixins/sideBarNavTabsMixin"
+import {submitMessagesMixin} from '~/mixins/submitMessagesMixin'
 
 export default {
   name: "SideBarMob",
@@ -33,7 +34,7 @@ export default {
   components: {
     HeaderNavigation, SideBarNavigation
   },
-  mixins: [sideBarNavTabsMixin(HOME_NAV_TABS)],
+  mixins: [sideBarNavTabsMixin(HOME_NAV_TABS), submitMessagesMixin],
   computed: {
     ...mapGetters({
       isShowSideBar: 'sidebar/getIsShowSideBar',
@@ -52,9 +53,13 @@ export default {
       })
 
       if (logout.status === 'TOKEN_REVOKED') {
-        this.$apolloHelpers.onLogout()
+        const defaultClient = this.$apolloProvider.defaultClient
+        this.$apolloHelpers.onLogout(defaultClient, true)
+        defaultClient.stop()
+        defaultClient.cache.reset()
+        defaultClient.resetStore()
         this.showSubmitMessage(logout.message, 'success')
-        this.$router.push('/')
+        this.$router.push('/login')
       }
     },
   }
@@ -89,6 +94,11 @@ export default {
     display: flex;
     align-items: center;
     padding: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(#000, 0.2);
+    }
   }
 
   &__close {

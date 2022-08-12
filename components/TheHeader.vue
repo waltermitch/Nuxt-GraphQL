@@ -6,7 +6,7 @@
           <img src="~assets/images/header/logo.svg" />
         </NuxtLink>
 
-        <button type="button" class="btn-humburger" @click="setIsShowSideBar"><img src="~assets/images/icons/menu.svg"></button>
+        <button v-if="!onlyLogo" type="button" class="btn-humburger" @click="setIsShowSideBar"><img src="~assets/images/icons/menu.svg"></button>
 
         <div class="nav">
           <HeaderNavigation v-if="!onlyLogo" />
@@ -38,11 +38,12 @@
           <div class="nav--mobile">
             <HeaderNavigation v-if="!onlyLogo" />
           </div>
-          <div class="menu-item">
-            <span @click="profile">My Profile</span>
+
+          <div class="menu-item" @click="profile">
+            My Profile
           </div>
-          <div class="menu-item">
-            <span @click="logout">Logout</span>
+          <div class="menu-item" @click="logout">
+            Logout
           </div>
         </div>
         <!-- <div v-if="isShowDropdown" class="logout">
@@ -57,10 +58,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Logout from '../graphql/mutations/logout.gql'
 import HeaderNavigation from './HeaderNavigation.vue'
 import { submitMessagesMixin } from '~/mixins/submitMessagesMixin'
-
 import Me from '~/graphql/queries/me.query.gql'
 
 export default {
@@ -73,25 +74,28 @@ export default {
       default: false,
     },
   },
-  apollo: {
-  },
   data() {
     return {
-      timer: null,
       avatarResource: '',
 
       isShowDropdown: false,
       isShowSideBar:false,
     }
   },
-  beforeMount() {
-    this.timer = setInterval(function () {
-      this.fetchData();
-    }.bind(this), 2000);
-    this.fetchData();
+  computed: {
+    ...mapGetters ({
+      getUpdated: 'profile/getUpdated'
+    })
   },
-  destroyed() {
-    clearInterval(this.timer);
+  watch: {
+    getUpdated() {
+      this.fetchData()
+    }
+  },
+  beforeMount() {
+    if(!this.onlyLogo) {
+      this.fetchData();
+    }
   },
   methods: {
     fetchData() {
@@ -121,11 +125,14 @@ export default {
       } = await this.$apollo.mutate({
         mutation: Logout,
       })
-
       if (logout.status === 'TOKEN_REVOKED') {
-        this.$apolloHelpers.onLogout()
+        const defaultClient = this.$apolloProvider.defaultClient
+        this.$apolloHelpers.onLogout(defaultClient, true)
+        defaultClient.stop()
+        defaultClient.cache.reset()
+        defaultClient.resetStore()
         this.showSubmitMessage(logout.message, 'success')
-        this.$router.push('/')
+        this.$router.push('/login')
       }
     },
   },
@@ -150,8 +157,6 @@ export default {
     }
   }
 }
-
-
 
 .btn-humburger{
   background: transparent;
@@ -237,6 +242,7 @@ export default {
     padding: 10px;
     display: flex;
     align-items: center;
+
     &:not(:last-child) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
@@ -244,6 +250,7 @@ export default {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
     }
+
     cursor: pointer;
     transition: .2s all;
     &:hover {

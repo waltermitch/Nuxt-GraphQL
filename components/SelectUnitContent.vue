@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import InputWithTitle from './InputWithTitle.vue'
 import CustomSelect from './CustomSelect.vue'
 import DefaultButton from './DefaultButton.vue'
@@ -46,30 +47,34 @@ export default {
   mixins: [mutationMixin, meMixin],
   data() {
     return {
-      unit: '',
       selectError: false,
     }
+  },
+  computed: {
+    ...mapGetters({
+      unit: 'unit/getUnit',
+    })
   },
   methods: {
     async submitEvent() {
       if (!this.unit) {
         this.selectError = true
+      } else {
+
+        const { id } = this.unit
+
+        await this.mutationAction(
+          SelectUnit,
+          { id },
+          Me,
+          'Select Unit Success',
+          'select unit error'
+        )
       }
-
-      const { id } = this.unit
-
-      await this.mutationAction(
-        SelectUnit,
-        { id },
-        Me,
-        'Select Unit Success',
-        'select unit error'
-      )
-
       // this.$router.push('/home/close-register')
     },
     selectUnit(unit) {
-      this.unit = unit
+      this.$store.commit('unit/SET_UNIT', unit)
     },
   },
 }

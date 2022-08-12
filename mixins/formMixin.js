@@ -17,7 +17,9 @@ export const formMixin = {
       if (this.$refs.form) {
         this.$refs.form.reset()
         this.clearState()
-        this.setShowMessage(false)
+        setTimeout(() => {
+          this.setShowMessage(false)
+        }, 4000)
       }
     },
     saveEvent() {
