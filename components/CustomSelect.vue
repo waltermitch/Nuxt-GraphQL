@@ -11,7 +11,7 @@
       @click="disabled ? null : toggleSelect()"
     >
       <span v-if="doNotPreselect && !selected && !selectedOptions"
-        >Select some</span
+        >-- Select --</span
       >
       <span v-if="disabled">{{ selected && selected[selectBy] }}</span>
       <span v-else-if="multiSelect">
@@ -295,6 +295,7 @@ export default {
   cursor: pointer;
   border: 1px solid gainsboro;
   border-radius: 3px;
+  font-size: 14px;
 
   &--opened {
     border-radius: 3px 3px 0px 0px;
@@ -358,6 +359,7 @@ export default {
   color: #000;
   background: #fff;
   z-index: 2;
+  font-size: 14px;
   cursor: pointer;
 
   &:hover {
