@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle class="unit-select">
           <template #title> Unit </template>
 
           <template #input>
@@ -302,7 +302,7 @@ export default {
   computed: {
     unitRegisters() {
       return this.registers.filter(
-        (register) => register.unit.id === this.unit.id
+        (register) => register.unit?.id === this.unit.id
       )
     },
   },
@@ -438,6 +438,10 @@ export default {
   margin-bottom: 20px;
 }
 
+.multiselect__content-wrapper {
+  width: auto;
+}
+
 .multiselect__tags {
   border: 1px solid gainsboro;
   border-radius: 3px;
@@ -517,4 +521,5 @@ export default {
 .buttons-area {
   margin-top: 25px;
 }
+
 </style>

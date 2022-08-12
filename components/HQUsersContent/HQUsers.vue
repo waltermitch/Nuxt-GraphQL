@@ -29,11 +29,21 @@
                   {{ user.units.map((unit) => unit.name).join(', ') }}
                 </span>
               </td>
-              <td class="text-center">
-                <span v-if="user.isAdmin">+</span><span v-else>-</span>
+              <td>
+                <CustomRadioButton 
+                  v-if="user"
+                  class="radio-center"
+                  :is-active="user.isAdmin"
+                  disabled
+                />
               </td>
-              <td class="text-center">
-                <span v-if="user.isActive">+</span><span v-else>-</span>
+              <td>
+                <CustomRadioButton 
+                  v-if="user"
+                  class="radio-center"
+                  :is-active="user.isActive"
+                  disabled
+                />
               </td>
               <td>
                 <CustomTableIconsColumn
@@ -80,7 +90,7 @@
             > >> </PaginationButton>
           </div>
           <div class='description-bar'>
-            Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+            Showing {{queryData.paginatorInfo.firstItem}}-{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
           </div>
         </PaginationRow>
         <!-- pagination -->
@@ -229,6 +239,10 @@ export default {
 
 .text-center {
   text-align: center !important;
+}
+
+.radio-center {
+  flex-direction: column;
 }
 
 table {

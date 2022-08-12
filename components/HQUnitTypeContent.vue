@@ -2,8 +2,8 @@
   <PageContentWrapper>
     <LoadingBar v-if="$apollo.loading"/>
     <div v-else class="header">
-      <div class="header-body">
-        <InputRow class="input-row">
+      <div class="unit-type-desc">
+        <InputRow>
           <InputWithTitle class="unit-select">
             <template #title> Unit</template>
 
@@ -30,7 +30,7 @@
           </InputWithTitle>
         </InputRow>
 
-        <InputRow v-if="unit && unit.unitType" class="input-row">
+        <InputRow v-if="unit && unit.unitType">
           <InputWithTitle>
             <template #title> Unit Type ID</template>
 
@@ -364,10 +364,26 @@ export default {
   align-items: baseline;
   justify-content: space-between;
 
-  .header-body {
+  .unit-type-desc {
     width: 100%;
-  }
+
+    .input-row:first-child {
   
+      @media screen and (max-width: $md) {
+        flex-direction: column;
+        
+        div:first-child {
+          margin-bottom: 10px;
+        }
+      }
+
+      .unit-select {
+        min-width: 240px;
+        max-width: fit-content !important;
+      }
+    }
+  }
+
   .table-row {
     padding: 12px 0;
   }
@@ -404,22 +420,6 @@ export default {
     @media screen and (max-width: $md) {
       grid-template-columns: 80px 150px auto 250px;
     }
-  }
-}
-
-.input-row:first-child {
-  
-  @media screen and (max-width: $md) {
-    flex-direction: column;
-    
-    div:first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  .unit-select {
-    min-width: 240px;
-    max-width: fit-content !important;
   }
 }
 

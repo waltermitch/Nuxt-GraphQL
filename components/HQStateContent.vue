@@ -144,7 +144,7 @@
               > >> </PaginationButton>
             </div>
             <div class='description-bar'>
-              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+              Showing {{queryData.paginatorInfo.firstItem}}-{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
             </div>
           </PaginationRow>
           <!-- pagination -->
@@ -173,7 +173,7 @@
               rules="required|double|between:0,100"
               do-not-show-error-message
               is-float="true"
-              name='"Sales Tax - Vending"'
+              name='"Sa       les Tax - Vending"'
               @change="onChangeFloatValue('salesTaxVending')"
             />
 

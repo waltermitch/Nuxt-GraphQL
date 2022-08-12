@@ -1,5 +1,5 @@
-import { addPercentSign } from '~/helpers/helpers'
 
+import { addPercentSign } from '~/helpers/helpers'
 export const tableActionsMixin = {
   data() {
     return {

@@ -106,7 +106,7 @@
               > >> </PaginationButton>
             </div>
             <div class='description-bar'>
-              Showing {{queryData.paginatorInfo.firstItem}}~{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
+              Showing {{queryData.paginatorInfo.firstItem}}-{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
             </div>
           </PaginationRow>
           <!-- pagination -->

@@ -3,7 +3,7 @@
   <PageContentWrapper v-else>
     <div class="header">
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle class="unit-select">
           <template #title> Unit </template>
 
           <template #input>
@@ -31,7 +31,7 @@
       </InputRow>
 
       <InputRow v-if="isAttachGlAccounts">
-        <InputWithTitle>
+        <InputWithTitle class="gl-account-select">
           <template #title> GL Account </template>
 
           <template #input>
@@ -48,7 +48,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle v-if="glAccount && glAccount.child">
+        <InputWithTitle v-if="glAccount && glAccount.child" class="gl-sub-account-select">
           <template #title> GL Sub Account </template>
 
           <template #input>
@@ -347,8 +347,6 @@ export default {
   },
   watch: {
     unit() {
-      console.log(this.unit)
-
       this.glAccountsTmp = this.unit.glAccounts
       this.fetchAccountData()
     },
@@ -368,7 +366,7 @@ export default {
   },
   methods: {
     fetchAccountData() {
-      const glAccounts = this.glAccountsTmp ? this.glAccountsTmp.filter((data) => data.name.toLowerCase().includes(this.searchAccount.toLowerCase()) || data.id.includes(this.searchAccount)) : []
+      const glAccounts = this.glAccountsTmp?.filter((data) => data.name.toLowerCase().includes(this.searchAccount.toLowerCase()) || data.id.includes(this.searchAccount))
       this.unit.glAccounts = glAccounts
     },
     async fetchTypeData() {
@@ -598,6 +596,21 @@ export default {
   display: block;
   top: 0;
 }
+
+.input-row {
+  @media screen and (max-width: $md) {
+    flex-direction: column;
+
+    div:first-child {
+      margin-bottom: 10px;
+    }
+  }
+
+  .unit-select, .gl-account-select, .gl-sub-account-select {
+    min-width: 240px;
+    max-width: fit-content !important;
+  }
+}
 </style>
 <style lang="scss" scoped>
 .table-row {
@@ -667,4 +680,5 @@ export default {
     margin-right: 10px;
   }
 }
+
 </style>

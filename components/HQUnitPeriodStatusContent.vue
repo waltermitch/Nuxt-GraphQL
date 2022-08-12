@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <div class="header">
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle class="unit-select">
           <template #title> Unit </template>
 
           <template #input>

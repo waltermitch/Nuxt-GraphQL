@@ -218,7 +218,7 @@ export default {
       return (
         this.registers &&
         this.registers.filter(
-          (register) => register.unit.id === this.me.selectedUnit.id
+          (register) => register.unit?.id === this.me.selectedUnit.id
         )
       )
     },

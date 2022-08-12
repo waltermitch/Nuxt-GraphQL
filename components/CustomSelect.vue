@@ -290,7 +290,7 @@ export default {
 
 .selected {
   height: 100%;
-  padding: 10px 16px 10px 8px;
+  padding: 10px 36px 10px 8px;
   background: #fff;
   cursor: pointer;
   border: 1px solid gainsboro;
@@ -326,7 +326,7 @@ export default {
 }
 
 .options {
-  position: absolute;
+  // position: absolute;
   left: 0;
   right: 0;
   z-index: 1;
@@ -354,6 +354,7 @@ export default {
 
 .option {
   padding: 10px 16px 10px 8px;
+  width: auto;
   color: #000;
   background: #fff;
   z-index: 2;

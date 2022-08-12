@@ -64,10 +64,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    value: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
   },
   methods: {
     setIsActive() {
-      this.$emit('set-is-active')
+      this.$emit('set-is-active', this.value)
     },
   },
 }
