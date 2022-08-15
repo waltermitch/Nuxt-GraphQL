@@ -8,7 +8,7 @@
             <tr>
               <!-- <th width="50">ID</th> -->
               <th>First Name</th>
-              <th>Lats Name</th>
+              <th>Last Name</th>
               <th>Email</th>
               <th class="text-center">Role Name</th>
               <th class="tables__col-5">Units</th>

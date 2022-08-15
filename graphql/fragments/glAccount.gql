@@ -6,6 +6,4 @@ fragment GlAccountFragment on GlAccount {
   glTypeCode {
     ...GlTypeCodeFragment
   }
-  createdAt
-  updatedAt
 }

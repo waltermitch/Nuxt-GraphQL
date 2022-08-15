@@ -24,7 +24,7 @@
       </InputRow>
     </div>
 
-    <CustomTable v-if="queryData.data" :w-table="500">
+    <CustomTable v-if="units" :w-table="500">
       <template #header>
         <div class="table-row">
           <CustomRadioButton
@@ -39,7 +39,7 @@
       </template>
 
       <template #content>
-        <CustomTableRow v-for="item in queryData.data" :key="item.id" class="table-row">
+        <CustomTableRow v-for="item in units" :key="item.id" class="table-row">
           <CustomRadioButton
             :is-active="item.selected"
             @set-is-active="selectItem(item)"
@@ -53,44 +53,6 @@
             {{ item.name }}
           </span>
         </CustomTableRow>
-
-        <!-- pagination -->
-        <PaginationRow v-if="queryData.data.length">
-          <div :class="'show button-bar'">
-            <PaginationButton
-              :disabled="currentPage == 1"
-              :loading="fetchingData"
-              @event="firstPage"
-            > << </PaginationButton>
-            <PaginationButton
-              :disabled="currentPage == 1"
-              :loading="fetchingData"
-              @event="prevPage"
-            > < </PaginationButton>
-            <PaginationInput
-              v-model="page"
-              :disabled="fetchingData"
-              @change="goToPage"
-              @event="goToPage"
-              >
-            </PaginationInput>
-            <PaginationButton
-              :disabled="currentPage >= queryData.paginatorInfo.lastPage"
-              :loading="fetchingData"
-              @event="nextPage"
-            > > </PaginationButton>
-            <PaginationButton
-              :disabled="currentPage >= queryData.paginatorInfo.lastPage"
-              :loading="fetchingData"
-              @event="lastPage"
-            > >> </PaginationButton>
-          </div>
-          <div class='description-bar'>
-            Showing {{queryData.paginatorInfo.firstItem}}-{{queryData.paginatorInfo.lastItem}} of {{queryData.paginatorInfo.total}}
-          </div>
-        </PaginationRow>
-        <!-- pagination -->
-
       </template>
     </CustomTable>
 
@@ -113,19 +75,13 @@ import CustomSelect from './CustomSelect.vue'
 import CustomTable from './CustomTable.vue'
 import CustomTableRow from './CustomTableRow.vue'
 import CustomRadioButton from './CustomRadioButton.vue'
-import PaginationRow from './PaginationRow.vue'
-import PaginationButton from './PaginationButton.vue'
-import PaginationInput from './PaginationInput.vue'
 import InputRow from './InputRow.vue'
 import Units from '~/graphql/queries/units.gql'
-import UnitList from '~/graphql/queries/unitList.gql'
 import Periods from '~/graphql/queries/periods.gql'
 import ExportData from '~/graphql/mutations/reports/exportData.gql'
 import { formatDateFromAPI } from '~/helpers/helpers'
 import { mutationMixin } from '~/mixins/mutationMixin'
-import { paginatorMixin } from '~/mixins/paginatorMixin'
 import { EXPORT_TYPES } from '~/constants/exportTypes'
-
 export default {
   name: 'HQExportPurchases',
   components: {
@@ -136,9 +92,6 @@ export default {
     CustomTableRow,
     CustomRadioButton,
     InputRow,
-    PaginationRow,
-    PaginationButton,
-    PaginationInput,
   },
   apollo: {
     units: {
@@ -151,14 +104,9 @@ export default {
       },
     },
   },
-  mixins: [mutationMixin, paginatorMixin],
+  mixins: [mutationMixin],
   data() {
     return {
-      query: UnitList,
-      queryName: "unitList",
-      currentPage: 1,
-      queryData: {},
-      
       periodEndDate: '',
       selectAllUnits: false,
       exportType: '',
@@ -184,9 +132,6 @@ export default {
         this.selectAllUnits = true
       }
     },
-  },
-  beforeMount(){
-    this.fetchData();
   },
   methods: {
     formatDateFromAPI,
