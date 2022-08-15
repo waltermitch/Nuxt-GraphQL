@@ -1,5 +1,3 @@
-#import './unit.gql'
-
 fragment RegisterFragment on Register {
   id
   code
@@ -14,8 +12,6 @@ fragment RegisterFragment on Register {
     name
   }
   unit {
-    ...UnitFragment
+    id
   }
-  createdAt
-  updatedAt
 }

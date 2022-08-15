@@ -28,8 +28,8 @@
         </InputWithTitle>
       </InputRow>
 
-      <LoadingBar v-if="$apollo.loading" />
-      <CustomTable v-else-if="unit" class="table-register" :w-table="1100">
+      <!-- <LoadingBar v-if="$apollo.loading" /> -->
+      <CustomTable v-if="unit" class="table-register" :w-table="1100">
         <template #header>
           <div class="table-row">
             <span>Code</span>

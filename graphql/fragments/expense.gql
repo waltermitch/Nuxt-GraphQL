@@ -1,29 +1,32 @@
-#import './unit.gql'
-#import './vendor.gql'
-#import './glAccount.gql'
 #import './expenseType.gql'
-#import '../fragments/period.gql'
 
 fragment ExpenseFragment on Expense {
   id
   unit {
-    ...UnitFragment
+    id
+    code
+    name
   }
   comments
   vendor {
-    ...VendorFragment
+    id
+    code
+    name
   }
   period {
-    ...PeriodFragment
+    id
+    periodEnd
+    pivot {
+      isClosed
+    }
   }
   expenseDate
   glAccount {
-    ...GlAccountFragment
+    id
+    name
   }
   expenseType {
     ...ExpenseTypeFragment
   }
   amount
-  createdAt
-  updatedAt
 }

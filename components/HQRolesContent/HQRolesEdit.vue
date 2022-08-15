@@ -36,30 +36,33 @@
                 <td>{{ permissionNames[i] }}</td>
                 <td>
                   <div class="checkbox-hld">
-                    <CustomCheckbox
+                    <CustomRadioButton
                       v-if="permissionCapabilities[i].isView"
+                      :is-active="permission.isView"
                       :value="{menuNum: i, actionType: 'isView', checked: permission.isView}"
-                      @update-checkbox="updateCheckbox"
+                      @set-is-active="updateCheckbox"
                     />
                     <span v-else>-</span>
                   </div>
                 </td>
                 <td>
                   <div class="checkbox-hld">
-                    <CustomCheckbox
+                    <CustomRadioButton
                       v-if="permissionCapabilities[i].isCreate"
+                      :is-active="permission.isCreate"
                       :value="{menuNum: i, actionType: 'isCreate', checked: permission.isCreate}"
-                      @update-checkbox="updateCheckbox"
+                      @set-is-active="updateCheckbox"
                     />
                     <span v-else>-</span>
                   </div>
                 </td>
                 <td>
                   <div class="checkbox-hld">
-                    <CustomCheckbox
+                    <CustomRadioButton
                       v-if="permissionCapabilities[i].isModify"
+                      :is-active="permission.isModify"
                       :value="{menuNum: i, actionType: 'isModify', checked: permission.isModify}"
-                      @update-checkbox="updateCheckbox"
+                      @set-is-active="updateCheckbox"
                     />
                     <span v-else>-</span>
                   </div>

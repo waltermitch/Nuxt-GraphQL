@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
-    <LoadingBar v-if="$apollo.loading"/>
-    <div v-else class="header">
+    <!-- <LoadingBar v-if="$apollo.loading"/> -->
+    <div class="header">
       <div class="unit-type-desc">
         <InputRow>
           <InputWithTitle class="unit-select">

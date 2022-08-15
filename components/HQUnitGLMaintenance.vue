@@ -1,6 +1,6 @@
 <template>
-  <LoadingBar v-if="$apollo.loading" />
-  <PageContentWrapper v-else>
+  <!-- <LoadingBar v-if="$apollo.loading" /> -->
+  <PageContentWrapper>
     <div class="header">
       <InputRow>
         <InputWithTitle class="unit-select">
@@ -348,7 +348,7 @@ export default {
   watch: {
     unit() {
       this.glAccountsTmp = this.unit.glAccounts
-      this.fetchAccountData()
+      // this.fetchAccountData()
     },
     glAccount() {
       this.glSubAccount = ''
