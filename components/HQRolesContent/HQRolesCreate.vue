@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="input-row input-row--offset mb-20">
-        <div class="input-col">
+        <div class="input-col full-col">
           <InputWithTitle>
             <template #title> Permissions</template>
           </InputWithTitle>
@@ -263,6 +263,14 @@ export default {
 
   .permissions-table__col-5 {
     min-width: 200px;
+  }
+}
+
+.full-col {
+  min-width: 100% !important;
+
+  .permissions-table {
+    width: 100% !important;
   }
 }
 </style>
