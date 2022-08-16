@@ -1,7 +1,7 @@
 <template>
   <div class="select-container">
     <div class="select-content">
-      <InputWithTitle>
+      <InputWithTitle class="select-unit">
         <template #title>Select Unit</template>
 
         <template #input>
@@ -9,6 +9,7 @@
           <CustomSelect
             v-if="me"
             :options="me.units"
+            class="unit-select"
             select-by="name"
             select-by-second="id"
             :selected-item="selectedUnit"
@@ -91,8 +92,17 @@ export default {
 
   &-content {
     width: 100%;
-    max-width: 240px;
+    max-width: 300px;
   }
+}
+
+.select-unit {
+  width: 300px;
+  max-width: 300px !important;
+}
+
+.unit-select {
+  max-width: 300px;
 }
 
 .button-area {
