@@ -18,38 +18,10 @@
       </InputWithTitle>
 
       <InputWithTitle>
-        <template #title>Net Total</template>
-
-        <!-- //TO-DO PECZIS: Calculations -->
-        <template #input>
-          <CustomInput v-model="netTotal" readonly disabled symbol="$" is-float="true" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
         <template #title>Last Non-Resettable</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" is-float="true" />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title>Net O/V</template>
-
-        <template #input>
-          <CustomInput
-            v-model="netOV"
-            rules="currency|required|max:255"
-            type="number"
-            name="Net O/V"
-            placeholder="0.00"
-            symbol="$"
-            @change="onChangeFloatValue('netOV')"
-          />
+          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
     </InputRow>
@@ -58,25 +30,16 @@
       <InputWithTitle>
         <template #title>Total To Distribute</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
           <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
 
       <InputWithTitle>
-        <template #title>Net Charge</template>
+        <template #title>Net Total</template>
 
         <template #input>
-          <CustomInput
-            v-model="netCharge"
-            rules="currency|required|max:255"
-            placeholder="0.00"
-            name="Net Charge"
-            type="number"
-            symbol="$"
-            @change="onChangeFloatValue('netCharge')"
-          />
+          <CustomInput v-model="netTotal" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
     </InputRow>
@@ -94,22 +57,6 @@
             type="number"
             symbol="$"
             @change="onChangeFloatValue('taxFromTheTape')"
-          />
-        </template>
-      </InputWithTitle>
-
-      <InputWithTitle>
-        <template #title>Net Voucher</template>
-
-        <template #input>
-          <CustomInput
-            v-model="netVoucher"
-            rules="currency|required|max:255"
-            placeholder="0.00"
-            name="Net Voucher"
-            type="number"
-            symbol="$"
-            @change="onChangeFloatValue('netVoucher')"
           />
         </template>
       </InputWithTitle>
@@ -133,11 +80,18 @@
       </InputWithTitle>
 
       <InputWithTitle>
-        <template #title>Net Cash</template>
+        <template #title>Net O/V</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="netCash" readonly disabled symbol="$" is-float="true" />
+          <CustomInput
+            v-model="netOV"
+            rules="currency|required|max:255"
+            type="number"
+            name="Net O/V"
+            placeholder="0.00"
+            symbol="$"
+            @change="onChangeFloatValue('netOV')"
+          />
         </template>
       </InputWithTitle>
     </InputRow>
@@ -155,6 +109,22 @@
             type="number"
             symbol="$"
             @change="onChangeFloatValue('chargeTax')"
+          />
+        </template>
+      </InputWithTitle>
+
+      <InputWithTitle>
+        <template #title>Net Charge</template>
+
+        <template #input>
+          <CustomInput
+            v-model="netCharge"
+            rules="currency|required|max:255"
+            placeholder="0.00"
+            name="Net Charge"
+            type="number"
+            symbol="$"
+            @change="onChangeFloatValue('netCharge')"
           />
         </template>
       </InputWithTitle>
@@ -176,15 +146,38 @@
           />
         </template>
       </InputWithTitle>
+
+      <InputWithTitle>
+        <template #title>Net Voucher</template>
+
+        <template #input>
+          <CustomInput
+            v-model="netVoucher"
+            rules="currency|required|max:255"
+            placeholder="0.00"
+            name="Net Voucher"
+            type="number"
+            symbol="$"
+            @change="onChangeFloatValue('netVoucher')"
+          />
+        </template>
+      </InputWithTitle>
     </InputRow>
 
     <InputRow>
       <InputWithTitle>
         <template #title>Cash Tax</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="cashTax" readonly disabled symbol="$" is-float="true" />
+          <CustomInput v-model="cashTax" readonly disabled symbol="$" is-float="true"/>
+        </template>
+      </InputWithTitle>
+
+      <InputWithTitle>
+        <template #title>Net Cash</template>
+
+        <template #input>
+          <CustomInput v-model="netCash" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
     </InputRow>
@@ -210,17 +203,18 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
+import {ValidationObserver} from 'vee-validate'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput'
-import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
-import { tabsViewMixin } from '~/mixins/tabsViewMixin'
-import { meMixin } from '~/mixins/meMixin'
+import {closeRegisterMixin} from '~/mixins/closeRegisterMixin'
+import {tabsViewMixin} from '~/mixins/tabsViewMixin'
+import {meMixin} from '~/mixins/meMixin'
+
 export default {
   name: 'SalesInfo',
-  components: { ValidationObserver, InputRow, CustomInput },
+  components: {ValidationObserver, InputRow, CustomInput},
   mixins: [closeRegisterMixin, tabsViewMixin, meMixin],
-  data () {
+  data() {
     return {
       nonResetable: '',
       netOV: '',
@@ -365,42 +359,42 @@ export default {
   methods: {
     onChangeFloatValue(stateProp) {
       this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
-      if ( stateProp === 'nonResetable' ) {
+      if (stateProp === 'nonResetable') {
         this.$store.dispatch('closeRegister/setNonResetable', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netOV' ) {
+      } else if (stateProp === 'netOV') {
         this.$store.dispatch('closeRegister/setNetOV', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netCharge' ) {
+      } else if (stateProp === 'netCharge') {
         this.$store.dispatch('closeRegister/setNetCharge', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'taxFromTheTape' ) {
+      } else if (stateProp === 'taxFromTheTape') {
         this.$store.dispatch('closeRegister/setTaxFromTheTape', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netVoucher' ) {
+      } else if (stateProp === 'netVoucher') {
         this.$store.dispatch('closeRegister/setNetVoucher', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'overringVoidTax' ) {
+      } else if (stateProp === 'overringVoidTax') {
         this.$store.dispatch('closeRegister/setOverringTax', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'chargeTax' ) {
+      } else if (stateProp === 'chargeTax') {
         this.$store.dispatch('closeRegister/setChargeTax', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'voucherTax' ) {
+      } else if (stateProp === 'voucherTax') {
         this.$store.dispatch('closeRegister/setVoucherTax', {
           ...this.calculationVariables,
           value: this[stateProp],
