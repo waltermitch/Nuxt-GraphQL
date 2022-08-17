@@ -344,7 +344,7 @@ export default {
   &--above {
     bottom: 100%;
     border-top: 1px solid gainsboro;
-    border-bottom: none;
+    // border-bottom: none;
     border-radius: 3px 3px 0px 0px;
   }
 
