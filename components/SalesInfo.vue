@@ -18,22 +18,64 @@
       </InputWithTitle>
 
       <InputWithTitle>
-        <template #title>Net Total</template>
+        <template #title>Last Non-Resettable</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="netTotal" readonly disabled symbol="$" is-float="true" />
+          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
     </InputRow>
 
     <InputRow>
       <InputWithTitle>
-        <template #title>Last Non-Resettable</template>
+        <template #title>Total To Distribute</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="lastNonResetable" readonly disabled symbol="$" is-float="true" />
+          <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" is-float="true"/>
+        </template>
+      </InputWithTitle>
+
+      <InputWithTitle>
+        <template #title>Net Total</template>
+
+        <template #input>
+          <CustomInput v-model="netTotal" readonly disabled symbol="$" is-float="true"/>
+        </template>
+      </InputWithTitle>
+    </InputRow>
+
+    <InputRow>
+      <InputWithTitle>
+        <template #title>Tax From The Tape</template>
+
+        <template #input>
+          <CustomInput
+            v-model="taxFromTheTape"
+            rules="currency|required|max:255"
+            placeholder="0.00"
+            name="Tax From The Tape"
+            type="number"
+            symbol="$"
+            @change="onChangeFloatValue('taxFromTheTape')"
+          />
+        </template>
+      </InputWithTitle>
+    </InputRow>
+
+    <InputRow>
+      <InputWithTitle>
+        <template #title>Overring/Void Tax</template>
+
+        <template #input>
+          <CustomInput
+            v-model="overringVoidTax"
+            rules="currency|required|max:255"
+            placeholder="0.00"
+            name="Overring/Void Tax"
+            type="number"
+            symbol="$"
+            @change="onChangeFloatValue('overringVoidTax')"
+          />
         </template>
       </InputWithTitle>
 
@@ -56,11 +98,18 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>Total To Distribute</template>
+        <template #title>Charge Tax</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="totalToDistribute" readonly disabled symbol="$" is-float="true"/>
+          <CustomInput
+            v-model="chargeTax"
+            rules="currency|required|max:255"
+            placeholder="0.00"
+            name="Charge Tax"
+            type="number"
+            symbol="$"
+            @change="onChangeFloatValue('chargeTax')"
+          />
         </template>
       </InputWithTitle>
 
@@ -83,17 +132,17 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>Tax From The Tape</template>
+        <template #title>Voucher Tax</template>
 
         <template #input>
           <CustomInput
-            v-model="taxFromTheTape"
+            v-model="voucherTax"
             rules="currency|required|max:255"
             placeholder="0.00"
-            name="Tax From The Tape"
+            name="Voucher Tax"
             type="number"
             symbol="$"
-            @change="onChangeFloatValue('taxFromTheTape')"
+            @change="onChangeFloatValue('voucherTax')"
           />
         </template>
       </InputWithTitle>
@@ -117,74 +166,18 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>- Overring/Void Tax</template>
+        <template #title>Cash Tax</template>
 
         <template #input>
-          <CustomInput
-            v-model="overringVoidTax"
-            rules="currency|required|max:255"
-            placeholder="0.00"
-            name="Overring/Void Tax"
-            type="number"
-            symbol="$"
-            @change="onChangeFloatValue('overringVoidTax')"
-          />
+          <CustomInput v-model="cashTax" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
 
       <InputWithTitle>
         <template #title>Net Cash</template>
 
-        <!-- //TO-DO PECZIS: Calculations -->
         <template #input>
-          <CustomInput v-model="netCash" readonly disabled symbol="$" is-float="true" />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title>- Charge Tax</template>
-
-        <template #input>
-          <CustomInput
-            v-model="chargeTax"
-            rules="currency|required|max:255"
-            placeholder="0.00"
-            name="Charge Tax"
-            type="number"
-            symbol="$"
-            @change="onChangeFloatValue('chargeTax')"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title>- Voucher Tax</template>
-
-        <template #input>
-          <CustomInput
-            v-model="voucherTax"
-            rules="currency|required|max:255"
-            placeholder="0.00"
-            name="Voucher Tax"
-            type="number"
-            symbol="$"
-            @change="onChangeFloatValue('voucherTax')"
-          />
-        </template>
-      </InputWithTitle>
-    </InputRow>
-
-    <InputRow>
-      <InputWithTitle>
-        <template #title>Cash Tax</template>
-
-        <!-- //TO-DO PECZIS: Calculations -->
-        <template #input>
-          <CustomInput v-model="cashTax" readonly disabled symbol="$" is-float="true" />
+          <CustomInput v-model="netCash" readonly disabled symbol="$" is-float="true"/>
         </template>
       </InputWithTitle>
     </InputRow>
@@ -210,17 +203,18 @@
 </template>
 
 <script>
-import { ValidationObserver } from 'vee-validate'
+import {ValidationObserver} from 'vee-validate'
 import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput'
-import { closeRegisterMixin } from '~/mixins/closeRegisterMixin'
-import { tabsViewMixin } from '~/mixins/tabsViewMixin'
-import { meMixin } from '~/mixins/meMixin'
+import {closeRegisterMixin} from '~/mixins/closeRegisterMixin'
+import {tabsViewMixin} from '~/mixins/tabsViewMixin'
+import {meMixin} from '~/mixins/meMixin'
+
 export default {
   name: 'SalesInfo',
-  components: { ValidationObserver, InputRow, CustomInput },
+  components: {ValidationObserver, InputRow, CustomInput},
   mixins: [closeRegisterMixin, tabsViewMixin, meMixin],
-  data () {
+  data() {
     return {
       nonResetable: '',
       netOV: '',
@@ -365,42 +359,42 @@ export default {
   methods: {
     onChangeFloatValue(stateProp) {
       this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
-      if ( stateProp === 'nonResetable' ) {
+      if (stateProp === 'nonResetable') {
         this.$store.dispatch('closeRegister/setNonResetable', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netOV' ) {
+      } else if (stateProp === 'netOV') {
         this.$store.dispatch('closeRegister/setNetOV', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netCharge' ) {
+      } else if (stateProp === 'netCharge') {
         this.$store.dispatch('closeRegister/setNetCharge', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'taxFromTheTape' ) {
+      } else if (stateProp === 'taxFromTheTape') {
         this.$store.dispatch('closeRegister/setTaxFromTheTape', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'netVoucher' ) {
+      } else if (stateProp === 'netVoucher') {
         this.$store.dispatch('closeRegister/setNetVoucher', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'overringVoidTax' ) {
+      } else if (stateProp === 'overringVoidTax') {
         this.$store.dispatch('closeRegister/setOverringTax', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'chargeTax' ) {
+      } else if (stateProp === 'chargeTax') {
         this.$store.dispatch('closeRegister/setChargeTax', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'voucherTax' ) {
+      } else if (stateProp === 'voucherTax') {
         this.$store.dispatch('closeRegister/setVoucherTax', {
           ...this.calculationVariables,
           value: this[stateProp],
