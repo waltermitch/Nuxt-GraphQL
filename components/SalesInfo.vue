@@ -64,7 +64,7 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>- Overring/Void Tax</template>
+        <template #title>Overring/Void Tax</template>
 
         <template #input>
           <CustomInput
@@ -98,7 +98,7 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>- Charge Tax</template>
+        <template #title>Charge Tax</template>
 
         <template #input>
           <CustomInput
@@ -132,7 +132,7 @@
 
     <InputRow>
       <InputWithTitle>
-        <template #title>- Voucher Tax</template>
+        <template #title>Voucher Tax</template>
 
         <template #input>
           <CustomInput
