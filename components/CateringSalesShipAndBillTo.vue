@@ -56,7 +56,7 @@
 
         <DefaultButton
           button-color-gamma="white"
-          :disabled="pristine && !getIsEdit"
+          :disabled="isEmptyForm && pristine && !getIsEdit"
           @event="getIsEdit ? cancelEdit() : cancelCreate()"
         >
           Cancel
@@ -79,8 +79,8 @@ import { mutationMixin } from '~/mixins/mutationMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
 import CateringOrders from '~/graphql/queries/cateringOrders.gql'
 import { formatDate, formatDateAndTime } from '~/helpers/helpers'
-import { CATERING_ORDER } from '~/constants/cateringOrder'
-import { meMixin } from '~/mixins/meMixin'
+// import { CATERING_ORDER } from '~/constants/cateringOrder'
+
 export default {
   name: 'CateringSalesShipAndBillTo',
   components: {
@@ -90,7 +90,7 @@ export default {
     ValidationObserver,
     CustomInput,
   },
-  mixins: [formMixin, mutationMixin, cateringSalesMixin, meMixin],
+  mixins: [formMixin, mutationMixin, cateringSalesMixin],
   data() {
     return {}
   },
@@ -127,6 +127,9 @@ export default {
         this.$store.commit('cateringSales/SET_BILL_TO_ADDRESS', value)
       },
     },
+    isEmptyForm() {
+      return !this.getShipToName && !this.getBillToName && !this.getShipToAddress && !this.getBillToAddress
+    }
   },
   methods: {
     formatDate,
@@ -167,7 +170,8 @@ export default {
         }
       )
       if (res) {
-        this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
+        this.$store.commit('cateringSales/SET_ID', res.data.createCateringOrder.id)
+        // this.$store.commit('cateringSales/SET_CATERING_ORDER', CATERING_ORDER)
       }
     },
     async UpdateCateringOrder() {

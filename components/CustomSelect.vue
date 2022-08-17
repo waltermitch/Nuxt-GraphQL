@@ -226,6 +226,7 @@ export default {
           temp.remove()
         }
 
+        options.style.position = `absolute`
         options.style.top = this.isAbove
           ? `${rect.top + scrollToTop - 300}px`
           : `${rect.top + 40 + scrollToTop}px`

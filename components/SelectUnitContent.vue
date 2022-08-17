@@ -6,12 +6,12 @@
 
         <template #input>
 
-          <CustomSelect
+          <CustomSelect 
             v-if="me"
             :options="me.units"
             class="unit-select"
             select-by="name"
-            select-by-second="id"
+            select-by-second="code"
             :selected-item="selectedUnit"
             :error="selectError"
             @input="selectUnit"

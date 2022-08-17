@@ -131,7 +131,7 @@
         <CustomTableRow class="table-footer table-row">
           <span class="table-footer-caption">Tax</span>
 
-          <CustomInput
+          <!-- <CustomInput
             v-model.number="tax"
             type="number"
             placeholder="0.00"
@@ -140,7 +140,10 @@
             name="Tax"
             symbol="$"
             @change="onChangeFloatValue('tax')"
-          />
+          /> -->
+          
+          <span class="table-footer-item">${{ Number(getTax).toFixed(2) }}</span>
+
         </CustomTableRow>
 
         <CustomTableRow class="table-footer table-row">
@@ -154,7 +157,7 @@
     <div class="buttons-area">
       <DefaultButton
         button-color-gamma="red"
-        :disabled="invalid || !tax"
+        :disabled="invalid"
         @event="nextTab"
       >
         Continue
@@ -162,7 +165,6 @@
 
       <DefaultButton
         button-color-gamma="white"
-        :disabled="!tax"
         @event="getIsEdit ? cancelEdit() : cancelCreate()"
         >Cancel</DefaultButton
       >
@@ -181,6 +183,8 @@ import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
 import { cateringSalesMixin } from '~/mixins/cateringSalesMixin'
 import { tabsViewMixin } from '~/mixins/tabsViewMixin'
+import { meMixin } from '~/mixins/meMixin'
+
 export default {
   name: 'CateringSalesItems',
   components: {
@@ -190,8 +194,8 @@ export default {
     DefaultButton,
     ValidationObserver,
     CustomTableAddIcon,
-  },
-  mixins: [formMixin, tableActionsMixin, cateringSalesMixin, tabsViewMixin],
+},
+  mixins: [formMixin, tableActionsMixin, cateringSalesMixin, tabsViewMixin, meMixin],
   data() {
     return {
       newItem: {
@@ -220,22 +224,19 @@ export default {
     },
     totalPriceWithTax() {
       return (Number(this.totalPrice) + Number(this.getTax)).toFixed(2)
-    },
-    /* tax: {
-      get() {
-        return this.getTax
-      },
-      set(value) {
-        this.$store.commit('cateringSales/SET_TAX', value)
-      },
-    }, */
+    }
+  },
+  beforeMount() {
+    const selectedUnit = this.selectedUnit
+    this.tax = Number(selectedUnit.city.tax) + Number(selectedUnit.county.tax)
+    this.onChangeFloatValue('tax')
   },
   methods: {
     onChangeFloatValue(stateProp) {
       if ( stateProp === 'price' || stateProp === 'ext' ) {
-        this.newItem[stateProp] = parseFloat(Number(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2));
+        this.newItem[stateProp] = parseFloat(Number(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2))
       } else if ( stateProp === 'tax' ) {
-        this[stateProp] = parseFloat(Number(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2));
+        this[stateProp] = parseFloat(Number(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2))
         this.$store.commit('cateringSales/SET_TAX', this[stateProp])
       }
     },

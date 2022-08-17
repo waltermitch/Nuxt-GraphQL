@@ -29,11 +29,12 @@
             @change="onChangeFloatValue('amount', true, item)"
           />
 
-          <span v-if="!getIsEdit">{{ item.inventoryCategory.name }}</span>
+          <span v-if="!getIsEdit">{{ item.inventoryCategory.id }} - {{ item.inventoryCategory.name }}</span>
           <CustomSelect
             v-else-if="inventoryCategories"
             :options="inventoryCategories"
             select-by="name"
+            select-by-second="id"
             :selected-item="item.inventoryCategory"
             @input="selectInventoryCategory(item, $event)"
           />
@@ -72,6 +73,7 @@
             v-if="inventoryCategories"
             :options="inventoryCategories"
             select-by="name"
+            select-by-second="id"
             do-not-preselect
             @input="selectNewItemInventoryCategory"
           />
@@ -176,6 +178,9 @@ export default {
     },
     inventoryCategories: {
       query: InventoryCategories,
+      variables: {
+        vending: "Y"
+      }
     },
   },
   data() {
@@ -338,9 +343,9 @@ export default {
           activePeriod: true,
         }
       )
-      console.log(res)
       if(res) {
-        this.cancelCreate()
+        this.$store.commit("purchaseOrders/SET_ID", res.data.createPurchase.id)
+        // this.cancelCreate()
       }
     },
     async UpdatePurchaseOrder() {

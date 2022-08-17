@@ -90,6 +90,7 @@ export const getters = {
   getBillToAddress: (state) => state.cateringOrder.billToAddress,
   getIsCashOrder: (state) => state.cateringOrder.isCashOrder,
   getChargeNumber: (state) => state.cateringOrder.chargeNumber,
+  getCateringOrder: (state) => state.cateringOrder,
   getIsEdit: (state) => state.isEdit,
   getDeleteItemIDs: (state) => state.deleteItemIDs,
   getItemsWithoutId: (state) =>

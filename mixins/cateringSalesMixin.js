@@ -20,6 +20,7 @@ export const cateringSalesMixin = {
       getBillToAddress: 'cateringSales/getBillToAddress',
       getIsCashOrder: 'cateringSales/getIsCashOrder',
       getChargeNumber: 'cateringSales/getChargeNumber',
+      getCateringOrder: 'cateringSales/getCateringOrder',
       getIsEdit: 'cateringSales/getIsEdit',
       getDeleteItemIDs: 'cateringSales/getDeleteItemIDs',
       getItemsWithoutId: 'cateringSales/getItemsWithoutId',
