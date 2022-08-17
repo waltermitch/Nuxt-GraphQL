@@ -38,6 +38,8 @@
               v-if="me.selectedUnit.glAccounts && getIsEdit"
               :options="me.selectedUnit.glAccounts"
               select-by="name"
+              select-by-second="id"
+              select-by-parent="parent"
               :selected-item="
                 me.selectedUnit.glAccounts.find((glAccount) =>
                   item.glAccountId
@@ -47,7 +49,8 @@
               "
               @input="selectGlAccount(item, $event)"
             />
-            <span v-else-if="!getIsEdit">{{ item.glAccount.name }}</span>
+            <span v-else-if="!getIsEdit && item.glAccount.parent">{{ item.glAccount.parent.id }}-{{ item.glAccount.id }} - {{ item.glAccount.name }}</span>
+            <span v-else>{{ item.glAccount.id }} - {{ item.glAccount.name }}</span>
 
             <CustomInput
               :value="item.amount"
@@ -72,6 +75,8 @@
               v-if="me.selectedUnit.glAccounts"
               :options="me.selectedUnit.glAccounts"
               select-by="name"
+              select-by-second="id"
+              select-by-parent="parent"
               @input="selectWewItemGlAccount"
             />
 
@@ -196,6 +201,9 @@ export default {
         })
       },
     }, */
+  },
+  mounted() {
+    console.log(this.me.selectedUnit.glAccounts)
   },
   methods: {
     onChangeFloatValue(stateProp, crud = false) {

@@ -20,7 +20,9 @@
       <span v-else>
         {{
           selected && selectBySecond
-            ? `${selected[selectBySecond]} - ${selected[selectBy]}`
+            ? selectByParent && selected[selectByParent]
+            ? `${selected[selectByParent][selectBySecond]}-${selected[selectBySecond]} - ${selected[selectBy]}`
+            : `${selected[selectBySecond]} - ${selected[selectBy]}`
             : selected && formatIfDate(selected[selectBy])
         }}
       </span>
@@ -50,7 +52,9 @@
       >
         {{
           selectBySecond
-            ? `${option[selectBySecond]} - ${option[selectBy]}`
+            ? selectByParent && option[selectByParent]
+            ? `${option[selectByParent][selectBySecond]}-${option[selectBySecond]} - ${option[selectBy]}`
+            : `${option[selectBySecond]} - ${option[selectBy]}`
             : formatIfDate(option[selectBy])
         }}
       </div>
@@ -81,6 +85,10 @@ export default {
       default: 'name',
     },
     selectBySecond: {
+      type: String,
+      default: null,
+    },
+    selectByParent: {
       type: String,
       default: null,
     },
