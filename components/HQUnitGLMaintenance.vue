@@ -298,6 +298,9 @@ export default {
     },
     glAccounts: {
       query: GlAccounts,
+    },
+    glTypeCodes: {
+      query: GlTypeCodes
     }
   },
   mixins: [mutationMixin, tableActionsMixin],
@@ -408,6 +411,7 @@ export default {
     async createGlTypeCode() {
       const unit = this.unit
       const searchAccount = this.searchAccount
+
       await this.mutationAction(
         CreateGlTypeCode,
         {
@@ -447,6 +451,7 @@ export default {
     async confirmDeleteGlTypeCode(id) {
       const unit = this.unit
       const searchAccount = this.searchAccount
+
       await this.mutationAction(
         DeleteGlTypeCode,
         { id },

@@ -20,7 +20,9 @@
       <span v-else>
         {{
           selected && selectBySecond
-            ? `${selected[selectBySecond]} - ${selected[selectBy]}`
+            ? selectByParent && selected[selectByParent]
+            ? `${selected[selectByParent][selectBySecond]}-${selected[selectBySecond]} - ${selected[selectBy]}`
+            : `${selected[selectBySecond]} - ${selected[selectBy]}`
             : selected && formatIfDate(selected[selectBy])
         }}
       </span>
@@ -50,7 +52,9 @@
       >
         {{
           selectBySecond
-            ? `${option[selectBySecond]} - ${option[selectBy]}`
+            ? selectByParent && option[selectByParent]
+            ? `${option[selectByParent][selectBySecond]}-${option[selectBySecond]} - ${option[selectBy]}`
+            : `${option[selectBySecond]} - ${option[selectBy]}`
             : formatIfDate(option[selectBy])
         }}
       </div>
@@ -81,6 +85,10 @@ export default {
       default: 'name',
     },
     selectBySecond: {
+      type: String,
+      default: null,
+    },
+    selectByParent: {
       type: String,
       default: null,
     },
@@ -226,6 +234,7 @@ export default {
           temp.remove()
         }
 
+        options.style.position = `absolute`
         options.style.top = this.isAbove
           ? `${rect.top + scrollToTop - 300}px`
           : `${rect.top + 40 + scrollToTop}px`
@@ -343,7 +352,7 @@ export default {
   &--above {
     bottom: 100%;
     border-top: 1px solid gainsboro;
-    border-bottom: none;
+    // border-bottom: none;
     border-radius: 3px 3px 0px 0px;
   }
 

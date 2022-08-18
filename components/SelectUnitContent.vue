@@ -1,33 +1,34 @@
 <template>
   <div class="select-container">
     <div class="select-content">
-      <InputWithTitle>
-        <template #title>Select Unit</template>
+        <InputWithTitle class="select-unit">
+          <template #title>Select Unit</template>
 
-        <template #input>
+          <template #input>
 
-          <CustomSelect
-            v-if="me"
-            :options="me.units"
-            select-by="name"
-            select-by-second="id"
-            :selected-item="selectedUnit"
-            :error="selectError"
-            @input="selectUnit"
-          />
+            <CustomSelect 
+              v-if="me"
+              :options="me.units"
+              class="unit-select"
+              select-by="name"
+              select-by-second="code"
+              :selected-item="selectedUnit"
+              :error="selectError"
+              @input="selectUnit"
+            />
 
-          <span v-else
-            >The user isn't the location manager of any location yet. Please
-            reach admin to add you as location manager</span
-          >
-        </template>
-      </InputWithTitle>
+            <span v-else
+              >The user isn't the location manager of any location yet. Please
+              reach admin to add you as location manager</span
+            >
+          </template>
+        </InputWithTitle>
 
-      <div class="button-area">
-        <DefaultButton button-color-gamma="red" @event="submitEvent">
-          Submit
-        </DefaultButton>
-      </div>
+        <div class="button-area">
+          <DefaultButton button-color-gamma="red" @event="submitEvent">
+            Submit
+          </DefaultButton>
+        </div>
     </div>
   </div>
 </template>
@@ -91,8 +92,17 @@ export default {
 
   &-content {
     width: 100%;
-    max-width: 240px;
+    margin-top: -100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+}
+
+.select-unit {
+  min-width: 240px;
+  max-width: fit-content !important;
 }
 
 .button-area {

@@ -6,7 +6,7 @@
           <template #title>Order Number</template>
 
           <template #input>
-            <CustomInput v-model="getId" disabled />
+            <CustomInput v-model="getId" disabled/>
           </template>
         </InputWithTitle>
 
