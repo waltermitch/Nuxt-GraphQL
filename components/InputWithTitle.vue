@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="{ maxWidth }">
+  <div class="container" :class="{'select' : hasSelect}" :style="{ maxWidth }">
     <h5 class="title" :style="{ marginBottom }">
       <slot name="title"></slot>
     </h5>
@@ -20,6 +20,10 @@ export default {
       type: String,
       default: '240px',
     },
+    hasSelect: {
+      type: Boolean,
+      default: false
+    }
   },
 }
 </script>
@@ -28,6 +32,11 @@ export default {
 .container {
   width: 100%;
   max-width: 240px;
+}
+
+.select {
+  min-width: 240px;
+  max-width: fit-content !important;
 }
 
 .title {

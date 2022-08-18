@@ -27,7 +27,7 @@
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title>Vendor</template>
 
           <template #input>

@@ -2,7 +2,7 @@
   <div>
     <ValidationObserver ref="form" v-slot="{ invalid }">
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Management Fee - Type </template>
 
           <template #input>
@@ -54,7 +54,7 @@
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Administrative Fee - Type </template>
 
           <template #input>
@@ -106,7 +106,7 @@
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Support Fee - Type </template>
 
           <template #input>
@@ -206,7 +206,7 @@
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Reg Tax </template>
 
           <template #input>

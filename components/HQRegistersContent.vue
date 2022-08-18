@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow>
-        <InputWithTitle class="unit-select">
+        <InputWithTitle has-select>
           <template #title> Unit </template>
 
           <template #input>

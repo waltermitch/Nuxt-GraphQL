@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <div class="input">
       <InputRow class="input">
-        <InputWithTitle v-if="periods">
+        <InputWithTitle v-if="periods" has-select>
           <template #title>Period End Date</template>
 
           <template #input>
@@ -14,7 +14,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title>Export type</template>
 
           <template #input>

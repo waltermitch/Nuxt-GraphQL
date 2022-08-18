@@ -3,7 +3,7 @@
   <PageContentWrapper>
     <div class="header">
       <InputRow>
-        <InputWithTitle class="unit-select">
+        <InputWithTitle has-select>
           <template #title> Unit </template>
 
           <template #input>
@@ -31,7 +31,7 @@
       </InputRow>
 
       <InputRow v-if="isAttachGlAccounts">
-        <InputWithTitle class="gl-account-select">
+        <InputWithTitle has-select>
           <template #title> GL Account </template>
 
           <template #input>
@@ -48,7 +48,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle v-if="glAccount && glAccount.child" class="gl-sub-account-select">
+        <InputWithTitle v-if="glAccount && glAccount.child" has-select>
           <template #title> GL Sub Account </template>
 
           <template #input>
@@ -603,17 +603,13 @@ export default {
 }
 
 .input-row {
-  @media screen and (max-width: $md) {
+  @media screen and (max-width: $sm) {
     flex-direction: column;
 
     div:first-child {
-      margin-bottom: 10px;
+      margin-right: 0px !important;
+      margin-bottom: 16px;
     }
-  }
-
-  .unit-select, .gl-account-select, .gl-sub-account-select {
-    min-width: 240px;
-    max-width: fit-content !important;
   }
 }
 </style>

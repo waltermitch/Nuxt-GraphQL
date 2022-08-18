@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <InputRow>
-      <InputWithTitle>
+      <InputWithTitle has-select>
         <template #title>Expense Type</template>
 
         <template v-if="expenseTypes" #input>

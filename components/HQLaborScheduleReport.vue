@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver ref="form">
       <InputRow class="input-row-mob">
-        <InputWithTitle v-if="districts">
+        <InputWithTitle v-if="districts" has-select>
           <template #title>Select District</template>
 
           <template #input>
@@ -10,7 +10,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle v-if="periods">
+        <InputWithTitle v-if="periods" has-select>
           <template #title> Period </template>
 
           <template #input>

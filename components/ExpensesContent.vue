@@ -21,7 +21,7 @@
             </template>
           </InputWithTitle>
 
-          <InputWithTitle class="radio-buttons-row">
+          <InputWithTitle class="radio-buttons-row" has-select>
             <template #title>Expense Type</template>
 
             <template v-if="ExpenseTypes" #input>
@@ -37,7 +37,7 @@
         </InputRow>
 
         <InputRow>
-          <InputWithTitle>
+          <InputWithTitle has-select>
             <template #title>GL Account</template>
 
             <template v-if="glAccounts" #input>
@@ -59,6 +59,7 @@
                 expenseType.type === 'ReAccrual')
             "
             class="radio-buttons-row"
+            has-select
           >
             <template #title>Vendor</template>
 

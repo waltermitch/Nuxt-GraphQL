@@ -2,7 +2,7 @@
   <PageContentWrapper>
     <ValidationObserver>
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Report Type </template>
 
           <template #input>
@@ -10,7 +10,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Period </template>
 
           <template #input>
@@ -32,7 +32,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> Unit </template>
 
           <template #input>

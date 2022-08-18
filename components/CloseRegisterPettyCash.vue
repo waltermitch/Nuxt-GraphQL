@@ -202,9 +202,6 @@ export default {
       },
     }, */
   },
-  mounted() {
-    console.log(this.me.selectedUnit.glAccounts)
-  },
   methods: {
     onChangeFloatValue(stateProp, crud = false) {
       if ( crud ) {

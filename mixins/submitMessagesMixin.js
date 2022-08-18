@@ -33,7 +33,7 @@ export const submitMessagesMixin = {
       // HQ Unit Setup / Units
       const unitTabs = [['Details', 0], ['Financials', 1], ['Fees', 2]]
       for ( const [tab, key] of unitTabs ) { if(message.includes(tab)) {
-        this.$store.commit('tabsView/SET_ACTIVE_TAB', key) 
+        this.$store.commit('tabsView/SET_ACTIVE_TAB', key)
         this.$store.commit('tabsView/SET_ACTIVE_VALIDATE', tab) 
       }}
     },

@@ -78,7 +78,7 @@
           </InputWithTitle>
         </div>
         <div v-if="!isAdmin" class="input-col mb-20">
-          <InputWithTitle class="mb-20">
+          <InputWithTitle class="mb-20" has-select>
             <template #title> Role </template>
 
             <template #input>

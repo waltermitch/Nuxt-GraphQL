@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <InputRow>
-      <InputWithTitle>
+      <InputWithTitle has-select>
         <template #title> Report Type </template>
 
         <template #input>
@@ -9,7 +9,7 @@
         </template>
       </InputWithTitle>
 
-      <InputWithTitle>
+      <InputWithTitle has-select>
         <template #title> Period End Date </template>
 
         <template v-if="formattedPeriods" #input>

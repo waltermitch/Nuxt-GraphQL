@@ -60,7 +60,7 @@
           <h2 class="title">Select Register To Close</h2>
 
           <InputRow>
-            <InputWithTitle>
+            <InputWithTitle has-select>
               <template #title>Register ID</template>
 
               <template v-if="registers" #input>
@@ -74,7 +74,7 @@
               </template>
             </InputWithTitle>
 
-            <InputWithTitle>
+            <InputWithTitle has-select>
               <template #title>Register Name</template>
 
               <template v-if="registers" #input>

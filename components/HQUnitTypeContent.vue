@@ -4,7 +4,7 @@
     <div class="header">
       <div class="unit-type-desc">
         <InputRow>
-          <InputWithTitle class="unit-select">
+          <InputWithTitle has-select>
             <template #title> Unit</template>
 
             <template #input>
@@ -366,22 +366,6 @@ export default {
 
   .unit-type-desc {
     width: 100%;
-
-    .input-row:first-child {
-  
-      @media screen and (max-width: $md) {
-        flex-direction: column;
-        
-        div:first-child {
-          margin-bottom: 10px;
-        }
-      }
-
-      .unit-select {
-        min-width: 240px;
-        max-width: fit-content !important;
-      }
-    }
   }
 
   .table-row {

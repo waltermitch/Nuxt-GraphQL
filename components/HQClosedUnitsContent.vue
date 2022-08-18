@@ -1,7 +1,7 @@
 <template>
   <PageContentWrapper>
     <InputRow>
-      <InputWithTitle>
+      <InputWithTitle has-select>
         <template #title> District </template>
 
         <template #input>

@@ -1,7 +1,7 @@
 <template>
   <div class="select-container">
     <div class="select-content">
-        <InputWithTitle class="select-unit">
+        <InputWithTitle has-select>
           <template #title>Select Unit</template>
 
           <template #input>
@@ -98,11 +98,6 @@ export default {
     flex-direction: column;
     align-items: center;
   }
-}
-
-.select-unit {
-  min-width: 240px;
-  max-width: fit-content !important;
 }
 
 .button-area {

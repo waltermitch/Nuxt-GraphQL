@@ -28,7 +28,7 @@
           </template>
         </InputWithTitle>
 
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> State </template>
 
           <template #input>
@@ -44,7 +44,7 @@
       </InputRow>
 
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> City </template>
 
           <template #input>
@@ -57,7 +57,7 @@
             />
           </template>
         </InputWithTitle>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> County </template>
 
           <template #input>
@@ -80,7 +80,7 @@
             <CustomInput v-model="zip" rules="required|max:255" name="unit-zip" />
           </template>
         </InputWithTitle>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title> District </template>
 
           <template #input>
@@ -161,7 +161,7 @@
         </InputWithTitle>
       </InputRow>
       <InputRow>
-        <InputWithTitle>
+        <InputWithTitle has-select>
           <template #title>Location Manager</template>
 
           <template #input>
@@ -173,7 +173,7 @@
             />
           </template>
         </InputWithTitle>
-        <InputWithTitle v-if="!unitID">
+        <InputWithTitle v-if="!unitID" has-select>
           <template #title> Start Period </template>
 
           <template #input>
