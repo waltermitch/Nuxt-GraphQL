@@ -220,7 +220,11 @@ export default {
               (Number(current.price) + Number(current.ext))
           )
         )
-      }, 0)
+      }, 0) +
+          Number(
+            Number(this.newItem.quantity) *
+              (Number(this.newItem.price) + Number(this.newItem.ext))
+          )
     },
     totalPriceWithTax() {
       return (Number(this.totalPrice) + Number(this.getTax)).toFixed(2)
