@@ -189,7 +189,12 @@ export default {
       this.vendor = vendor
     },
     onChangeFloatValue() {
-      this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal));
+      this.purchaseTotal = parseFloat(this.purchaseTotal !== '' ? this.purchaseTotal : 0).toFixed(2);
+      this.$store.dispatch('closeRegister/setPurchaseTotal', {
+        ...this.calculationVariables,
+        value: this.purchaseTotal,
+      })
+      // this.$store.commit('purchaseOrders/SET_PURCHASE_TOTAL', Number(this.purchaseTotal));
     },
     onChangeDateValue(value) {
       this.$store.commit('purchaseOrders/SET_PURCHASE_DATE', value)

@@ -350,11 +350,21 @@ export default {
   }
   &--left {
     @media screen and (min-width: $xl) {
-      width: 60% !important;
+      width: calc(60% - 20px) !important;
     }
     @media screen and (max-width: $xl) {
       width: 100% !important;
       margin: 0 !important;
+    }
+  }
+
+  .table-content {
+    .content {
+      @media screen and (min-width: $xl) {
+        .button {
+          width: calc(100% - 20px);
+        }
+      }
     }
   }
 }
