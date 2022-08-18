@@ -40,7 +40,7 @@
             @input="(e) => updateItems(item, Number(e), 'menuItem')"
           />
 
-          <span v-if="!getIsEdit">{{ parseFloat(item.price).toFixed(2) }}$</span>
+          <span v-if="!getIsEdit">${{ parseFloat(item.price).toFixed(2) }}</span>
           <CustomInput
             v-else
             :value="item.price"
@@ -53,7 +53,7 @@
             @input="(e) => updateItems(item, Number(e), 'price')"
           />
 
-          <span v-if="!getIsEdit">{{ parseFloat(item.ext).toFixed(2) }}$</span>
+          <span v-if="!getIsEdit">${{ parseFloat(item.ext).toFixed(2) }}</span>
           <CustomInput
             v-else
             :value="item.ext"
