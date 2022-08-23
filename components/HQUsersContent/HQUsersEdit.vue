@@ -47,7 +47,6 @@
             <template #input>
               <CustomInput 
                 v-model="password"
-                rules="required"
                 name='"User Password"'
               />
             </template>

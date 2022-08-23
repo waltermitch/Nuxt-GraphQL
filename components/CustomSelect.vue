@@ -129,7 +129,7 @@ export default {
       selectedList: this.selectedItems ? [...this.selectedItems] : [],
       open: false,
       isAbove: false,
-      parentIsTable: false,
+      parentIsTable: false
     }
   },
   computed: {
@@ -146,6 +146,9 @@ export default {
     },
   },
   watch: {
+    open() {
+      this.adjustPosition()    
+    },
     options() {
       this.selected = this.options[0]
       if (!this.doNotPreselect) {
@@ -160,6 +163,7 @@ export default {
     },
   },
   beforeMount() {
+    window.addEventListener("resize", this.detectWindowSize);
     document.addEventListener('click', this.detectClickOutside)
   },
   mounted() {
@@ -167,13 +171,10 @@ export default {
       this.$emit('input', this.selected)
     }
 
-    if (this.localTemp) {
-      this.tmpId = 'tmp'
-    }
-
-    this.adjustPosition()
+    this.adjustOptions()
   },
   destroyed() {
+    window.removeEventListener("resize", this.detectWindowSize);
     document.removeEventListener('click', this.detectClickOutside)
     this.open = false
   },
@@ -204,47 +205,70 @@ export default {
 
       return date.toISOString().startsWith(value);
     },
-    adjustPosition() {
+    adjustOptions() {
       if (typeof window === 'undefined') return
 
       const parentElement = this.$el.parentElement
       const parentElementIsTable = parentElement.className.includes('table-row')
-      const spaceAbove = this.$el.getBoundingClientRect().top
-      const spaceBelow =
-        window.innerHeight - this.$el.getBoundingClientRect().bottom
-      const hasEnoughSpaceBelow = spaceBelow > 300
-
-      if (!hasEnoughSpaceBelow && spaceAbove) {
-        this.isAbove = true
-      } else {
-        this.isAbove = false
-      }
 
       if (parentElementIsTable) {
         this.parentIsTable = true
-        const rect = this.$el.getBoundingClientRect()
-        const scrollToTop = document.documentElement.scrollTop
         const options = this.$el.querySelector('.options')
         const temp = this.localTemp
           ? document.getElementById('temp')
           : document.getElementById(this.tempId)
 
         if (temp) {
-          this.tempId = Math.random().toFixed(2)
+          if(!this.localTemp) {
+            this.tempId = Math.random().toFixed(2)
+          }
           temp.remove()
         }
-
-        options.style.position = `absolute`
-        options.style.top = this.isAbove
-          ? `${rect.top + scrollToTop - 300}px`
-          : `${rect.top + 40 + scrollToTop}px`
-        options.style.left = `${rect.left}px`
-        options.style.width = `${rect.width}px`
+        
         this.localTemp
           ? options.setAttribute('id', 'temp')
           : options.setAttribute('id', this.tempId)
         document.body.appendChild(options)
       }
+    },
+    adjustPosition() {
+      if(!(this.open && this.parentIsTable)) return
+
+      const options = this.localTemp
+          ? document.getElementById('temp')
+          : document.getElementById(this.tempId)
+
+      const optionHeight = 37
+      const selectedOptionHeight = 40
+      const openOptionsCountLimit = 8
+      const openOptionsHeightLimit = 298
+      const openOptionsHeight = this.options.length > openOptionsCountLimit ? openOptionsHeightLimit : optionHeight * this.options.length
+
+      const spaceAbove = this.$el.getBoundingClientRect().top
+      const spaceBelow =
+        window.innerHeight - this.$el.getBoundingClientRect().bottom
+      const hasEnoughSpaceBelow = spaceBelow > openOptionsHeight
+
+      if (!hasEnoughSpaceBelow && spaceAbove) {
+        this.isAbove = true
+      } else {
+        this.isAbove = false
+      }
+        
+      const rect = this.$el.getBoundingClientRect()
+      const scrollToTop = document.documentElement.scrollTop
+
+      options.style.position = `absolute`
+      if(this.isAbove) {
+        options.style.top = `auto`
+        options.style.bottom = `${spaceBelow + selectedOptionHeight - scrollToTop - 1}px`
+      } else {
+        options.style.top = `${spaceAbove + selectedOptionHeight + scrollToTop}px`
+        options.style.bottom = `auto`
+      }
+
+      options.style.left = `${rect.left}px`
+      options.style.width = `${rect.width}px`
     },
     toggleSelect() {
       if (this.options.length) {
@@ -278,6 +302,9 @@ export default {
         this.$emit('input', option)
       }
       this.open = false
+    },
+    detectWindowSize() {
+      this.adjustPosition()
     },
     detectClickOutside(event) {
       if (!(this.$el === event.target || this.$el.contains(event.target))) {
