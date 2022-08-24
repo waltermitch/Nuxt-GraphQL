@@ -93,7 +93,7 @@ export default {
       this.fetchData()
     }
   },
-  beforeMount() {
+  mounted() {
     if(!this.onlyLogo && this.role !== 'admin') {
       this.fetchData();
     }
