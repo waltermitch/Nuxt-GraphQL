@@ -32,7 +32,7 @@ export const paginatorMixin = {
                 fetchPolicy: 'network-only',
                 variables,
             });
-            console.log(queryData)
+
             this.fetchingData = false
             
             this.queryData = queryData.data[this.queryName];
