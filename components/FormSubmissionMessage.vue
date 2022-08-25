@@ -61,11 +61,11 @@ export default {
 }
 
 .fade-in-out {
-  animation: fadeInOut ease-in-out 4s;
-  -webkit-animation: fadeInOut ease-in-out 4s;
-  -moz-animation: fadeInOut ease-in-out 4s;
-  -o-animation: fadeInOut ease-in-out 4s;
-  -ms-animation: fadeInOut ease-in-out 4s;
+  animation: fadeInOut ease-in-out 4.1s;
+  -webkit-animation: fadeInOut ease-in-out 4.1s;
+  -moz-animation: fadeInOut ease-in-out 4.1s;
+  -o-animation: fadeInOut ease-in-out 4.1s;
+  -ms-animation: fadeInOut ease-in-out 4.1s;
 }
 
 @keyframes fadeInOut {
