@@ -8,9 +8,9 @@
 
           <template #input>
             <multiselect
-              v-if="units"
+              v-if="unitsByGLAccount"
               v-model="unit"
-              :options="units"
+              :options="unitsByGLAccount"
               :custom-label="nameWithId"
               placeholder="-- Select --"
               track-by="name"
@@ -261,7 +261,7 @@
 <script>
 import { ValidationObserver } from 'vee-validate'
 import Multiselect from 'vue-multiselect'
-import Units from '../graphql/queries/units.gql'
+import UnitsByGLAccount from '../graphql/queries/unitsByGLAccount.gql'
 import GlAccounts from '../graphql/queries/glAccounts.gql'
 import GlTypeCodes from '../graphql/queries/glTypeCodes.gql'
 import UpdateUnit from '../graphql/mutations/unit/updateUnit.gql'
@@ -293,15 +293,12 @@ export default {
     Multiselect,
   },
   apollo: {
-    units: {
-      query: Units,
+    unitsByGLAccount: {
+      query: UnitsByGLAccount,
     },
     glAccounts: {
       query: GlAccounts,
     },
-    glTypeCodes: {
-      query: GlTypeCodes
-    }
   },
   mixins: [mutationMixin, tableActionsMixin],
   data() {
@@ -423,12 +420,13 @@ export default {
             description: this.glTypeCodeNew.description,
           },
         },
-        GlTypeCodes,
+        null,
         'Add Gl Type success',
         'Add Gl Type error'
       )
       this.unit = unit
       this.searchAccount = searchAccount
+      this.fetchTypeData()
     },
     async confirmEditGlTypeCode(GlType) {
       const unit = this.unit
@@ -444,12 +442,14 @@ export default {
         {
           GlTypeCodeInput: editedUnitType,
         },
-        GlTypeCodes,
+        null,
         'Edit Gl Type success',
         'Edit Gl Type error'
       )
+
       this.unit = unit
       this.searchAccount = searchAccount
+      this.fetchTypeData()
     },
     async confirmDeleteGlTypeCode(id) {
       const unit = this.unit
@@ -458,12 +458,13 @@ export default {
       await this.mutationAction(
         DeleteGlTypeCode,
         { id },
-        GlTypeCodes,
+        null,
         'Delete Gl Type success',
         'Delete Gl Type error'
       )
       this.unit = unit
       this.searchAccount = searchAccount
+      this.fetchTypeData()
     },
     async addGlToUnit() {
       const searchType = this.searchType
@@ -491,7 +492,7 @@ export default {
             },
           },
         },
-        Units,
+        UnitsByGLAccount,
         'Add Gl account to unit success',
         'Add Gl account to unit error'
       )
@@ -499,6 +500,7 @@ export default {
       this.searchType = searchType
       this.glTypeCodes = glTypeCodes
 
+      console.log(updateUnit)
       if (updateUnit) {
         this.unit = updateUnit
         this.cancelAttach()
@@ -521,7 +523,7 @@ export default {
             },
           },
         },
-        Units,
+        UnitsByGLAccount,
         'Remove Gl account from unit success',
         'Remove Gl account from unit error'
       )
