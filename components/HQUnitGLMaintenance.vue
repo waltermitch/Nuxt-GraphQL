@@ -82,7 +82,7 @@
         <div class="gl-table">
           <div v-if="(unit.glAccounts && unit.glAccounts.length) || searchAccount" class="gl-account-area">
             <h2 class="gl-account-header">
-              Gl Accounts
+              GL Accounts
             </h2>
             <div class="search-area">
               <span class="search-span">Search: </span>
@@ -92,7 +92,7 @@
                 placeholder="GL(Sub) Name, ID"
               />
             </div>
-          
+
           </div>
           <h2 v-else class="table-header">Please, attach new GL Account</h2>
 
@@ -154,7 +154,7 @@
 
         <div>
           <div class="gl-type-area">
-            <h2 class="gl-type-header">Gl Types</h2>
+            <h2 class="gl-type-header">GL Types</h2>
 
             <div class="search-area">
               <span class="search-span">Search: </span>
@@ -315,10 +315,10 @@ export default {
       glSubAccount: '',
       isAttachGlAccounts: false,
       glTypeCodeEdit: false,
-      
+
       searchType: '',
       searchAccount: '',
-      
+
       glAccountsTmp: {},
       glTypeCodes: {},
       queryVariable: {
@@ -370,7 +370,7 @@ export default {
       this.unit.glAccounts = glAccounts
     },
     async fetchTypeData() {
-      
+
       if(this.searchType !== '') this.queryVariable.search = '%' + this.searchType + '%';
       else this.queryVariable.search = '%';
 
@@ -421,8 +421,8 @@ export default {
           },
         },
         null,
-        'Add Gl Type success',
-        'Add Gl Type error'
+        'Add GL Type success',
+        'Add GL Type error'
       )
       this.unit = unit
       this.searchAccount = searchAccount
@@ -443,8 +443,8 @@ export default {
           GlTypeCodeInput: editedUnitType,
         },
         null,
-        'Edit Gl Type success',
-        'Edit Gl Type error'
+        'Edit GL Type success',
+        'Edit GL Type error'
       )
 
       this.unit = unit
@@ -459,8 +459,8 @@ export default {
         DeleteGlTypeCode,
         { id },
         null,
-        'Delete Gl Type success',
-        'Delete Gl Type error'
+        'Delete GL Type success',
+        'Delete GL Type error'
       )
       this.unit = unit
       this.searchAccount = searchAccount
@@ -493,8 +493,8 @@ export default {
           },
         },
         UnitsByGLAccount,
-        'Add Gl account to unit success',
-        'Add Gl account to unit error'
+        'Add GL account to unit success',
+        'Add GL account to unit error'
       )
 
       this.searchType = searchType
@@ -510,7 +510,7 @@ export default {
       const searchType = this.searchType
       const glTypeCodes = this.glTypeCodes
       const { id } = this.unit
-      
+
       const {
         data: { updateUnit },
       } = await this.mutationAction(
@@ -524,8 +524,8 @@ export default {
           },
         },
         UnitsByGLAccount,
-        'Remove Gl account from unit success',
-        'Remove Gl account from unit error'
+        'Remove GL account from unit success',
+        'Remove GL account from unit error'
       )
 
       this.searchType = searchType
