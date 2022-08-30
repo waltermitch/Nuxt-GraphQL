@@ -209,17 +209,11 @@ import UpdateRegisterCloseout from '~/graphql/mutations/registerCloseout/updateR
 import RegisterCloseouts from '~/graphql/queries/registerCloseouts'
 import { formatDateForCloseRegisterAPI } from '~/helpers/helpers'
 import { CLOSE_REGISTER } from '~/constants/closeRegister'
-import Me from '~/graphql/queries/me.query.gql'
-import { meMixin } from '~/mixins/meMixin'
+
 export default {
   name: 'CloseRegisterFinishCloseout',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin, closeRegisterMixin, mutationMixin, meMixin],
-  apollo: {
-    me: {
-      query: Me,
-    },
-  },
+  mixins: [formMixin, closeRegisterMixin, mutationMixin],
   data () {
     return {
       actualCashDeposit: '',

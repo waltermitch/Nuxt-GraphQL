@@ -208,12 +208,11 @@ import InputRow from './InputRow.vue'
 import CustomInput from './CustomInput'
 import {closeRegisterMixin} from '~/mixins/closeRegisterMixin'
 import {tabsViewMixin} from '~/mixins/tabsViewMixin'
-import {meMixin} from '~/mixins/meMixin'
 
 export default {
   name: 'SalesInfo',
   components: {ValidationObserver, InputRow, CustomInput},
-  mixins: [closeRegisterMixin, tabsViewMixin, meMixin],
+  mixins: [closeRegisterMixin, tabsViewMixin],
   data() {
     return {
       nonResetable: '',
