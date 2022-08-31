@@ -50,12 +50,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountBreakfast"
-              placeholder="0.00"
-              rules="required|currency"
+              placeholder="0"
+              rules="required|numeric"
               name="Customer Count-Breakfast"
-              type="double"
-              symbol="$"
-              @change="onChangeFloatValue('customerCountBreakfast')"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -84,12 +82,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountLunch"
-              placeholder="0.00"
-              rules="required|currency"
+              placeholder="0"
+              rules="required|numeric"
               name="Customer Count-Lunch"
-              type="double"
-              symbol="$"
-              @change="onChangeFloatValue('customerCountLunch')"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -118,12 +114,10 @@
           <template #input>
             <CustomInput
               v-model.number="customerCountDinner"
-              placeholder="0.00"
-              rules="required|currency"
+              placeholder="0"
+              rules="required|numeric"
               name="Customer Count-Dinner"
-              type="double"
-              symbol="$"
-              @change="onChangeFloatValue('customerCountDinner')"
+              type="number"
             />
           </template>
         </InputWithTitle>
@@ -152,10 +146,9 @@
           <template #input>
             <CustomInput
               v-model="customerCountTotals"
-              placeholder="0.00"
+              placeholder="0"
               disabled
-              symbol="$"
-              is-float="true"
+              is-float="false"
             />
           </template>
         </InputWithTitle>
@@ -218,11 +211,8 @@ export default {
   data () {
     return {
       actualCashDeposit: '',
-      customerCountBreakfast: '',
-      customerCountLunch: '',
       netSalesBreakfast: '',
       netSalesLunch: '',
-      customerCountDinner: '',
       netSalesDinner: '',
     }
   },
@@ -254,7 +244,7 @@ export default {
         this.$store.commit('closeRegister/SET_OVER_SHORT', value)
       },
     },
-    /* customerCountBreakfast: {
+    customerCountBreakfast: {
       get() {
         return this.getCustomerCountBreakfast
       },
@@ -264,8 +254,8 @@ export default {
           value,
         })
       },
-    }, */
-    /* customerCountLunch: {
+    },
+    customerCountLunch: {
       get() {
         return this.getCustomerCountLunch
       },
@@ -275,7 +265,7 @@ export default {
           value,
         })
       },
-    }, */
+    },
     /* netSalesBreakfast: {
       get() {
         return this.getNetSalesBreakfast
@@ -298,7 +288,7 @@ export default {
         })
       },
     }, */
-    /* customerCountDinner: {
+    customerCountDinner: {
       get() {
         return this.getCustomerCountDinner
       },
@@ -308,7 +298,7 @@ export default {
           value,
         })
       },
-    }, */
+    },
     /* netSalesDinner: {
       get() {
         return this.getNetSalesDinner
@@ -342,11 +332,8 @@ export default {
       if(!value) return
 
       this.actualCashDeposit = ''
-      this.customerCountBreakfast = ''
-      this.customerCountLunch = ''
       this.netSalesBreakfast = ''
       this.netSalesLunch = ''
-      this.customerCountDinner = ''
       this.netSalesDinner = ''
     }
   },
@@ -360,16 +347,6 @@ export default {
           ...this.calculationVariables,
           value: this[stateProp],
         })
-      } else if ( stateProp === 'customerCountBreakfast' ) {
-        this.$store.dispatch('closeRegister/setCustomerCountBreakfast', {
-          ...this.calculationVariables,
-          value: this[stateProp],
-        })
-      } else if ( stateProp === 'customerCountLunch' ) {
-        this.$store.dispatch('closeRegister/setCustomerCountLunch', {
-          ...this.calculationVariables,
-          value: this[stateProp],
-        })
       } else if ( stateProp === 'netSalesBreakfast' ) {
         this.$store.dispatch('closeRegister/setNetSalesBreakfast', {
           ...this.calculationVariables,
@@ -377,11 +354,6 @@ export default {
         })
       } else if ( stateProp === 'netSalesLunch' ) {
         this.$store.dispatch('closeRegister/setNetSalesLunch', {
-          ...this.calculationVariables,
-          value: this[stateProp],
-        })
-      } else if ( stateProp === 'customerCountDinner' ) {
-        this.$store.dispatch('closeRegister/setCustomerCountDinner', {
           ...this.calculationVariables,
           value: this[stateProp],
         })
