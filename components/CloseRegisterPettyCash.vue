@@ -202,13 +202,20 @@ export default {
       },
     }, */
   },
+  watch: {
+    getIsCancel(value) {
+      if(!value) return
+      this.totalPettyCash = ''
+    }
+  },
   methods: {
     onChangeFloatValue(stateProp, crud = false) {
+      this.$store.commit('closeRegister/SET_IS_CANCEL', false)
       if ( crud ) {
-        this.newItem[stateProp] = parseFloat(this.newItem[stateProp] !== '' ? this.newItem[stateProp] : 0).toFixed(2)
+        this.newItem[stateProp] = parseFloat(typeof this[stateProp] !== 'string' ? this.newItem[stateProp] : 0).toFixed(2)
         return ;
       }
-      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      this[stateProp] = parseFloat(typeof this[stateProp] !== 'string' ? this[stateProp] : 0).toFixed(2)
       if ( stateProp === 'totalPettyCash' ) {
         this.$store.dispatch('closeRegister/setTotalPettyCash', {
           ...this.calculationVariables,

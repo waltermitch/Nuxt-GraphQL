@@ -209,11 +209,12 @@ import UpdateRegisterCloseout from '~/graphql/mutations/registerCloseout/updateR
 import RegisterCloseouts from '~/graphql/queries/registerCloseouts'
 import { formatDateForCloseRegisterAPI } from '~/helpers/helpers'
 import { CLOSE_REGISTER } from '~/constants/closeRegister'
+import { meMixin } from '~/mixins/meMixin'
 
 export default {
   name: 'CloseRegisterFinishCloseout',
   components: { InputRow, InputWithTitle, CustomInput, ValidationObserver },
-  mixins: [formMixin, closeRegisterMixin, mutationMixin],
+  mixins: [formMixin, closeRegisterMixin, mutationMixin, meMixin],
   data () {
     return {
       actualCashDeposit: '',
@@ -336,9 +337,24 @@ export default {
       },
     },
   },
+  watch: {
+    getIsCancel(value) {
+      if(!value) return
+
+      this.actualCashDeposit = ''
+      this.customerCountBreakfast = ''
+      this.customerCountLunch = ''
+      this.netSalesBreakfast = ''
+      this.netSalesLunch = ''
+      this.customerCountDinner = ''
+      this.netSalesDinner = ''
+    }
+  },
   methods: {
     onChangeFloatValue(stateProp) {
-      this[stateProp] = parseFloat(this[stateProp] !== '' ? this[stateProp] : 0).toFixed(2);
+      this.$store.commit('closeRegister/SET_IS_CANCEL', false)
+      this[stateProp] = parseFloat(typeof this[stateProp] !== 'string' ? this[stateProp] : 0).toFixed(2)
+
       if ( stateProp === 'actualCashDeposit' ) {
         this.$store.dispatch('closeRegister/setActualCashDeposit', {
           ...this.calculationVariables,
@@ -431,6 +447,7 @@ export default {
       if (res) {
         this.$router.push('/home/close-register')
         this.$store.commit('closeRegister/SET_CLOSE_REGISTER', CLOSE_REGISTER)
+        this.$store.commit('closeRegister/SET_IS_CANCEL', true)
       }
     },
     async UpdateCloseRegister() {
