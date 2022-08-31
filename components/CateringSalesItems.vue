@@ -122,13 +122,13 @@
           <DefaultButton @event="cancelAdd"> Cancel </DefaultButton>
         </div>
 
-        <CustomTableRow class="table-footer table-row">
+        <CustomTableRow v-if="isTaxable" class="table-footer table-row">
           <span class="table-footer-caption">Price</span>
 
           <span class="table-footer-item">${{ totalPrice.toFixed(2) }}</span>
         </CustomTableRow>
 
-        <CustomTableRow class="table-footer table-row">
+        <CustomTableRow v-if="isTaxable" class="table-footer table-row">
           <span class="table-footer-caption">Tax</span>
 
           <!-- <CustomInput
@@ -141,7 +141,7 @@
             symbol="$"
             @change="onChangeFloatValue('tax')"
           /> -->
-          
+
           <span class="table-footer-item">${{ totalTax.toFixed(2) }}</span>
 
         </CustomTableRow>
@@ -207,6 +207,11 @@ export default {
     }
   },
   computed: {
+    isTaxable: {
+      get() {
+        return this.getIsTaxable
+      },
+    },
     combinedItemsArray() {
       return [...this.getItems]
     },
@@ -224,10 +229,13 @@ export default {
           )
     },
     totalTax() {
+      if (!this.isTaxable)
+        return 0;
+
       const salesTaxCafe = this.selectedUnit.city.state.salesTaxCafeteria
       const countyTax = this.selectedUnit.county.tax
       const cityTax = this.selectedUnit.city.tax
-      
+
       const cateringTax = Number(this.totalPrice) * (Number(salesTaxCafe) + Number(countyTax) + Number(cityTax))
       return cateringTax
     },
