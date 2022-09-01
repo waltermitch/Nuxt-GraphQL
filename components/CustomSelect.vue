@@ -6,6 +6,7 @@
         'selected--opened': open,
         'selected--error': error,
         'selected--above': isAbove,
+        'selected--input': inputSelect,
         disabled: disabled,
       }"
       @click="disabled ? null : toggleSelect()"
@@ -17,6 +18,12 @@
       <span v-else-if="multiSelect">
         {{ selectedOptions }}
       </span>
+      <input 
+        v-else-if="inputSelect"
+        v-model="searchValue"
+        class="input"
+        @input="onChangeInputValue($event.target.value)"
+      />
       <span v-else>
         {{
           selected && selectBySecond
@@ -48,15 +55,38 @@
         v-for="(option, i) of options"
         :key="i"
         class="option"
+        :class="{
+          'selectedOption': selectedIndex === i
+        }"
         @click="selectOption(option)"
       >
-        {{
-          selectBySecond
-            ? selectByParent && option[selectByParent]
-            ? `${option[selectByParent][selectBySecond]}-${option[selectBySecond]} - ${option[selectBy]}`
-            : `${option[selectBySecond]} - ${option[selectBy]}`
-            : formatIfDate(option[selectBy])
-        }}
+        <div v-if="inputSelect">
+
+          {{ `${option[selectBy]}` }}
+          
+          <span v-if="selectBySecond" class="right">
+            {{
+              selectByParent && option[selectByParent]
+                ? `${option[selectByParent][selectBySecond]}-${option[selectBySecond]}`
+                : `${option[selectBySecond]}`
+            }}
+          </span>
+        </div>
+        <div v-else>
+          {{
+            selectBySecond
+              ? selectByParent && option[selectByParent]
+              ? `${option[selectByParent][selectBySecond]}-${option[selectBySecond]} - ${option[selectBy]}`
+              : `${option[selectBySecond]} - ${option[selectBy]}`
+              : formatIfDate(option[selectBy])
+          }}
+
+          <span v-if="showActivePeriodend" class="right">
+            {{
+              option.activePeriod ? `${option.activePeriod.periodEnd}` : ''
+            }}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -108,7 +138,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    inputSelect: {
+      type: Boolean,
+      default: false,
+    },
     doNotPreselect: {
+      type: Boolean,
+      default: false,
+    },
+    showActivePeriodend: {
       type: Boolean,
       default: false,
     },
@@ -129,7 +167,9 @@ export default {
       selectedList: this.selectedItems ? [...this.selectedItems] : [],
       open: false,
       isAbove: false,
-      parentIsTable: false
+      parentIsTable: false,
+      selectedIndex: '',
+      searchValue: '',
     }
   },
   computed: {
@@ -170,7 +210,7 @@ export default {
     if (!this.doNotPreselect) {
       this.$emit('input', this.selected)
     }
-
+    
     this.adjustOptions()
   },
   destroyed() {
@@ -204,6 +244,36 @@ export default {
       }
 
       return date.toISOString().startsWith(value);
+    },
+    onChangeInputValue(value) {
+      if(value === '') return
+
+      for(let i = 0; i < this.options.length; i++) {
+        const option = this.options[i]
+        const code = this.selectBySecond
+          ? this.selectByParent && option[this.selectByParent]
+          ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBy]}`
+        if( code.indexOf(value) === 0) {
+            this.selectedIndex = i
+            return
+        }
+      }
+      for(let i = 0; i < this.options.length; i++) {
+        const option = this.options[i]
+        const code = this.selectBySecond
+          ? this.selectByParent && option[this.selectByParent]
+          ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBy]}`
+        
+        if(code.includes('-') && code.indexOf(value) === (code.indexOf('-') + 1) ) {
+          this.selectedIndex = i
+          return
+        }
+      }
+      this.open = true
     },
     adjustOptions() {
       if (typeof window === 'undefined') return
@@ -286,6 +356,16 @@ export default {
         }
       }
 
+      if(this.inputSelect) {
+        this.searchValue = this.selectBySecond
+          ? this.selectByParent && option[this.selectByParent]
+          ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
+          : `${option[this.selectBy]}`
+        this.$emit('input', option)
+        return
+      }
+
       if (
         this.doNotPreselect &&
         this.selected &&
@@ -346,9 +426,18 @@ export default {
     border-radius: 0px 0px 3px 3px;
   }
 
+  &--input {
+    padding: 0px 36px 0px 0px;
+  }
+
   &:active {
     border-color: $firebrick;
   }
+}
+
+.selectedOption {
+  color: #fff !important;
+  background-color: $firebrick !important;
 }
 
 .icon {
@@ -404,6 +493,16 @@ export default {
   }
 }
 
+.input {
+  width: 100%;
+  height: 100%;
+  padding: 5px 10px 5px 8px;
+  
+  &:focus {
+    outline: none !important;
+  }
+}
+
 .error {
   font-size: 12px;
   color: $firebrick;
@@ -412,5 +511,13 @@ export default {
 .disabled {
   background: transparent;
   cursor: not-allowed;
+}
+
+.right {
+  float: right;
+  width: auto;
+  // min-width: 4.2rem;
+  margin-left: 2rem;
+  font-weight: bold;
 }
 </style>

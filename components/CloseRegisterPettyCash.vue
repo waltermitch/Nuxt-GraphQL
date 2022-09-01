@@ -47,6 +47,7 @@
                     : glAccount.id == item.glAccount.id
                 )
               "
+              input-select
               @input="selectGlAccount(item, $event)"
             />
             <span v-else-if="!getIsEdit && item.glAccount.parent">{{ item.glAccount.parent.id }}-{{ item.glAccount.id }} - {{ item.glAccount.name }}</span>
@@ -77,6 +78,7 @@
               select-by="name"
               select-by-second="id"
               select-by-parent="parent"
+              input-select
               @input="selectWewItemGlAccount"
             />
 

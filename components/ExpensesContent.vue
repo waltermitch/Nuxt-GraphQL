@@ -43,9 +43,13 @@
             <template v-if="glAccounts" #input>
               <CustomSelect
                 :options="glAccounts"
+                select-by="name"
+                select-by-second="id"
+                select-by-parent="parent"
                 :error="selectError"
                 :selected-item="glAccount"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
+                input-select
                 @input="selectGlAccount"
               />
             </template>
