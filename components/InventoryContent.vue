@@ -25,7 +25,7 @@
               class="table-row"
             >
               <span class="table-text">
-                {{ item.id }}
+                {{ item.itemId }}
               </span>
 
               <span class="table-text">

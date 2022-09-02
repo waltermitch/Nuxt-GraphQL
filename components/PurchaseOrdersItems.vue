@@ -29,12 +29,12 @@
             @change="onChangeFloatValue('amount', true, item)"
           />
 
-          <span v-if="!getIsEdit">{{ item.inventoryCategory.id }} - {{ item.inventoryCategory.name }}</span>
+          <span v-if="!getIsEdit">{{ item.inventoryCategory.itemId }} - {{ item.inventoryCategory.name }}</span>
           <CustomSelect
             v-else-if="inventoryCategories"
             :options="inventoryCategories"
             select-by="name"
-            select-by-second="id"
+            select-by-second="itemId"
             :selected-item="item.inventoryCategory"
             @input="selectInventoryCategory(item, $event)"
           />
@@ -73,7 +73,7 @@
             v-if="inventoryCategories"
             :options="inventoryCategories"
             select-by="name"
-            select-by-second="id"
+            select-by-second="itemId"
             do-not-preselect
             @input="selectNewItemInventoryCategory"
           />
