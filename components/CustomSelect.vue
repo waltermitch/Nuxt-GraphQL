@@ -22,6 +22,7 @@
         v-else-if="inputSelect"
         v-model="searchValue"
         class="input"
+        @keyup.enter="onNext()"
         @input="onChangeInputValue($event.target.value)"
       />
       <span v-else>
@@ -56,7 +57,7 @@
         :key="i"
         class="option"
         :class="{
-          'selectedOption': selectedIndex === i
+          'selectedOption': optionIndex === i
         }"
         @click="selectOption(option)"
       >
@@ -168,8 +169,9 @@ export default {
       open: false,
       isAbove: false,
       parentIsTable: false,
-      selectedIndex: '',
+      optionIndex: 0,
       searchValue: '',
+      isNext: false,
     }
   },
   computed: {
@@ -246,33 +248,37 @@ export default {
       return date.toISOString().startsWith(value);
     },
     onChangeInputValue(value) {
+      this.optionIndex = 0
+      this.onSearchOption(value)
+    },
+    onNext() {
+      this.optionIndex ++
+      this.onSearchOption(this.searchValue, 'isNext')
+    },
+    onSearchOption(value, isNext) {
       if(value === '') return
 
-      for(let i = 0; i < this.options.length; i++) {
-        const option = this.options[i]
+      const optionHeight = 37
+
+      for(; this.optionIndex < this.options.length; this.optionIndex ++) {
+
+        const option = this.options[this.optionIndex]
         const code = this.selectBySecond
           ? this.selectByParent && option[this.selectByParent]
           ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
           : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
           : `${option[this.selectBy]}`
-        if( code.indexOf(value) === 0) {
-            this.selectedIndex = i
-            return
-        }
-      }
-      for(let i = 0; i < this.options.length; i++) {
-        const option = this.options[i]
-        const code = this.selectBySecond
-          ? this.selectByParent && option[this.selectByParent]
-          ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
-          : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
-          : `${option[this.selectBy]}`
-        
-        if(code.includes('-') && code.indexOf(value) === (code.indexOf('-') + 1) ) {
-          this.selectedIndex = i
+
+        if(code.includes(value)) {
+          const selector = this.$el.querySelector('.options')
+          if(selector) selector.scrollTop = optionHeight * this.optionIndex
+          this.$emit('input', option)
           return
         }
+
+        if((this.optionIndex + 1) === this.options.length && isNext) this.optionIndex = 0
       }
+
       this.open = true
     },
     adjustOptions() {
@@ -342,15 +348,13 @@ export default {
     },
     toggleSelect() {
       if (this.options.length) {
-        this.open = !this.open
+        this.open = this.inputSelect ? true : !this.open
       }
     },
     selectOption(option) {
       if (this.multiSelect) {
         if (this.selectedList.find((item) => item.id === option.id)) {
-          this.selectedList = this.selectedList.filter(
-            (item) => item.id !== option.id
-          )
+          this.selectedList = this.selectedList.filter((item) => item.id !== option.id)
         } else {
           this.selectedList.push(option)
         }
@@ -362,6 +366,12 @@ export default {
           ? `${option[this.selectByParent][this.selectBySecond]}-${option[this.selectBySecond]} - ${option[this.selectBy]}`
           : `${option[this.selectBySecond]} - ${option[this.selectBy]}`
           : `${option[this.selectBy]}`
+
+        this.options.forEach((item, key) => {
+          if(item[this.selectBySecond] === option[this.selectBySecond]) {
+            this.optionIndex = key
+          }
+        });
         this.$emit('input', option)
         return
       }
