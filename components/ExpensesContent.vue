@@ -71,6 +71,8 @@
               <CustomSelect
                 :options="vendors"
                 :selected-item="vendor"
+                select-by="name"
+                select-by-second="code"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @input="setVendor"
               />
