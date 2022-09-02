@@ -5,6 +5,8 @@
       <CustomTable v-else :w-table="780">
         <template #header>
           <div class="table-row">
+            <span> ID </span>
+
             <span> Name </span>
 
             <span> GL account </span>
@@ -19,6 +21,15 @@
             :key="inventoryCategory.id"
             class="table-row"
           >
+            <CustomInput
+              v-if="isEdit === inventoryCategory.id"
+              v-model="inventoryCategoryEdit.itemId"
+              rules="required|max:255"
+              do-not-show-error-message
+              name='"InventoryCategory ID"'
+            />
+            <span v-else>{{ inventoryCategory.itemId }}</span>
+
             <CustomInput
               v-if="isEdit === inventoryCategory.id"
               v-model="inventoryCategoryEdit.name"
@@ -102,6 +113,13 @@
           <!-- pagination -->
 
           <CustomTableRow v-if="isAdd" class="table-row">
+            <CustomInput
+              v-model="inventoryCategoryNew.itemId"
+              rules="required|max:255"
+              do-not-show-error-message
+              name='"InventoryCategory ID"'
+            />
+
             <CustomInput
               v-model="inventoryCategoryNew.name"
               rules="required|max:255"
@@ -200,6 +218,7 @@ export default {
       // pagination
 
       inventoryCategoryNew: {
+        itemId: '',
         name: '',
         glAccount: '',
         vending: '',
@@ -217,6 +236,7 @@ export default {
     },
     addInventoryCategoryRow() {
       this.inventoryCategoryNew = {
+        itemId: '',
         name: '',
         glAccount: '',
         vending: '',
@@ -228,6 +248,7 @@ export default {
         CreateInventoryCategory,
         {
           inventoryCategoryInput: {
+            itemId: this.inventoryCategoryNew.itemId,
             name: this.inventoryCategoryNew.name,
             glAccount: {
               connect: this.inventoryCategoryNew.glAccount.id,
@@ -250,6 +271,7 @@ export default {
     async confirmEdit(inventoryCategory) {
       const editedInventoryCategory = {
         id: inventoryCategory.id,
+        itemId: this.inventoryCategoryEdit.itemId,
         name: this.inventoryCategoryEdit.name,
         glAccount: {
           connect: this.inventoryCategoryEdit.glAccount.id,
@@ -304,10 +326,10 @@ export default {
   column-gap: 30px;
   padding: 12px 0;
   @media screen and (min-width: $lg) {
-    grid-template-columns: 30% 30% 10% auto;
+    grid-template-columns: 10% 30% 30% 10% auto;
   }
   @media screen and (max-width: $lg) {
-    grid-template-columns: 200px 200px 100px auto;
+    grid-template-columns: 100px 200px 200px 100px auto;
   }
 }
 

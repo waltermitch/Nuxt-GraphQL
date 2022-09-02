@@ -4,16 +4,17 @@ query InventoryCategoryList($page: Int!) {
       count
       perPage
       total
-      
+
       firstItem
       lastItem
-      
+
       currentPage
       lastPage
       hasMorePages
     }
     data {
       id
+      itemId
       name
       vending
       glAccount {
