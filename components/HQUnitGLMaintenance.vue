@@ -39,7 +39,7 @@
               v-if="glAccounts"
               v-model="glAccount"
               :options="glAccounts"
-              :custom-label="nameWithId"
+              :custom-label="glAccountName"
               placeholder="-- Select --"
               track-by="name"
               :preselect-first="false"
@@ -56,7 +56,7 @@
               v-if="glAccount && !glAccount.parent"
               v-model="glSubAccount"
               :options="glAccount.child"
-              :custom-label="nameWithId"
+              :custom-label="glAccountName"
               placeholder="-- Select --"
               track-by="name"
               :preselect-first="false"
@@ -124,12 +124,12 @@
                 <!-- <span>{{ glAcc.id }}</span> -->
 
                 <span v-if="!glAcc.parent">{{
-                  `${glAcc.id} - ${glAcc.name}`
+                  `${glAcc.itemId}-000 - ${glAcc.name}`
                 }}</span>
                 <span v-else></span>
 
                 <div v-if="glAcc.parent">
-                  {{ `${glAcc.id} - ${glAcc.name}` }}
+                  {{ `${glAcc.parent.itemId}-${glAcc.itemId} - ${glAcc.name}` }}
                 </div>
                 <div v-else></div>
 
@@ -386,6 +386,13 @@ export default {
         return `${id} — ${name}`
       }else {
         return `${code} — ${name}`
+      }
+    },
+    glAccountName({ name, itemId, id }) {
+      if(itemId === undefined) {
+        return `${id} — ${name}`
+      }else {
+        return `${itemId} — ${name}`
       }
     },
     showAttachGlAccounts() {

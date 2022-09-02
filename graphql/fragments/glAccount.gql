@@ -2,6 +2,7 @@
 
 fragment GlAccountFragment on GlAccount {
   id
+  itemId
   name
   glTypeCode {
     ...GlTypeCodeFragment
