@@ -19,7 +19,13 @@ query InventoryCategoryList($page: Int!) {
       vending
       glAccount {
         id
+        itemId
         name
+        parent {
+          id
+          itemId
+          name
+        }
       }
     }
   }

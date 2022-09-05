@@ -45,7 +45,7 @@
                 :options="glAccounts"
                 select-by="name"
                 select-by-second="id"
-                select-by-parent="parent"
+                select-by-gl-account="glAccount"
                 :error="selectError"
                 :selected-item="glAccount"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
