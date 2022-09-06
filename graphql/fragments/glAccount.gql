@@ -4,6 +4,11 @@ fragment GlAccountFragment on GlAccount {
   id
   itemId
   name
+  parent{
+    id
+    itemId
+    name
+  }
   glTypeCode {
     ...GlTypeCodeFragment
   }

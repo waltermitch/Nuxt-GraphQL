@@ -27,7 +27,7 @@
             <template v-if="ExpenseTypes" #input>
               <CustomSelect
                 :options="ExpenseTypes"
-                select-by="type"
+                select-by="description"
                 :selected-item="expenseType"
                 :disabled="getIsEdit && expenseType.type === 'ReAccrual'"
                 @input="setExpensesType"

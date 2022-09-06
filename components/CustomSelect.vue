@@ -174,7 +174,7 @@ export default {
       parentIsTable: false,
       optionIndex: 0,
       searchValue: '',
-      isNext: false,
+      isNonSearchResult: true,
     }
   },
   computed: {
@@ -192,7 +192,15 @@ export default {
   },
   watch: {
     open() {
-      this.adjustPosition()    
+      this.adjustPosition()
+      if(this.open && this.selected && !this.inputSelect) {
+        this.options.forEach((item, index) => {
+          if(item.id === this.selected.id) {
+            this.optionIndex = index
+            this.scrollToPosition(index)
+          }
+        });
+      }
     },
     options() {
       this.selected = this.options[0]
@@ -253,6 +261,7 @@ export default {
     onChangeInputValue(value) {
       this.open = true
       this.optionIndex = 0
+      this.isNonSearchResult = true
       this.onSearchOption(value)
     },
     onNext() {
@@ -267,15 +276,22 @@ export default {
         const option = this.options[this.optionIndex]
         const code = this.selectByGlAccount && `${this.getItemIdWithGLAccount(option)}`
         if(code.includes(value)) {
-          const optionHeight = 37
-          let selector = this.$el.querySelector('.options')
-          if(!selector) selector = document.querySelector('.options')
-          selector.scrollTop = optionHeight * this.optionIndex
+          this.isNonSearchResult = false
+          this.scrollToPosition(this.optionIndex)
           this.$emit('input', option)
           return
         }
+        if((this.optionIndex + 1) === this.options.length && !this.isNonSearchResult) this.optionIndex = 0
       }
-      if(this.optionIndex === this.options.length) this.optionIndex = 0
+    },
+    scrollToPosition(itemCount) {
+      console.log(itemCount)
+      const optionHeight = 37
+      let selector = this.$el.querySelector('.options')
+      if(!selector) selector = document.querySelector('.options')
+      selector.scrollTop = optionHeight * itemCount
+      console.log(optionHeight * itemCount)
+      console.log(selector.scrollTop)
     },
     adjustOptions() {
       if (typeof window === 'undefined') return
