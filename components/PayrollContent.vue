@@ -152,7 +152,7 @@ export default {
                 },
             },
             null,
-            'Add Payroll Success',
+            'Add Payroll Success1',
             'Add Payroll Error',
             {
                 activePeriod: true,
