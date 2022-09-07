@@ -152,12 +152,13 @@ export default {
                 },
             },
             null,
-            'Add Payroll Success1',
+            'Add Payroll Success',
             'Add Payroll Error',
             {
                 activePeriod: true,
             }
         )
+        console.log(res, "resource")
         if (res) {
           this.cancelCreate()
         }
