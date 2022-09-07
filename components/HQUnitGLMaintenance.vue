@@ -121,9 +121,9 @@
               <div class="table-row">
                 <!-- <span>ID</span> -->
 
-                <span>GL account ID - GL account Name</span>
+                <span> GL </span>
 
-                <span>GL sub account ID - GL sub account Name</span>
+                <span> Name </span>
 
                 <span> Type </span>
 
@@ -139,15 +139,9 @@
               >
                 <!-- <span>{{ glAcc.id }}</span> -->
 
-                <span v-if="!glAcc.parent">{{
-                  `${glAcc.itemId}-000 - ${glAcc.name}`
-                }}</span>
-                <span v-else></span>
+                <span>{{ `${getItemIdWithGLAccount(glAcc)}` }}</span>
 
-                <div v-if="glAcc.parent">
-                  {{ `${glAcc.parent.itemId}-${glAcc.itemId} - ${glAcc.name}` }}
-                </div>
-                <div v-else></div>
+                <span>{{ `${glAcc.name}` }}</span>
 
                 <span v-if="glAcc.parent">{{
                   glAcc.parent.glTypeCode && glAcc.parent.glTypeCode.description
@@ -294,6 +288,7 @@ import CustomTableAddIcon from './CustomTableAddIcon.vue'
 import DefaultButton from './DefaultButton.vue'
 import { mutationMixin } from '~/mixins/mutationMixin'
 import { tableActionsMixin } from '~/mixins/tableActionsMixin'
+import { glAccountMixin } from '~/mixins/glAccountMixin'
 export default {
   name: 'HQUnitGLMaintenance',
   components: {
@@ -316,7 +311,7 @@ export default {
       query: GlAccounts,
     },
   },
-  mixins: [mutationMixin, tableActionsMixin],
+  mixins: [mutationMixin, tableActionsMixin, glAccountMixin],
   data() {
     return {
       unit: '',

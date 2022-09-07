@@ -285,13 +285,10 @@ export default {
       }
     },
     scrollToPosition(itemCount) {
-      console.log(itemCount)
       const optionHeight = 37
       let selector = this.$el.querySelector('.options')
       if(!selector) selector = document.querySelector('.options')
       selector.scrollTop = optionHeight * itemCount
-      console.log(optionHeight * itemCount)
-      console.log(selector.scrollTop)
     },
     adjustOptions() {
       if (typeof window === 'undefined') return
@@ -430,6 +427,9 @@ export default {
 }
 
 .selected {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: 100%;
   padding: 10px 36px 10px 8px;
   background: #fff;
@@ -515,6 +515,12 @@ export default {
   &:hover {
     color: #fff;
     background-color: $firebrick;
+  }
+  
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
