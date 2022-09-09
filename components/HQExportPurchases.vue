@@ -186,7 +186,6 @@ export default {
 
       
       if (exportData) {
-        console.log(exportData)
         const download = document.getElementById('export')
         download.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(exportData))
         download.setAttribute('download', 'purchase.txt')

@@ -1,5 +1,5 @@
 <template>
-  <PageContentWrapper id="download">
+  <PageContentWrapper>
     <ValidationObserver>
       <InputRow>
         <InputWithTitle has-select>
@@ -66,7 +66,7 @@ import DefaultButton from './DefaultButton.vue'
 import Units from '~/graphql/queries/units.gql'
 import Periods from '~/graphql/queries/periods.gql'
 import { mutationMixin } from '~/mixins/mutationMixin'
-// import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
+import OperatingReport from '~/graphql/mutations/reports/operatingReport.gql'
 import { formatDateFromAPI } from '~/helpers/helpers'
 export default {
   name: 'HQWeeklyOperatingReports',
@@ -117,34 +117,25 @@ export default {
     selectPeriodEndDate(item) {
       this.periodEndDate = item
     },
-    openReport() {
-      const divContents = document.getElementById('download');
-      console.log(divContents)
-      const printWindow = window.open('', '', 'height=400,width=800');
-      printWindow.document.write('<html><head><title>DIV Contents</title>');
-      printWindow.document.write('</head><body>');
-      printWindow.document.write(divContents);
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
-      // const {
-      //   data: { operatingReport },
-      // } = await this.mutationAction(
-      //   OperatingReport,
-      //   {
-      //     input: {
-      //       period: this.periodEndDate.id,
-      //       unit: this.selectedUnit.id,
-      //       type: this.reportType.type,
-      //       typePeriod: this.reportType.typePeriod,
-      //     },
-      //   },
-      //   Units,
-      //   'Open Report Success',
-      //   null,
-      //   null,
-      //   true
-      // )
+    async openReport() {
+      const {
+        data: { operatingReport },
+      } = await this.mutationAction(
+        OperatingReport,
+        {
+          input: {
+            period: this.periodEndDate.id,
+            unit: this.selectedUnit.id,
+            type: this.reportType.type,
+            typePeriod: this.reportType.typePeriod,
+          },
+        },
+        Units,
+        'Open Report Success',
+        null,
+        null,
+        true
+      )
 
       window.open(operatingReport)
     },
